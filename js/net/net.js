@@ -22,7 +22,14 @@
  *       peers() · mode(uid) -> 'connecting' | 'direct' | 'relay' | 'closed'
  */
 G.Net = (() => {
-  const ICE = [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }];
+  const ICE = [{ urls: [
+    'stun:stun.l.google.com:19302',
+    'stun:stun1.l.google.com:19302',
+    'stun:stun2.l.google.com:19302',
+    'stun:stun3.l.google.com:19302',
+    'stun:stun4.l.google.com:19302',
+    'stun:stun.cloudflare.com:3478'
+  ] }];
   const TURN_API = 'https://ice.pokesurvivor.com/v1/ice';
   // Primero se intenta sin TURN (lo normal es conectar directo) y sólo si falla se
   // reintenta al momento con él: el navegador reserva un hueco en el TURN por cada
@@ -32,7 +39,7 @@ G.Net = (() => {
   // costaba del cooperativo. Sin conexión directa, esa pareja no puede jugar
   // junta ('failed') y el anfitrión lo reintenta cada RETRY_MS. Por la base de datos
   // sólo pasa la señalización (unos pocos mensajes pequeños para conectarse).
-  const ALLOW_RELAY = false, RETRY_MS = 15000;
+  const ALLOW_RELAY = true, RETRY_MS = 15000;
   const ICE_BATCH = 250, ICE_MAX = 40;    // candidatos: se juntan 250 ms (o 40) en un mensaje (ver newPeer)
   // Lo que puede quedar por salir en el canal. El canal no pierde nada y va en orden:
   // si la conexión da menos de lo que se manda, lo de más se queda en cola y el otro lo
