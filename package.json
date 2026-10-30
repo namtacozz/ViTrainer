@@ -1,0 +1,24 @@
+{
+  "name": "pokesurvivor",
+  "version": "1.0.0",
+  "description": "PokéSurvivor - Mundo Misterioso: Bullet-heaven / Roguelike fan game with 966 Pokémon on HTML5 Canvas 2D.",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "dev": "python -m http.server 8080",
+    "test": "node --test tests/*.test.cjs",
+    "build": "node tools/build.js && node tools/export_data.js && python tools/make_seo_pages.py",
+    "build:quick": "node tools/build.js --expose",
+    "export-data": "node tools/export_data.js",
+    "seo": "python tools/make_seo_pages.py"
+  },
+  "keywords": [
+    "pokemon",
+    "bullet-heaven",
+    "roguelike",
+    "canvas2d",
+    "game",
+    "webrtc"
+  ],
+  "author": "Jonathan Piera Torregrosa",
+  "license": "SEE LICENSE IN LICENSE-NONCOMMERCIAL.md"
+}
