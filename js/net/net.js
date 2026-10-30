@@ -151,7 +151,7 @@ G.Net = (() => {
       try { m = JSON.parse(raw); } catch (e) { return; }
       if (!m || !m.f) return;
       if (m.sig) onSignal(m.f, m.sig);
-      else { if (m.d && m.d.k === 'start') { const p = peers.get(m.f); if (p && p.mode !== 'direct') { p.mode = ALLOW_RELAY ? 'relay' : 'failed'; emitPeer(m.f); } } deliver(m.f, m.d); }
+      else deliver(m.f, m.d);
     };
     qref.on('child_added', onMsg);
     qref.on('child_changed', onMsg);
@@ -269,7 +269,7 @@ G.Net = (() => {
     p.mode = ALLOW_RELAY ? 'relay' : 'failed';
     emitPeer(u);
     if (!isHost) return;
-    p.timer = setTimeout(() => { if (peers.get(u) === p && (p.mode === 'failed' || (p.mode === 'relay' && !(typeof G !== 'undefined' && G.Coop && G.Coop.active))) && roomId) { drop(u, true); connect(u); } }, RETRY_MS);
+    p.timer = setTimeout(() => { if (peers.get(u) === p && (p.mode === 'failed' || p.mode === 'relay') && roomId) { drop(u, true); connect(u); } }, RETRY_MS);
   }
 
   /** Anfitrión: abre conexión con un invitado. */
@@ -384,7 +384,7 @@ G.Net = (() => {
   }
 
   function toHost(msg) { if (!isHost && hostUid) send(hostUid, msg); }
-  function broadcast(msg, except) { if (msg && msg.k === 'start') { for (const [u, p] of peers.entries()) { if (p.mode !== 'direct') { p.mode = ALLOW_RELAY ? 'relay' : 'failed'; emitPeer(u); } } } for (const u of peers.keys()) if (u !== except) send(u, msg); }
+  function broadcast(msg, except) { for (const u of peers.keys()) if (u !== except) send(u, msg); }
 
   function deliver(from, msg) {
     stats.recv++;

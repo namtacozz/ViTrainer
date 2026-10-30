@@ -21,27 +21,6 @@ G.Game = (() => {
   let pl = null;
   let caught = [];          // shinies conseguidos en esta run
   let biome = -1;
-  let bgWorker = null;
-  try {
-    if (typeof Worker !== 'undefined' && typeof Blob !== 'undefined') {
-      const blob = new Blob([
-        'let t = null;\n' +
-        'self.onmessage = function(e) {\n' +
-        '  if (e.data === "start") {\n' +
-        '    if (!t) t = setInterval(function() { self.postMessage(1); }, 33);\n' +
-        '  } else if (e.data === "stop") {\n' +
-        '    if (t) { clearInterval(t); t = null; }\n' +
-        '  }\n' +
-        '};'
-      ], { type: 'application/javascript' });
-      bgWorker = new Worker(URL.createObjectURL(blob));
-      bgWorker.onmessage = () => {
-        if (typeof document !== 'undefined' && document.hidden && pl && state !== 'ui' && state !== 'over') {
-          try { frame(performance.now()); } catch (e) {}
-        }
-      };
-    }
-  } catch (e) {}
 
   const st = { get time() { return time; } };
 
@@ -60,15 +39,21 @@ G.Game = (() => {
     if (window.visualViewport) visualViewport.addEventListener('resize', resizeSoon);
     if (window.ResizeObserver) new ResizeObserver(() => resize()).observe(cv);
     G.Touch.init(cv);
-    // Al ocultarse la pestaña: en solitario se pausa; en cooperativo, el worker mantiene el bucle vivo.
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        if (!G.Coop.active) autoPause();
-        else if (bgWorker) bgWorker.postMessage('start');
-      } else {
-        if (bgWorker) bgWorker.postMessage('stop');
-      }
-    });
+    // En móvil: al cambiar de app o girarlo en vertical, la partida se pausa.
+    document.addEventListener('visibilitychange', () => { if (document.hidden) autoPause(); });
+    // Rueda del ratón para cambiar de movimiento (como cambio de armas en shooters/Valorant).
+    let lastWheelTime = 0;
+    addEventListener('wheel', e => {
+      if (state !== 'playing' || !pl || pl.dead) return;
+      if (G.UI && (G.UI.isOpen('scr-levelup') || G.UI.isOpen('scr-pause') || G.UI.isOpen('scr-item') || G.UI.isOpen('scr-bond'))) return;
+      const now = performance.now();
+      if (now - lastWheelTime < 100) return;
+      if (Math.abs(e.deltaY) < 10) return;
+      e.preventDefault();
+      lastWheelTime = now;
+      if (e.deltaY > 0) pl.cycle(1);
+      else if (e.deltaY < 0) pl.cycle(-1);
+    }, { passive: false });
     // En el móvil, bajar la cortina de avisos o abrir otra app por encima a veces
     // sólo quita el foco a la página (sin ocultarla): también se pausa.
     addEventListener('blur', () => { if (G.Touch.active) autoPause(); });
@@ -337,8 +322,8 @@ G.Game = (() => {
       const targets = G.Coop && G.Coop.active ? [pl, ...G.Coop.puppets()] : (pl ? [pl] : []);
       for (const p of targets) {
         if (!p) continue;
-        p.invuln = Math.max(p.invuln || 0, 2.0);
-        if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(p, 220);
+        p.invuln = Math.max(p.invuln || 0, 2.5);
+        if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(p, 260);
       }
       if (state === 'levelup') { state = holdBy.length ? 'held' : 'playing'; afterLevelUp(); }
     },
@@ -507,7 +492,7 @@ G.Game = (() => {
   // ---------------- subida de nivel ----------------
 
   function maybeLevelUp() {
-    if (pendingLevels <= 0 || state !== 'playing') return;
+    if (pendingLevels <= 0 || (state !== 'playing' && state !== 'levelup')) return;
     if (G.Coop.active) {
       // En grupo, las cartas salen a la vez para todos y se espera a que elijan.
       if (G.Coop.players().every(p => p.dead)) return;
@@ -523,8 +508,8 @@ G.Game = (() => {
     G.RunUI.showLevelUp(pl.level, G.LevelUp.offer(pl), card => {
       G.Audio.sfx('confirm');
       card.apply(pl);
-      pl.invuln = Math.max(pl.invuln || 0, 2.0);
-      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 220);
+      pl.invuln = Math.max(pl.invuln || 0, 2.5);
+      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 260);
       if (pendingLevels > 0) {
         maybeLevelUp();
       } else {
@@ -560,8 +545,8 @@ G.Game = (() => {
       G.FX.ring(pl.x, pl.y, 8, 130, '#ff8ad8', 0.8, 6);
       G.FX.burst(pl.x, pl.y - pl.bodyH * 0.5, '#ffb3e6', 40, 240);
       G.Spawner.say('¡Vínculo! ' + group.length + ' movimientos a la vez', 2.6, true);
-      pl.invuln = Math.max(pl.invuln || 0, 1.2);
-      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 130);
+      pl.invuln = Math.max(pl.invuln || 0, 2.5);
+      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 260);
       if (state === 'choice') state = holdBy.length ? 'held' : 'playing';
       if (G.Coop.active) G.Coop.holdEnd();
     });
@@ -603,8 +588,8 @@ G.Game = (() => {
         G.Spawner.say('¡Llevas ' + G.Items.BY[got].name + '!', 2.6, true);
         G.Progress.event('item', { id: got });
       }
-      pl.invuln = Math.max(pl.invuln || 0, 1.2);
-      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 130);
+      pl.invuln = Math.max(pl.invuln || 0, 2.5);
+      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 260);
       if (!mine) { afterLevelUp(); return; }
       if (state === 'choice') state = holdBy.length ? 'held' : 'playing';
       if (G.Coop.active) G.Coop.holdEnd();
