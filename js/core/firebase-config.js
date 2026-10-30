@@ -9,11 +9,11 @@
  * Si se pone a null, el juego funciona en modo local (sólo en el navegador).
  */
 G.FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyC3-uoTpWjIulfEb_NC_R0zE62Afoj26nE',
-  authDomain: 'vitmmt-d21ba.firebaseapp.com',
-  projectId: 'vitmmt-d21ba',
-  storageBucket: 'vitmmt-d21ba.firebasestorage.app',
-  messagingSenderId: '194912829481',
-  appId: '1:194912829481:web:226dfbfa943c9b82655c38',
-  databaseURL: 'https://vitmmt-d21ba-default-rtdb.asia-southeast1.firebasedatabase.app'
+  apiKey: 'AIzaSyC1jpnsPXx73eT3sfFJKYiA8oPWMltMo4o',
+  authDomain: 'vitrainer-7a1bf.firebaseapp.com',
+  projectId: 'vitrainer-7a1bf',
+  storageBucket: 'vitrainer-7a1bf.firebasestorage.app',
+  messagingSenderId: '911739961674',
+  appId: '1:911739961674:web:cdbd6306e9f95fa81c01b3',
+  databaseURL: 'https://vitrainer-7a1bf-default-rtdb.asia-southeast1.firebasedatabase.app'
 };
