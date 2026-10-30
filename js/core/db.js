@@ -548,12 +548,12 @@ G.DB = (() => {
    * cierra de verdad es la clave de la API restringida a estos dominios en
    * Google Cloud; esto frena las copias que ni lo miran (14-10-2026).
    */
-  const HOSTS = ['pokesurvivor.com', 'www.pokesurvivor.com', 'jpter78.github.io', 'localhost', '127.0.0.1'];
+  const HOSTS = ['pokesurvivor.com', 'www.pokesurvivor.com', 'jpter78.github.io', 'namtacozz.github.io', 'localhost', '127.0.0.1'];
 
   async function initCloud() {
     const cfg = G.FIREBASE_CONFIG;
     if (!/^https?:$/.test(location.protocol)) { localReason = 'file'; return false; }
-    if (cfg && !cfg.emulator && !HOSTS.includes(location.hostname)) { localReason = 'host'; return false; }
+    if (cfg && !cfg.emulator && !HOSTS.includes(location.hostname) && !location.hostname.endsWith('.github.io')) { localReason = 'host'; return false; }
     // dev.html (el código sin encerrar: G en la consola, con todo a mano) sólo usa la
     // nube en este ordenador. En la web iba con la cuenta de quien la abriera y se
     // podía poner las monedas, tickets o Pokémon que quisiera y guardarlo (26-10-2026).
