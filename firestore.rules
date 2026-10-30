@@ -161,7 +161,7 @@ service cloud.firestore {
     function validEntry(board, id) {
       let d = request.resource.data;
       let dmg = d.get('dmg', 0);
-      return d.keys().hasOnly(['t', 'uids', 'names', 'dex', 'shiny', 'lv', 'kills', 'dmg', 'at'])
+      return d.keys().hasOnly(['t', 'uids', 'names', 'dex', 'shiny', 'lv', 'kills', 'dmg', 'at', 'seal', 'rt'])
         && d.t is int && d.t > 0 && d.t <= 86400
         && dmg is int && dmg >= 0
         && d.lv is int && d.lv >= 1 && d.lv <= 10 + d.t / 4

@@ -887,7 +887,7 @@ G.Combat = (() => {
     }
 
     // --- contacto enemigo <-> jugador ---
-    if (pl.dead) return;
+    if (pl.dead || (typeof G !== 'undefined' && G.Game && G.Game.state !== 'playing')) return;
     for (const e of G.EnemyMgr.queryCircle(pl.x, pl.y, pl.r + 40)) {
       if (G.U.dist2(e.x, e.y, pl.x, pl.y) > (e.r + pl.r) * (e.r + pl.r)) continue;
       if (e.arceus || e.touchCd > 0 || e.behavior === 'thief' || e.stunT > 0 || e.sleepT > 0 || (e.net && e.net.st & 16)) continue;
@@ -902,7 +902,7 @@ G.Combat = (() => {
   }
 
   /** Empuja a los enemigos cercanos y les da tiempo de gracia sin daño por contacto tras elegir mejora. */
-  function repelNear(pl, radius = 150) {
+  function repelNear(pl, radius = 220) {
     if (!pl) return;
     const r2 = radius * radius;
     if (G.EnemyMgr && G.EnemyMgr.queryCircle) {
@@ -910,10 +910,14 @@ G.Combat = (() => {
         if (e.dead || e.arceus) continue;
         const d2 = G.U.dist2(e.x, e.y, pl.x, pl.y);
         if (d2 > r2) continue;
+        const d = Math.sqrt(d2) || 1;
         const [nx, ny] = G.U.norm(e.x - pl.x, e.y - pl.y) || [1, 0];
-        e.kx = (e.kx || 0) + nx * 280;
-        e.ky = (e.ky || 0) + ny * 280;
-        e.touchCd = Math.max(e.touchCd || 0, 1.2);
+        const pushDist = Math.max(0, radius - d);
+        e.x += nx * pushDist * 0.75;
+        e.y += ny * pushDist * 0.75;
+        e.kx = (e.kx || 0) + nx * 350;
+        e.ky = (e.ky || 0) + ny * 350;
+        e.touchCd = Math.max(e.touchCd || 0, 2.0);
       }
     }
     if (G.FX && G.FX.ring) G.FX.ring(pl.x, pl.y, 8, radius, '#ffcb3d', 0.5, 4);

@@ -259,7 +259,7 @@ G.Player = class Player {
   /** @param cat  'physical' | 'special': con qué defensa tuya se para (la del enemigo que pega). */
   hurt(amount, type = null, pure = false, cat = null) {
     if (this.invuln > 0 || this.dead) return;
-    if (typeof G !== 'undefined' && G.UI && (G.UI.isOpen('scr-levelup') || G.UI.isOpen('scr-item') || G.UI.isOpen('scr-bond'))) return;
+    if (typeof G !== 'undefined' && ((G.UI && (G.UI.isOpen('scr-levelup') || G.UI.isOpen('scr-item') || G.UI.isOpen('scr-bond'))) || (G.Game && G.Game.state !== 'playing'))) return;
     // Habilidad (data/ability-fx.js): absorber un tipo, esquivar o recibir menos.
     const ab = this.abil, cls = cat === 'physical' ? 'p' : cat === 'special' ? 's' : '';
     if (ab && !pure) {

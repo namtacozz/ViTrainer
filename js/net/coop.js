@@ -444,12 +444,13 @@ G.Coop = (() => {
   /** Invitado: se para (o sigue) según si el anfitrión está. */
   function updateAway() { if (api.away) api.away(hostAway || stalled ? nameOf(hostUid) : null); }
 
-  // Anfitrión: al irse de la pestaña avisa a todos al momento (después ya no
-  // podrá mandar nada) y al volver, que sigue.
+  // Anfitrión: al volver a la pestaña avisa que sigue; al ocultarse, el ticker en segundo plano mantiene la partida viva sin congelar a los invitados.
   document.addEventListener('visibilitychange', () => {
     if (!active || !host) return;
-    emit(['ha', document.hidden ? 1 : 0]);
-    flushAll();
+    if (!document.hidden) {
+      emit(['ha', 0]);
+      flushAll();
+    }
   });
 
   function onHostFrame(msg) {
