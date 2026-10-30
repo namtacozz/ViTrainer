@@ -901,6 +901,24 @@ G.Combat = (() => {
     }
   }
 
-  return { tick, resolve, ghostCast, ghostOrbit, updateFields, drawGroundFields, drawAirFields, clearFields,
+  /** Empuja a los enemigos cercanos y les da tiempo de gracia sin daño por contacto tras elegir mejora. */
+  function repelNear(pl, radius = 150) {
+    if (!pl) return;
+    const r2 = radius * radius;
+    if (G.EnemyMgr && G.EnemyMgr.queryCircle) {
+      for (const e of G.EnemyMgr.queryCircle(pl.x, pl.y, radius)) {
+        if (e.dead || e.arceus) continue;
+        const d2 = G.U.dist2(e.x, e.y, pl.x, pl.y);
+        if (d2 > r2) continue;
+        const [nx, ny] = G.U.norm(e.x - pl.x, e.y - pl.y) || [1, 0];
+        e.kx = (e.kx || 0) + nx * 280;
+        e.ky = (e.ky || 0) + ny * 280;
+        e.touchCd = Math.max(e.touchCd || 0, 1.2);
+      }
+    }
+    if (G.FX && G.FX.ring) G.FX.ring(pl.x, pl.y, 8, radius, '#ffcb3d', 0.5, 4);
+  }
+
+  return { tick, resolve, ghostCast, ghostOrbit, repelNear, updateFields, drawGroundFields, drawAirFields, clearFields,
            get fieldCount() { return fields.length; } };
 })();

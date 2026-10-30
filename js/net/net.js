@@ -143,15 +143,18 @@ G.Net = (() => {
     rtdb = fb.rtdb; uid = fb.uid;
     roomId = id; isHost = host; hostUid = hostId;
     qref = rtdb.ref('rooms/' + id + '/q/' + uid);
-    qref.on('child_added', s => {
+    const onMsg = s => {
       const raw = s.val();
+      if (!raw) return;
       s.ref.remove().catch(() => {});
       let m;
       try { m = JSON.parse(raw); } catch (e) { return; }
       if (!m || !m.f) return;
       if (m.sig) onSignal(m.f, m.sig);
       else deliver(m.f, m.d);
-    });
+    };
+    qref.on('child_added', onMsg);
+    qref.on('child_changed', onMsg);
     // Invitado: hueco para el anfitrión desde ya (se sustituye al llegar su
     // oferta). Así, si no llega nunca, se sigue por el relé y se sabe cuándo se va.
     if (!isHost) {
@@ -252,19 +255,21 @@ G.Net = (() => {
 
   function useRelay(u) {
     const p = peers.get(u);
-    if (!p || p.mode === 'direct' || p.mode === 'closed' || p.mode === 'failed') return;
-    if (ALLOW_RELAY) { p.mode = 'relay'; emitPeer(u); return; }
-    // Sin relé: no se puede jugar con esa persona por ahora. El anfitrión reintenta.
+    if (!p || p.mode === 'direct' || p.mode === 'closed') return;
     clearTimeout(p.timer);
-    p.mode = 'failed';
     try { if (p.pc) p.pc.close(); } catch (e) { /* nada */ }
+    const withTurn = isHost && !p.turn && !needTurn.has(u);
+    if (withTurn) needTurn.add(u);
+    if (withTurn) {
+      p.mode = 'failed';
+      emitPeer(u);
+      p.timer = setTimeout(() => { if (peers.get(u) === p && p.mode === 'failed' && roomId) { drop(u, true); connect(u); } }, 0);
+      return;
+    }
+    p.mode = ALLOW_RELAY ? 'relay' : 'failed';
     emitPeer(u);
     if (!isHost) return;
-    // Primer fallo sin TURN: se reintenta ya, esta vez con él. Basta con que lo tenga
-    // uno de los dos: si el anfitrión no consigue el suyo, el invitado pone el propio.
-    const withTurn = !p.turn && !needTurn.has(u);
-    if (withTurn) needTurn.add(u);
-    p.timer = setTimeout(() => { if (peers.get(u) === p && p.mode === 'failed' && roomId) { drop(u, true); connect(u); } }, withTurn ? 0 : RETRY_MS);
+    p.timer = setTimeout(() => { if (peers.get(u) === p && (p.mode === 'failed' || p.mode === 'relay') && roomId) { drop(u, true); connect(u); } }, RETRY_MS);
   }
 
   /** Anfitrión: abre conexión con un invitado. */
@@ -373,7 +378,7 @@ G.Net = (() => {
     }
     // Sin relé, los datos de la partida no van por la base de datos (se pierden: esa
     // pareja no está conectada). Sólo pasa el aviso de empezar.
-    if (!ALLOW_RELAY && !(msg && msg.k === 'start')) return;
+    if ((!ALLOW_RELAY || !p || p.mode !== 'relay') && !(msg && msg.k === 'start')) return;
     stats.relaySent++;
     relayPush(to, { f: uid, d: msg });
   }

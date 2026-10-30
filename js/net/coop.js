@@ -320,7 +320,7 @@ G.Coop = (() => {
    * en pausa («esperando al anfitrión») y el anfitrión sigue jugando.
    */
   const GRACE_MS = 45000;
-  const SILENT_MS = 3000;              // sin noticias de un compañero: los enemigos le dejan (ver tick)
+  const SILENT_MS = 8000;              // sin noticias de un compañero: los enemigos le dejan (ver tick; margen para relé)
   const graceT = new Map();             // uid -> temporizador de la espera
 
   function stopGrace(u) { clearTimeout(graceT.get(u)); graceT.delete(u); }

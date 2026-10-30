@@ -34,7 +34,7 @@
             ".read": "auth != null && auth.uid === $to",
             "$msg": {
               ".write": "auth != null && (auth.uid === $to ? !newData.exists() : (root.child('rooms').child($room).child('m').child(auth.uid).exists() && (auth.uid === $room || $to === $room)))",
-              ".validate": "newData.isString() && newData.val().length <= 16000 && $msg.matches(/^[A-Za-z0-9]{1,64}_[0-9][0-9]$/) && $msg.beginsWith(auth.uid + '_') && root.child('rooms').child($room).child('m').child($to).exists()"
+              ".validate": "newData.isString() && newData.val().length <= 16000 && $msg.matches(/^[A-Za-z0-9_-]{1,64}_[0-9][0-9]$/) && $msg.beginsWith(auth.uid + '_') && root.child('rooms').child($room).child('m').child($to).exists()"
             }
           }
         },

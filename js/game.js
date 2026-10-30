@@ -306,6 +306,10 @@ G.Game = (() => {
     waiting(names) { G.RunUI.setWaiting(names); },
     resume() {
       G.RunUI.closeLevelUp();
+      if (pl) {
+        pl.invuln = Math.max(pl.invuln || 0, 1.5);
+        if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 150);
+      }
       if (state === 'levelup') { state = holdBy.length ? 'held' : 'playing'; afterLevelUp(); }
     },
     /** ¿Estás eligiendo algo que para la partida (objeto o vínculo)? */
@@ -489,6 +493,8 @@ G.Game = (() => {
     G.RunUI.showLevelUp(pl.level, G.LevelUp.offer(pl), card => {
       G.Audio.sfx('confirm');
       card.apply(pl);
+      pl.invuln = Math.max(pl.invuln || 0, 1.5);
+      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 150);
       state = 'playing';
     });
   }
@@ -520,6 +526,8 @@ G.Game = (() => {
       G.FX.ring(pl.x, pl.y, 8, 130, '#ff8ad8', 0.8, 6);
       G.FX.burst(pl.x, pl.y - pl.bodyH * 0.5, '#ffb3e6', 40, 240);
       G.Spawner.say('¡Vínculo! ' + group.length + ' movimientos a la vez', 2.6, true);
+      pl.invuln = Math.max(pl.invuln || 0, 1.2);
+      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 130);
       if (state === 'choice') state = holdBy.length ? 'held' : 'playing';
       if (G.Coop.active) G.Coop.holdEnd();
     });
@@ -561,6 +569,8 @@ G.Game = (() => {
         G.Spawner.say('¡Llevas ' + G.Items.BY[got].name + '!', 2.6, true);
         G.Progress.event('item', { id: got });
       }
+      pl.invuln = Math.max(pl.invuln || 0, 1.2);
+      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 130);
       if (!mine) { afterLevelUp(); return; }
       if (state === 'choice') state = holdBy.length ? 'held' : 'playing';
       if (G.Coop.active) G.Coop.holdEnd();

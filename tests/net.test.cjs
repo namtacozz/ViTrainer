@@ -10,7 +10,7 @@ const C = codec();
 // Devuelve la ruta del destinatario, sin el hueco.
 function slotted(p) {
   const i = p.lastIndexOf('/');
-  assert.match(p.slice(i + 1), /^[A-Za-z0-9]{1,64}_[0-9][0-9]$/);
+  assert.match(p.slice(i + 1), /^[A-Za-z0-9_-]{1,64}_[0-9][0-9]$/);
   return p.slice(0, i);
 }
 
