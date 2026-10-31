@@ -50,6 +50,10 @@ G.Player = class Player {
     this.isApex = false;
     this.awakeningTier = 0;
     this.pendingEvoBranches = null;
+    this.isMega = false;
+    this.megaId = null;
+    this.pendingMegaBranches = null;
+    this.weaknessPolicyT = -999;
 
     this.moves = [];           // todos los movimientos aprendidos
     this.slots = [];           // huecos: cada uno, una lista de movimientos que se lanzan a la vez
@@ -119,7 +123,10 @@ G.Player = class Player {
   cy() { return this.y; }
 
   // ---------------- stats efectivos ----------------
-  get atk() { return this.baseAtk * this.atkMul * (1 + this.buffs.atk.n * this.buffs.atk.amount); }
+  get atk() {
+    const wp = (this.hasItem && this.hasItem('weaknesspolicy') && performance.now() - (this.weaknessPolicyT || 0) < 8000) ? 1.35 : 1;
+    return this.baseAtk * this.atkMul * wp * (1 + this.buffs.atk.n * this.buffs.atk.amount);
+  }
   /**
    * Ataque con un movimiento: el físico o el especial de tu Pokémon (ver
    * G.Stats), con las danzas que sean de su lado (las de mejora, sin ninguna).
@@ -292,12 +299,23 @@ G.Player = class Player {
       }
       if (ab.inMul) amount *= ab.inMul(this, type, cls);
     }
-    if (!pure) amount *= G.Stats.taken(this.mon, cat);
+    if (!pure) {
+      if (this.hasItem && this.hasItem('eviolite')) {
+        const chain = this.evoChain;
+        if (chain && this.evoStage < chain.maxStage) amount *= 0.714;
+      }
+      amount *= G.Stats.taken(this.mon, cat);
+    }
     let eff = null;
     if (type) {
       const k = G.Types.mult(type, this.mon.types);
       eff = G.Types.label(k);
       amount *= k * G.Weather.mult(type);
+      if (eff === 'super' && this.hasItem && this.hasItem('weaknesspolicy')) {
+        this.weaknessPolicyT = performance.now();
+        G.FX.dmgText(this.x, this.y - this.bodyH - 24, '¡Seguro Debilidad!', '#ffd23f', true);
+        G.FX.ring(this.x, this.y, 8, 80, '#ffd23f', 0.5, 3);
+      }
     }
     // Con un ataque cuerpo a cuerpo activo se recibe un 25 % menos: hay que
     // estar encima de los enemigos para pegar (iban muy por detrás).
@@ -549,6 +567,76 @@ G.Player = class Player {
     }
   }
 
+  canMegaEvolve() {
+    if (this.isMega) return false;
+    const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
+    return megas && megas.length > 0 && (this.level >= 30 || (this.hasItem && this.hasItem('keystone')));
+  }
+
+  triggerMegaIfAvailable() {
+    if (this.isMega) return;
+    const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
+    if (!megas || megas.length === 0) return;
+    if (megas.length === 1) {
+      this.megaEvolve(megas[0].id);
+    } else {
+      this.pendingMegaBranches = megas;
+      if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) {
+        G.LevelUp.open();
+      }
+    }
+  }
+
+  megaEvolve(megaId) {
+    const mega = (typeof G !== 'undefined' && G.getMega) ? G.getMega(megaId) : null;
+    if (!mega) return;
+    this.isMega = true;
+    this.megaId = megaId;
+    this.pendingMegaBranches = null;
+
+    const oldHpRatio = this.hp / this.maxHp;
+    this.mon = Object.assign({}, this.mon, {
+      types: mega.types,
+      atk: mega.atk,
+      pa: mega.pa,
+      sa: mega.sa,
+      df: mega.df,
+      sd: mega.sd,
+      spd: mega.spd,
+      bst: mega.bst,
+      name: mega.name
+    });
+    this.baseSpd = mega.spd;
+    this.baseAtk = mega.atk;
+    const hpBonus = Math.round(70 + (mega.hp || 80) * 0.45);
+    this.maxHp = Math.max(this.maxHp + 30, Math.round(hpBonus * (1 + (this.level - 1) * 0.05)));
+    this.hp = Math.round(this.maxHp * oldHpRatio);
+
+    if (mega.spriteDex && typeof G !== 'undefined' && G.SPRITE_META && G.SPRITE_META[mega.spriteDex]) {
+      this.dex = mega.spriteDex;
+    }
+    this.megaAura = true;
+
+    if (mega.ability) {
+      this.setAbility(mega.ability);
+    }
+
+    if (typeof G !== 'undefined') {
+      if (G.FX) {
+        G.FX.ring(this.x, this.y, 10, 140, '#ffd23f', 0.8, 6);
+        G.FX.ring(this.x, this.y, 14, 110, '#f43f5e', 0.7, 5);
+        G.FX.ring(this.x, this.y, 18, 80, '#38bdf8', 0.6, 4);
+        G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ffd23f', 30, 260);
+        G.FX.dmgText(this.x, this.y - this.bodyH - 28, '¡MEGA EVOLUCIÓN!', '#f43f5e', true);
+      }
+      if (G.Audio) G.Audio.sfx('legend');
+      if (G.Camera) G.Camera.kick(0.45);
+      if (G.Coop && G.Coop.active) {
+        G.Coop.broadcast(['mega', this.uid, mega.id]);
+      }
+    }
+  }
+
   // ---------------- objeto equipado ----------------
   hasItem(id) { return this.item === id; }
 
@@ -627,10 +715,10 @@ G.Player = class Player {
 
     // --- terreno líquido ---
     // (Levitación: flota por encima del agua y la lava.)
-    this.inLiquid = !(this.abil && this.abil.levitate) && G.World.isLiquid(this.x, this.y);
+    this.inLiquid = !(this.abil && this.abil.levitate) && !(this.hasItem && this.hasItem('heavydutyboots')) && G.World.isLiquid(this.x, this.y);
     if (this.inLiquid) {
       const le = G.World.liquidEffect(this.mon.types);
-      if (le.dmg && !(this.abil && this.abil.lavaProof)) {
+      if (le.dmg && !(this.abil && this.abil.lavaProof) && !(this.hasItem && this.hasItem('heavydutyboots'))) {
         this.lavaTick -= dt;
         if (this.lavaTick <= 0) {
           this.lavaTick = le.every; this.invuln = 0;
@@ -787,6 +875,20 @@ G.Player = class Player {
       ctx.globalAlpha = 0.4 + Math.sin(performance.now() / 150) * 0.2;
       ctx.strokeStyle = '#ff4081'; ctx.lineWidth = 2.5;
       ctx.beginPath(); ctx.ellipse(this.x, this.y, this.r * 1.9, this.r * 0.75, 0, 0, 6.2832); ctx.stroke();
+      ctx.restore();
+    }
+
+    // Halo Megaevolución / Primal Reversion: Aro arcoíris y partículas de ADN
+    if (this.isMega && !this.dead) {
+      const now = performance.now();
+      const hue = (now / 15) % 360;
+      ctx.save();
+      ctx.globalAlpha = 0.55 + Math.sin(now / 120) * 0.2;
+      ctx.strokeStyle = `hsl(${hue}, 95%, 65%)`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.ellipse(this.x, this.y, this.r * 2.2, this.r * 0.9, 0, 0, 6.2832);
+      ctx.stroke();
       ctx.restore();
     }
 

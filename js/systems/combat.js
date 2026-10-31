@@ -45,7 +45,23 @@ G.Combat = (() => {
     run(pl, m);
   }
 
+  function countFor(pl, m) {
+    let n = Math.max(1, m.count | 0);
+    if (pl && pl.hasItem && pl.hasItem('loadeddice') && ((m.count || 1) > 1 || m.bounce || m.waves || (m.pierce && m.pierce > 1) || m.kind === 'boomerang' || m.kind === 'chain')) {
+      n += 2;
+    }
+    return n;
+  }
+
   function run(pl, m) {
+    if (pl && pl.abil && m.type === 'normal') {
+      if (pl.abil.pixilate) m = Object.assign({}, m, { type: 'fairy' });
+      else if (pl.abil.aerilate) m = Object.assign({}, m, { type: 'flying' });
+      else if (pl.abil.refrigerate) m = Object.assign({}, m, { type: 'ice' });
+    }
+    if (pl && pl.abil && pl.abil.protean && pl.mon && m.type) {
+      pl.mon.types = [m.type];
+    }
     switch (m.kind) {
       case 'projectile': fireProjectiles(pl, m); break;
       case 'melee':      melee(pl, m); break;
@@ -114,7 +130,7 @@ G.Combat = (() => {
   function fireProjectiles(pl, m) {
     const col = G.U.TYPE_COLOR[m.type];
     const vis = G.VFX.forMove(m);
-    const n = Math.max(1, m.count | 0);
+    const n = countFor(pl, m);
     const spread = m.spread || 0;
     for (let i = 0; i < n; i++) {
       const off = n === 1 ? 0 : (i / (n - 1) - 0.5) * spread * n;
@@ -128,7 +144,7 @@ G.Combat = (() => {
   function nova(pl, m) {
     const col = G.U.TYPE_COLOR[m.type];
     const vis = G.VFX.forMove(m);
-    const n = Math.max(3, m.count | 0);
+    const n = Math.max(3, countFor(pl, m));
     for (let i = 0; i < n; i++) {
       const a = (i / n) * 6.2832 + G.U.rand(-0.06, 0.06);
       shot(pl, m, a, col, vis);
@@ -227,7 +243,7 @@ G.Combat = (() => {
   /** Bumerán: sale hacia el enemigo, se para y vuelve a ti golpeando a la ida y a la vuelta. */
   function boomerang(pl, m) {
     const col = G.U.TYPE_COLOR[m.type], vis = G.VFX.forMove(m);
-    const n = Math.max(1, m.count | 0), spread = m.spread || 0.5;
+    const n = countFor(pl, m), spread = m.spread || 0.5;
     const out = m.radius / m.speed;                       // segundos de ida
     for (let i = 0; i < n; i++) {
       const a = pl.aim + (n === 1 ? 0 : (i / (n - 1) - 0.5) * spread * Math.min(n, 3));
@@ -246,7 +262,7 @@ G.Combat = (() => {
     if (!cur) return;
     let fx = pl.x, fy = pl.y - G.LIFT, k = 1;
     const done = new Set();
-    const n = Math.max(1, m.count | 0);
+    const n = countFor(pl, m);
     for (let i = 0; i < n && cur; i++) {
       done.add(cur.id);
       const tx = cur.x, ty = cur.y - cur.bodyH * 0.5;
@@ -749,17 +765,33 @@ G.Combat = (() => {
   const arcK = e => (e.arceus ? G.Judgment.dmgK() : 1);
 
   function hit(pl, e, dmg, col, dx, dy, knock, m) {
-    const k = typeK(m.type, e) * G.Stats.taken(e.mon, m.cat) * abilOut(pl, m, e) * arcK(e);
+    let k = typeK(m.type, e) * G.Stats.taken(e.mon, m.cat) * abilOut(pl, m, e) * arcK(e);
+    if (pl && pl.hasItem && pl.hasItem('expertbelt') && typeK(m.type, e) > 1.2) {
+      k *= 1.30;
+    }
+    if (pl && pl.hasItem && pl.hasItem('keystone') && (pl.mon.types || []).includes(m.type)) {
+      k *= 1.15;
+    }
     const crit = isCrit(pl), sk = statusK(pl);
     dmg *= k * (crit ? critMul(pl) : 1);
     e.hurt(dmg, col, dx, dy, sk ? knock : 0, crit ? 'crit' : G.Types.label(G.Types.mult(m.type, e.types)));
     if (!ghost) pl.onDealt(dmg);
     pl.dmgDealt += dmg;
-    m.dealt = (m.dealt || 0) + dmg;               // por ataque, para el resumen de la pausa
+    m.dealt = (m.dealt || 0) + dmg;
     if (m.burn && sk) e.applyBurn(m.burn * sk);
     if (m.poison && sk) e.applyPoison(m.poison * sk);
     if (m.slow && sk) e.applySlow(Math.min(0.8, m.slow * sk));
     afterHit(pl, e, m);
+
+    if (pl && pl.abil && pl.abil.parentalBond && !m._parentalEcho && !e.dead) {
+      setTimeout(() => {
+        if (e && !e.dead && pl && !pl.dead) {
+          const echoM = Object.assign({}, m, { _parentalEcho: true });
+          hit(pl, e, dmg * 0.35, col, dx * 0.4, dy * 0.4, 0, echoM);
+          G.FX.burst(e.x, e.y - e.bodyH * 0.5, col, 4, 70);
+        }
+      }, 150);
+    }
   }
 
   // ---------------- colisiones ----------------
@@ -787,6 +819,19 @@ G.Combat = (() => {
           continue;
         }
         if (G.U.dist2(p.x, p.y, pl.x, pl.y) < (p.r + pl.r) * (p.r + pl.r)) {
+          if (pl.abil && pl.abil.magicBounce && Math.random() < 0.5) {
+            p.friendly = true;
+            p.vx = -p.vx * 1.3;
+            p.vy = -p.vy * 1.3;
+            p.owner = pl;
+            p.color = '#ff99dd';
+            p.dmg = Math.max(p.dmg * 1.5, 30);
+            p.life = 2.5;
+            p.hits = new Set();
+            G.FX.ring(pl.x, pl.y, pl.r, pl.r * 2.5, '#ff99dd', 0.3, 3);
+            G.Audio.sfx('break');
+            continue;
+          }
           pl.hurt(p.dmg, p.mtype, false, p.cat);
           G.FX.burst(p.x, p.y - G.LIFT, p.color, 7, 110);
           projectiles.splice(i, 1);

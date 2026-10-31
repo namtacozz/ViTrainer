@@ -72,6 +72,23 @@ G.LevelUp = (() => {
       }
     }
 
+    // --- Mega Evoluciones (Golden Cards) ---
+    if (pl.pendingMegaBranches && pl.pendingMegaBranches.length > 0) {
+      for (const mega of pl.pendingMegaBranches) {
+        const typesStr = (mega.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+        out.push({
+          w: 1200, type: 'mega_evo', key: 'mega_evo:' + mega.id,
+          icon: 'megaBadge', color: '#f43f5e', tag: 'MEGA EVOLUCIÓN',
+          title: G.T(mega.name),
+          desc: `Despierta la Megaevolución (${typesStr}). BST ${mega.bst}, habilidad ${G.T(mega.ability, 'ability') || mega.ability} y poder desatado.`,
+          apply: p => {
+            p.pendingMegaBranches = null;
+            p.megaEvolve(mega.id);
+          }
+        });
+      }
+    }
+
     // --- ramificaciones de evolución de Pokémon (Golden Cards) ---
     if (pl.pendingEvoBranches && pl.pendingEvoBranches.length > 0) {
       for (const branchDex of pl.pendingEvoBranches) {

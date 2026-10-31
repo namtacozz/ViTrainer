@@ -33,7 +33,20 @@ G.Items = (() => {
       on: () => {}, off: () => {} },
     { id: 'assaultvest', name: 'Chaleco Asalto', desc: '+20% de reducción de daño recibido.',
       // (aparte del tope del 70 % de las cartas Coraza: ver Player.reduction)
-      on: p => { p.itemReduce += 0.2; }, off: p => { p.itemReduce -= 0.2; } }
+      on: p => { p.itemReduce += 0.2; }, off: p => { p.itemReduce -= 0.2; } },
+    { id: 'eviolite', name: 'Mineral Evolutivo', desc: '+40% de Def. y Def. Esp. si el Pokémon no ha alcanzado su fase final.',
+      on: p => { p.eviolite = true; }, off: p => { p.eviolite = false; } },
+    { id: 'weaknesspolicy', name: 'Seguro Debilidad', desc: 'Al recibir daño muy eficaz, +35% de daño durante 8 s.',
+      on: p => { p.weaknesspolicy = true; }, off: p => { p.weaknesspolicy = false; } },
+    { id: 'expertbelt', name: 'Cinta Experto', desc: '+30% de daño al acertar ataques muy eficaces.',
+      on: p => { p.expertbelt = true; }, off: p => { p.expertbelt = false; } },
+    { id: 'loadeddice', name: 'Dado Trucado', desc: '+2 proyectiles o impactos en movimientos de varios golpes.',
+      on: p => { p.loadeddice = true; }, off: p => { p.loadeddice = false; } },
+    { id: 'heavydutyboots', name: 'Botas Gruesas', desc: 'Inmune a lava, charcos ralentizantes y trampas de suelo.',
+      on: p => { p.heavydutyboots = true; }, off: p => { p.heavydutyboots = false; } },
+    { id: 'keystone', name: 'Mega Aro', desc: '+10% estadísticas, activa la Megaevolución al instante y +15% de bonus STAB.',
+      on: p => { p.keystone = true; p.atkMul *= 1.10; p.spdMul *= 1.10; if (p.triggerMegaIfAvailable) p.triggerMegaIfAvailable(); },
+      off: p => { p.keystone = false; p.atkMul /= 1.10; p.spdMul /= 1.10; } }
   ];
   const BY = {};
   for (const it of LIST) BY[it.id] = it;

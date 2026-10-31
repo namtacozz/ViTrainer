@@ -570,6 +570,25 @@ G.Coop = (() => {
     else outEv.push(['evo', me, newDex, isApex]);
   }
 
+  function applyMateMega(uid, megaId) {
+    const m = mates.get(uid);
+    if (!m || !m.pl) return;
+    const mega = (typeof G !== 'undefined' && G.getMega) ? G.getMega(megaId) : null;
+    if (!mega) return;
+    m.pl.isMega = true;
+    m.pl.megaId = megaId;
+    m.pl.mon = Object.assign({}, m.pl.mon, { types: mega.types, atk: mega.atk, spd: mega.spd, bst: mega.bst, name: mega.name });
+    if (mega.spriteDex && G.SPRITE_META && G.SPRITE_META[mega.spriteDex]) {
+      m.pl.dex = mega.spriteDex;
+    }
+    if (G.FX) {
+      G.FX.ring(m.pl.x, m.pl.y, 10, 160, '#f43f5e', 1.0, 8);
+      G.FX.burst(m.pl.x, m.pl.y - m.pl.bodyH * 0.5, '#ffd23f', 40, 260);
+      G.FX.dmgText(m.pl.x, m.pl.y - m.pl.bodyH - 28, '¡MEGA!', '#f43f5e', true);
+    }
+    if (G.Audio) G.Audio.sfx('legend');
+  }
+
   function applyMateEvo(uid, newDex, isApex) {
     const m = mates.get(uid);
     if (!m || !m.pl) return;

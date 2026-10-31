@@ -199,6 +199,27 @@ G.Icons = (() => {
     assaultvest: { pal: { g: '#4f8a3a', d: '#2f5a22', y: '#ffd23f' }, rows: [
       '............', '.kkk....kkk.', 'kggk....kggk', 'kgggkkkkgggk', 'kgggyggygggk', 'kgggggggggdk',
       'kggyggggygdk', 'kgggggggggdk', 'kgggggggggdk', 'kddddddddddk', 'kkkkkkkkkkkk', '............'] },
+    eviolite: { pal: { p: '#ff66b2', d: '#b31d6d', w: '#ffcce6', c: '#e60073' }, rows: [
+      '....kkkk....', '..kkwwwwkk..', '.kwwppppddk.', '.kwppppppdk.', 'kwwppcpcppdk', 'kwppcpcpppdk',
+      'kppcpcppppdk', 'kppcppppdddk', '.kppppdddk..', '..kddddk....', '...kkkk.....', '............'] },
+    weaknesspolicy: { pal: { y: '#ffd23f', o: '#d08a10', r: '#ff3048', w: '#fff3b0' }, rows: [
+      '....kkkk....', '..kkyyyykk..', '.kywrrrrwyk.', 'kywrrrrrrwyk', 'kyy..rr..yyk', 'kyyoorr..yok',
+      'kyy..rr..yok', 'kyy..rr..yok', '.kyy....yok.', '..kyooooyk..', '...kkkkkk...', '............'] },
+    expertbelt: { pal: { b: '#30303a', d: '#18181e', w: '#ffffff', y: '#ffd23f' }, rows: [
+      '............', '...kkkkkk...', '.kkbbwwbbkk.', 'kbb......bbk', 'kd........dk', 'kbb..yy..bbk',
+      'kbb.yyyy.bbk', 'kd...yy...dk', '.kkbbddbbkk.', '...kddddk...', '....kddk....', '.....kk.....'] },
+    loadeddice: { pal: { g: '#2dd4bf', d: '#0f766e', w: '#ffffff', s: '#134e4a' }, rows: [
+      '..kkkkkkkk..', '.kggggggggk.', 'kgwkwkwwgwgk', 'kggggggggggk', 'kgwkwkwwgwgk', 'kggggggggggk',
+      'kgwkwkwwgwgk', 'kggggggggggk', 'kddddddddddk', '.kssssssssk.', '..kkkkkkkk..', '............'] },
+    heavydutyboots: { pal: { b: '#92400e', d: '#542007', y: '#facc15', w: '#fef08a' }, rows: [
+      '..kk....kk..', '.kbk....kbk.', '.kbyk..kbyk.', '.kbk....kbk.', '.kbyk..kbyk.', '.kbbk..kbbk.',
+      'kbbbbkkbbbbk', 'kbbbbbbbbbbk', 'kddddddddddk', 'kkkkkkkkkkkk', '............', '............'] },
+    keystone: { pal: { s: '#94a3b8', d: '#475569', w: '#ffffff', r: '#f43f5e', b: '#38bdf8', y: '#facc15' }, rows: [
+      '....kkkk....', '..kksssskk..', '.ksrwwrrdsk.', 'kswrwwrrbssk', 'ksrryybbbsdk', 'ksrryybbbsdk',
+      'kswrrbbbbssk', '.ksbbbdddsk.', '..kkddddkk..', '.kssssssssk.', '..kkkkkkkk..', '............'] },
+    megaBadge: { pal: { r: '#f43f5e', b: '#38bdf8', y: '#facc15', w: '#ffffff' }, rows: [
+      '.....kk.....', '...kkrrkk...', '..krrrbrrk..', '.krrrbbyrrk.', 'krwwrbyywwrk', 'krrrbbyyrrrk',
+      'krwwbbyywwrk', '.kbbbbyyyk..', '..kbbbyyk...', '...kkyykk...', '.....kk.....', '............'] },
     // ---------- medallas de logros (bronce, plata, oro) ----------
     medal1: { pal: { r: '#ff5f6d', q: '#b8283a', m: '#d08a4a', n: '#8a5226', w: '#ffd0a0', s: '#ffe8c8' }, rows: MEDAL },
     medal2: { pal: { r: '#4fb4ff', q: '#2a6fb0', m: '#c9d2de', n: '#7d8899', w: '#ffffff', s: '#ffffff' }, rows: MEDAL },

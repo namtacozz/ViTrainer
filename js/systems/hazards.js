@@ -46,7 +46,7 @@ G.Hazards = (() => {
         h.hit = true;
         detonate(h);
         // (Humedad: la explosión de un kamikaze no le daña, ver data/ability-fx.js.)
-        if (pl && !pl.dead && inside(h, pl.x, pl.y, pl.r) && !(h.boom && pl.abil && pl.abil.damp)) {
+        if (pl && !pl.dead && inside(h, pl.x, pl.y, pl.r) && !(h.boom && pl.abil && pl.abil.damp) && !(pl.hasItem && pl.hasItem('heavydutyboots') && h.kind === 'zone' && !h.pure)) {
           pl.invuln = 0;
           pl.hurt(h.pct ? Math.max(h.dmg, pl.maxHp * h.pct) : h.dmg, h.type, !!h.pure, h.cat);
         }

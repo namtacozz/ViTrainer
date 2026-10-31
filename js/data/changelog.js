@@ -6,6 +6,14 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Megaevolución, Primal Reversion y Nuevos Objetos", "Mega Evolution, Primal Reversion & New Items"], new: [
+    ["Megaevolución y Regresión Primigenia en partida: los Pokémon compatibles alcanzan su forma Mega al nivel 30 o con el Mega Aro, obteniendo aumentos colosales de estadísticas, nuevos tipos, habilidades devastadoras y auras luminosas con el emblema de ADN.",
+     "Mega Evolution and Primal Reversion: eligible Pokémon can now Mega Evolve in battle at Lv.30 or via the Mega Bracelet, gaining colossal stat boosts, new type combinations, signature abilities, and glowing iridescent DNA auras."],
+    ["6 nuevos objetos equipables: Mineral Evolutivo (+40% defensas en fases previas), Seguro Debilidad (+35% ataque tras golpe eficaz), Cinta Experto (+30% daño eficaz), Dado Trucado (+2 impactos en multihit), Botas Gruesas (inmune a lava y trampas) y Mega Aro (despierta la Megaevolución al instante).",
+     "6 new held items: Eviolite (+40% def/sp.def for unevolved stages), Weakness Policy (+35% atk after effective hit), Expert Belt (+30% super-effective damage), Loaded Dice (+2 hits on multihit moves), Heavy-Duty Boots (immune to hazards & liquid slowdown), and Mega Bracelet (instant Mega Evolution)."],
+    ["Nuevas habilidades exclusivas: Amor Filial (golpe eco con 35% de daño), Garra Dura (+35% daño de contacto), Piel Feérica / Celeste / Helada (convierte ataques Normales con +25% daño), Espejo Mágico (50% reflejo de proyectiles), Impulso y Mutatipo/Líbero.",
+     "New abilities: Parental Bond (secondary echo strike dealing 35% damage), Tough Claws (+35% contact damage), Pixilate / Aerilate / Refrigerate (Normal moves morph into Fairy/Flying/Ice with +25% damage), Magic Bounce (50% projectile reflection), Speed Boost, and Protean/Libero."]
+  ]},
   { d: '2026-10-31', title: ["Evolución en partida y renovación del Gacha", "In-Run Evolution & Gacha Rework"], new: [
     ["Evolución en partida: tus Pokémon ahora evolucionan durante la partida al alcanzar los niveles 15 y 30 (nivel 18 para Pokémon de dos fases). Los Pokémon de fase única desbloquean Despertar I y II (Apex+).",
      "In-run evolution: your Pokémon now evolve during runs upon reaching levels 15 and 30 (level 18 for two-stage species). Single-stage species unlock Awakening I and II (Apex+)."],

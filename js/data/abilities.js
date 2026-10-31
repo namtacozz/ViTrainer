@@ -7,6 +7,11 @@
  * "Rara" ya significan otra cosa allí. Ver G.Mons.name().
  */
 G.ABIL = {
+  "parental-bond": ["Amor Filial", "Parental Bond", "Amour Filial", "Amore Filiale", "亲子爱", "親子愛"],
+  "aerilate": ["Piel Celeste", "Aerilate", "Peau Céleste", "Pellecielo", "飞行皮肤", "飛行皮膚"],
+  "primordial-sea": ["Mar del Albor", "Primordial Sea", "Mer Primaire", "Mare Primordiale", "始源之海", "始源之海"],
+  "desolate-land": ["Tierra del Ocaso", "Desolate Land", "Terre Finale", "Terra Estrema", "终结之地", "終結之地"],
+  "delta-stream": ["Ráfaga Delta", "Delta Stream", "Souffle Delta", "Flusso Delta", "德尔塔气流", "德爾塔氣流"],
   "adaptability":["Adaptable","Adaptability","Adaptabilité","Adattabilità","适应力","適應力"],
   "aftermath":["Detonación","Aftermath","Boom Final","Scoppio","引爆","引爆"],
   "air-lock":["Bucle Aire","Air Lock","Air Lock","Riparo","气闸","氣閘"],

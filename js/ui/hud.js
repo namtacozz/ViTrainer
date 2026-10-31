@@ -89,6 +89,10 @@ G.HUD = (() => {
     ctx.fillStyle = '#eaf2ff';
     ctx.textAlign = 'left';
     ctx.fillText(pl.mon.name, px, py + 10);
+    if (pl.isMega && G.Icons) {
+      const nw = ctx.measureText(pl.mon.name).width;
+      G.Icons.draw(ctx, 'megaBadge', px + nw + 6, py - 3, 16);
+    }
 
     ctx.font = F(700, 11);
     ctx.fillStyle = '#ffcb3d';
