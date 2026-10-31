@@ -188,6 +188,8 @@ G.Game = (() => {
     G.Pickups.clear();
     G.Spawner.reset();
     G.Rift.reset();
+    if (G.Timeline && G.Timeline.reset) G.Timeline.reset();
+    if (G.InRunEvents && G.InRunEvents.reset) G.InRunEvents.reset();
     G.Judgment.reset();
     G.Events.reset();
     G.Weather.reset();
@@ -836,6 +838,7 @@ G.Game = (() => {
       return;
     }
     time += dt;
+    if (G.InRunEvents && G.InRunEvents.update) G.InRunEvents.update(dt, time);
 
     const b = Math.floor(time / 240);
     if (b !== biome && !G.Rift.inArena && !G.Judgment.active) {
@@ -910,6 +913,7 @@ G.Game = (() => {
     G.Hazards.draw(ctx);
     G.Combat.drawGroundFields(ctx);
     G.Pickups.draw(ctx);
+    if (G.InRunEvents && G.InRunEvents.drawWorld) G.InRunEvents.drawWorld(ctx);
 
     // Todo lo que tiene "pies" se ordena por Y: objetos, enemigos, jugador.
     const items = [];

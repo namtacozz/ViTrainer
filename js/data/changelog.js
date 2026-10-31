@@ -6,6 +6,20 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Línea Temporal Deslizante en HUD, Eventos Secuenciales en Partida y Correcciones", "HUD Infinite Timeline Bar, In-Run Sequential Events & Fixes"], new: [
+    ["Barra de progreso continua en el HUD: nueva barra de tiempo deslizante en la parte superior central que visualiza la llegada continua de Jefes, Grietas y Eventos en tiempo real para runs infinitas, sincronizada en cooperativo y con distintivos canvas vectoriales nítidos sin emojis.",
+     "HUD Infinite Sliding Timeline Bar: real-time sliding timeline at top-center displaying upcoming Bosses, Rifts, and In-Run Events continuously for infinite runs, synchronized across co-op peers with crisp vector canvas badges."],
+    ["Tres eventos secuenciales en partida: Toma de Zona (círculo con barrido radial horario 360° y agresión de hordas), Búsqueda de Cristales (recolección con brújula e indicadores direccionales HUD) y Supervivencia Extrema (evasión de Pokémon Alfa inmortal con peligros telegrafiados).",
+     "Three Sequential In-Run Events: Zone Capture (tactical circle with clockwise 360° radial sweep and horde rush), Scavenger Hunt (crystal collection with compass HUD arrows pointing to off-screen items), and Boss Pursuit (survival escape from immortal Alpha boss with telegraphed hazards)."],
+    ["Recompensas generosas de eventos: reanimación instantánea de compañeros caídos al 50% de PS con escudo invulnerable, aumentos de estadísticas permanentes para la run (+15% daño, +8 velocidad) y lluvia de tickets y monedas.",
+     "Generous Event Rewards: instant teammate revival at 50% HP with invulnerability shield, permanent run stat boons (+15% damage, +8 speed), and guaranteed tickets and coins."]
+  ], chg: [
+    ["Nombres de movimientos en inglés canónico: unificados todos los nombres de movimientos a sus nombres oficiales en inglés en todos los idiomas (manteniendo sus descripciones traducidas a cada idioma según los ajustes).",
+     "Canon English Move Names: standardized all move names across all languages exclusively to their official canon English names (keeping full descriptions translated to each locale)."]
+  ], fix: [
+    ["Estado en línea en la lista de amigos: corregido el indicador visual que mostraba erróneamente a todos los amigos confirmados como conectados con luz verde.",
+     "Friend Online Status Fix: resolved false-positive green online indicator that incorrectly marked all confirmed friends as actively online."]
+  ]},
   { d: '2026-10-31', title: ["Director de Hordas, Jefes Inteligentes, Blindaje Cooperativo de 8 Jugadores y Combos Elementales", "Spawn Director, Intelligent Bosses, 8-Player Hardened Co-op & Elemental Combos"], new: [
     ["Spawn Director inteligente: nuevo sistema de generación de hordas que gestiona créditos por segundo, ciclos respiratorios de 60s (30s subida, 15s clímax, 15s respiro) y arco de escape garantizado >= 60° con protección anti-kiteo.",
      "Intelligent Spawn Director: new horde director budgeting credits per second, 60s breathing cycles (30s ramp, 15s peak, 15s reprieve), and guaranteed >= 60° escape corridors with anti-kiting pursuit packs."],

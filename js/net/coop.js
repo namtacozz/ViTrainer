@@ -474,6 +474,7 @@ G.Coop = (() => {
           else if (ev[2] === 't') e.applyStun(ev[3]);
           break;
         }
+        case 'inrun_ev': if (G.InRunEvents && G.InRunEvents.onRemoteEvent) G.InRunEvents.onRemoteEvent(ev); emit(ev, from); break;
         case 'c':
           G.Combat.ghostCast(m.pl, ev[1], ev[2], ev[3], ev[4]);
           emit(['c', from, ev[1], ev[2], ev[3], ev[4]], from);
@@ -626,6 +627,7 @@ G.Coop = (() => {
         G.Spawner.say(n + ' se ha reconectado', 2.5);
         break;
       }
+      case 'inrun_ev': if (G.InRunEvents && G.InRunEvents.onRemoteEvent) G.InRunEvents.onRemoteEvent(ev); break;
       case 'say': G.Spawner.say(ev[1], ev[2]); break;
       case 'heal': if (!local.dead) { local.heal(local.maxHp * ev[1]); G.FX.ring(local.x, local.y, 6, 60, '#5fe08a', 0.4, 3); } break;
       case 'lu': if (!ev[2] || ev[2] > seenSeq) { seenSeq = ev[2] || seenSeq; api.levelStart(ev[1]); } break;

@@ -53,8 +53,8 @@ G.Progress = (() => {
     const key = String(s.created || 0);
     s.missions = s.missions || {};
     const M = s.missions;
-    if (M.day !== ids.d || (M.daily && M.daily.length < 5)) {
-      if (M.day !== ids.d) {
+    if (M.day !== ids.d || !M.daily || M.daily.length < 5) {
+      if (M.day !== ids.d || !M.daily) {
         M.day = ids.d; M.rerolled = false;
         M.daily = pickSet(G.MissionDefs.daily, 5, rng(ids.d + key));
       } else if (M.daily && M.daily.length < 5) {
@@ -64,8 +64,8 @@ G.Progress = (() => {
         M.daily = M.daily.concat(extra);
       }
     }
-    if (M.week !== ids.w || (M.weekly && M.weekly.length < 3)) {
-      if (M.week !== ids.w) {
+    if (M.week !== ids.w || !M.weekly || M.weekly.length < 3) {
+      if (M.week !== ids.w || !M.weekly) {
         M.week = ids.w;
         M.weekly = pickSet(G.MissionDefs.weekly, 3, rng(ids.w + key));
       } else if (M.weekly && M.weekly.length < 3) {

@@ -67,6 +67,148 @@ G.HUD = (() => {
     }
   }
 
+  
+  function drawTimelineBadge(ctx, x, y, ev) {
+    ctx.save();
+    if (ev.type === "boss") {
+      ctx.fillStyle = "#ff3344";
+      ctx.beginPath();
+      ctx.arc(x, y, 6.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(x - 2.5, y - 1.5, 1.6, 1.6);
+      ctx.fillRect(x + 0.9, y - 1.5, 1.6, 1.6);
+    } else if (ev.type === "rift") {
+      ctx.fillStyle = "#a05bff";
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#9ae6ff";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 1.5);
+      ctx.stroke();
+    } else if (ev.type === "event_zone") {
+      ctx.fillStyle = "#ffd23f";
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#101424";
+      ctx.fillRect(x - 1.5, y - 3.5, 1.2, 7);
+      ctx.beginPath();
+      ctx.moveTo(x - 0.5, y - 3.5);
+      ctx.lineTo(x + 3.5, y - 1.5);
+      ctx.lineTo(x - 0.5, y + 0.5);
+      ctx.closePath();
+      ctx.fill();
+    } else if (ev.type === "event_scavenger") {
+      ctx.fillStyle = "#7fe0ff";
+      ctx.beginPath();
+      ctx.moveTo(x, y - 6.5);
+      ctx.lineTo(x + 5, y);
+      ctx.lineTo(x, y + 6.5);
+      ctx.lineTo(x - 5, y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    } else if (ev.type === "event_pursuit") {
+      ctx.fillStyle = "#ff7b3d";
+      ctx.beginPath();
+      ctx.moveTo(x, y - 6);
+      ctx.lineTo(x + 6, y + 5);
+      ctx.lineTo(x - 6, y + 5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(x - 0.7, y - 1.5, 1.4, 3.5);
+      ctx.fillRect(x - 0.7, y + 3, 1.4, 1.4);
+    } else if (ev.type === "judgment") {
+      ctx.fillStyle = "#ffe664";
+      ctx.beginPath();
+      ctx.arc(x, y, 6.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawTimelineBar(ctx, w, h, time) {
+    if (!G.Timeline) return;
+    const barW = Math.min(320, w - 220);
+    if (barW < 140) return;
+    const barH = 18;
+    const barX = (w - barW) / 2;
+    const barY = 66;
+    const windowSecs = 135;
+    const nowX = barX + 28;
+
+    ctx.save();
+    roundRect(ctx, barX, barY, barW, barH, 9);
+    ctx.fillStyle = "rgba(7, 13, 26, 0.78)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(140, 180, 255, 0.28)";
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(nowX, barY + barH / 2);
+    ctx.lineTo(barX + barW - 10, barY + barH / 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#ffd23f";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(nowX, barY + 3);
+    ctx.lineTo(nowX, barY + barH - 3);
+    ctx.stroke();
+
+    ctx.save();
+    roundRect(ctx, barX + 2, barY + 1, barW - 4, barH - 2, 8);
+    ctx.clip();
+
+    const upcoming = G.Timeline.getUpcoming(time, windowSecs);
+    for (const ev of upcoming) {
+      const dt = ev.time - time;
+      const markerX = nowX + (dt / windowSecs) * (barW - 42);
+      if (markerX >= barX - 12 && markerX <= barX + barW + 12) {
+        drawTimelineBadge(ctx, markerX, barY + barH / 2, ev);
+      }
+    }
+    ctx.restore();
+
+    if (G.InRunEvents && G.InRunEvents.current) {
+      const cur = G.InRunEvents.current;
+      const pulse = 0.5 + Math.sin(Date.now() / 180) * 0.5;
+      ctx.strokeStyle = cur.type === "zone" ? ("rgba(255, 210, 63, " + (0.4 + pulse * 0.5) + ")")
+                      : cur.type === "scavenger" ? ("rgba(127, 224, 255, " + (0.4 + pulse * 0.5) + ")")
+                      : ("rgba(255, 95, 109, " + (0.4 + pulse * 0.5) + ")");
+      ctx.lineWidth = 2;
+      roundRect(ctx, barX - 1, barY - 1, barW + 2, barH + 2, 10);
+      ctx.stroke();
+
+      ctx.font = F(700, 9);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#ffffff";
+      if (cur.type === "zone") {
+        const pct = Math.floor(cur.progress * 100);
+        ctx.fillText(G.T("Toma de Zona") + ": " + pct + "%", barX + barW / 2, barY + barH + 10);
+      } else if (cur.type === "scavenger") {
+        ctx.fillText(G.T("Búsqueda de Cristales") + ": " + cur.collectedCount + "/" + cur.total + " (" + Math.ceil(cur.t) + "s)", barX + barW / 2, barY + barH + 10);
+      } else if (cur.type === "pursuit") {
+        ctx.fillText(G.T("Supervivencia Extrema") + ": " + Math.ceil(cur.t) + "s", barX + barW / 2, barY + barH + 10);
+      }
+    }
+
+    ctx.restore();
+  }
+
   function draw(ctx, w, h, pl, st) {
     ctx.save();
     ctx.textBaseline = 'alphabetic';
@@ -201,6 +343,7 @@ G.HUD = (() => {
     // Halloween: también los caramelos que llevas en esta partida.
     const cn = G.Halloween.inRun ? '  ·  ' + (pl.candy || 0) + ' CARAMELOS' : '';
     ctx.fillText(G.World.biomeName().toUpperCase() + '  ·  ' + pl.kills + ' DERROTADOS  ·  ' + pl.coins + ' MONEDAS' + cn, w / 2, 58);
+    drawTimelineBar(ctx, w, h, st.time);
 
     // ---------- clima (arriba a la derecha) ----------
     const wx = G.Weather.current;
