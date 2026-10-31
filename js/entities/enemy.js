@@ -149,6 +149,7 @@
         return;
       }
       if (this.boss) {
+        if (this.vulnerableT > 0) d = Math.round(d * 1.50); // Sơ hở sau đòn đánh: nhận +50% sát thương
         if (d > this.maxHp * 0.04) d = this.maxHp * 0.04 + (d - this.maxHp * 0.04) * 0.15;
         d = Math.max(1, Math.round(d * 0.85));
         this.rd += d;
@@ -225,9 +226,10 @@
       const phase = this.bossPhase;
       this.dmg = Math.round(this.dmg * 1.35);
       this.spd = Math.round(this.spd * 1.15);
+      // Thay vì hồi 100% full máu, tăng giới hạn máu tối đa và hồi 40% phục hồi
       const hpMultiplier = phase === 2 ? 1.25 : 1.5;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
-      this.hp = this.maxHp;
+      this.hp = Math.round(this.maxHp * 0.50); // Ngưỡng hồi phục kịch tính 50%
 
       if (phase === 3) {
         const megas = (typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(this.dex)) || [];
@@ -546,6 +548,7 @@
     }
 
     bossMove(dt, pl, dist, dx, dy, spd) {
+      if (this.vulnerableT > 0) this.vulnerableT -= dt;
       if (!this.ai) this.bossInit();
       const ai = this.ai;
       if (!ai.fury && this.hp < this.maxHp * 0.5) this.enrage();
@@ -710,8 +713,12 @@
     bossEnd() {
       const ai = this.ai;
       ai.cast = null;
-      ai.cd = G.U.rand(0.9, 1.5);
-      if (ai.fury && Math.random() < 0.45) ai.cd = 0.2;    // encadena otro
+      ai.cd = G.U.rand(1.2, 1.8);
+      this.vulnerableT = 1.5; // Cửa sổ sơ hở 1.5s nhận +50% sát thương
+      if (typeof G !== 'undefined' && G.FX && G.FX.dmgText) {
+        G.FX.dmgText(this.x, this.y - this.bodyH - 24, 'VULNERABLE!', '#38bdf8', false);
+      }
+      if (ai.fury && Math.random() < 0.35) ai.cd = 0.6;
       return [0, 0, 'Idle'];
     }
 

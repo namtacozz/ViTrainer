@@ -53,13 +53,26 @@ G.Progress = (() => {
     const key = String(s.created || 0);
     s.missions = s.missions || {};
     const M = s.missions;
-    if (M.day !== ids.d) {
-      M.day = ids.d; M.rerolled = false;
-      M.daily = pickSet(G.MissionDefs.daily, 3, rng(ids.d + key));
+    if (M.day !== ids.d || (M.daily && M.daily.length < 5)) {
+      if (M.day !== ids.d) {
+        M.day = ids.d; M.rerolled = false;
+        M.daily = pickSet(G.MissionDefs.daily, 5, rng(ids.d + key));
+      } else if (M.daily && M.daily.length < 5) {
+        // Expand active daily missions from 3 to 5
+        const existingIds = M.daily.map(m => m.id);
+        const extra = pickSet(G.MissionDefs.daily, 5 - M.daily.length, rng(ids.d + key + ':extra'), existingIds);
+        M.daily = M.daily.concat(extra);
+      }
     }
-    if (M.week !== ids.w) {
-      M.week = ids.w;
-      M.weekly = pickSet(G.MissionDefs.weekly, 2, rng(ids.w + key));
+    if (M.week !== ids.w || (M.weekly && M.weekly.length < 3)) {
+      if (M.week !== ids.w) {
+        M.week = ids.w;
+        M.weekly = pickSet(G.MissionDefs.weekly, 3, rng(ids.w + key));
+      } else if (M.weekly && M.weekly.length < 3) {
+        const existingIds = M.weekly.map(m => m.id);
+        const extra = pickSet(G.MissionDefs.weekly, 3 - M.weekly.length, rng(ids.w + key + ':extra'), existingIds);
+        M.weekly = M.weekly.concat(extra);
+      }
     }
   }
 

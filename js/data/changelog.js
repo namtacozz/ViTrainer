@@ -6,6 +6,16 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Director de Hordas, Jefes Inteligentes, Blindaje Cooperativo de 8 Jugadores y Combos Elementales", "Spawn Director, Intelligent Bosses, 8-Player Hardened Co-op & Elemental Combos"], new: [
+    ["Spawn Director inteligente: nuevo sistema de generación de hordas que gestiona créditos por segundo, ciclos respiratorios de 60s (30s subida, 15s clímax, 15s respiro) y arco de escape garantizado >= 60° con protección anti-kiteo.",
+     "Intelligent Spawn Director: new horde director budgeting credits per second, 60s breathing cycles (30s ramp, 15s peak, 15s reprieve), and guaranteed >= 60° escape corridors with anti-kiting pursuit packs."],
+    ["Jefes inteligentes con estado vulnerable: los jefes ahora muestran telegrafiado claro de ataques con zonas de peligro rojas, fases tácticas por umbrales de vida y una ventana de vulnerabilidad de 1.5s (+50% de daño recibido) tras ejecutar sus ataques especiales.",
+     "Intelligent Bosses with Vulnerability Window: bosses now telegraph attacks with clear red hazards, trigger tactical phase shifts at health thresholds, and expose a 1.5s vulnerability window (+50% damage taken) following powerful moves."],
+    ["Blindaje para cooperativo de 8 jugadores: gestión de interés adaptativa que reduce el radio de transmisión a 720 px y limita a 50 enemigos por paquete para escuadras grandes, eliminando la congestión de datos en el anfitrión.",
+     "8-Player Hardened Co-op: adaptive interest management reducing broadcast radius to 720px and capping mob synchronization to 50 entities per packet for large squads, preventing host WebRTC congestion."],
+    ["Combos de votos elementales (Co-op Combos): cuando dos compañeros golpean al mismo objetivo en menos de 1.2s, se desata un combo cooperativo con +35% de daño adicional y efecto visual radiante.",
+     "Elemental Pledge Combos: when teammates land hits on the same target within 1.2s, a synergistic co-op combo activates with +35% bonus damage and radiant burst visual effects."]
+  ]},
   { d: '2026-10-31', title: ["Vista Previa de Formas en Pokédex, Evolución de Movimientos +/++/+++, Jefes Multifase y Rebalanceo de Slaking", "Pokédex Form Preview, Multi-Tier Move Evolution (+/++/+++), Multi-Phase Bosses & Slaking Rebalance"], new: [
     ["Vista previa interactiva en la Pokédex: ahora puedes previsualizar todas las formas Mega, Primigenias y las 54 variantes regionales directamente en la cadena evolutiva con sprites nítidos, estadísticas completas y tipos, incluso sin haberlas desbloqueado.",
      "Interactive Form Preview in Pokédex: you can now preview all Mega, Primal, and 54 regional variants directly in the evolution chain with clear sprites, full stats, and typing, even before unlocking them."],

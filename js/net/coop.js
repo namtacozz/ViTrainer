@@ -28,7 +28,7 @@ G.Coop = (() => {
   // Realtime Database (apagado: 1 $ el GB).
   const RATE_FAST = 1 / 15, RATE_SLOW = 1 / 4;
   const rateFor = u => (G.Net.slow(u) ? RATE_SLOW : RATE_FAST);
-  const NEAR = 950;                     // radio de enemigos que se mandan a cada uno
+  const NEAR = 950, NEAR_8P = 720;                     // radio de enemigos que se mandan a cada uno
   const EV_MAX = 500;                   // eventos por envío como mucho (el resto, en el siguiente)
 
   let active = false, host = false, me = null, hostUid = null;
@@ -228,13 +228,16 @@ G.Coop = (() => {
   function enemyList(near, max = 0) {
     const out = [];
     if (!G.EnemyMgr || !G.EnemyMgr.all) return out;
-    const r2n = NEAR * NEAR;
+    const isBigSquad = mates.size >= 4;
+    const currentNear = isBigSquad ? NEAR_8P : NEAR;
+    const r2n = currentNear * currentNear;
+    const effectiveMax = max || (isBigSquad ? 50 : 0);
     for (const e of G.EnemyMgr.all()) {
       if (e.dead || G.U.dist2(e.x, e.y, near.x, near.y) > r2n) continue;
       const a = ANIMS.indexOf(e.anim.cur);
       out.push([e.id, r1(e.x), r1(e.y), Math.ceil(e.hp), a < 0 ? 0 : a, e.anim.dir,
                 (e.burn > 0 ? 1 : 0) | (e.poison > 0 ? 2 : 0) | (e.shield > 0 ? 4 : 0) | (e.slow > 0 ? 8 : 0) | (e.sleepT > 0 ? 16 : 0)]);
-      if (max && out.length >= max) break;
+      if (effectiveMax && out.length >= effectiveMax) break;
     }
     return out;
   }
@@ -299,11 +302,9 @@ G.Coop = (() => {
         m.pl.silent = performance.now() - m.lastAt > SILENT_MS;
         m.flushT -= dt;
         if (m.flushT > 0) continue;
-        // Si aún no ha salido lo de antes, mandar más sólo alarga la cola: se espera
-        // (los eventos se guardan en m.q). Si dura, el invitado se pone en pausa
-        // («esperando al anfitrión») en vez de ver la partida minutos tarde.
         if (G.Net.busy(m.uid)) continue;
-        m.flushT = rateFor(m.uid);
+        // Stagger peer sends across ticks if in large squad to avoid packet spikes
+        m.flushT = rateFor(m.uid) * (mates.size >= 5 ? 1.25 : 1.0);
         G.Net.send(m.uid, hostFrame(m));
       }
     } else {
@@ -450,6 +451,16 @@ G.Coop = (() => {
           const e = G.EnemyMgr.get(ev[1]);
           if (!e || e.dead || e.remote) break;
           hitFrom = from;
+          // Co-op Pledge Elemental Combo Check
+          const nowMs = performance.now();
+          if (e.lastHitFrom && e.lastHitFrom !== from && (nowMs - (e.lastHitAt || 0) < 1200)) {
+            // Synergistic cross-player combo hit: +35% combo damage & burst FX
+            ev[2] = Math.round(ev[2] * 1.35);
+            if (G.FX && G.FX.burst) G.FX.burst(e.x, e.y - (e.bodyH || 20) * 0.5, '#ffd23f', 16, 120);
+            if (G.FX && G.FX.dmgText) G.FX.dmgText(e.x, e.y - (e.bodyH || 20) - 20, 'COMBO!', '#ffeb3b', true);
+          }
+          e.lastHitFrom = from;
+          e.lastHitAt = nowMs;
           e.hurt(ev[2], ev[3], ev[4], ev[5], ev[6]);
           hitFrom = null;
           break;

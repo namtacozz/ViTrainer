@@ -37,7 +37,20 @@ G.Input = (() => {
       if (MOVE_KEYS.right.some(k => down.has(k))) x += 1;
       if (MOVE_KEYS.up.some(k => down.has(k))) y -= 1;
       if (MOVE_KEYS.down.some(k => down.has(k))) y += 1;
-      return G.U.norm(x, y);
+      if (x !== 0 || y !== 0) return G.U.norm(x, y);
+
+      // Tùy chọn di chuyển theo con trỏ chuột (Mouse Cursor Movement)
+      if (G.Settings && G.Settings.get('mouseMove') && G.Game && G.Game.player) {
+        const mw = this.mouseWorld();
+        const pl = G.Game.player;
+        const dx = mw.x - pl.x, dy = mw.y - pl.y;
+        const dist = Math.hypot(dx, dy);
+        // Vùng chết (deadzone) 24px để nhân vật không bị rung giật khi chuột ở ngay chân
+        if (dist > 24) {
+          return [dx / dist, dy / dist];
+        }
+      }
+      return [0, 0];
     },
     held(c) { return down.has(c); },
     /** true sólo en el frame en que se pulsó. */

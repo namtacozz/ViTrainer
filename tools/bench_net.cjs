@@ -4,7 +4,14 @@ const { performance } = require('node:perf_hooks');
 const { frame, client } = require('../tests/net-fixtures.cjs');
 const G = {}; new Function('G', fs.readFileSync(path.join(__dirname, '../js/net/codec.js'), 'utf8'))(G);
 const C = G.NetCodec, results = [];
-for (const [name, f] of [['client', client()], ...[0, 30, 100, 300, 600].map(n => [`host-${n}`, frame(n)])]) {
+
+// Includes 8-player scenario (Host broadcasting to 7 receivers with culled 45/60/100 mob counts)
+const testFrames = [
+  ['client', client()],
+  ...[0, 30, 45, 60, 100, 300, 600].map(n => [`host-${n}`, frame(n)])
+];
+
+for (const [name, f] of testFrames) {
   const json = JSON.stringify(f), b = C.encode(f), jsonBytes = Buffer.byteLength(json);
   for (let i = 0; i < 100; i++) { C.decode(C.encode(f)); }
   const start = performance.now();
@@ -17,6 +24,7 @@ for (const [name, f] of [['client', client()], ...[0, 30, 100, 300, 600].map(n =
   results.push({ fixture: name, jsonBytes, wirePayloadBytes: bytes,
     reduction: `${(100 * (1 - bytes / jsonBytes)).toFixed(1)}%`,
     encodeSelectDecodeMs: +ms.toFixed(3), jsonEncodeDecodeMs: +jsonMs.toFixed(3),
-    payloadKiBPerSecondAt15Hz: +(bytes * 15 / 1024).toFixed(2) });
+    payloadKiBPerSecondAt15Hz: +(bytes * 15 / 1024).toFixed(2),
+    host8pTotalKiBPerSec: +(bytes * 15 * 7 / 1024).toFixed(2) });
 }
 console.table(results);

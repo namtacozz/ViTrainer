@@ -27,7 +27,8 @@ G.Spawner = (() => {
   let forceShiny = 0;           // para pruebas: los N próximos salen shiny
 
   function reset() {
-    acc = 0; bossIdx = 0; surgeT = 32; announce = null; announceT = 0; preloadT = 0;
+    acc = 0; bossIdx = 0; surgeT = 32;
+    if (G.Director && G.Director.reset) G.Director.reset(); announce = null; announceT = 0; preloadT = 0;
     G.Enemies.rollRun();
     G.Sprites.preload(G.Enemies.upcomingDex(0, 80));
   }
@@ -97,7 +98,17 @@ G.Spawner = (() => {
     return full;
   }
 
-  function spawnOne(pl, t, angle) {
+    function spawnOneDirector(pl, t, angle, role = null) {
+    const bag = G.Enemies.bagAt(t);
+    let def = G.U.pick(bag);
+    if (role === 'rusher') {
+      const rushers = bag.filter(d => d.behavior === 'runner' || d.behavior === 'charger');
+      if (rushers.length) def = G.U.pick(rushers);
+    }
+    return spawnOne(pl, t, angle, def);
+  }
+
+  function spawnOne(pl, t, angle, overrideDef = null) {
     const bag = G.Enemies.bagAt(t);
     let def = G.U.pick(bag);
     if (SUPPORT.has(def.behavior)) {
@@ -155,12 +166,22 @@ G.Spawner = (() => {
     // jefe sea un momento propio y se le pueda apuntar entre la multitud.
     const bossFight = G.EnemyMgr.bossAlive();
 
-    // --- goteo normal ---
+    // --- director & goteo normal ---
+    if (G.Director && G.Director.update) G.Director.update(dt, players, t);
     if (G.EnemyMgr.count < currentCap()) {
       acc += rate(t) * G.Coop.scaleRate(players.length) * (bossFight ? 0.25 : 1) * dt;
       let n = Math.floor(acc);
       acc -= n;
-      while (n-- > 0 && G.EnemyMgr.count < currentCap()) spawnOne(anchor(), t);
+      while (n-- > 0 && G.EnemyMgr.count < currentCap()) {
+        const target = anchor();
+        // Directional spawning with guaranteed >= 60 deg escape corridor
+        const vx = target.svx || target._vx || 0, vy = target.svy || target._vy || 0;
+        const spd = Math.hypot(vx, vy);
+        const heading = spd > 20 ? Math.atan2(vy, vx) : Math.random() * 6.2832;
+        // Spawn in arc [-120 deg, +120 deg] leaving rear corridor >= 120 deg completely clear
+        const spawnAngle = heading + G.U.rand(-2.0, 2.0);
+        spawnOne(target, t, spawnAngle);
+      }
     }
 
     // --- marea ---
@@ -229,6 +250,6 @@ G.Spawner = (() => {
   /** Invitado en cooperativo: sólo corre el reloj del aviso. */
   function tickBanner(dt) { if (announceT > 0) announceT -= dt; }
 
-  return { reset, update, ahead, burst, outR, tickBanner, banner, say, rate, spawnMinionsForBoss, SHINY_RATE, get CAP() { return currentCap(); },
+  return { reset, update, ahead, spawnOneDirector, burst, outR, tickBanner, banner, say, rate, spawnMinionsForBoss, SHINY_RATE, get CAP() { return currentCap(); },
            debugForceShiny(n = 1) { forceShiny = n; } };
 })();
