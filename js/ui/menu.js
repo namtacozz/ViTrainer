@@ -709,9 +709,12 @@ G.MenuUI = (() => {
   let tipOn = null;
   function moveTipHtml(id) {
     const m = G.Moves.BY_ID[id];
+    if (!m) return '';
     const cat = G.Stats.NAME[m.cat || (m.stat === 'patk' ? 'physical' : m.stat === 'satk' ? 'special' : '')];
+    const typeName = G.T(G.U.TYPE_NAME[m.type]);
+    const catName = cat ? G.T(cat) : '';
     return `<b>${G.T(m.name, 'move')}</b>
-      <div class="move-tip-tags"><span class="tag-chip" style="background:${G.U.TYPE_COLOR[m.type]}">${G.U.TYPE_NAME[m.type]}</span>${cat ? `<span class="tag-chip cat">${cat}</span>` : ''}</div>
+      <div class="move-tip-tags"><span class="tag-chip" style="background:${G.U.TYPE_COLOR[m.type]}">${typeName}</span>${catName ? `<span class="tag-chip cat">${catName}</span>` : ''}</div>
       <div class="sub">${G.T(m.desc)}</div>`;
   }
   function hideMoveTip() { tipOn = null; const t = $('move-tip'); if (t) t.classList.add('hidden'); }
@@ -728,6 +731,7 @@ G.MenuUI = (() => {
     }
     tipOn = ic;
     tip.innerHTML = moveTipHtml(ic.dataset.move);
+    if (G.I18n && G.I18n.walk) G.I18n.walk(tip);
     tip.classList.remove('hidden');
     // Encima del icono (si no cabe, debajo), sin salirse por los lados.
     const r = ic.getBoundingClientRect(), t = tip.getBoundingClientRect(), M = 8;

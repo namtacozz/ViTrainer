@@ -55,6 +55,7 @@
       this.x = x; this.y = y;
       this.boss = boss;
       this.scale = boss ? bossScale(def.dex) : 1;
+      this.legend = !!(def.legend || this.legend);
       if (boss) {
         this.bossPhase = 1;
         this.maxBossPhase = this.legend ? 3 : ((typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(def.dex).length > 0) ? 3 : 2);
@@ -227,9 +228,10 @@
       this.dmg = Math.round(this.dmg * 1.35);
       this.spd = Math.round(this.spd * 1.15);
       // Thay vì hồi 100% full máu, tăng giới hạn máu tối đa và hồi 40% phục hồi
-      const hpMultiplier = phase === 2 ? 1.25 : 1.5;
+      const hpMultiplier = phase === 2 ? 1.5 : 2.0;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
-      this.hp = Math.round(this.maxHp * 0.50); // Ngưỡng hồi phục kịch tính 50%
+      this.hp = this.maxHp;
+      this.invuln = 1.2; // Ngưỡng hồi phục kịch tính 50%
 
       if (phase === 3) {
         const megas = (typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(this.dex)) || [];

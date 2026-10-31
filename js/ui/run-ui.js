@@ -292,6 +292,62 @@ G.RunUI = (() => {
     cb(picked);
   }
 
+
+  // ---------------- menú de confirmación y ramas de evolución ----------------
+  let evoSession = null;
+
+  function showEvoChoice(options, cb) {
+    evoSession = { options, cb };
+    const box = $('evo-cards');
+    if (!box) { cb(options[0]); return; }
+    box.innerHTML = '';
+    const titleEl = $('evo-title');
+    const subEl = $('evo-sub');
+
+    const multi = options.length > 1;
+    if (titleEl) titleEl.textContent = multi ? G.T('¡Ramas de Evolución!') : G.T('¡Evolución Despertada!');
+    if (subEl) subEl.textContent = multi ? G.T('Elige qué forma deseas adoptar') : G.T('Confirma tu evolución para desatar tu poder');
+
+    options.forEach((opt, i) => {
+      const el = document.createElement('div');
+      el.className = 'card evo' + (multi ? '' : ' picked');
+      const col = opt.color || '#38bdf8';
+      const tag = `<span class="tag-chip" style="background:${col}">${G.T(opt.tag || 'EVOLUCIÓN')}</span>`;
+      const btnText = G.T(multi ? 'Elegir esta forma' : 'Confirmar Evolución');
+      const btnConfirm = `<button class="btn gold small" style="margin-top:6px;width:100%">${btnText}</button>`;
+
+      el.innerHTML =
+        `<div class="ico" style="background:${col}33"></div>
+         <div class="txt">
+           <div class="nm">${G.T(opt.title)} ${tag}</div>
+           <div class="ds">${G.T(opt.desc)}</div>
+           ${btnConfirm}
+         </div>
+         <div class="key">${i + 1}</div>`;
+
+      const ico = el.querySelector('.ico');
+      if (ico && opt.dex) {
+        ico.appendChild(G.UI.spriteCanvas(opt.dex, 48, 48, { scale: 2, lively: true }));
+      }
+      el.dataset.sfx = 'none';
+      onTap(el, () => pickEvo(i));
+      box.appendChild(el);
+    });
+
+    G.UI.show('scr-evo');
+    guard(box);
+  }
+
+  function pickEvo(i) {
+    if (!evoSession || !evoSession.options[i] || guarded()) return;
+    const choice = evoSession.options[i];
+    const cb = evoSession.cb;
+    evoSession = null;
+    G.Audio.sfx('confirm');
+    G.UI.hide('scr-evo');
+    cb(choice);
+  }
+
   function bondBack() {
     if (!bond) return;
     bond.first = null;
@@ -443,5 +499,5 @@ G.RunUI = (() => {
     $('btn-quit').onclick = onQuit;
   }
 
-  return { showLevelUp, reroll, showItemChoice, showBond, pickBond, bondBack, pick, setWaiting, closeLevelUp, showOver, wirePause, showPause };
+  return { showLevelUp, showEvoChoice, pickEvo, reroll, showItemChoice, showBond, pickBond, bondBack, pick, setWaiting, closeLevelUp, showOver, wirePause, showPause };
 })();

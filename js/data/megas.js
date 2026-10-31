@@ -1265,6 +1265,26 @@ G.MEGAS = {
     "bst": 708,
     "spriteDex": 10120
   },
+  "10121": {
+    "id": 10121,
+    "baseDex": 718,
+    "name": "Mega Zygarde",
+    "slug": "zygarde-mega",
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "ability": "power-construct",
+    "hp": 180,
+    "spd": 120,
+    "atk": 1.55,
+    "pa": 1.55,
+    "sa": 1.45,
+    "df": 140,
+    "sd": 115,
+    "bst": 780,
+    "spriteDex": 10120
+  },
   "10157": {
     "id": 10157,
     "baseDex": 800,

@@ -520,20 +520,65 @@ G.Player = class Player {
   }
 
   /** Comprueba y dispara la evolución o despertar al subir niveles en partida. */
+
+  promptEvo(options) {
+    if (this.remote || !options || !options.length) return;
+    if (typeof G !== 'undefined' && G.Game && G.Game.offerEvo) {
+      G.Game.offerEvo(options, choice => {
+        if (choice && choice.apply) choice.apply();
+      });
+    } else if (options[0] && options[0].apply) {
+      options[0].apply();
+    }
+  }
+
   checkInRunEvo() {
     if (this.remote || !this.evoChain) return;
     const chain = this.evoChain;
 
+    const buildMegaOptions = () => {
+      const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
+      if (!megas || !megas.length) return null;
+      return megas.map(m => {
+        const typesStr = (m.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+        return {
+          dex: m.spriteDex || m.baseDex || this.dex,
+          title: m.name,
+          tag: 'MEGA EVOLUCIÓN',
+          color: '#f43f5e',
+          desc: `Despierta la forma definitiva (${typesStr}). BST ${m.bst}, habilidad ${m.ability || 'Poder Desatado'} y aumento descomunal de poder.`,
+          apply: () => this.megaEvolve(m.id)
+        };
+      });
+    };
+
     // Especie de fase única (Legendarios / Singulares / Sin evolución)
     if (chain.type === 'single') {
       if (this.level >= 15 && this.awakeningTier === 0) {
-        this.activateAwakening(1);
+        this.awakeningTier = 1;
+        this.promptEvo([{
+          dex: this.dex,
+          title: (this.mon ? this.mon.name : 'Pokémon') + ' · Despertar I',
+          tag: 'DESPERTAR I',
+          color: '#ffd23f',
+          desc: 'Despierta el poder primordial: +25% de vida y estadísticas combativas aumentadas.',
+          apply: () => this.activateAwakening(1)
+        }]);
       }
       if (this.level >= 30) {
         if (!this.isMega && this.hasMegaForm()) {
-          this.triggerMegaIfAvailable();
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
         } else if (!this.isMega && !this.pendingMegaBranches && this.awakeningTier < 2) {
-          this.activateAwakening(2);
+          this.awakeningTier = 2;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Poder Apex definitivo: corona dorada, +35% de daño total y regeneración aumentada.',
+            apply: () => this.activateAwakening(2)
+          }]);
         }
       }
       return;
@@ -544,16 +589,36 @@ G.Player = class Player {
       if (this.level >= 15 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
-          this.evolveTo(nextDex);
+          const mon = G.DEX_BY[nextDex];
+          const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+          this.evoStage = 2;
+          this.promptEvo([{
+            dex: nextDex,
+            title: mon.name,
+            tag: 'FASE 2',
+            color: '#38bdf8',
+            desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de PS y amplifica estadísticas base.`,
+            apply: () => this.evolveTo(nextDex)
+          }]);
         } else if (this.awakeningTier === 0) {
+          this.awakeningTier = 1;
           this.activateAwakening(1);
         }
       }
       if (this.level >= 30 && this.evoStage >= 2) {
         if (!this.isMega && this.hasMegaForm()) {
-          this.triggerMegaIfAvailable();
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
         } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
-          this.activateApex();
+          this.isApex = true;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Estado Apex (+) desatado: corona celestial, +30% daño y recuperación total.',
+            apply: () => this.activateApex()
+          }]);
         }
       }
       return;
@@ -564,22 +629,52 @@ G.Player = class Player {
       if (this.level >= 15 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
-          this.evolveTo(nextDex);
+          const mon = G.DEX_BY[nextDex];
+          const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+          this.evoStage = 2;
+          this.promptEvo([{
+            dex: nextDex,
+            title: mon.name,
+            tag: 'FASE 2',
+            color: '#38bdf8',
+            desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de PS y aumenta estadísticas.`,
+            apply: () => this.evolveTo(nextDex)
+          }]);
         } else if (this.awakeningTier === 0) {
+          this.awakeningTier = 1;
           this.activateAwakening(1);
         }
       }
       if (this.level >= 30 && this.evoStage === 2) {
         const nextDex = chain.stages[2] && chain.stages[2][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
-          this.evolveTo(nextDex);
+          const mon = G.DEX_BY[nextDex];
+          const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+          this.evoStage = 3;
+          this.promptEvo([{
+            dex: nextDex,
+            title: mon.name,
+            tag: 'FASE 3',
+            color: '#38bdf8',
+            desc: `Evolución final a ${mon.name} (${typesStr}). Recupera 50% de PS y desata estadísticas definitivas.`,
+            apply: () => this.evolveTo(nextDex)
+          }]);
         }
       }
       if (this.level >= 30 && this.evoStage >= 3) {
         if (!this.isMega && this.hasMegaForm()) {
-          this.triggerMegaIfAvailable();
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
         } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
-          this.activateApex();
+          this.isApex = true;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Estado Apex (+) desatado: corona celestial, +30% daño y recuperación total.',
+            apply: () => this.activateApex()
+          }]);
         }
       }
       return;
@@ -591,40 +686,77 @@ G.Player = class Player {
       const nextList = (info ? info.next : []).filter(d => G.DEX_BY && G.DEX_BY[d]);
       if (this.evoStage === 1 && this.level >= 15) {
         if (nextList.length === 1) {
-          this.evolveTo(nextList[0]);
-        } else if (nextList.length > 1 && !this.pendingEvoBranches) {
-          if (this.baseDex === 133) {
-            const moveTypes = new Set(this.moves.map(m => m.type));
-            const branchTypeMap = { 134: 'water', 135: 'electric', 136: 'fire', 196: 'psychic', 197: 'dark', 470: 'grass', 471: 'ice', 700: 'fairy' };
-            const pool = nextList.slice().sort((a, b) => {
-              const ma = moveTypes.has(branchTypeMap[a]) ? 1 : 0;
-              const mb = moveTypes.has(branchTypeMap[b]) ? 1 : 0;
-              return mb - ma;
-            });
-            this.pendingEvoBranches = pool;
-            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
-          } else {
-            this.pendingEvoBranches = nextList;
-            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
-          }
-        } else if (this.awakeningTier === 0) {
-          this.activateAwakening(1);
+          const nextDex = nextList[0];
+          const mon = G.DEX_BY[nextDex];
+          this.evoStage = 2;
+          this.promptEvo([{
+            dex: nextDex,
+            title: mon.name,
+            tag: 'EVOLUCIÓN',
+            color: '#38bdf8',
+            desc: `Evoluciona a ${mon.name}. Recupera 50% de vida y mejora estadísticas.`,
+            apply: () => this.evolveTo(nextDex)
+          }]);
+        } else if (nextList.length > 1) {
+          this.evoStage = 2;
+          const branchOpts = nextList.map(d => {
+            const mon = G.DEX_BY[d];
+            const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+            return {
+              dex: d,
+              title: mon.name,
+              tag: 'EVOLUCIÓN',
+              color: '#ffd23f',
+              desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de vida y adopta nuevo tipo.`,
+              apply: () => this.evolveTo(d)
+            };
+          });
+          this.promptEvo(branchOpts);
         }
-      } else if (this.evoStage === 2) {
-        if (chain.maxStage === 3 && this.level >= 30) {
-          if (nextList.length === 1) {
-            this.evolveTo(nextList[0]);
-          } else if (nextList.length > 1 && !this.pendingEvoBranches) {
-            this.pendingEvoBranches = nextList;
-            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
-          }
+      } else if (this.evoStage === 2 && chain.maxStage === 3 && this.level >= 30) {
+        if (nextList.length === 1) {
+          const nextDex = nextList[0];
+          const mon = G.DEX_BY[nextDex];
+          this.evoStage = 3;
+          this.promptEvo([{
+            dex: nextDex,
+            title: mon.name,
+            tag: 'FASE 3',
+            color: '#38bdf8',
+            desc: `Evolución final a ${mon.name}. Recupera 50% de vida y estadísticas máximas.`,
+            apply: () => this.evolveTo(nextDex)
+          }]);
+        } else if (nextList.length > 1) {
+          this.evoStage = 3;
+          const branchOpts = nextList.map(d => {
+            const mon = G.DEX_BY[d];
+            const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+            return {
+              dex: d,
+              title: mon.name,
+              tag: 'FASE 3',
+              color: '#ffd23f',
+              desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de vida.`,
+              apply: () => this.evolveTo(d)
+            };
+          });
+          this.promptEvo(branchOpts);
         }
       }
       if (this.level >= 30 && this.evoStage >= chain.maxStage) {
         if (!this.isMega && this.hasMegaForm()) {
-          this.triggerMegaIfAvailable();
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
         } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
-          this.activateApex();
+          this.isApex = true;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Estado Apex (+) desatado: corona celestial, +30% daño y recuperación total.',
+            apply: () => this.activateApex()
+          }]);
         }
       }
     }

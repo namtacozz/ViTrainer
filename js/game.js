@@ -573,6 +573,30 @@ G.Game = (() => {
     });
   }
 
+
+  function offerEvo(options, onPick) {
+    if (!pl || pl.dead || (state !== 'playing' && state !== 'held')) {
+      pl.pendingEvoModal = { options, onPick };
+      return;
+    }
+    if (['scr-bond', 'scr-pause', 'scr-item', 'scr-levelup', 'scr-evo'].some(G.UI.isOpen)) {
+      pl.pendingEvoModal = { options, onPick };
+      return;
+    }
+    pl.pendingEvoModal = null;
+    state = 'choice';
+    if (G.Coop.active) G.Coop.holdStart();
+    G.Audio.sfx('levelup');
+    G.RunUI.showEvoChoice(options, choice => {
+      choice.apply();
+      pl.invuln = Math.max(pl.invuln || 0, 3.0);
+      if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 300);
+      if (state === 'choice') state = holdBy.length ? 'held' : 'playing';
+      if (G.Coop.active) G.Coop.holdEnd();
+      if (pendingLevels > 0) maybeLevelUp();
+    });
+  }
+
   // ---------------- recogida ----------------
 
   const PICK_SFX = { xp: 'xp', xpBig: 'xp', coin: 'coin', heal: 'heal', bomb: 'break', magnet: 'confirm', ticket: 'shiny', ticket10: 'legend', item: 'legend', sphere: 'confirm' };
@@ -882,6 +906,11 @@ G.Game = (() => {
     G.Audio.music(G.Judgment.active ? G.Judgment.music : G.Rift.inArena ? 'rift' : G.EnemyMgr.bossAlive() ? 'boss' : G.BIOME_MUSIC[biome % G.BIOME_MUSIC.length]);
     if (!coop || G.Coop.isHost) maybeLevelUp();
     if (pl.bonds > 0) offerBond(true);
+    if (pl.pendingEvoModal && !['scr-bond', 'scr-pause', 'scr-item', 'scr-levelup', 'scr-evo'].some(G.UI.isOpen)) {
+      const pem = pl.pendingEvoModal;
+      pl.pendingEvoModal = null;
+      offerEvo(pem.options, pem.onPick);
+    }
     if (G.Coop.isHost) checkAllDown(dt);
   }
 
@@ -1106,7 +1135,7 @@ G.Game = (() => {
   })();
 
   return {
-    init, startRun, everyone, levelXp, flash, offerBond,
+    init, startRun, everyone, levelXp, flash, offerBond, offerEvo,
     /** Para pruebas: salta el reloj de la run. */
     debugTime(t) { tampered = true; time = t; },
     /** Halloween: caramelos de golpe (al llegar al gran Gengar; en grupo, los da el anfitrión a todos). */

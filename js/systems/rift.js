@@ -154,11 +154,11 @@ G.Rift = (() => {
     const ts = TS();
     const def = {
       dex: mon.dex, name: mon.name,
-      hp: Math.round((80000 + t * 225) * G.Coop.scaleHp(n) * (n > 1 ? 1.15 : 1)),
+      hp: Math.round((1200000 + t * 3500) * G.Coop.scaleHp(n) * (n > 1 ? 1.15 : 1)),
       spd: Math.round(G.U.clamp(48 + (mon.spd - 78) * 0.6, 48, 105)),
       dmg: Math.round(36 + t / 20), xp: Math.round(500 + t * 1.2),
       behavior: mon.types.some(x => ['psychic', 'electric', 'ghost', 'fairy', 'fire', 'water', 'ice', 'dragon'].includes(x)) ? 'ranged' : 'charger',
-      shotDmg: Math.round(18 + t / 40), shotCd: 0.9, range: 300
+      shotDmg: Math.round(32 + t / 25), legend: true, shotCd: 0.9, range: 300
     };
     const e = new G.Enemy(def, arena.x, arena.y - ts * 3.5, { hp: 1, spd: 1, dmg: 1 }, true);
     e.legend = true;
