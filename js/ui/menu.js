@@ -321,6 +321,10 @@ G.MenuUI = (() => {
     const natCls = k => (!nat ? '' : nat.up === k ? ' nat-up' : nat.down === k ? ' nat-down' : '');
     const bar = (label, v, m, txt, k) =>
       `<div class="stat${natCls(k)}"><span>${label}</span><div class="bar"><i style="width:${Math.min(100, v / m * 100)}%"></i></div><span>${txt}</span></div>`;
+    const isBase = typeof G !== 'undefined' && G.isBaseStage ? G.isBaseStage(dex) : true;
+    const baseDex = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
+    const baseMon = G.DEX_BY[baseDex] || p;
+    const effRarity = typeof G !== 'undefined' && G.Gacha && G.Gacha.getRarity ? G.Gacha.getRarity(p) : p.rarity;
     const usingThis = isPartner && (!hasSh || !!s.partnerShiny === viewShiny);
 
     const box = $('dex-detail');
@@ -352,7 +356,10 @@ G.MenuUI = (() => {
           ${G.Moves.poolFor(p).map(id => `<span data-move="${id}">${G.Icons.html('move:' + id, 32)}</span>`).join('')}</p>
         ${usingThis
           ? '<button class="btn grow" disabled style="width:100%">Es tu compañero</button>'
-          : `<button id="dex-pick" class="btn gold" data-sfx="confirm" style="width:100%">Elegir de compañero${viewShiny ? ' (shiny)' : ''}</button>`}
+          : !isBase
+            ? `<button class="btn grow" disabled style="width:100%" title="${G.T('Solo la fase inicial puede ser compañero')}">${G.T('Evolución (no elegible como compañero)')}</button>
+               <button id="dex-pick-base" class="btn gold" data-sfx="confirm" style="width:100%;margin-top:6px">${G.T('Elegir fase inicial')} (${baseMon.name})</button>`
+            : `<button id="dex-pick" class="btn gold" data-sfx="confirm" style="width:100%">Elegir de compañero${viewShiny ? ' (shiny)' : ''}</button>`}
       ` : `<p class="center" style="color:var(--muted)">Aún no lo tienes.<br>Consíguelo en el banner de <b class="gold">${GEN_NAMES[p.gen - 1]}</b>
             o derrotándolo cuando salga shiny.</p>`}
     `;
@@ -374,6 +381,14 @@ G.MenuUI = (() => {
       G.DB.commit();
       G.UI.toast(p.name + (s.partnerShiny ? ' shiny' : '') + ' es ahora tu compañero');
       renderGrid(true); showDetail(dex);
+    };
+    const pickBase = $('dex-pick-base');
+    if (pickBase) pickBase.onclick = () => {
+      s.partner = baseDex;
+      s.partnerShiny = G.DB.ownsShiny(baseDex) && viewShiny;
+      G.DB.commit();
+      G.UI.toast(baseMon.name + (s.partnerShiny ? ' shiny' : '') + ' es ahora tu compañero');
+      renderGrid(true); showDetail(baseDex);
     };
     if (own) {
       wireExtras(dex, box);
@@ -509,12 +524,8 @@ G.MenuUI = (() => {
 
     return `
       <div class="evo-section">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="display:flex;justify-content:center;align-items:center;margin-bottom:8px;">
           <span style="font-size:11px;font-weight:bold;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;">${G.T('Línea evolutiva')}</span>
-          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);cursor:pointer;" title="${G.T('Al entrar a la partida empezarás con este Pokémon en vez de su fase inicial')}">
-            <input type="checkbox" id="evo-keep-toggle" ${keepApp ? 'checked' : ''} style="cursor:pointer;accent-color:var(--gold);" />
-            <span>${G.T('Fijar aspecto')}</span>
-          </label>
         </div>
         <div class="evo-tree-row">${nodesHtml}</div>
       </div>
@@ -540,15 +551,7 @@ G.MenuUI = (() => {
         }
       };
     });
-    const keepTog = $('evo-keep-toggle');
-    if (keepTog) {
-      keepTog.onchange = e => {
-        s.keepApp = s.keepApp || {};
-        s.keepApp[baseDex] = e.target.checked;
-        G.DB.commit();
-        G.UI.toast(e.target.checked ? G.T('Fijado: empezarás la partida con este aspecto') : G.T('Evolución normal en partida activada'));
-      };
-    }
+
   }
 
 

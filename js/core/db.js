@@ -126,6 +126,9 @@ G.DB = (() => {
     s.pabil = s.pabil || {};
     s.shiny = s.shiny || {};
     s.keepApp = s.keepApp || {};
+    if (s.partner && typeof G !== 'undefined' && G.getBaseDex) {
+      s.partner = G.getBaseDex(s.partner);
+    }
 
     const ownedDexes = Object.keys(s.owned).map(Number).filter(d => G.DEX_BY && G.DEX_BY[d]);
     const chainMembers = {};

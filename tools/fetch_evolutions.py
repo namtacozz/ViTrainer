@@ -67,14 +67,30 @@ def get_dex_from_url(url):
     return int(m.group(1)) if m else None
 
 
-def calc_rarity(bst, is_legendary=False):
-    if is_legendary or bst >= 580:
+STARTER_DEX = {
+    1, 4, 7, 152, 155, 158, 252, 255, 258,
+    387, 390, 393, 495, 498, 501, 650, 653, 656,
+    722, 725, 728, 810, 813, 816, 906, 909, 912
+}
+
+PSEUDO_DEX = {
+    147, 246, 371, 374, 443, 633, 704, 782, 885, 996
+}
+
+def calc_rarity(dex, base_bst, max_bst, is_legendary=False):
+    if is_legendary:
         return 5
-    if bst >= 495:
+    if dex in PSEUDO_DEX or max_bst >= 600:
         return 4
-    if bst >= 410:
+    if dex in STARTER_DEX:
         return 3
-    if bst >= 320:
+    if base_bst <= 275 and max_bst < 510:
+        return 1
+    if max_bst >= 535:
+        return 4
+    if max_bst >= 495:
+        return 3
+    if max_bst >= 450:
         return 2
     return 1
 
@@ -138,7 +154,8 @@ def main():
         # Tính maxBST của cả dòng để quyết định rarity gacha cho Bậc 1
         max_bst = max(dex_by_id[d].get('bst', 300) for d in present_members)
         is_leg = any(dex_by_id[d].get('leg', False) for d in present_members)
-        base_rarity = calc_rarity(max_bst, is_leg)
+        root_bst = dex_by_id.get(root_dex, {}).get('bst', 300)
+        base_rarity = calc_rarity(root_dex, root_bst, max_bst, is_leg)
 
         root_name = dex_by_id.get(root_dex, {}).get('name', c['species']['name'].capitalize())
 
@@ -203,7 +220,7 @@ def main():
                 'type': 'single',
                 'maxStage': 1,
                 'maxBst': p.get('bst', 300),
-                'baseRarity': calc_rarity(p.get('bst', 300), p.get('leg', False)),
+                'baseRarity': calc_rarity(dex, p.get('bst', 300), p.get('bst', 300), p.get('leg', False)),
                 'stages': [[dex], [], []],
                 'members': [dex]
             }
@@ -230,6 +247,36 @@ def main():
 """
     js_content = header + f"G.EVO_CHAINS = {json.dumps(chains, ensure_ascii=False, indent=2)};\n\n"
     js_content += f"G.EVO_BY_DEX = {json.dumps(evo_by_dex, ensure_ascii=False, indent=2)};\n"
+
+    helpers = """
+G.getEvoChain = function(dex) {
+  if (!G.EVO_BY_DEX) return null;
+  const info = G.EVO_BY_DEX[dex];
+  if (!info) return null;
+  return G.EVO_CHAINS[info.baseDex] || null;
+};
+
+G.getEvoInfo = function(dex) {
+  return (G.EVO_BY_DEX && G.EVO_BY_DEX[dex]) || null;
+};
+
+G.getBaseDex = function(dex) {
+  const info = G.getEvoInfo(dex);
+  return info ? info.baseDex : dex;
+};
+
+G.getStage = function(dex) {
+  const info = G.getEvoInfo(dex);
+  return info ? info.stage : 1;
+};
+
+G.isBaseStage = function(dex) {
+  const info = G.getEvoInfo(dex);
+  return !info || info.stage === 1;
+};
+"""
+    js_content += helpers
+
 
     with open(OUT_JS, 'w', encoding='utf-8') as f:
         f.write(js_content)

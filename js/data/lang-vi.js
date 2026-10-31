@@ -2,6 +2,10 @@
  * Tự động tạo và đồng bộ từ TRANSLATIONS.md
  */
 G.I18n.add({
+  "Solo la fase inicial puede ser compañero": "Chỉ có thể chọn dạng 1 làm bạn đồng hành",
+  "Elegir fase inicial": "Chọn dạng 1",
+  "Evolución (no elegible como compañero)": "Dạng tiến hóa (không thể chọn làm bạn đồng hành)",
+
   "Línea evolutiva": "Dòng tiến hóa",
   "Fijar aspecto": "Giữ ngoại hình",
   "Al entrar a la partida empezarás con este Pokémon en vez de su fase inicial": "Khi vào trận bạn sẽ bắt đầu với Pokémon này thay vì dạng ban đầu",

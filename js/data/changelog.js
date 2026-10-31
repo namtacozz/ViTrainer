@@ -9,10 +9,10 @@ G.CHANGELOG = [
   { d: '2026-10-31', title: ["Evolución en partida y renovación del Gacha", "In-Run Evolution & Gacha Rework"], new: [
     ["Evolución en partida: tus Pokémon ahora evolucionan durante la partida al alcanzar los niveles 15 y 30 (nivel 18 para Pokémon de dos fases). Los Pokémon de fase única desbloquean Despertar I y II (Apex+).",
      "In-run evolution: your Pokémon now evolve during runs upon reaching levels 15 and 30 (level 18 for two-stage species). Single-stage species unlock Awakening I and II (Apex+)."],
-    ["Árbol evolutivo en la Pokédex: visualiza las fases y ramas evolutivas de cada Pokémon, con opción de fijar aspecto inicial si prefieres empezar directamente con tu Pokémon evolucionado.",
-     "Evolution line in Pokédex: visualize evolution stages and branches for each Pokémon, with an option to keep your chosen appearance at the start of the run."],
-    ["Renovación del Gacha: los banners ahora contienen formas iniciales y Pokémon de fase única con rarezas basadas en sus estadísticas finales. Los duplicados desbloquean fases de evolución y ramas antes de convertirse en PokéCoins.",
-     "Gacha rework: banners now feature base stages and single-stage Pokémon with rarities reflecting their final stats. Duplicates unlock evolution tiers and branches before converting to PokéCoins."]
+    ["Árbol evolutivo en la Pokédex: visualiza las fases y ramas evolutivas de cada Pokémon. Las partidas siempre comienzan con la fase inicial para evolucionar en combate.",
+     "Evolution line in Pokédex: visualize evolution stages and branches for each Pokémon. Runs now always start with the base stage to evolve in battle."],
+    ["Renovación del Gacha y variedad de Poké Balls: rarezas reequilibradas para todas las fases iniciales, asegurando una distribución colorida y variada de Poké Balls, Super Balls, Ultra Balls y Master Balls en cada tirada.",
+     "Gacha rework & ball variety: rebalanced rarities across all base stages, ensuring a colorful and diverse spread of Poké Balls, Great Balls, Ultra Balls, and Master Balls in every pull."]
   ], chg: [
     ["Ajustado el equilibrio en partidas cooperativas: ritmo de aparición de enemigos más equilibrado, mayor ganancia de experiencia en grupo y ajuste en la vida de los jefes para evitar saturación injusta.",
      "Balanced cooperative matches: smoother enemy spawn rate, fairer team experience gain, and adjusted boss health scaling to prevent unfair swarming."]

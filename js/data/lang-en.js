@@ -4,6 +4,10 @@
  * son los oficiales en inglés.
  */
 G.I18n.add({
+  'Solo la fase inicial puede ser compañero': 'Only base stage can be chosen as partner',
+  'Elegir fase inicial': 'Choose base stage',
+  'Evolución (no elegible como compañero)': 'Evolution (not eligible as partner)',
+
   'Línea evolutiva': 'Evolution line',
   'Fijar aspecto': 'Keep appearance',
   'Al entrar a la partida empezarás con este Pokémon en vez de su fase inicial': 'When starting a run, you will start with this Pokémon instead of its base stage',

@@ -11,7 +11,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         1
@@ -36,7 +36,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 534,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         4
@@ -61,7 +61,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         7
@@ -86,7 +86,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 395,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         10
@@ -111,7 +111,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 395,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         13
@@ -136,7 +136,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 479,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         16
@@ -161,7 +161,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 413,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         19
@@ -183,7 +183,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 442,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         21
@@ -205,7 +205,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 448,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         23
@@ -227,7 +227,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         172
@@ -252,7 +252,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 450,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         27
@@ -274,7 +274,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         29
@@ -299,7 +299,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         32
@@ -324,7 +324,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 483,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         173
@@ -349,7 +349,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         37
@@ -371,7 +371,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 435,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         174
@@ -421,7 +421,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 3,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         43
@@ -448,7 +448,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 405,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         46
@@ -470,7 +470,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 450,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         48
@@ -492,7 +492,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 425,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         50
@@ -514,7 +514,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 440,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         52
@@ -538,7 +538,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         54
@@ -607,7 +607,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 3,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         60
@@ -634,7 +634,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         63
@@ -659,7 +659,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         66
@@ -684,7 +684,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         69
@@ -709,7 +709,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         72
@@ -731,7 +731,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         74
@@ -756,7 +756,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         77
@@ -778,7 +778,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         79
@@ -827,7 +827,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 377,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         83
@@ -849,7 +849,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         84
@@ -871,7 +871,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         86
@@ -893,7 +893,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         88
@@ -915,7 +915,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         90
@@ -937,7 +937,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         92
@@ -962,7 +962,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         95
@@ -984,7 +984,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 483,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         96
@@ -1006,7 +1006,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         98
@@ -1028,7 +1028,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         100
@@ -1050,7 +1050,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         102
@@ -1072,7 +1072,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 425,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         104
@@ -1094,7 +1094,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 455,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         236
@@ -1120,7 +1120,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         108
@@ -1142,7 +1142,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         109
@@ -1236,7 +1236,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         115
@@ -1280,7 +1280,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 450,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         118
@@ -1302,7 +1302,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 520,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         120
@@ -1324,7 +1324,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         439
@@ -1349,7 +1349,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         123
@@ -1373,7 +1373,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 455,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         238
@@ -1445,7 +1445,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         127
@@ -1464,7 +1464,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         128
@@ -1543,7 +1543,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         133
@@ -1604,7 +1604,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         138
@@ -1626,7 +1626,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         140
@@ -1648,7 +1648,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         142
@@ -1746,7 +1746,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         147
@@ -1809,7 +1809,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         152
@@ -1834,7 +1834,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 534,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         155
@@ -1859,7 +1859,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         158
@@ -1884,7 +1884,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 415,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         161
@@ -1906,7 +1906,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 452,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         163
@@ -1928,7 +1928,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 390,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         165
@@ -1950,7 +1950,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 400,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         167
@@ -1972,7 +1972,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         170
@@ -2019,7 +2019,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         177
@@ -2041,7 +2041,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         179
@@ -2066,7 +2066,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 420,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         298
@@ -2091,7 +2091,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 410,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         438
@@ -2113,7 +2113,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         187
@@ -2138,7 +2138,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 482,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         190
@@ -2160,7 +2160,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 425,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         191
@@ -2182,7 +2182,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         193
@@ -2204,7 +2204,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 430,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         194
@@ -2228,7 +2228,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         198
@@ -2250,7 +2250,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         200
@@ -2272,7 +2272,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 336,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         201
@@ -2291,7 +2291,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 405,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         360
@@ -2313,7 +2313,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 520,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         203
@@ -2335,7 +2335,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 465,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         204
@@ -2357,7 +2357,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 520,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         206
@@ -2379,7 +2379,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         207
@@ -2401,7 +2401,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 450,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         209
@@ -2423,7 +2423,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         211
@@ -2445,7 +2445,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         213
@@ -2464,7 +2464,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         214
@@ -2483,7 +2483,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         215
@@ -2532,7 +2532,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 430,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         218
@@ -2554,7 +2554,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         220
@@ -2579,7 +2579,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         222
@@ -2601,7 +2601,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         223
@@ -2623,7 +2623,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 330,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         225
@@ -2642,7 +2642,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         458
@@ -2664,7 +2664,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 465,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         227
@@ -2683,7 +2683,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         228
@@ -2705,7 +2705,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         231
@@ -2727,7 +2727,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         234
@@ -2768,7 +2768,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         241
@@ -2844,7 +2844,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         246
@@ -2926,7 +2926,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         252
@@ -2951,7 +2951,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         255
@@ -2976,7 +2976,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 535,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         258
@@ -3001,7 +3001,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 420,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         261
@@ -3023,7 +3023,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 520,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         263
@@ -3048,7 +3048,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 3,
     "maxBst": 395,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         265
@@ -3077,7 +3077,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         270
@@ -3102,7 +3102,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         273
@@ -3127,7 +3127,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 455,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         276
@@ -3149,7 +3149,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 440,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         278
@@ -3171,7 +3171,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 3,
     "maxBst": 518,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         280
@@ -3198,7 +3198,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 454,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         283
@@ -3220,7 +3220,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         285
@@ -3242,7 +3242,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 670,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         287
@@ -3267,7 +3267,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 456,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         290
@@ -3291,7 +3291,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         293
@@ -3316,7 +3316,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 474,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         296
@@ -3338,7 +3338,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         299
@@ -3360,7 +3360,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 400,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         300
@@ -3382,7 +3382,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 380,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         302
@@ -3401,7 +3401,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 380,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         303
@@ -3420,7 +3420,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         304
@@ -3445,7 +3445,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 410,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         307
@@ -3467,7 +3467,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         309
@@ -3489,7 +3489,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 405,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         311
@@ -3508,7 +3508,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 405,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         312
@@ -3527,7 +3527,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 430,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         313
@@ -3546,7 +3546,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 430,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         314
@@ -3565,7 +3565,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         406
@@ -3590,7 +3590,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 467,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         316
@@ -3612,7 +3612,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         318
@@ -3634,7 +3634,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         320
@@ -3656,7 +3656,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         322
@@ -3678,7 +3678,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         324
@@ -3697,7 +3697,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         325
@@ -3719,7 +3719,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 360,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         327
@@ -3738,7 +3738,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 520,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         328
@@ -3763,7 +3763,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         331
@@ -3785,7 +3785,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         333
@@ -3807,7 +3807,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 458,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         335
@@ -3826,7 +3826,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 458,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         336
@@ -3845,7 +3845,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         337
@@ -3864,7 +3864,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         338
@@ -3883,7 +3883,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 468,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         339
@@ -3905,7 +3905,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 468,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         341
@@ -3927,7 +3927,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         343
@@ -3949,7 +3949,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         345
@@ -3971,7 +3971,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         347
@@ -4015,7 +4015,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 420,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         351
@@ -4034,7 +4034,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 440,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         352
@@ -4053,7 +4053,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 455,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         353
@@ -4075,7 +4075,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         355
@@ -4100,7 +4100,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         357
@@ -4119,7 +4119,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 455,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         433
@@ -4141,7 +4141,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 465,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         359
@@ -4160,7 +4160,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         361
@@ -4184,7 +4184,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         363
@@ -4209,7 +4209,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         366
@@ -4233,7 +4233,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         369
@@ -4252,7 +4252,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 330,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         370
@@ -4271,7 +4271,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         371
@@ -4296,7 +4296,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         374
@@ -4511,7 +4511,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         387
@@ -4536,7 +4536,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 534,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         390
@@ -4561,7 +4561,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         393
@@ -4586,7 +4586,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         396
@@ -4611,7 +4611,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 410,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         399
@@ -4633,7 +4633,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 384,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         401
@@ -4655,7 +4655,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 523,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         403
@@ -4680,7 +4680,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         408
@@ -4702,7 +4702,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         410
@@ -4724,7 +4724,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 424,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         412
@@ -4748,7 +4748,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 474,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         415
@@ -4770,7 +4770,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 405,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         417
@@ -4789,7 +4789,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         418
@@ -4811,7 +4811,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 450,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         420
@@ -4833,7 +4833,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         422
@@ -4855,7 +4855,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 498,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         425
@@ -4877,7 +4877,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         427
@@ -4899,7 +4899,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 452,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         431
@@ -4921,7 +4921,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 479,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         434
@@ -4943,7 +4943,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         436
@@ -4965,7 +4965,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 411,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         441
@@ -4984,7 +4984,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         442
@@ -5003,7 +5003,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         443
@@ -5028,7 +5028,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         447
@@ -5050,7 +5050,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         449
@@ -5072,7 +5072,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         451
@@ -5094,7 +5094,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         453
@@ -5116,7 +5116,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 454,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         455
@@ -5135,7 +5135,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         456
@@ -5157,7 +5157,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 494,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         459
@@ -5179,7 +5179,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 440,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         479
@@ -5467,7 +5467,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 528,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         495
@@ -5492,7 +5492,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 528,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         498
@@ -5517,7 +5517,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 528,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         501
@@ -5542,7 +5542,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 420,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         504
@@ -5564,7 +5564,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         506
@@ -5589,7 +5589,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 446,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         509
@@ -5611,7 +5611,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 498,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         511
@@ -5677,7 +5677,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 487,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         517
@@ -5699,7 +5699,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 488,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         519
@@ -5724,7 +5724,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         524
@@ -5749,7 +5749,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 425,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         527
@@ -5771,7 +5771,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 508,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         529
@@ -5793,7 +5793,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 445,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         531
@@ -5812,7 +5812,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         532
@@ -5837,7 +5837,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 509,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         535
@@ -5862,7 +5862,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 465,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         539
@@ -5881,7 +5881,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         540
@@ -5906,7 +5906,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         543
@@ -5931,7 +5931,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         546
@@ -5953,7 +5953,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         548
@@ -5975,7 +5975,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         550
@@ -5997,7 +5997,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 519,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         551
@@ -6022,7 +6022,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         554
@@ -6044,7 +6044,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 461,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         556
@@ -6063,7 +6063,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 325,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         557
@@ -6085,7 +6085,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 488,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         559
@@ -6107,7 +6107,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         561
@@ -6126,7 +6126,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 483,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         562
@@ -6172,7 +6172,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 474,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         568
@@ -6194,7 +6194,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         570
@@ -6216,7 +6216,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         572
@@ -6238,7 +6238,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         574
@@ -6263,7 +6263,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         577
@@ -6288,7 +6288,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 473,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         580
@@ -6335,7 +6335,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         585
@@ -6357,7 +6357,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 428,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         587
@@ -6376,7 +6376,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         588
@@ -6420,7 +6420,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         594
@@ -6439,7 +6439,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 472,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         595
@@ -6461,7 +6461,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 489,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         597
@@ -6483,7 +6483,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 520,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         599
@@ -6508,7 +6508,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         602
@@ -6533,7 +6533,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         605
@@ -6555,7 +6555,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 520,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         607
@@ -6605,7 +6605,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         613
@@ -6627,7 +6627,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 515,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         615
@@ -6646,7 +6646,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         616
@@ -6668,7 +6668,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         619
@@ -6690,7 +6690,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         621
@@ -6709,7 +6709,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 483,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         622
@@ -6756,7 +6756,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         627
@@ -6778,7 +6778,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         629
@@ -6800,7 +6800,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 484,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         631
@@ -6819,7 +6819,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 484,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         632
@@ -6838,7 +6838,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         633
@@ -7113,7 +7113,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         650
@@ -7138,7 +7138,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 534,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         653
@@ -7163,7 +7163,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         656
@@ -7188,7 +7188,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 423,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         659
@@ -7210,7 +7210,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 499,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         661
@@ -7235,7 +7235,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 411,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         664
@@ -7260,7 +7260,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 369,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         667
@@ -7307,7 +7307,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 531,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         672
@@ -7329,7 +7329,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         674
@@ -7351,7 +7351,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 472,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         676
@@ -7370,7 +7370,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 466,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         677
@@ -7392,7 +7392,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         679
@@ -7417,7 +7417,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 341,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         682
@@ -7439,7 +7439,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         684
@@ -7461,7 +7461,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 482,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         686
@@ -7483,7 +7483,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         688
@@ -7505,7 +7505,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 494,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         690
@@ -7527,7 +7527,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         692
@@ -7549,7 +7549,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 481,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         694
@@ -7571,7 +7571,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 521,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         696
@@ -7593,7 +7593,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 521,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         698
@@ -7615,7 +7615,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         701
@@ -7634,7 +7634,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 431,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         702
@@ -7653,7 +7653,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         703
@@ -7672,7 +7672,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         704
@@ -7697,7 +7697,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         707
@@ -7716,7 +7716,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 474,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         708
@@ -7738,7 +7738,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 494,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         710
@@ -7760,7 +7760,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 514,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         712
@@ -7918,7 +7918,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         722
@@ -7943,7 +7943,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         725
@@ -7968,7 +7968,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         728
@@ -8040,7 +8040,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         736
@@ -8065,7 +8065,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 478,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         739
@@ -8087,7 +8087,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 476,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         741
@@ -8106,7 +8106,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 464,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         742
@@ -8128,7 +8128,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 487,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         744
@@ -8169,7 +8169,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         747
@@ -8191,7 +8191,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         749
@@ -8213,7 +8213,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 454,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         751
@@ -8235,7 +8235,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         753
@@ -8279,7 +8279,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         757
@@ -8301,7 +8301,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         759
@@ -8323,7 +8323,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         761
@@ -8348,7 +8348,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         764
@@ -8367,7 +8367,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         766
@@ -8386,7 +8386,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         767
@@ -8408,7 +8408,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         769
@@ -8430,7 +8430,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 410,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         771
@@ -8471,7 +8471,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 440,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         774
@@ -8490,7 +8490,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         775
@@ -8509,7 +8509,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         776
@@ -8528,7 +8528,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 435,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         777
@@ -8547,7 +8547,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 476,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         778
@@ -8566,7 +8566,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         779
@@ -8585,7 +8585,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         780
@@ -8604,7 +8604,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 517,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         781
@@ -8623,7 +8623,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         782
@@ -9042,7 +9042,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         810
@@ -9067,7 +9067,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         813
@@ -9092,7 +9092,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         816
@@ -9117,7 +9117,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         819
@@ -9139,7 +9139,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         821
@@ -9164,7 +9164,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         824
@@ -9189,7 +9189,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 455,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         827
@@ -9211,7 +9211,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 460,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         829
@@ -9233,7 +9233,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         831
@@ -9255,7 +9255,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 485,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         833
@@ -9277,7 +9277,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         835
@@ -9328,7 +9328,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         843
@@ -9350,7 +9350,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         845
@@ -9369,7 +9369,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         846
@@ -9391,7 +9391,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 502,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         848
@@ -9413,7 +9413,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         850
@@ -9435,7 +9435,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         852
@@ -9457,7 +9457,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 508,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         854
@@ -9479,7 +9479,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         856
@@ -9504,7 +9504,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         859
@@ -9529,7 +9529,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         868
@@ -9551,7 +9551,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 435,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         871
@@ -9570,7 +9570,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         872
@@ -9592,7 +9592,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         874
@@ -9611,7 +9611,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         875
@@ -9630,7 +9630,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         876
@@ -9649,7 +9649,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 436,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         877
@@ -9668,7 +9668,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         880
@@ -9687,7 +9687,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         881
@@ -9706,7 +9706,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         882
@@ -9725,7 +9725,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 505,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         883
@@ -9744,7 +9744,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         884
@@ -9766,7 +9766,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         885
@@ -9984,7 +9984,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         906
@@ -10009,7 +10009,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         909
@@ -10034,7 +10034,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         912
@@ -10059,7 +10059,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 489,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         915
@@ -10081,7 +10081,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 404,
-    "baseRarity": 2,
+    "baseRarity": 1,
     "stages": [
       [
         917
@@ -10103,7 +10103,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 450,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         919
@@ -10125,7 +10125,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         921
@@ -10150,7 +10150,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 470,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         924
@@ -10172,7 +10172,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 477,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         926
@@ -10194,7 +10194,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 510,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         928
@@ -10219,7 +10219,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         932
@@ -10244,7 +10244,7 @@ G.EVO_CHAINS = {
     "type": "branch",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         935
@@ -10268,7 +10268,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 495,
-    "baseRarity": 4,
+    "baseRarity": 1,
     "stages": [
       [
         938
@@ -10290,7 +10290,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 490,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         940
@@ -10334,7 +10334,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 486,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         951
@@ -10400,7 +10400,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 506,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         957
@@ -10425,7 +10425,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 425,
-    "baseRarity": 3,
+    "baseRarity": 1,
     "stages": [
       [
         960
@@ -10447,7 +10447,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 457,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         963
@@ -10469,7 +10469,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 500,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         965
@@ -10491,7 +10491,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 501,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         967
@@ -10510,7 +10510,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 480,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         968
@@ -10529,7 +10529,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 525,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         969
@@ -10551,7 +10551,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 488,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         971
@@ -10573,7 +10573,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 521,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         974
@@ -10595,7 +10595,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 478,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         976
@@ -10614,7 +10614,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 530,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         977
@@ -10633,7 +10633,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 475,
-    "baseRarity": 3,
+    "baseRarity": 2,
     "stages": [
       [
         978
@@ -10823,7 +10823,7 @@ G.EVO_CHAINS = {
     "type": "3stage",
     "maxStage": 3,
     "maxBst": 600,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         996
@@ -10889,7 +10889,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 590,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         1005
@@ -10908,7 +10908,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 590,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         1006
@@ -10946,7 +10946,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 590,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         1009
@@ -10965,7 +10965,7 @@ G.EVO_CHAINS = {
     "type": "single",
     "maxStage": 1,
     "maxBst": 590,
-    "baseRarity": 5,
+    "baseRarity": 4,
     "stages": [
       [
         1010
@@ -10984,7 +10984,7 @@ G.EVO_CHAINS = {
     "type": "2stage",
     "maxStage": 2,
     "maxBst": 508,
-    "baseRarity": 4,
+    "baseRarity": 3,
     "stages": [
       [
         1012
@@ -20870,8 +20870,28 @@ G.EVO_BY_DEX = {
   }
 };
 
-G.getEvoChain = dex => G.EVO_CHAINS[dex] || (G.EVO_BY_DEX[dex] && G.EVO_CHAINS[G.EVO_BY_DEX[dex].baseDex]);
-G.getEvoInfo = dex => G.EVO_BY_DEX[dex] || null;
-G.getBaseDex = dex => (G.EVO_BY_DEX[dex] && G.EVO_BY_DEX[dex].baseDex) || dex;
-G.getStage = dex => (G.EVO_BY_DEX[dex] && G.EVO_BY_DEX[dex].stage) || 1;
-G.isBaseStage = dex => G.getStage(dex) === 1;
+G.getEvoChain = function(dex) {
+  if (!G.EVO_BY_DEX) return null;
+  const info = G.EVO_BY_DEX[dex];
+  if (!info) return null;
+  return G.EVO_CHAINS[info.baseDex] || null;
+};
+
+G.getEvoInfo = function(dex) {
+  return (G.EVO_BY_DEX && G.EVO_BY_DEX[dex]) || null;
+};
+
+G.getBaseDex = function(dex) {
+  const info = G.getEvoInfo(dex);
+  return info ? info.baseDex : dex;
+};
+
+G.getStage = function(dex) {
+  const info = G.getEvoInfo(dex);
+  return info ? info.stage : 1;
+};
+
+G.isBaseStage = function(dex) {
+  const info = G.getEvoInfo(dex);
+  return !info || info.stage === 1;
+};

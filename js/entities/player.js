@@ -9,6 +9,11 @@ G.Player = class Player {
    * @param perks mejoras permanentes ya resueltas (ver data/upgrades.js)
    */
   constructor(mon, perks = {}, shiny = false) {
+    // El jugador siempre empieza en fase inicial
+    const baseDex = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(mon.dex) : mon.dex;
+    if (mon.dex !== baseDex && typeof G !== 'undefined' && G.DEX_BY && G.DEX_BY[baseDex]) {
+      mon = G.DEX_BY[baseDex];
+    }
     this.mon = mon;
     this.dex = mon.dex;
     this.shiny = shiny && G.Sprites.hasShiny(mon.dex);

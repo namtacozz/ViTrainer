@@ -290,5 +290,5 @@ G.Gacha = (() => {
 
   return { debugForceShiny(n = 1) { forceShiny = n; },
            costOf, RATES, PITY_5, SHINY_RATE, SHINY_RATE_IRIS, REFUND, RARITY_NAME, RARITY_COLOR, BANNERS, SPOOKY, banner, isOpen,
-           pool, featured, pull, dexOf, hasIris, shinyRate };
+           pool, featured, pull, dexOf, hasIris, shinyRate, getRarity };
 })();
