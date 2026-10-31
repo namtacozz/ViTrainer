@@ -532,7 +532,7 @@ G.Social = (() => {
   async function invite(other) {
     const f = friends.get(other);
     if (!f || f.status !== 'ok') return { ok: false, error: 'Sólo puedes invitar a tus amigos.' };
-    if (room && room.members.length >= MAX_PLAYERS) return { ok: false, error: 'La sala está llena.' };
+    if (room && room.members.length >= MAX_PLAYERS) return { ok: false, error: 'La sala está llena (máximo ' + MAX_PLAYERS + ').' };
     if (room && !room.isHost) return { ok: false, error: 'Sólo el anfitrión de la sala puede invitar.' };
     if (!room) await createRoom();
     // Acabas de invitarle a esta sala: ya la tiene (pulsar otra vez no escribe nada; 25-10-2026).

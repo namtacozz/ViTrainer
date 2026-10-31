@@ -151,17 +151,31 @@ G.RunQuests = (() => {
       });
     }
 
-    // 2. Kiểm tra Mega Evolution cho Pokémon hiện tại
-    const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(dex) : [];
+    // 2. Kiểm tra Mega Evolution cho Pokémon hiện tại hoặc trong chuỗi tiến hóa
+    let megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(dex) : [];
+    let megaDex = dex;
+    if ((!megas || megas.length === 0) && typeof G !== 'undefined' && G.getEvoChain) {
+      const chain = G.getEvoChain(dex);
+      if (chain && chain.members) {
+        for (const mDex of chain.members) {
+          const mList = G.getMegasFor ? G.getMegasFor(mDex) : [];
+          if (mList && mList.length > 0) {
+            megas = mList;
+            megaDex = mDex;
+            break;
+          }
+        }
+      }
+    }
     if (megas && megas.length > 0 && !activeQuests.some(q => q.type === 'mega')) {
       activeQuests.unshift({
-        id: 'mega_' + dex,
+        id: 'mega_' + megaDex,
         type: 'mega',
         title: 'THỬ THÁCH MEGA',
         desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
         targetKills: 350,
         targetLv: 25,
-        kills: 0,
+        kills: (pl && pl.kills) || 0,
         rewardType: 'item',
         rewardItem: 'keystone',
         rewardName: 'Mega Aro (Keystone)',
@@ -288,7 +302,7 @@ G.RunQuests = (() => {
         desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
         targetKills: 350,
         targetLv: 25,
-        kills: 0,
+        kills: (pl && pl.kills) || 0,
         rewardType: 'item',
         rewardItem: 'keystone',
         rewardName: 'Mega Aro (Keystone)',
@@ -308,12 +322,15 @@ G.RunQuests = (() => {
   /** Khi tiêu diệt kẻ địch */
   function onKill(e, pl) {
     if (!e) return;
+    pl = pl || ((typeof G !== 'undefined' && G.Game && G.Game.player) ? G.Game.player : null);
     const isPhys = e.lastHitMove && e.lastHitMove.cat === 'physical';
     const isRunner = e.behavior === 'thief' || e.shiny || e.golden;
 
     for (const q of activeQuests) {
       if (q.completed) continue;
-      if (q.targetKills !== undefined) q.kills = (q.kills || 0) + 1;
+      if (q.targetKills !== undefined) {
+        q.kills = Math.max((q.kills || 0) + 1, (pl && pl.kills) || 0);
+      }
       if (isPhys && q.targetPhysKills !== undefined) q.physKills = (q.physKills || 0) + 1;
       if (isRunner && q.archetype === 'speedster') q.caughtRunner = true;
     }
@@ -355,7 +372,8 @@ G.RunQuests = (() => {
 
       if (q.type === 'mega' || q.type === 'legend_form') {
         if (q.targetKills !== undefined && q.targetLv !== undefined) {
-          if ((q.kills || 0) >= q.targetKills && pl.level >= q.targetLv) isDone = true;
+          const curKills = Math.max(q.kills || 0, (pl && pl.kills) || 0);
+          if (curKills >= q.targetKills && (pl.level || 1) >= q.targetLv) isDone = true;
         } else if (q.id === 'legend_giratina') {
           if (curTime >= q.targetTime || (pl.bosses || 0) >= q.targetBosses) isDone = true;
         } else if (q.id === 'legend_zygarde') {
@@ -446,14 +464,15 @@ G.RunQuests = (() => {
 
     if (q.type === 'mega' || q.type === 'legend_form') {
       if (q.targetKills !== undefined && q.targetLv !== undefined) {
-        const killF = Math.min(1, (q.kills || 0) / q.targetKills);
-        const lvF = Math.min(1, (pl.level || 1) / q.targetLv);
+        const curKills = Math.max(q.kills || 0, (pl && pl.kills) || 0);
+        const killF = Math.min(1, curKills / q.targetKills);
+        const lvF = Math.min(1, ((pl && pl.level) || 1) / q.targetLv);
         const pct = (killF + lvF) * 0.5;
         return {
-          current: q.kills || 0,
+          current: curKills,
           max: q.targetKills,
           pct,
-          label: `${q.kills || 0}/${q.targetKills} (Nv.${pl.level || 1}/${q.targetLv})`
+          label: `${curKills}/${q.targetKills} (Nv.${(pl && pl.level) || 1}/${q.targetLv})`
         };
       }
       if (q.id === 'legend_giratina') {

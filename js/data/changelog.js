@@ -14,6 +14,10 @@ G.CHANGELOG = [
     ["Idiomas simplificados: interfaz centrada exclusivamente en inglés nativo y vietnamita completo.",
      "Streamlined Languages: game interface focused exclusively on native English and full Vietnamese."]
   ], fix: [
+    ["Salas de 8 jugadores: corregido el límite visual y de invitaciones que mostraba 'hasta 4 jugadores' al invitar con la sala llena a la mitad.",
+     "8-Player Rooms: fixed the visual party cap and invite toast that still showed 'up to 4 players' when inviting beyond 4 trainers."],
+    ["Misión Mega en partida: sincronizado el contador de bajas y la barra de progreso (0/350) en tiempo real con las bajas de la partida, disponible desde la fase inicial de cada línea evolutiva y en partidas cooperativas.",
+     "In-run Mega Quest: live-synced the kill counter and progress bar (0/350) with player kills, enabled right from base evolution stages, and fully supported in co-op matches."],
     ["Megaevoluciones y Formas en partida: corregido el desbloqueo y activación de las formas Mega, Primigenias y Especiales al alcanzar nivel 30 (incluidos Salamence, Lucario, Charizard X/Y, Rayquaza y todas las especies con Mega). Unificada la primera evolución de especies de 2 fases a nivel 15 y asegurada la actualización inmediata del sprite de combate.",
      "In-run Mega Evolutions & Forms: fixed unlocking and triggering of Mega, Primal, and Special forms upon reaching Level 30 (including Salamence, Lucario, Charizard X/Y, Rayquaza, and all Mega species). Unified 2-stage species first evolution to Level 15 and ensured immediate combat sprite and animation updates."],
     ["Daño a jefes: corregido el error que impedía que los jefes recibieran daño, con puntos de vida reequilibrados.",

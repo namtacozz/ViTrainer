@@ -964,7 +964,7 @@
       const e = byId.get(id);
       if (!e) return;
       byId.delete(id);
-      if (died) { e.die(); G.Progress.kill(e); }
+      if (died) { e.die(); G.Progress.kill(e); const localPl = (typeof G !== 'undefined' && G.Game && G.Game.player) ? G.Game.player : null; if (G.RunQuests && G.RunQuests.onKill) G.RunQuests.onKill(e, localPl); }
       const i = list.indexOf(e);
       if (i >= 0) list.splice(i, 1);
       if (died) corpses.push(e);

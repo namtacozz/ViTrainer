@@ -320,6 +320,7 @@ G.Game = (() => {
       pl.t1 = t.t1 || 0; pl.t10 = t.t10 || 0;
       if (t.cn > (pl.candy || 0)) pl.candy = t.cn;
       bankTickets();
+      if (G.RunQuests && G.RunQuests.update) G.RunQuests.update(0, pl, { time, biome });
     },
     levelStart(level) {
       // (Si tenías abierta la elección de objeto, vuelve al terminar: afterLevelUp.)

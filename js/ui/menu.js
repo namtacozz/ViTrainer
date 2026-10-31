@@ -165,7 +165,7 @@ G.MenuUI = (() => {
     const req = fr.filter(f => f.status === 'in').length;
     const parts = [];
     if (req) parts.push(req + (req === 1 ? ' solicitud' : ' solicitudes'));
-    $('menu-friends-sub').textContent = parts.length ? parts.join(' · ') : 'Juega en grupo, hasta 4';
+    $('menu-friends-sub').textContent = parts.length ? parts.join(' · ') : ('Juega en grupo, hasta ' + (G.Social ? G.Social.MAX_PLAYERS : 8));
     $('menu-friends-sub').classList.toggle('gold', req > 0);
   }
 
