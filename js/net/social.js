@@ -21,7 +21,7 @@
  */
 G.Social = (() => {
   const VALID = /^[A-Za-z0-9_ñÑáéíóúÁÉÍÓÚ]{3,16}$/;
-  const MAX_PLAYERS = 4;
+  const MAX_PLAYERS = 8;
   const INVITE_TTL = 3 * 60 * 1000;
   const REINVITE_MS = 20 * 1000;     // volver a invitar al mismo amigo antes de esto no escribe nada
   /*
@@ -302,6 +302,23 @@ G.Social = (() => {
    * verdad (rin/{sala}/{uid}, que sólo escribe cada invitado), y los mensajes
    * son pequeños y van a huecos fijos (net.js).
    */
+    const ACTIVE_ROOM_KEY = 'ps.coop_active_room';
+  function saveActiveRoom(id, host) {
+    try { localStorage.setItem(ACTIVE_ROOM_KEY, JSON.stringify({ id, host, at: now() })); } catch (e) {}
+  }
+  function clearActiveRoom() {
+    try { localStorage.removeItem(ACTIVE_ROOM_KEY); } catch (e) {}
+  }
+  function getActiveRoom() {
+    try {
+      const s = localStorage.getItem(ACTIVE_ROOM_KEY);
+      if (!s) return null;
+      const data = JSON.parse(s);
+      if (now() - (data.at || 0) > 45 * 60 * 1000) { clearActiveRoom(); return null; }
+      return data;
+    } catch (e) { return null; }
+  }
+
   const rinRef = (id, u = uid) => fb.rtdb.ref('rin/' + id + '/' + u);
 
   async function createRoom() {
@@ -313,7 +330,7 @@ G.Social = (() => {
     return room;
   }
 
-  async function joinRoom(id) {
+  async function joinRoom(id, isRejoin = false) {
     if (room && room.id === id) return { ok: true };
     if (room) await leaveRoom();
     rtOn();
@@ -323,7 +340,9 @@ G.Social = (() => {
       host = (await fb.rtdb.ref('rooms/' + id + '/host').get()).val();
     } catch (e) { /* sala borrada */ }
     if (!host) { rtOff(); return { ok: false, error: 'Esa sala ya no existe.' }; }
-    if (open !== true) { rtOff(); return { ok: false, error: 'La partida de esa sala ya ha empezado.' }; }
+    const saved = getActiveRoom();
+    const wasMember = !!(saved && saved.id === id);
+    if (open !== true && !isRejoin && !wasMember) { rtOff(); return { ok: false, error: 'La partida de esa sala ya ha empezado.' }; }
     // (Con las reglas de antes de rin no se puede escribir: se sigue igual.)
     await rinRef(id).set(true).catch(() => {});
     try { await fb.rtdb.ref('rooms/' + id + '/m/' + uid).set(memberInfo()); }
@@ -340,6 +359,7 @@ G.Social = (() => {
 
   function enterRoom(id, host) {
     room = { id, host, isHost: host === uid, members: [], open: true, lost: false };
+    saveActiveRoom(id, host);
     watchRoom(id);
     emit('room');
   }
@@ -459,7 +479,17 @@ G.Social = (() => {
 
   /** Anfitrión: quita a alguien de la sala (se cortó en partida y no volvió). */
   function dropMember(u) {
-    if (room && room.isHost && u !== uid) fb.rtdb.ref('rooms/' + room.id + '/m/' + u).remove().catch(() => {});
+    if (room && room.isHost && u !== uid) {
+      fb.rtdb.ref('rooms/' + room.id + '/m/' + u).remove().catch(() => {});
+      rinRef(room.id, u).remove().catch(() => {});
+    }
+  }
+
+  async function kickMember(u) {
+    if (room && room.isHost && u !== uid) {
+      await fb.rtdb.ref('rooms/' + room.id + '/m/' + u).remove().catch(() => {});
+      await rinRef(room.id, u).remove().catch(() => {});
+    }
   }
 
   function closedRoom() {
@@ -473,6 +503,7 @@ G.Social = (() => {
 
   async function leaveRoom() {
     if (!room) return;
+    clearActiveRoom();
     const r = room;
     detachRoom();
     room = null;
@@ -626,7 +657,7 @@ G.Social = (() => {
 
   return {
     start, stop, claimNick, request, accept, remove, publishProfile, getProfile, profileData,
-    createRoom, joinRoom, leaveRoom, setOpen, refreshMember, dropMember, setPlaying, ensureFriends,
+    createRoom, joinRoom, leaveRoom, setOpen, refreshMember, dropMember, kickMember, getActiveRoom, clearActiveRoom, setPlaying, ensureFriends,
     invite, acceptInvite, declineInvite,
     on(fn) { listeners.add(fn); }, off(fn) { listeners.delete(fn); },
     get me() { return me; },

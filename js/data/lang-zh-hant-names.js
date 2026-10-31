@@ -1124,7 +1124,36 @@ G.I18n.add({
   "Tierra": "地面",
   "Veneno": "毒",
   "Volador": "飛行",
-  "Teselia": "合眾"
+  "Teselia": "合眾",
+  "Alolan Vulpix": "阿羅拉六尾",
+  "Alolan Ninetales": "阿羅拉九尾",
+  "Alolan Sandshrew": "阿羅拉穿山鼠",
+  "Alolan Sandslash": "阿羅拉穿山王",
+  "Alolan Raichu": "阿羅拉雷丘",
+  "Galarian Ponyta": "伽勒爾小火馬",
+  "Galarian Rapidash": "伽勒爾烈焰馬",
+  "Galarian Zigzagoon": "伽勒爾蛇紋熊",
+  "Galarian Linoone": "伽勒爾直衝熊",
+  "Hisuian Zorua": "洗翠索羅亞",
+  "Hisuian Zoroark": "洗翠索羅亞克",
+  "Hisuian Growlithe": "洗翠卡蒂狗",
+  "Hisuian Arcanine": "洗翠風速狗",
+  "Paldean Wooper": "帕底亞烏波",
+  "11037": "阿羅拉六尾",
+  "11038": "阿羅拉九尾",
+  "11027": "阿羅拉穿山鼠",
+  "11028": "阿羅拉穿山王",
+  "11026": "阿羅拉雷丘",
+  "11077": "伽勒爾小火馬",
+  "11078": "伽勒爾烈焰馬",
+  "11263": "伽勒爾蛇紋熊",
+  "11264": "伽勒爾直衝熊",
+  "11570": "洗翠索羅亞",
+  "11571": "洗翠索羅亞克",
+  "11058": "洗翠卡蒂狗",
+  "11059": "洗翠風速狗",
+  "11194": "帕底亞烏波"
+
 }, 'zh-Hant');
 
 // Spanish uses the same word for the Psychic type and the move Psychic.

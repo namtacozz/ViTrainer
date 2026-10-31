@@ -64,6 +64,13 @@
         if (r.ok) $('fr-name').value = '';
       };
       $('fr-room').onclick = () => G.LobbyUI.open();
+      if ($('fr-create-room')) {
+        $('fr-create-room').onclick = async () => {
+          if (!G.Social.me) { G.NickUI.open(() => G.Social.createRoom().then(() => G.LobbyUI.open())); return; }
+          await G.Social.createRoom();
+          G.LobbyUI.open();
+        };
+      }
       G.Social.on(() => { if (G.UI.isOpen('scr-friends')) render(); });
     }
 
@@ -91,6 +98,7 @@
       const room = G.Social.room;
       $('fr-me').innerHTML = 'Tu apodo: <b class="gold" translate="no">' + esc(G.Social.me ? G.Social.me.name : '') + '</b> · dáselo a tus amigos para que te añadan.';
       $('fr-room').classList.toggle('hidden', !room);
+      if ($('fr-create-room')) $('fr-create-room').classList.toggle('hidden', !!room);
       const list = G.Social.friends.sort((a, b) => {
         const rank = f => f.status === 'in' ? 0 : f.status === 'ok' ? 1 : 2;
         return rank(a) - rank(b) || a.name.localeCompare(b.name);
@@ -204,9 +212,21 @@
           const c = document.createElement('div');
           c.className = 'lob-card' + (m ? '' : ' empty');
           if (m) {
-            c.style.setProperty('--pc', G.Coop.COLORS[i]);
+            c.style.setProperty('--pc', G.Coop.COLORS[i % G.Coop.COLORS.length]);
             c.appendChild(G.UI.spriteCanvas(m.dex, 120, 96, { scale: 2, lively: true, shiny: !!m.shiny }));
             c.insertAdjacentHTML('beforeend', `<b translate="no">${esc(m.name)}</b><small>${esc((G.DEX_BY[m.dex] || {}).name || '')}</small><span class="conn" data-u="${m.uid}"></span>`);
+            if (room.isHost && m.uid !== G.Social.uid) {
+              const kbtn = document.createElement('button');
+              kbtn.className = 'btn small ghost';
+              kbtn.style.cssText = 'padding:2px 8px;margin-top:6px;font-size:11px;color:#ff5a79;border-color:rgba(255,90,121,.4);';
+              kbtn.textContent = '✕ Expulsar';
+              kbtn.onclick = async (e) => {
+                e.stopPropagation();
+                await G.Social.kickMember(m.uid);
+                render();
+              };
+              c.appendChild(kbtn);
+            }
           } else c.innerHTML = '<span>Libre</span>';
           box.appendChild(c);
         }

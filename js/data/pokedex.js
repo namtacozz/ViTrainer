@@ -974,6 +974,20 @@ G.DEX = [
   {"dex":1018,"name":"Archaludon","types":["steel","dragon"],"hp":110,"spd":114,"atk":1.39,"pa":1.28,"sa":1.39,"df":130,"sd":65,"rarity":5,"bst":600,"starter":false,"gen":9},
   {"dex":1019,"name":"Hydrapple","types":["grass","dragon"],"hp":118,"spd":96,"atk":1.36,"pa":1.14,"sa":1.36,"df":110,"sd":80,"rarity":4,"bst":540,"starter":false,"gen":9},
   {"dex":1024,"name":"Terapagos","types":["normal"],"hp":110,"spd":103,"atk":1.06,"pa":1.06,"sa":1.06,"df":85,"sd":85,"rarity":5,"bst":450,"starter":false,"gen":9,"leg":true},
+  {"dex": 11037, "name": "Alolan Vulpix", "types": ["ice"], "hp": 87, "spd": 105, "atk": 0.97, "pa": 0.93, "sa": 0.97, "df": 40, "sd": 65, "rarity": 3, "bst": 299, "starter": false, "gen": 7},
+  {"dex": 11038, "name": "Alolan Ninetales", "types": ["ice", "fairy"], "hp": 103, "spd": 124, "atk": 1.15, "pa": 1.07, "sa": 1.15, "df": 75, "sd": 100, "rarity": 4, "bst": 505, "starter": false, "gen": 7},
+  {"dex": 11027, "name": "Alolan Sandshrew", "types": ["ice", "steel"], "hp": 92, "spd": 95, "atk": 1.11, "pa": 1.11, "sa": 0.76, "df": 90, "sd": 35, "rarity": 3, "bst": 300, "starter": false, "gen": 7},
+  {"dex": 11028, "name": "Alolan Sandslash", "types": ["ice", "steel"], "hp": 104, "spd": 105, "atk": 1.25, "pa": 1.25, "sa": 0.84, "df": 120, "sd": 65, "rarity": 4, "bst": 450, "starter": false, "gen": 7},
+  {"dex": 11026, "name": "Alolan Raichu", "types": ["electric", "psychic"], "hp": 97, "spd": 124, "atk": 1.22, "pa": 1.17, "sa": 1.22, "df": 50, "sd": 85, "rarity": 4, "bst": 485, "starter": false, "gen": 7},
+  {"dex": 11077, "name": "Galarian Ponyta", "types": ["psychic"], "hp": 92, "spd": 116, "atk": 1.17, "pa": 1.17, "sa": 1.06, "df": 55, "sd": 65, "rarity": 3, "bst": 410, "starter": false, "gen": 8},
+  {"dex": 11078, "name": "Galarian Rapidash", "types": ["psychic", "fairy"], "hp": 99, "spd": 122, "atk": 1.25, "pa": 1.25, "sa": 1.14, "df": 70, "sd": 80, "rarity": 4, "bst": 500, "starter": false, "gen": 8},
+  {"dex": 11263, "name": "Galarian Zigzagoon", "types": ["dark", "normal"], "hp": 87, "spd": 103, "atk": 0.86, "pa": 0.86, "sa": 0.86, "df": 41, "sd": 41, "rarity": 2, "bst": 240, "starter": false, "gen": 8},
+  {"dex": 11264, "name": "Galarian Linoone", "types": ["dark", "normal"], "hp": 105, "spd": 120, "atk": 1.08, "pa": 1.08, "sa": 0.97, "df": 61, "sd": 61, "rarity": 3, "bst": 420, "starter": false, "gen": 8},
+  {"dex": 11570, "name": "Hisuian Zorua", "types": ["normal", "ghost"], "hp": 86, "spd": 107, "atk": 1.17, "pa": 1.03, "sa": 1.17, "df": 40, "sd": 40, "rarity": 4, "bst": 330, "starter": false, "gen": 4},
+  {"dex": 11571, "name": "Hisuian Zoroark", "types": ["normal", "ghost"], "hp": 95, "spd": 124, "atk": 1.39, "pa": 1.25, "sa": 1.39, "df": 60, "sd": 60, "rarity": 5, "bst": 510, "starter": false, "gen": 4},
+  {"dex": 11058, "name": "Hisuian Growlithe", "types": ["fire", "rock"], "hp": 97, "spd": 101, "atk": 1.11, "pa": 1.11, "sa": 1.06, "df": 45, "sd": 50, "rarity": 3, "bst": 350, "starter": false, "gen": 4},
+  {"dex": 11059, "name": "Hisuian Arcanine", "types": ["fire", "rock"], "hp": 113, "spd": 116, "atk": 1.33, "pa": 1.33, "sa": 1.22, "df": 80, "sd": 80, "rarity": 5, "bst": 555, "starter": false, "gen": 4},
+  {"dex": 11194, "name": "Paldean Wooper", "types": ["poison", "ground"], "hp": 95, "spd": 84, "atk": 0.95, "pa": 0.95, "sa": 0.84, "df": 45, "sd": 25, "rarity": 2, "bst": 210, "starter": false, "gen": 9},
 ];
 
 G.DEX_BY = {};

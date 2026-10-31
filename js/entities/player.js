@@ -113,7 +113,18 @@ G.Player = class Player {
   }
 
   /** Segundos que hay que estar junto a un compañero caído para levantarlo. */
-  static get REVIVE_TIME() { return 3; }
+  static get REVIVE_TIME() {
+    const n = (typeof G !== 'undefined' && G.Coop && G.Coop.active) ? G.Coop.players().length : 1;
+    return G.Player.reviveTimeFor(n);
+  }
+
+  static reviveTimeFor(n) {
+    if (n <= 4) return 3.0;
+    if (n === 5) return 2.2;
+    if (n === 6) return 1.7;
+    if (n === 7) return 1.3;
+    return 1.0;
+  }
 
   // (×2 y luego ×4 el 2026-10-10: se subía de nivel demasiado rápido.)
   static xpFor(level) {

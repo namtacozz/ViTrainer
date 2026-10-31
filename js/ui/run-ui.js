@@ -381,10 +381,59 @@ G.RunUI = (() => {
       + (on ? `<div class="chips">${on}</div>` : '');
   }
 
+  function renderPauseCoopPlayers() {
+    const el = $('pause-coop-players');
+    if (!el) return;
+    if (!G.Coop || !G.Coop.active) {
+      el.classList.add('hidden');
+      el.innerHTML = '';
+      return;
+    }
+    el.classList.remove('hidden');
+    const isHost = G.Coop.isHost;
+    const mates = G.Coop.mates || [];
+    let html = '<div style="margin-top:12px;padding:8px;background:rgba(0,0,0,0.25);border-radius:8px">' +
+      '<div style="font-weight:bold;font-size:12px;margin-bottom:6px;color:var(--text-sub, #aaa)">Jugadores en la partida (' + (1 + mates.length) + '/8):</div>';
+    
+    const meName = (G.Social && G.Social.me && G.Social.me.name) ? G.Social.me.name : 'Tú';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.08)">' +
+      '<span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#5fc8ff;margin-right:6px"></span><b>' + meName + '</b> <small style="opacity:0.7">' + (isHost ? '(Anfitrión)' : '(Tú)') + '</small></span>' +
+      '<span style="font-size:11px;color:#7ee07a">Conectado</span>' +
+    '</div>';
+
+    mates.forEach(m => {
+      const conn = m.connected;
+      const kickBtn = isHost ? '<button class="btn small red coop-kick-btn" data-uid="' + m.uid + '" style="padding:2px 8px;font-size:11px;margin-left:8px">Expulsar</button>' : '';
+      html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.08)">' +
+        '<span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + (m.color || '#ffcb3d') + ';margin-right:6px"></span>' + m.name + '</span>' +
+        '<span style="display:flex;align-items:center">' +
+          '<span style="font-size:11px;color:' + (conn ? '#7ee07a' : '#ff5a79') + '">' + (conn ? 'Conectado' : 'Reconectando…') + '</span>' +
+          kickBtn +
+        '</span>' +
+      '</div>';
+    });
+
+    html += '</div>';
+    el.innerHTML = html;
+
+    if (isHost) {
+      el.querySelectorAll('.coop-kick-btn').forEach(btn => {
+        btn.onclick = () => {
+          const uid = btn.dataset.uid;
+          if (confirm('¿Expulsar a este jugador de la partida?')) {
+            G.Coop.kick(uid);
+            renderPauseCoopPlayers();
+          }
+        };
+      });
+    }
+  }
+
   function showPause(coop = false) {
     $('pause-sum').innerHTML = pauseSummary();
     G.UI.soundControls($('pause-sound'));
     $('pause-coop').classList.toggle('hidden', !coop);
+    renderPauseCoopPlayers();
     $('btn-quit').textContent = coop ? 'Salir de la partida' : 'Abandonar run';
     G.UI.show('scr-pause');
   }

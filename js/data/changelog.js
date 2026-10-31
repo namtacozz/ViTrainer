@@ -6,6 +6,19 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Cooperativo hasta 8 Jugadores, Reconexión y Formas Regionales", "8-Player Co-op, Rejoin & Regional Forms"], new: [
+    ["Salas directas y cooperativo hasta 8 jugadores: ahora puedes crear una sala directamente desde el menú social sin depender de invitaciones, con capacidad ampliada hasta 8 entrenadores simultáneos.",
+     "Direct Rooms & 8-Player Co-op: you can now create a room directly from the social menu without waiting for invitations, expanding lobby capacity up to 8 simultaneous trainers."],
+    ["Escalado dinámico y reanimación ultrarrápida: el número de enemigos y su vida se ajustan progresivamente según los jugadores. El tiempo de reanimación se reduce drásticamente (hasta 1.0 s con 8 jugadores) y varios aliados pueden colaborar a la vez para revivirte aún más rápido.",
+     "Dynamic Scaling & Superfast Revives: enemy spawn counts and health now scale progressively with player count. Revive time drops sharply (down to 1.0s with 8 players), and multiple nearby teammates can assist to revive you even faster."],
+    ["Pausa por desconexión y reconexión fluida: si un jugador pierde la conexión, la partida se pausa automáticamente esperando que regrese. Si recargas el juego, un nuevo botón dorado te permite reconectarte al instante a la partida en curso.",
+     "Disconnect Pause & Seamless Rejoin: if a player disconnects, the match automatically pauses while awaiting reconnection. Reloading the game offers a golden menu button to jump straight back into the ongoing run."],
+    ["Nuevas Formas Regionales: incorporadas 14 variantes de Alola, Galar, Hisui y Paldea con sprites completos, evoluciones y tipos únicos: Vulpix y Ninetales de Alola, Sandshrew y Sandslash de Alola, Raichu de Alola, Ponyta y Rapidash de Galar, Zigzagoon y Linoone de Galar, Obstagoon, Zorua y Zoroark de Hisui, Growlithe y Arcanine de Hisui, y Wooper de Paldea y Clodsire.",
+     "New Regional Forms: integrated 14 regional variants across Alola, Galar, Hisui, and Paldea with full sprites, evolutions, and unique typings: Alolan Vulpix & Ninetales, Alolan Sandshrew & Sandslash, Alolan Raichu, Galarian Ponyta & Rapidash, Galarian Zigzagoon & Linoone, Obstagoon, Hisuian Zorua & Zoroark, Hisuian Growlithe & Arcanine, and Paldean Wooper & Clodsire."]
+  ], chg: [
+    ["Gestión de anfitrión: el anfitrión de la sala ahora puede expulsar jugadores desconectados o inactivos desde la sala o desde el menú de pausa para reanudar el juego.",
+     "Host Controls: the room host can now kick disconnected or inactive players from both the lobby and the in-game pause menu to resume play."]
+  ]},
   { d: '2026-10-31', title: ["Jefes Renovados, Gráficos Oficiales Nintendo y Destrucción de Árboles", "Boss Overhaul, Official Nintendo Assets & Destructible Trees"], new: [
     ["Reforma total de Jefes: los jefes ahora son auténticos desafíos de incursión con entre 3x y 5x más vida, tope de daño por impacto único, resistencia a ralentizaciones, combos rápidos y ataques elementales telegrafiados según su tipo (Infierno, Ventisca, Tormenta Eléctrica, Floración Tóxica, Vacío Sombrío y Carga Dragón). Al caer por debajo del 50% de vida, entran en Fase de Furia e invocan dos esbirros dorados de élite.",
      "Boss Overhaul: bosses are now formidable raid-tier challenges with 3x-5x higher health pools, single-hit damage capping to prevent burst cheese, slow resistance, faster combos, and signature elemental moves (Inferno, Blizzard, Thunderstorm, Toxic Bloom, Shadow Void, Dragon Rush). Below 50% HP they enter an Enraged Phase, summoning two elite golden bodyguards."],

@@ -35,11 +35,45 @@ G.MenuUI = (() => {
       G.Audio.music(null);
       G.DB.logout().then(() => G.Flow.toLogin());
     };
+    const reconBtn = $('menu-reconnect');
+    if (reconBtn) {
+      reconBtn.onclick = () => {
+        const saved = G.Social && G.Social.getActiveRoom ? G.Social.getActiveRoom() : null;
+        if (!saved || !saved.id) {
+          reconBtn.classList.add('hidden');
+          G.UI.toast('No hay ninguna partida activa guardada', 3000);
+          return;
+        }
+        reconBtn.disabled = true;
+        reconBtn.textContent = 'Reconectando…';
+        G.Social.joinRoom(saved.id, true).then(res => {
+          reconBtn.disabled = false;
+          reconBtn.textContent = 'Reconectarse a la partida';
+          if (!res || !res.ok) {
+            G.UI.toast(res && res.error ? res.error : 'No se pudo reconectar a la sala', 3500);
+            if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
+            reconBtn.classList.add('hidden');
+            return;
+          }
+          G.Net.toHost({ k: 'rejoin', uid: G.Net.uid, name: G.Social.me ? G.Social.me.name : '' });
+          G.UI.toast('Conectado. Sincronizando con la partida…', 3000);
+        }).catch(err => {
+          reconBtn.disabled = false;
+          reconBtn.textContent = 'Reconectarse a la partida';
+          G.UI.toast('Error al reconectar', 3000);
+        });
+      };
+    }
   }
 
   // ---------------- menú principal ----------------
 
   function open() {
+    const saved = G.Social && G.Social.getActiveRoom ? G.Social.getActiveRoom() : null;
+    const reconBtn = $('menu-reconnect');
+    if (reconBtn) {
+      reconBtn.classList.toggle('hidden', !saved || !saved.id);
+    }
     const s = G.DB.save;
     const mon = G.DEX_BY[s.partner];
     const shiny = !!s.partnerShiny && G.DB.ownsShiny(mon.dex);

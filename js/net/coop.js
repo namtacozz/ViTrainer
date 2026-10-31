@@ -23,7 +23,7 @@
  */
 G.Coop = (() => {
   const ANIMS = ['Idle', 'Walk', 'Attack', 'Shoot', 'Charge', 'Hurt', 'Faint'];
-  const COLORS = ['#ffcb3d', '#5fc8ff', '#7ee07a', '#ff8ad8'];
+  const COLORS = ['#ffcb3d', '#5fc8ff', '#7ee07a', '#ff8ad8', '#ff7849', '#b57aff', '#4fe2c2', '#ff5a79'];
   // Mensajes por segundo: 15 por la conexión directa y 3 por el relé de la
   // Realtime Database (apagado: 1 $ el GB).
   const RATE_FAST = 1 / 15, RATE_SLOW = 1 / 4;
@@ -40,6 +40,7 @@ G.Coop = (() => {
   let api = {};                         // callbacks del juego (game.js)
   let waiting = new Set();              // subida de nivel: quién falta por elegir
   let holds = new Set();                // quién está eligiendo una fusión (la partida se para para todos)
+  const reconnecting = new Set();       // quién se ha desconectado temporalmente
   // El anfitrión mueve a los enemigos: si cambia de pestaña (o se le congela),
   // todo se para para todos. Antes los enemigos se quedaban quietos y los demás
   // seguían jugando con una ventaja enorme.
@@ -51,9 +52,10 @@ G.Coop = (() => {
   let members = [];
 
   // ---------------- escalado de dificultad ----------------
-
-  const scaleRate = n => 1 + 0.45 * Math.max(0, n - 1);
-  const scaleHp = n => 1 + 0.25 * Math.max(0, n - 1);
+  // 1-4 jugadores: escalado normal (+45% ratio, +25% vida por jugador).
+  // 5-8 jugadores: escalado exponencial para soportar escuadras grandes.
+  const scaleRate = n => n <= 4 ? (1 + 0.45 * Math.max(0, n - 1)) : (2.35 * Math.pow(1.32, n - 4));
+  const scaleHp = n => n <= 4 ? (1 + 0.25 * Math.max(0, n - 1)) : (1.75 * Math.pow(1.20, n - 4));
 
   // ---------------- arranque / fin ----------------
 
@@ -71,26 +73,33 @@ G.Coop = (() => {
     members = cfg.members;
     mates.clear();
     outEv = []; flushT = 0; waiting = new Set(); holds = new Set();
+    reconnecting.clear();
     hostAway = false; stalled = false; lastHostAt = performance.now();
     sums = {}; sumT = 1; myHold = false;
     levelSeq = 0; levelNow = 1; seenSeq = 0; doneSeq = 0; lastHo = '';
+    if (G.Social && G.Social.saveActiveRoom && G.Social.room) {
+      G.Social.saveActiveRoom(G.Social.room.id, host);
+    }
     cfg.members.forEach((m, i) => {
+      const col = COLORS[i % COLORS.length];
       const x = (i - (cfg.members.length - 1) / 2) * 34, y = 0;
-      if (m.uid === me) { pl.x = x; pl.y = y; pl.uid = me; pl.coopHost = host; pl.tagColor = COLORS[i]; return; }
+      if (m.uid === me) { pl.x = x; pl.y = y; pl.uid = me; pl.coopHost = host; pl.tagColor = col; return; }
       const mon = G.DEX_BY[m.dex] || G.DEX_BY[25];
       const p = new G.Player(mon, {}, !!m.shiny);
-      p.remote = true; p.uid = m.uid; p.tag = m.name; p.tagColor = COLORS[i]; p.revLabel = 'Quédate a su lado';
+      p.remote = true; p.uid = m.uid; p.tag = m.name; p.tagColor = col; p.revLabel = 'Quédate a su lado';
       p.x = x; p.y = y;
       p.net = { x, y, ang: Math.PI / 2, walk: 0, hp: p.maxHp, maxHp: p.maxHp, dead: 0, mv: G.baseStartOf(mon.dex), ml: 1, mag: 78, aim: Math.PI / 2, rev: 0 };
       G.Sprites.preload([mon.dex], 8000, p.shiny);
-      mates.set(m.uid, { uid: m.uid, name: m.name, color: COLORS[i], pl: p, connected: true, q: [], flushT: 0, xpMul: 1, lastAt: performance.now() });
+      mates.set(m.uid, { uid: m.uid, name: m.name, color: col, pl: p, connected: true, q: [], flushT: 0, xpMul: 1, lastAt: performance.now() });
     });
   }
 
   function end() {
     for (const u of [...graceT.keys()]) stopGrace(u);
+    if (G.Social && G.Social.clearActiveRoom) G.Social.clearActiveRoom();
     active = false; host = false; local = null;
     mates.clear(); outEv = []; waiting = new Set(); holds = new Set();
+    reconnecting.clear();
   }
 
   /** Te vas de la partida (los demás siguen). */
@@ -131,9 +140,9 @@ G.Coop = (() => {
 
   function myState() {
     // Con un vínculo se manda la órbita si la hay (es lo único que los demás no ven por los 'c').
-    const g = local.activeGroup();
-    const m = g.find(x => x.kind === 'orbit') || g[0];
-    return [r1(local.x), r1(local.y), r2(local.moveAngle), local.walking ? 1 : 0, r1(local.hp), r1(local.maxHp),
+    const g = local.activeGroup ? local.activeGroup() : (local.moves || []);
+    const m = Array.isArray(g) ? (g.find(x => x && x.kind === 'orbit') || g[0]) : null;
+    return [r1(local.x), r1(local.y), r2(local.moveAngle || 0), local.walking ? 1 : 0, r1(local.hp || 100), r1(local.maxHp || 100),
             local.dead ? 1 : 0, m ? m.id : '', m ? m.lvl : 1, r1(local.magnet), r2(local.aim), r2(local.xpMul),
             r2(local.reviveT || 0), api.choosing && api.choosing() ? 1 : 0, doneSeq, api.watching ? api.watching() : '',
             r2((G.Camera && G.Camera.zoomTo) || 1)];
@@ -218,6 +227,7 @@ G.Coop = (() => {
 
   function enemyList(near, max = 0) {
     const out = [];
+    if (!G.EnemyMgr || !G.EnemyMgr.all) return out;
     const r2n = NEAR * NEAR;
     for (const e of G.EnemyMgr.all()) {
       if (e.dead || G.U.dist2(e.x, e.y, near.x, near.y) > r2n) continue;
@@ -232,7 +242,7 @@ G.Coop = (() => {
   function hostFrame(m) {
     const isSlow = G.Net.slow(m.uid);
     const maxEv = isSlow ? 80 : EV_MAX;
-    const st = api.team();
+    const st = (api.team ? api.team() : null) || {};
     const p = { [me]: myState() };
     for (const o of mates.values()) {
       if (o.connected && o.uid !== m.uid && o.state) p[o.uid] = o.state;
@@ -240,9 +250,9 @@ G.Coop = (() => {
     // Tras una espera (ver tick) puede haber muchos: un mensaje enorme no saldría.
     const ev = m.q.length > maxEv ? m.q.splice(0, maxEv) : m.q;
     if (ev === m.q) m.q = [];
-    const f = { k: 'f', t: r2(st.time), lv: st.level, xp: r2(st.xp), xn: st.xpNext, ki: st.kills, bo: st.bosses, co: st.coins, tk: [st.t1, st.t10, st.cn || 0],
+    const f = { k: 'f', t: r2(st.time || 0), lv: st.level || 1, xp: r2(st.xp || 0), xn: st.xpNext || 100, ki: st.kills || 0, bo: st.bosses || 0, co: st.coins || 0, tk: [st.t1 || 0, st.t10 || 0, st.cn || 0],
                 p, e: enemyList(viewOf(m), isSlow ? 120 : 0), ev };
-    const ja = G.Judgment.netState();       // Arceus en la Sentencia
+    const ja = (G.Judgment && G.Judgment.netState) ? G.Judgment.netState() : null;
     if (ja) f.ja = ja;
     // Siempre: quién está eligiendo y, si hay cartas de nivel, cuáles (ver arriba).
     f.ho = holdNames();
@@ -311,9 +321,47 @@ G.Coop = (() => {
   G.Net.on((from, msg) => {
     if (!msg) return;
     if (msg.k === 'start') { if (G.Flow.startCoop) G.Flow.startCoop(msg); return; }
+    if (msg.k === 'rejoin-sync') { if (G.Flow.startCoop) G.Flow.startCoop(msg); return; }
+    if (msg.k === 'rejoin') { if (host) handleRejoin(from, msg); return; }
+    if (msg.k === 'kicked') {
+      end();
+      if (G.Social && G.Social.clearActiveRoom) G.Social.clearActiveRoom();
+      if (api.lost) api.lost(msg.reason || 'Has sido expulsado de la partida por el anfitrión.');
+      return;
+    }
     if (!active || msg.k !== 'f') return;
     if (host) onClientFrame(from, msg); else if (from === hostUid) onHostFrame(msg);
   });
+
+  function handleRejoin(from, msg) {
+    if (!host || !active) return;
+    const uid = from || msg.uid;
+    const m = mates.get(uid);
+    if (!m) return;
+    stopGrace(uid);
+    reconnecting.delete(uid);
+    if (holds.has('recon:' + uid)) holdOff('recon:' + uid);
+    m.connected = true;
+    m.lastAt = performance.now();
+    m.pl.silent = false;
+    G.Spawner.say(m.name + ' ha vuelto a la partida', 3);
+    emit(['mate-rejoined', uid, m.name]);
+    const st = api.team ? api.team() : {};
+    G.Net.send(uid, {
+      k: 'rejoin-sync',
+      seed: 0,
+      host: hostUid,
+      members,
+      rejoinTime: st.time || 0,
+      level: st.level || 1,
+      xp: st.xp || 0,
+      xpNext: st.xpNext || 100,
+      kills: st.kills || 0,
+      bosses: st.bosses || 0,
+      coins: st.coins || 0
+    });
+    flushAll();
+  }
 
   /*
    * Cortes de la conexión directa en plena partida (22-10-2026). Antes, al
@@ -334,18 +382,31 @@ G.Coop = (() => {
       if (!graceT.has(u)) return;
       stopGrace(u);
       const m = mates.get(u);
-      if (host && m && m.connected) G.Spawner.say(m.name + ' ha vuelto', 2);
+      if (host && m) {
+        m.connected = true;
+        reconnecting.delete(u);
+        if (holds.has('recon:' + u)) holdOff('recon:' + u);
+        G.Spawner.say(m.name + ' ha vuelto', 2);
+      }
       return;
     }
     if (mode !== 'closed' && mode !== 'failed') return;
     const ours = host ? !!(mates.get(u) && mates.get(u).connected) : u === hostUid;
-    if (mode === 'failed' && ours) {
+    if ((mode === 'failed' || mode === 'closed') && ours) {
       if (graceT.has(u)) return;                  // ya se le está esperando
-      if (host) G.Spawner.say(nameOf(u) + ': reconectando…', 3);
+      if (host) {
+        reconnecting.add(u);
+        holdOn('recon:' + u);
+        G.Spawner.say(nameOf(u) + ': desconectado, esperando reconexión…', 999, true);
+      }
       graceT.set(u, setTimeout(() => {
         graceT.delete(u);
         if (!active || G.Net.mode(u) === 'direct' || (host && !keeps(u))) return;   // volvió, o se fue ('bye')
-        if (host) G.Social.dropMember(u);         // no volvió: fuera de la sala
+        if (host) {
+          reconnecting.delete(u);
+          if (holds.has('recon:' + u)) holdOff('recon:' + u);
+          G.Social.dropMember(u);         // no volvió: fuera de la sala
+        }
         gone(u);
       }, GRACE_MS));
       return;
@@ -534,6 +595,26 @@ G.Coop = (() => {
         break;
       }
       case 'pb': G.World.breakAt(ev[1], ev[2]); break;
+      case 'kick': {
+        const targetUid = ev[1], targetName = ev[2];
+        if (targetUid === me) {
+          end();
+          if (G.Social && G.Social.clearActiveRoom) G.Social.clearActiveRoom();
+          if (api.lost) api.lost('Has sido expulsado de la partida por el anfitrión.');
+        } else {
+          const m = mates.get(targetUid);
+          if (m) { m.connected = false; G.Projectiles.clearOrbs(m.pl); }
+          G.Spawner.say(targetName + ' ha sido expulsado por el anfitrión', 2.6);
+        }
+        break;
+      }
+      case 'mate-rejoined': {
+        const u = ev[1], n = ev[2];
+        const m = mates.get(u);
+        if (m) m.connected = true;
+        G.Spawner.say(n + ' se ha reconectado', 2.5);
+        break;
+      }
       case 'say': G.Spawner.say(ev[1], ev[2]); break;
       case 'heal': if (!local.dead) { local.heal(local.maxHp * ev[1]); G.FX.ring(local.x, local.y, 6, 60, '#5fe08a', 0.4, 3); } break;
       case 'lu': if (!ev[2] || ev[2] > seenSeq) { seenSeq = ev[2] || seenSeq; api.levelStart(ev[1]); } break;
@@ -682,7 +763,36 @@ G.Coop = (() => {
   // Mientras alguien elige qué movimientos fusiona (vínculo de un legendario),
   // la partida se para para todos, como con las cartas de nivel.
 
-  function holdNames() { return [...holds].map(nameOf); }
+  function holdNames() {
+    return [...holds].map(id => {
+      if (typeof id === 'string' && id.startsWith('recon:')) {
+        const uid = id.slice(6);
+        return nameOf(uid) + ' (desconectado, reconectando…)';
+      }
+      return nameOf(id);
+    });
+  }
+
+  /** Anfitrión: expulsar a un jugador de la partida. */
+  function kick(targetUid) {
+    if (!host || !active) return;
+    const m = mates.get(targetUid);
+    const targetName = m ? m.name : 'Jugador';
+    stopGrace(targetUid);
+    reconnecting.delete(targetUid);
+    if (holds.has('recon:' + targetUid)) holdOff('recon:' + targetUid);
+    if (holds.has(targetUid)) holdOff(targetUid);
+    if (waiting.has(targetUid)) picked(targetUid);
+    if (m) {
+      m.connected = false;
+      G.Projectiles.clearOrbs(m.pl);
+    }
+    emit(['kick', targetUid, targetName]);
+    G.Net.send(targetUid, { k: 'kicked', reason: 'El anfitrión te ha expulsado de la partida.' });
+    if (G.Social && G.Social.dropMember) G.Social.dropMember(targetUid);
+    G.Spawner.say(targetName + ' ha sido expulsado por el anfitrión', 3);
+    flushAll();
+  }
 
   /** Anfitrión: `u` empieza a elegir. */
   function holdOn(u) {
@@ -731,6 +841,7 @@ G.Coop = (() => {
     sums: teamSums,
     get active() { return active; },
     get isHost() { return active && host; },
+    kick,
     broadcastEvo,
     get myUid() { return me; },
     get local() { return local; }

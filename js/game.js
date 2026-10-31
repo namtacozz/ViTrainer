@@ -196,7 +196,8 @@ G.Game = (() => {
     G.World.reset(coop ? coop.seed : Math.floor(Math.random() * 1e6));
     G.World.setBiome(G.Tiles.runBiome(0), true);
     biome = 0;
-    time = 0; pendingLevels = 0;
+    time = (coop && typeof coop.rejoinTime === 'number' && coop.rejoinTime > 0) ? coop.rejoinTime : 0;
+    pendingLevels = 0;
     runReal = performance.now(); tampered = false;
 
     // El Pokémon compañero siempre empieza en fase inicial para evolucionar en partida
@@ -230,6 +231,14 @@ G.Game = (() => {
     }
 
     if (coop) {
+      if (typeof coop.rejoinTime === 'number' && coop.rejoinTime > 0) {
+        if (coop.level) pl.level = coop.level;
+        if (coop.xp) pl.xp = coop.xp;
+        if (coop.xpNext) pl.xpNext = coop.xpNext;
+        if (coop.kills) pl.kills = coop.kills;
+        if (coop.bosses) pl.bosses = coop.bosses;
+        if (coop.coins) pl.coins = coop.coins;
+      }
       G.Coop.begin(coop, pl, coopApi);
       G.Social.setPlaying(true);
     }
@@ -872,10 +881,11 @@ G.Game = (() => {
     if (G.Coop.isHost) checkAllDown(dt);
   }
 
-  /** Caído en grupo: un compañero a tu lado te va levantando. */
+  /** Caído en grupo: un compañero a tu lado te va levantando (con varios compañeros se levanta más rápido). */
   function reviveTick(dt) {
-    const helper = G.Coop.puppets().some(p => !p.dead && G.U.dist2(p.x, p.y, pl.x, pl.y) < 56 * 56);
-    pl.reviveT = helper ? (pl.reviveT || 0) + dt : Math.max(0, (pl.reviveT || 0) - dt * 0.5);
+    const helpers = G.Coop.puppets().filter(p => !p.dead && G.U.dist2(p.x, p.y, pl.x, pl.y) < 56 * 56);
+    const boost = helpers.length > 0 ? (1 + (helpers.length - 1) * 0.5) : 0;
+    pl.reviveT = boost > 0 ? (pl.reviveT || 0) + dt * boost : Math.max(0, (pl.reviveT || 0) - dt * 0.5);
     if (pl.reviveT >= G.Player.REVIVE_TIME) pl.revive(0.5);
   }
 
@@ -1177,7 +1187,7 @@ G.Flow = {
   play() { G.Game.startRun(); },
   /** Empieza la partida en grupo (el anfitrión la manda a todos). */
   startCoop(cfg) {
-    if (G.Game.state !== 'ui' || !G.Social.room) return;
+    if (G.Game.state !== 'ui' && (!cfg || !cfg.rejoinTime)) return;
     G.LobbyUI.close();
     G.Game.startRun(cfg);
   }

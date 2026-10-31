@@ -4,6 +4,157 @@
  * độ hiếm Gacha cập nhật theo BST cao nhất của dòng.
  */
 G.EVO_CHAINS = {
+  "11015": {
+  "chainId": 11015,
+  "baseDex": 11037,
+  "name": "Alolan Vulpix",
+  "type": "2stage",
+  "maxStage": 2,
+  "maxBst": 505,
+  "baseRarity": 3,
+  "stages": [
+    [
+      11037
+    ],
+    [
+      11038
+    ]
+  ],
+  "members": [
+    11037,
+    11038
+  ]
+},
+  "11011": {
+  "chainId": 11011,
+  "baseDex": 11027,
+  "name": "Alolan Sandshrew",
+  "type": "2stage",
+  "maxStage": 2,
+  "maxBst": 450,
+  "baseRarity": 3,
+  "stages": [
+    [
+      11027
+    ],
+    [
+      11028
+    ]
+  ],
+  "members": [
+    11027,
+    11028
+  ]
+},
+  "11033": {
+  "chainId": 11033,
+  "baseDex": 11077,
+  "name": "Galarian Ponyta",
+  "type": "2stage",
+  "maxStage": 2,
+  "maxBst": 500,
+  "baseRarity": 3,
+  "stages": [
+    [
+      11077
+    ],
+    [
+      11078
+    ]
+  ],
+  "members": [
+    11077,
+    11078
+  ]
+},
+  "11135": {
+  "chainId": 11135,
+  "baseDex": 11263,
+  "name": "Galarian Zigzagoon",
+  "type": "3stage",
+  "maxStage": 3,
+  "maxBst": 520,
+  "baseRarity": 2,
+  "stages": [
+    [
+      11263
+    ],
+    [
+      11264
+    ],
+    [
+      862
+    ]
+  ],
+  "members": [
+    11263,
+    11264,
+    862
+  ]
+},
+  "11295": {
+  "chainId": 11295,
+  "baseDex": 11570,
+  "name": "Hisuian Zorua",
+  "type": "2stage",
+  "maxStage": 2,
+  "maxBst": 510,
+  "baseRarity": 4,
+  "stages": [
+    [
+      11570
+    ],
+    [
+      11571
+    ]
+  ],
+  "members": [
+    11570,
+    11571
+  ]
+},
+  "11024": {
+  "chainId": 11024,
+  "baseDex": 11058,
+  "name": "Hisuian Growlithe",
+  "type": "2stage",
+  "maxStage": 2,
+  "maxBst": 555,
+  "baseRarity": 3,
+  "stages": [
+    [
+      11058
+    ],
+    [
+      11059
+    ]
+  ],
+  "members": [
+    11058,
+    11059
+  ]
+},
+  "11097": {
+  "chainId": 11097,
+  "baseDex": 11194,
+  "name": "Paldean Wooper",
+  "type": "2stage",
+  "maxStage": 2,
+  "maxBst": 430,
+  "baseRarity": 2,
+  "stages": [
+    [
+      11194
+    ],
+    [
+      980
+    ]
+  ],
+  "members": [
+    11194,
+    980
+  ]
+},
   "1": {
     "chainId": 1,
     "baseDex": 1,
@@ -20867,7 +21018,21 @@ G.EVO_BY_DEX = {
     "maxStage": 1,
     "next": [],
     "prev": null
-  }
+  },
+  "11037": {"chainId":11015,"baseDex":11037,"stage":1,"type":"2stage","maxStage":2,"next":[11038],"prev":null},
+  "11038": {"chainId":11015,"baseDex":11037,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11037},
+  "11027": {"chainId":11011,"baseDex":11027,"stage":1,"type":"2stage","maxStage":2,"next":[11028],"prev":null},
+  "11028": {"chainId":11011,"baseDex":11027,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11027},
+  "11026": {"chainId":10,"baseDex":25,"stage":2,"type":"branch","maxStage":2,"next":[],"prev":25},
+  "11077": {"chainId":11033,"baseDex":11077,"stage":1,"type":"2stage","maxStage":2,"next":[11078],"prev":null},
+  "11078": {"chainId":11033,"baseDex":11077,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11077},
+  "11263": {"chainId":11135,"baseDex":11263,"stage":1,"type":"3stage","maxStage":3,"next":[11264],"prev":null},
+  "11264": {"chainId":11135,"baseDex":11263,"stage":2,"type":"3stage","maxStage":3,"next":[862],"prev":11263},
+  "11570": {"chainId":11295,"baseDex":11570,"stage":1,"type":"2stage","maxStage":2,"next":[11571],"prev":null},
+  "11571": {"chainId":11295,"baseDex":11570,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11570},
+  "11058": {"chainId":11024,"baseDex":11058,"stage":1,"type":"2stage","maxStage":2,"next":[11059],"prev":null},
+  "11059": {"chainId":11024,"baseDex":11058,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11058},
+  "11194": {"chainId":11097,"baseDex":11194,"stage":1,"type":"2stage","maxStage":2,"next":[980],"prev":null},
 };
 
 G.getEvoChain = function(dex) {
