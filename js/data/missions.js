@@ -45,7 +45,15 @@ G.MissionDefs = (() => {
     { id: 'legendKill', ev: 'kill', match: d => d.legend, goals: [1], reward: { t1: 4, coins: 350 },
       text: () => 'Derrota a un Pokémon Legendario en una grieta' },
     { id: 'coopPlay', ev: 'runEnd', match: d => d.group, goals: [1], reward: { t1: 3, coins: 250 },
-      text: () => 'Juega una partida en cooperativo' }
+      text: () => 'Juega una partida en cooperativo' },
+    { id: 'inrunEvent', ev: 'inrun_event', goals: [1, 2], reward: { t1: 3, coins: 250 },
+      text: n => (n === 1 ? 'Completa un evento en partida' : 'Completa ' + n + ' eventos en partida') },
+    { id: 'runEvo', ev: 'run_evo', goals: [1, 2], reward: { t1: 3, coins: 250 },
+      text: n => (n === 1 ? 'Evoluciona a tu Pokémon en partida' : 'Evoluciona ' + n + ' veces a tu Pokémon en partida') },
+    { id: 'candies', ev: 'candy', goals: [30, 60], reward: { t1: 2, coins: 200 },
+      text: n => 'Recoge ' + n + ' caramelos en tus partidas' },
+    { id: 'damageRun', ev: 'runEnd', value: d => d.dmg || 0, goals: [30000, 60000], reward: { t1: 3, coins: 250 },
+      text: n => 'Inflige ' + n.toLocaleString('es') + ' de daño en una run' }
   ];
 
   const weekly = [

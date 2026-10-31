@@ -599,7 +599,7 @@
     // ================= NUEVOS MOVIMIENTOS CANÓNICOS COMPETITIVOS =================
     { id: 'thousand-arrows', name: 'Thousand Arrows', type: 'ground', kind: 'cone',
       desc: 'Dispara una densa andanada de flechas de energía esmeralda que perfora y derriba a todos los enemigos.',
-      speed: 480, life: 0.75, dmg: 32, count: 8, spread: 0.65, pierce: 3, cd: 0.85 },
+      speed: 480, life: 0.75, dmg: 32, count: 8, spread: 0.65, size: 8, pierce: 3, cd: 0.85 },
     { id: 'thousand-waves', name: 'Thousand Waves', type: 'ground', kind: 'quake',
       desc: 'Ondas sísmicas concéntricas que barren a los rivales, dañándolos y ralentizándolos gravemente.',
       dmg: 42, radius: 130, count: 3, slow: 0.5, cd: 1.25, knock: 140 },

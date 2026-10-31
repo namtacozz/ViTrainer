@@ -53,14 +53,14 @@ G.Progress = (() => {
     const key = String(s.created || 0);
     s.missions = s.missions || {};
     const M = s.missions;
-    if (M.day !== ids.d || !M.daily || M.daily.length < 6) {
+    if (M.day !== ids.d || !M.daily || M.daily.length < 8) {
       if (M.day !== ids.d || !M.daily) {
         M.day = ids.d; M.rerolled = false;
-        M.daily = pickSet(G.MissionDefs.daily, 6, rng(ids.d + key));
-      } else if (M.daily && M.daily.length < 6) {
-        // Expand active daily missions from 3 to 5
+        M.daily = pickSet(G.MissionDefs.daily, 8, rng(ids.d + key));
+      } else if (M.daily && M.daily.length < 8) {
+        // Expand active daily missions to 8
         const existingIds = M.daily.map(m => m.id);
-        const extra = pickSet(G.MissionDefs.daily, 6 - M.daily.length, rng(ids.d + key + ':extra'), existingIds);
+        const extra = pickSet(G.MissionDefs.daily, 8 - M.daily.length, rng(ids.d + key + ':extra8'), existingIds);
         M.daily = M.daily.concat(extra);
       }
     }

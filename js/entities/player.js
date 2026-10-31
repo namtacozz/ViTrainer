@@ -536,13 +536,13 @@ G.Player = class Player {
     if (this.remote || !this.evoChain) return;
     const chain = this.evoChain;
 
-    const buildMegaOptions = () => {
-      const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
+    const buildMegaOptions = (targetDex = this.dex) => {
+      const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(targetDex) : [];
       if (!megas || !megas.length) return null;
       return megas.map(m => {
         const typesStr = (m.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
         return {
-          dex: m.spriteDex || m.baseDex || this.dex,
+          dex: m.spriteDex || m.baseDex || targetDex,
           title: m.name,
           tag: 'MEGA EVOLUCIÓN',
           color: '#f43f5e',
@@ -591,21 +591,25 @@ G.Player = class Player {
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
           const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
-          this.evoStage = 2;
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
             tag: 'FASE 2',
             color: '#38bdf8',
             desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de PS y amplifica estadísticas base.`,
-            apply: () => this.evolveTo(nextDex)
+            apply: () => {
+              this.evolveTo(nextDex);
+              if (this.level >= 30) {
+                const megas = buildMegaOptions(nextDex);
+                if (megas) this.promptEvo(megas);
+              }
+            }
           }]);
         } else if (this.awakeningTier === 0) {
           this.awakeningTier = 1;
           this.activateAwakening(1);
         }
-      }
-      if (this.level >= 30 && this.evoStage >= 2) {
+      } else if (this.level >= 30 && this.evoStage >= 2) {
         if (!this.isMega && this.hasMegaForm()) {
           const opts = buildMegaOptions();
           if (opts) this.promptEvo(opts);
@@ -631,7 +635,6 @@ G.Player = class Player {
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
           const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
-          this.evoStage = 2;
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
@@ -644,24 +647,27 @@ G.Player = class Player {
           this.awakeningTier = 1;
           this.activateAwakening(1);
         }
-      }
-      if (this.level >= 30 && this.evoStage === 2) {
+      } else if (this.level >= 30 && this.evoStage === 2) {
         const nextDex = chain.stages[2] && chain.stages[2][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
           const typesStr = (mon.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
-          this.evoStage = 3;
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
             tag: 'FASE 3',
             color: '#38bdf8',
             desc: `Evolución final a ${mon.name} (${typesStr}). Recupera 50% de PS y desata estadísticas definitivas.`,
-            apply: () => this.evolveTo(nextDex)
+            apply: () => {
+              this.evolveTo(nextDex);
+              const megas = buildMegaOptions(nextDex);
+              if (megas) {
+                this.promptEvo(megas);
+              }
+            }
           }]);
         }
-      }
-      if (this.level >= 30 && this.evoStage >= 3) {
+      } else if (this.level >= 30 && this.evoStage >= 3) {
         if (!this.isMega && this.hasMegaForm()) {
           const opts = buildMegaOptions();
           if (opts) this.promptEvo(opts);
@@ -881,7 +887,7 @@ G.Player = class Player {
       if (G.Camera) G.Camera.kick(0.45);
       if (G.UI && G.UI.toast) G.UI.toast(mega.name + ' AWAKENED!', 2500);
       if (G.Coop && G.Coop.active) {
-        G.Coop.broadcast(['mega', this.uid, mega.id]);
+        if (G.Coop.broadcastMega) G.Coop.broadcastMega(mega.id, targetDex);
       }
     }
   }

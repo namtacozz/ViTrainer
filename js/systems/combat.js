@@ -124,7 +124,7 @@ G.Combat = (() => {
     G.Projectiles.spawn(Object.assign({
       x: pl.x + Math.cos(a) * 3, y: pl.y + Math.sin(a) * 3,
       vx: Math.cos(a) * m.speed, vy: Math.sin(a) * m.speed,
-      dmg: m.dmg * pl.atkFor(m), r: m.size * sizeMul, life: m.life,
+      dmg: m.dmg * pl.atkFor(m), r: (m.size || 6) * sizeMul, life: m.life,
       pierce: (m.pierce | 0) + extraPierce, color: col, homing: m.homing || 0,
       hits: new Set(), vis, ghost, owner: pl
     }, payload(m)));
@@ -252,7 +252,7 @@ G.Combat = (() => {
       const a = pl.aim + (n === 1 ? 0 : (i / (n - 1) - 0.5) * spread * Math.min(n, 3));
       G.Projectiles.spawn(Object.assign({
         x: pl.x, y: pl.y, vx: Math.cos(a) * m.speed, vy: Math.sin(a) * m.speed,
-        dmg: m.dmg * pl.atkFor(m), r: m.size, life: out * 4 + 1.5, pierce: 999, color: col,
+        dmg: m.dmg * pl.atkFor(m), r: m.size || 8, life: out * 4 + 1.5, pierce: 999, color: col,
         hits: new Set(), vis, ghost, owner: pl, boom: out, bsp: m.speed * 1.1
       }, payload(m)));
     }
@@ -379,7 +379,7 @@ G.Combat = (() => {
       const sp = m.speed * G.U.rand(0.85, 1.1);
       G.Projectiles.spawn(Object.assign({
         x: pl.x + Math.cos(a) * 4, y: pl.y + Math.sin(a) * 4, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-        dmg: m.dmg * pl.atkFor(m), r: m.size, life: m.life * G.U.rand(0.85, 1.05), pierce: m.pierce | 0, color: col,
+        dmg: m.dmg * pl.atkFor(m), r: m.size || 8, life: m.life * G.U.rand(0.85, 1.05), pierce: m.pierce | 0, color: col,
         hits: new Set(), vis, ghost, owner: pl
       }, payload(m)));
     }

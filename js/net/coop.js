@@ -487,6 +487,14 @@ G.Coop = (() => {
           emit(['evo', targetUid, newDex, isApex], from);
           break;
         }
+        case 'mega': {
+          const targetUid = ev[1] || from;
+          const megaId = ev[2];
+          const spriteDex = ev[3];
+          applyMateMega(targetUid, megaId, spriteDex);
+          emit(['mega', targetUid, megaId, spriteDex], from);
+          break;
+        }
         case 'pb':
           G.World.breakAt(ev[1], ev[2]);
           emit(['pb', ev[1], ev[2]], from);
@@ -606,6 +614,13 @@ G.Coop = (() => {
         applyMateEvo(targetUid, newDex, isApex);
         break;
       }
+      case 'mega': {
+        const targetUid = ev[1];
+        const megaId = ev[2];
+        const spriteDex = ev[3];
+        applyMateMega(targetUid, megaId, spriteDex);
+        break;
+      }
       case 'pb': G.World.breakAt(ev[1], ev[2]); break;
       case 'kick': {
         const targetUid = ev[1], targetName = ev[2];
@@ -664,16 +679,29 @@ G.Coop = (() => {
     else outEv.push(['evo', me, newDex, isApex]);
   }
 
-  function applyMateMega(uid, megaId) {
+  function broadcastMega(megaId, spriteDex) {
+    if (!active) return;
+    if (host) emit(['mega', me, megaId, spriteDex]);
+    else outEv.push(['mega', me, megaId, spriteDex]);
+  }
+
+  function applyMateMega(uid, megaId, spriteDex) {
     const m = mates.get(uid);
     if (!m || !m.pl) return;
     const mega = (typeof G !== 'undefined' && G.getMega) ? G.getMega(megaId) : null;
-    if (!mega) return;
     m.pl.isMega = true;
     m.pl.megaId = megaId;
-    m.pl.mon = Object.assign({}, m.pl.mon, { types: mega.types, atk: mega.atk, spd: mega.spd, bst: mega.bst, name: mega.name });
-    if (mega.spriteDex && G.SPRITE_META && G.SPRITE_META[mega.spriteDex]) {
-      m.pl.dex = mega.spriteDex;
+    if (mega) {
+      m.pl.mon = Object.assign({}, m.pl.mon, { types: mega.types, atk: mega.atk, spd: mega.spd, bst: mega.bst, name: mega.name });
+    }
+    const finalDex = spriteDex || (mega && mega.spriteDex) || m.pl.dex;
+    if (finalDex) {
+      m.pl.dex = finalDex;
+      m.pl.scale = G.Sprites.playerScale(finalDex);
+      m.pl.anim = new G.Sprites.Animator(finalDex, m.pl.scale, m.pl.shiny);
+      m.pl.r = G.Sprites.playerRadius(finalDex);
+      m.pl.bodyH = G.Sprites.bodyHeight(finalDex, m.pl.scale);
+      if (G.Sprites.preload) G.Sprites.preload([finalDex], 8000, m.pl.shiny);
     }
     if (G.FX) {
       G.FX.ring(m.pl.x, m.pl.y, 10, 160, '#f43f5e', 1.0, 8);
@@ -856,6 +884,7 @@ G.Coop = (() => {
     get isHost() { return active && host; },
     kick,
     broadcastEvo,
+    broadcastMega,
     get myUid() { return me; },
     get local() { return local; }
   };

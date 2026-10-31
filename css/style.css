@@ -252,6 +252,13 @@ label { display: block; font-size: 14px; color: var(--muted); margin: 8px 0 4px;
 .dex-sort { align-items: center; margin-top: -4px; }
 .dex-more { grid-column: 1 / -1; height: 1px; }
 .fit-low { display: block; color: #ffb37a; font-size: 12px; margin-top: 2px; }
+#scr-dex .box { height: min(88vh, 840px); display: flex; flex-direction: column; overflow: hidden; }
+#scr-dex .row.between, #scr-dex .gen-tabs { flex: 0 0 auto; }
+#scr-dex .split { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 340px; gap: 16px; overflow: hidden; }
+#scr-dex .split > div:first-child { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+#scr-dex .dex-tools, #scr-dex .filters, #scr-dex .dex-sort { flex: 0 0 auto; }
+#scr-dex .grid { flex: 1; min-height: 0; max-height: none; overflow-y: auto; }
+#dex-detail { min-height: 0; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
 /* Pausa con el resumen de la partida (run-ui.js, pauseSummary). */
 .pause-box { width: min(720px, 100%); max-height: calc(100dvh - 24px); overflow-y: auto; }
 .pause-sum { text-align: left; margin: 4px 0 10px; }

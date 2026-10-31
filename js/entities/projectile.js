@@ -25,6 +25,7 @@ G.Projectiles = (() => {
       orb: false, rehit: 0.34, hitLog: null, phits: null
     }, o);
     if (p.friendly && !p.orb && !p.phits) p.phits = new Set();
+    p.r = Math.max(1, Number(p.r) || 6);
     list.push(p);
     return p;
   }

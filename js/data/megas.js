@@ -1561,6 +1561,26 @@ G.MEGAS = {
     "sd": 95,
     "bst": 700,
     "spriteDex": 10807
+  },
+  "10801": {
+    "id": 10801,
+    "baseDex": 801,
+    "name": "Mega Magearna",
+    "slug": "magearna-mega",
+    "types": [
+      "steel",
+      "fairy"
+    ],
+    "ability": "soul-heart",
+    "hp": 110,
+    "spd": 100,
+    "atk": 1.55,
+    "pa": 1.3,
+    "sa": 1.55,
+    "df": 135,
+    "sd": 135,
+    "bst": 700,
+    "spriteDex": 801
   }
 };
 
@@ -1765,6 +1785,9 @@ G.MEGAS_BY_BASE = {
   ],
   "800": [
     10157
+  ],
+  "801": [
+    10801
   ],
   "807": [
     10807

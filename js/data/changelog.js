@@ -6,6 +6,20 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Alineación de Megaevoluciones, Daño de Flechas Mil y Optimización de Pokédex", "Mega Evolutions Access, Thousand Arrows Fix & Pokédex Layout"], new: [
+    ["Megaevoluciones y formas definitivas para todas las especies: garantizada la transición a formas Mega y Primigenias a Nv. 30 en todas las líneas evolutivas de 3 fases (como Charizard X/Y tras evolucionar) y añadido Mega Magearna con Alma Corazón.",
+     "Mega Evolutions & Definitive Forms for All Species: guaranteed smooth transition to Mega and Primal forms at Lv. 30 across all 3-stage evolution chains (including Charizard X/Y post-evolution) and introduced Mega Magearna with Soul-Heart."],
+    ["Ampliación de misiones diarias: aumentado el cupo a 8 misiones diarias activas con nuevos desafíos de eventos en partida, evolución en combate y recolección de caramelos.",
+     "Expanded Daily Missions: upgraded to 8 active daily missions with new challenges for in-run events, in-run evolution, and candy gathering."]
+  ], chg: [
+    ["Indicadores claros de compatibilidad en cartas de nivel: reformulada la advertencia de afinidad para indicar explícitamente cuando un movimiento sufre reducción de eficacia por la orientación física o especial del Pokémon.",
+     "Clear Stat Affinity Hints on Level-Up Cards: rephrased stat fit notes to explicitly indicate effectiveness penalties when moves do not match the Pokémon's physical or special preference."],
+    ["Diseño independiente y sin cortes en la Pokédex: reestructurado el contenedor de la colección para scroll desacoplado entre lista y ficha de Pokémon, eliminando espacios vacíos.",
+     "Independent Pokédex Container Flow: overhauled collection modal layout with decoupled scrolling between grid and detail panels, eliminating blank gaps."]
+  ], fix: [
+    ["Daño y detección de colisiones de Flechas Mil: corregido el tamaño de proyectil de Thousand Arrows y proyectiles en abanico que atravesaban enemigos sin registrar impactos.",
+     "Thousand Arrows Hit Detection & Damage: resolved missing projectile radius on Thousand Arrows and cone attacks that previously pierced enemies without dealing damage."]
+  ]},
   { d: '2026-10-31', title: ["Rebalanceo de Vida de Jefes, Brújula e Indicadores Direccionales de Eventos en HUD", "Boss Health Rebalance, HUD Event Compass & Directional Indicators"], new: [
     ["Brújula e indicadores de dirección para eventos en el HUD: ahora aparecen flechas direccionales en los bordes de la pantalla con distancia exacta en metros hacia la zona de captura, cristales y jefes perseguidores, además de un haz de baliza ascendente hacia el cielo visible a gran distancia.",
      "HUD Event Compass & Directional Indicators: dynamic screen-edge compass arrows now point directly towards active zone captures, crystals, and pursuit bosses showing distance in meters, complemented by a radiant sky beacon beam visible from afar."],
