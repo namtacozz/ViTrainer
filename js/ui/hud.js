@@ -262,11 +262,11 @@ G.HUD = (() => {
     } else if (chain && chain.type === '3stage') {
       if (stage === 1) {
         targetLv = 15;
-        targetLabel = (tierUnlocked >= 2 ? '✦ ' : '🔒 ') + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
+        targetLabel = '✦ ' + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
         evoFrac = Math.min(1, lv / targetLv);
       } else if (stage === 2) {
         targetLv = 30;
-        targetLabel = (tierUnlocked >= 3 ? '✦ ' : '🔒 ') + (G.T ? G.T('Fase 3') : 'Fase 3') + ' (' + lv + '/' + targetLv + ')';
+        targetLabel = '✦ ' + (G.T ? G.T('Fase 3') : 'Fase 3') + ' (' + lv + '/' + targetLv + ')';
         evoFrac = Math.min(1, lv / targetLv);
       } else {
         targetLv = 30;
@@ -276,7 +276,7 @@ G.HUD = (() => {
     } else if (chain && chain.type === '2stage') {
       if (stage === 1) {
         targetLv = 18;
-        targetLabel = (tierUnlocked >= 2 ? '✦ ' : '🔒 ') + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
+        targetLabel = '✦ ' + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
         evoFrac = Math.min(1, lv / targetLv);
       } else {
         targetLv = 30;
@@ -296,11 +296,11 @@ G.HUD = (() => {
     } else {
       if (pl.awakeningTier === 0) {
         targetLv = 15;
-        targetLabel = (tierUnlocked >= 2 ? '✦ ' : '🔒 ') + (G.T ? G.T('Despertar I') : 'Despertar I') + ' (' + lv + '/' + targetLv + ')';
+        targetLabel = '✦ ' + (G.T ? G.T('Despertar I') : 'Despertar I') + ' (' + lv + '/' + targetLv + ')';
         evoFrac = Math.min(1, lv / targetLv);
       } else if (pl.awakeningTier === 1) {
         targetLv = 30;
-        targetLabel = (tierUnlocked >= 3 ? '✦ ' : '🔒 ') + (G.T ? G.T('Despertar II (Apex+)') : 'Despertar II') + ' (' + lv + '/' + targetLv + ')';
+        targetLabel = '✦ ' + (G.T ? G.T('Despertar II (Apex+)') : 'Despertar II') + ' (' + lv + '/' + targetLv + ')';
         evoFrac = Math.min(1, lv / targetLv);
       } else {
         targetLabel = G.T ? G.T('Apex (+)') : 'Apex (+)';
@@ -361,13 +361,15 @@ G.HUD = (() => {
     }
 
     // ---------- barra del jefe ----------
-    const boss = G.EnemyMgr.all().find(e => e.boss && !e.dead);
+    const boss = G.EnemyMgr.all().find(e => e.boss && !e.dead && !e.isPursuit);
     if (boss) {
-      const bw = Math.min(420, w - 80);
-      bar(ctx, (w - bw) / 2, 70, bw, 12, boss.hp / boss.maxHp, '#ffcb3d');
-      ctx.font = F(800, 10);
+      const bw = Math.min(300, w - 80);
+      const bY = 68;
+      bar(ctx, (w - bw) / 2, bY, bw, 12, boss.hp / boss.maxHp, '#ffcb3d');
+      ctx.font = F(800, 9.5);
       ctx.fillStyle = '#20160a';
-      ctx.fillText(boss.name.toUpperCase(), w / 2, 80);
+      const phaseTag = boss.bossPhase > 1 ? ' [FASE ' + boss.bossPhase + ']' : '';
+      ctx.fillText(boss.name.toUpperCase() + phaseTag, w / 2, bY + 9.5);
     }
 
     // ---------- aviso ----------

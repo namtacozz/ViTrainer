@@ -137,8 +137,8 @@ G.InRunEvents = (() => {
       pursuitBoss = new G.Enemy(bDef, sp.x, sp.y, 1, false);
       pursuitBoss.isPursuit = true;
       pursuitBoss.invulnerable = true;
-      if (G.EnemyMgr && G.EnemyMgr.enemies) {
-        G.EnemyMgr.enemies.push(pursuitBoss);
+      if (G.EnemyMgr && G.EnemyMgr.add) {
+        G.EnemyMgr.add(pursuitBoss);
       }
     }
 
@@ -146,6 +146,7 @@ G.InRunEvents = (() => {
       id: evDef.id,
       type: 'pursuit',
       boss: pursuitBoss,
+      bossId: pursuitBoss ? pursuitBoss.id : 0,
       bossX: sp.x,
       bossY: sp.y,
       dex: dex,
@@ -155,7 +156,7 @@ G.InRunEvents = (() => {
     };
 
     if (G.Coop && G.Coop.isHost) {
-      G.Coop.broadcast(['inrun_ev', 'start_hunt', evDef.id, maxT, Math.round(sp.x), Math.round(sp.y), dex]);
+      G.Coop.broadcast(['inrun_ev', 'start_hunt', evDef.id, maxT, Math.round(sp.x), Math.round(sp.y), dex, pursuitBoss ? pursuitBoss.id : 0]);
     }
 
     showBanner(G.T('Supervivencia Extrema'), G.T('¡Sobrevive antes de que acabe el tiempo!'), '#ff5f6d');
@@ -174,8 +175,9 @@ G.InRunEvents = (() => {
       if (banner.timer <= 0) banner = null;
     }
 
-    // Comprobar inicio de evento desde Timeline
+    // Comprobar inicio de evento desde Timeline (chặn kích hoạt khi đang ở trong đấu trường Rift hoặc trận Arceus)
     if (authority() && !current && G.Timeline) {
+      if ((G.Rift && G.Rift.inArena) || (G.Judgment && G.Judgment.active)) return;
       const upcoming = G.Timeline.getUpcoming(time, 4);
       for (const ev of upcoming) {
         if (ev.type.startsWith('event_') && Math.abs(time - ev.time) < 1.5 && lastStartedId !== ev.id) {
@@ -210,8 +212,8 @@ G.InRunEvents = (() => {
         }
 
         // Atraer enemigos hacia la zona
-        if (inside > 0 && G.EnemyMgr && G.EnemyMgr.enemies) {
-          for (const e of G.EnemyMgr.enemies) {
+        if (inside > 0 && G.EnemyMgr) {
+          for (const e of G.EnemyMgr.all()) {
             if (!e.boss && Math.random() < 0.04) {
               e.targetX = current.x + (Math.random() - 0.5) * current.r;
               e.targetY = current.y + (Math.random() - 0.5) * current.r;
@@ -280,9 +282,10 @@ G.InRunEvents = (() => {
       if (authority()) {
         if (current.t <= 0) {
           // Desaparece el jefe con efecto
-          if (current.boss && G.EnemyMgr) {
-            if (G.FX && G.FX.ring) G.FX.ring(current.boss.x, current.boss.y, 20, 160, '#9a4dff', 0.8, 5);
-            G.EnemyMgr.remove(current.boss, false);
+          const b = current.boss || (current.bossId && G.EnemyMgr ? G.EnemyMgr.get(current.bossId) : null);
+          if (b && G.EnemyMgr && G.EnemyMgr.remove) {
+            if (G.FX && G.FX.ring) G.FX.ring(b.x, b.y, 20, 160, '#9a4dff', 0.8, 5);
+            G.EnemyMgr.remove(b, false);
           }
           completeEvent();
         }
@@ -306,6 +309,10 @@ G.InRunEvents = (() => {
   }
 
   function failEvent() {
+    if (current && current.type === 'pursuit') {
+      const b = current.boss || (current.bossId && G.EnemyMgr ? G.EnemyMgr.get(current.bossId) : null);
+      if (b && G.EnemyMgr && G.EnemyMgr.remove) G.EnemyMgr.remove(b, false);
+    }
     current = null;
     if (G.Coop && G.Coop.isHost) {
       G.Coop.broadcast(['inrun_ev', 'fail']);
@@ -413,6 +420,7 @@ G.InRunEvents = (() => {
       current = {
         id: ev[2],
         type: 'pursuit',
+        bossId: ev[7] || 0,
         bossX: ev[4],
         bossY: ev[5],
         dex: ev[6],
@@ -438,6 +446,10 @@ G.InRunEvents = (() => {
       showBanner(G.T('¡Evento completado!'), G.T('¡Compañeros revividos y recompensa obtenida!'), '#5fe08a');
       if (G.Audio && G.Audio.sfx) G.Audio.sfx('confirm');
     } else if (action === 'fail') {
+      if (current && current.type === 'pursuit') {
+        const b = current.boss || (current.bossId && G.EnemyMgr ? G.EnemyMgr.get(current.bossId) : null);
+        if (b && G.EnemyMgr && G.EnemyMgr.remove) G.EnemyMgr.remove(b, false);
+      }
       current = null;
     }
   }
@@ -668,10 +680,15 @@ G.InRunEvents = (() => {
         const label = `💎 ${G.T('Cristal')} (${dM}m)`;
         edgeArrow(ctx, w, h, G.Camera, it.x, it.y, '#7fe0ff', label);
       }
-    } else if (current.type === 'pursuit' && current.boss && !current.boss.dead) {
-      const dM = Math.round(Math.hypot(current.boss.x - pl.x, current.boss.y - pl.y) / 32);
-      const label = `⚠️ ${G.T('Jefe')} (${dM}m)`;
-      edgeArrow(ctx, w, h, G.Camera, current.boss.x, current.boss.y, '#ff4757', label);
+    } else if (current.type === 'pursuit') {
+      const b = current.boss || (current.bossId && G.EnemyMgr ? G.EnemyMgr.get(current.bossId) : null);
+      if (!b || !b.dead) {
+        const bx = (b && b.x) || current.bossX || pl.x;
+        const by = (b && b.y) || current.bossY || pl.y;
+        const dM = Math.round(Math.hypot(bx - pl.x, by - pl.y) / 32);
+        const label = `⚠️ ${G.T('Jefe')} (${dM}m)`;
+        edgeArrow(ctx, w, h, G.Camera, bx, by, '#ff4757', label);
+      }
     }
   }
 

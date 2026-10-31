@@ -173,6 +173,8 @@ G.MenuUI = (() => {
 
   function openDex() {
     G.UI.show('scr-dex', true);
+    const scrDexBox = $('scr-dex') ? $('scr-dex').querySelector('.box') : null;
+    if (scrDexBox) scrDexBox.scrollTop = 0;
     const s = G.DB.save;
     if (dexSel == null) { dexSel = s.partner; dexGen = G.DEX_BY[s.partner].gen; }
     const owned = Object.keys(s.owned).filter(d => G.DEX_BY[d]).length;
@@ -346,7 +348,10 @@ G.MenuUI = (() => {
     // Al redibujar el mismo Pokémon (abrir el selector de Menta, enseñar una MT...)
     // no se vuelve arriba: se quedaba fuera de la vista lo que acababas de abrir.
     const sameMon = dex === showDetail.last, d0 = $('dex-detail');
-    const scrolls = sameMon && d0 ? [d0, d0.closest('.box')].filter(Boolean).map(el => [el, el.scrollTop]) : [];
+    const scrolls = sameMon && d0 ? [[d0, d0.scrollTop]] : [];
+    if (!sameMon && d0) d0.scrollTop = 0;
+    const dexModalBox = $('scr-dex') ? $('scr-dex').querySelector('.box') : null;
+    if (dexModalBox) dexModalBox.scrollTop = 0;
     showDetail.last = dex;
 
     const max = { hp: 183, atk: 1.55, spd: 137, def: 160 };

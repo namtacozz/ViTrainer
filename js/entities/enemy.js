@@ -246,8 +246,8 @@
       const hpMultiplier = phase === 2 ? 1.5 : 2.0;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
       this.hp = this.maxHp;
-      this.invuln = 1.5;
-      this.ccImmuneT = 5.0; // 5s Unstoppable during phase transformation
+      this.invuln = 0.8;
+      this.ccImmuneT = 2.0; // 2s Kháng hiệu ứng khi chuyển phase
 
       if (phase === 3) {
         const megas = (typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(this.dex)) || [];
@@ -259,6 +259,10 @@
           if (mega.types) this.types = mega.types;
           if (mega.types && mega.types[0]) this.atkType = mega.types[0];
         }
+      }
+
+      if (typeof G !== 'undefined' && G.Coop && G.Coop.isHost && G.Coop.broadcastBossPhase) {
+        G.Coop.broadcastBossPhase(this.id, this.bossPhase, this.maxHp, this.dex, this.name);
       }
 
       const title = '¡FASE ' + phase + ': ' + this.name.toUpperCase() + ' SE REGENERA!';
@@ -404,6 +408,7 @@
         } else if (le.slow) terrainMul = le.slow < 0.5 ? 0.45 : 0.55;
       }
 
+      if (this.invuln > 0) this.invuln -= dt;
       if (this.ccImmuneT > 0) this.ccImmuneT -= dt;
       if (this.sleepT > 0) {
         // Dormido no anda, pero un empujón (Rafagaesfera) sí lo mueve.
@@ -1059,6 +1064,16 @@
       if (died) corpses.push(e);
     }
 
+    /** Elimina un enemigo de la partida directamente (ej. jefe de huida al expirar tiempo). */
+    function remove(e, died = false) {
+      if (!e) return;
+      const i = list.indexOf(e);
+      if (i >= 0) list.splice(i, 1);
+      byId.delete(e.id);
+      if (G.Coop && G.Coop.isHost) G.Coop.enemyGone(e, died);
+      if (died) corpses.push(e);
+    }
+
     function key(cx, cy) { return cx * 73856093 ^ cy * 19349663; }
 
     function rebuildGrid() {
@@ -1229,7 +1244,8 @@
     function bossAlive() { return list.some(e => e.boss && !e.dead); }
     function shinies() { return list.filter(e => e.shiny && !e.dead); }
 
-    return { clear, all, add, get, addRemote, removeRemote, stash, restore, clearRemote, update, drawables, queryCircle, rebuildGrid, bossAlive, shinies, nearestPlayer,
+    return { clear, all, add, get, remove, addRemote, removeRemote, stash, restore, clearRemote, update, drawables, queryCircle, rebuildGrid, bossAlive, shinies, nearestPlayer,
+             get enemies() { return list; },
              get count() { return list.length; } };
   })();
 })();

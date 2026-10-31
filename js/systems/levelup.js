@@ -50,7 +50,10 @@ G.LevelUp = (() => {
       // Si es de su lado flojo, cuánto rinde (Machamp con Bola Sombra...).
       const fitNote = (mon, cat) => {
         const f = G.Stats.fit(mon, cat);
-        return f < 0.95 ? ` <span class="fit-low">Con ${mon.name} rinde un ${Math.round(f * 100)} %: pega mejor con ataques ${G.Stats.sideOf(mon) === 'special' ? 'especiales' : 'físicos'}.</span>` : '';
+        if (f >= 0.95) return '';
+        const side = G.Stats.sideOf(mon) === 'special' ? 'especiales' : 'físicos';
+        const pct = Math.round(f * 100);
+        return ` <span class="fit-low">⚠ ${G.I18n ? G.I18n.f('(Eficacia reducida al {x} %: este Pokémon rinde mejor con ataques {x})', pct, side) : `(Eficacia reducida al ${pct} %)`}</span>`;
       };
       const pool = G.Moves.poolFor(pl.mon).filter(id =>
         !pl.hasMove(id) && !(pl.banned && pl.banned.has(id)) && !(buffs >= 2 && G.Moves.BY_ID[id].kind === 'buff'));

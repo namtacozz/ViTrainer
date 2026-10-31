@@ -145,7 +145,7 @@ G.Coop = (() => {
     return [r1(local.x), r1(local.y), r2(local.moveAngle || 0), local.walking ? 1 : 0, r1(local.hp || 100), r1(local.maxHp || 100),
             local.dead ? 1 : 0, m ? m.id : '', m ? m.lvl : 1, r1(local.magnet), r2(local.aim), r2(local.xpMul),
             r2(local.reviveT || 0), api.choosing && api.choosing() ? 1 : 0, doneSeq, api.watching ? api.watching() : '',
-            r2((G.Camera && G.Camera.zoomTo) || 1)];
+            r2((G.Camera && G.Camera.zoomTo) || 1), local.dex, local.isMega ? 1 : 0];
   }
 
   /** Número que llega por la red: si no es un número de verdad vale `def`, y si se pasa se queda en el tope. */
@@ -194,7 +194,8 @@ G.Coop = (() => {
              mv: typeof a[7] === 'string' ? a[7].slice(0, 40) : '', ml: num(a[8], 1, 1, 99),
              mag: num(a[9], 0, 0, 5000), aim: num(a[10], 0, -10, 10), xpMul: num(a[11], 1, 0.1, 20),
              rev: num(a[12], 0, 0, 60), ch: a[13] === undefined ? undefined : a[13] ? 1 : 0, ld: num(a[14], 0, 0, 1e9),
-             wa: typeof a[15] === 'string' ? a[15].slice(0, 64) : '', zm: num(a[16], 1, 1, 1.5) };
+             wa: typeof a[15] === 'string' ? a[15].slice(0, 64) : '', zm: num(a[16], 1, 1, 1.5),
+             dex: num(a[17], 0, 0, 5000), mega: a[18] ? 1 : 0 };
   }
 
   /** Anfitrión: dónde mira un invitado (él mismo, o el compañero vivo que mira estando caído). */
@@ -444,7 +445,13 @@ G.Coop = (() => {
     if (msg.h === 0 && holds.has(from)) holdOff(from);
     else if (msg.h === 1 && !holds.has(from)) holdOn(from);
     if (typeof msg.w === 'number' && msg.w >= levelSeq && waiting.has(from)) picked(from);
-    if (msg.p) { m.state = msg.p; m.pl.net = readState(msg.p); m.xpMul = m.pl.net.xpMul || 1; reconcile(from, m.pl.net); }
+    if (msg.p) {
+      m.state = msg.p;
+      m.pl.net = readState(msg.p);
+      if (m.pl.net.dex && m.pl.net.dex !== m.pl.dex) applyMateEvo(from, m.pl.net.dex, m.pl.net.mega);
+      m.xpMul = m.pl.net.xpMul || 1;
+      reconcile(from, m.pl.net);
+    }
     for (const ev of msg.ev || []) {
       switch (ev[0]) {
         case 'h': {
@@ -565,7 +572,10 @@ G.Coop = (() => {
                    t1: (msg.tk || [])[0], t10: (msg.tk || [])[1], cn: num((msg.tk || [])[2], 0, 0, 1e6) });
     for (const u in msg.p || {}) {
       const m = mates.get(u);
-      if (m) m.pl.net = readState(msg.p[u]);
+      if (m) {
+        m.pl.net = readState(msg.p[u]);
+        if (m.pl.net.dex && m.pl.net.dex !== m.pl.dex) applyMateEvo(u, m.pl.net.dex, m.pl.net.mega);
+      }
     }
     const now = performance.now();
     for (const a of msg.e || []) {
@@ -619,6 +629,21 @@ G.Coop = (() => {
         const megaId = ev[2];
         const spriteDex = ev[3];
         applyMateMega(targetUid, megaId, spriteDex);
+        break;
+      }
+      case 'bp': {
+        const b = G.EnemyMgr && G.EnemyMgr.get ? G.EnemyMgr.get(ev[1]) : null;
+        if (b) {
+          b.bossPhase = ev[2];
+          b.maxHp = ev[3];
+          b.hp = ev[3];
+          b.dex = ev[4] || b.dex;
+          if (ev[5]) b.name = ev[5];
+          b.scale = G.Sprites.enemyScale(b.dex, true);
+          b.anim = new G.Sprites.Animator(b.dex, b.scale);
+          b.invuln = 0.8;
+          b.ccImmuneT = 2.0;
+        }
         break;
       }
       case 'pb': G.World.breakAt(ev[1], ev[2]); break;
@@ -676,13 +701,18 @@ G.Coop = (() => {
   function broadcastEvo(newDex, isApex = 0) {
     if (!active) return;
     if (host) emit(['evo', me, newDex, isApex]);
-    else outEv.push(['evo', me, newDex, isApex]);
+    else { outEv.push(['evo', me, newDex, isApex]); flushClient(true); }
   }
 
   function broadcastMega(megaId, spriteDex) {
     if (!active) return;
     if (host) emit(['mega', me, megaId, spriteDex]);
-    else outEv.push(['mega', me, megaId, spriteDex]);
+    else { outEv.push(['mega', me, megaId, spriteDex]); flushClient(true); }
+  }
+
+  function broadcastBossPhase(bossId, phase, maxHp, dex, name) {
+    if (!active || !host) return;
+    emit(['bp', bossId, phase, maxHp, dex, name]);
   }
 
   function applyMateMega(uid, megaId, spriteDex) {
@@ -885,6 +915,7 @@ G.Coop = (() => {
     kick,
     broadcastEvo,
     broadcastMega,
+    broadcastBossPhase,
     get myUid() { return me; },
     get local() { return local; }
   };

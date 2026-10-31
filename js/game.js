@@ -315,6 +315,7 @@ G.Game = (() => {
     // Invitado: el anfitrión manda el reloj y lo del equipo.
     syncTeam(t) {
       if (Math.abs(t.time - time) > 0.4) time = t.time;
+      const oldLevel = pl.level;
       if (t.level > pl.level) G.Audio.sfx('xp');
       pl.level = t.level; pl.xp = t.xp; pl.xpNext = t.xpNext;
       pl.kills = t.kills; pl.bosses = t.bosses; pl.coins = t.coins;
@@ -322,6 +323,7 @@ G.Game = (() => {
       pl.t1 = t.t1 || 0; pl.t10 = t.t10 || 0;
       if (t.cn > (pl.candy || 0)) pl.candy = t.cn;
       bankTickets();
+      if (t.level > oldLevel && pl.checkInRunEvo) pl.checkInRunEvo();
       if (G.RunQuests && G.RunQuests.update) G.RunQuests.update(0, pl, { time, biome });
     },
     levelStart(level) {
@@ -345,7 +347,7 @@ G.Game = (() => {
         p.invuln = Math.max(p.invuln || 0, 2.5);
         if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(p, 260);
       }
-      if (state === 'levelup') { state = holdBy.length ? 'held' : 'playing'; afterLevelUp(); }
+      if (state === 'levelup') { state = holdBy.length ? 'held' : 'playing'; afterLevelUp(); if (pl && pl.checkInRunEvo) pl.checkInRunEvo(); }
     },
     /** ¿Estás eligiendo algo que para la partida (objeto o vínculo)? */
     choosing() { return state === 'choice'; },
@@ -619,6 +621,11 @@ G.Game = (() => {
       return;
     }
     if (laterItems.length) offerItem(laterItems.shift());
+    if (pl && pl.pendingEvoModal && !['scr-bond', 'scr-pause', 'scr-item', 'scr-levelup', 'scr-evo'].some(G.UI.isOpen)) {
+      const pem = pl.pendingEvoModal;
+      pl.pendingEvoModal = null;
+      offerEvo(pem.options, pem.onPick);
+    }
   }
 
   /** Has cogido un objeto: si no llevas ninguno te lo pones; si no, eliges. */
@@ -730,6 +737,12 @@ G.Game = (() => {
         if (G.Input.tap('digit' + (i + 1)) || G.Input.tap('numpad' + (i + 1))) G.RunUI.pick(i);
       }
       if (G.Input.tap('keyr')) G.RunUI.reroll();
+      return;
+    }
+    if (G.UI.isOpen('scr-evo')) {
+      for (let i = 0; i < 4; i++) {
+        if (G.Input.tap('digit' + (i + 1)) || G.Input.tap('numpad' + (i + 1))) G.RunUI.pickEvo(i);
+      }
       return;
     }
     if (G.UI.isOpen('scr-bond')) {

@@ -6,6 +6,24 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Estabilidad en Partida, Sincronización de Evoluciones en Grupo y Corrección de HUD", "Mid-Run Stability, Co-op Evolution Sync & Top HUD Layout Polish"], new: [
+    ["Sincronización total de evoluciones y Megas en cooperativo: los compañeros de equipo en salas de hasta 8 jugadores sincronizan sus cambios de forma y Megaevolución de inmediato mediante paquetes de estado continuos, garantizando que todos los entrenadores vean la misma forma en tiempo real.",
+     "Full Co-op Evolution & Mega Form Synchronization: teammates in lobbies up to 8 players instantly synchronize evolved forms and Mega evolutions via continuous state broadcast packets, ensuring all trainers see identical forms in real time."],
+    ["Evolución garantizada en cliente cooperativo: corregida la verificación de hitos de nivel al recibir sincronizaciones de equipo del anfitrión, permitiendo elegir y activar evoluciones sin retraso.",
+     "Guaranteed Co-op Client In-Run Evolution: hooked level milestone evaluation into host team sync packets so clients reliably receive in-run evolution prompts upon reaching level thresholds."]
+  ], chg: [
+    ["Reorganización de capas del HUD superior: espaciadas las alturas del reloj (Y=26), barra de bioma (Y=40), línea temporal deslizante (Y=48) y barra de vida de jefes/eventos (Y=68) para evitar cualquier solapamiento visual.",
+     "Top HUD Vertical Hierarchy Overhaul: repositioned the run clock (Y=26), biome status (Y=40), sliding timeline (Y=48), and boss/event health bars (Y=68) to eliminate all visual overlap."],
+    ["Advertencia clara de reducción de eficacia: reformulado el aviso en subida de nivel para destacar claramente cuando un movimiento tiene penalización de daño por orientación física o especial.",
+     "Clear Move Incompatibility Warning: updated stat affinity alert on level-up cards with explicit warning badges and effectiveness penalty notes for mismatched moves."]
+  ], fix: [
+    ["Arreglo de cuelgue crítico en eventos de partida: resuelto el fallo de método inexistente en EnemyMgr al expirar el tiempo de persecución que detenía la partida en curso.",
+     "Critical In-Run Event Crash Resolution: fixed undefined method error in EnemyMgr on pursuit timeout that halted the game loop during runs."],
+    ["Ajuste de invulnerabilidad tras cambio de fase de jefes: reducida la ventana de inmunidad a 0.8s para evitar periodos prolongados de invencibilidad tras ondas de choque.",
+     "Boss Phase-Shift Invulnerability Trim: tightened invulnerability window upon boss phase changes to 0.8s, eliminating sluggish invulnerable periods after shockwaves."],
+    ["Aislamiento de eventos dentro de la Grieta o Sentencia: bloqueada la aparición de eventos secuenciales mientras se disputa una batalla en la arena de la Grieta o Sentencia de Arceus.",
+     "Event Suppression Inside Rift and Judgment: prevented in-run capture and crystal events from triggering inside active Rift arena or Arceus Judgment fights."]
+  ]},
   { d: '2026-10-31', title: ["Alineación de Megaevoluciones, Daño de Flechas Mil y Optimización de Pokédex", "Mega Evolutions Access, Thousand Arrows Fix & Pokédex Layout"], new: [
     ["Megaevoluciones y formas definitivas para todas las especies: garantizada la transición a formas Mega y Primigenias a Nv. 30 en todas las líneas evolutivas de 3 fases (como Charizard X/Y tras evolucionar) y añadido Mega Magearna con Alma Corazón.",
      "Mega Evolutions & Definitive Forms for All Species: guaranteed smooth transition to Mega and Primal forms at Lv. 30 across all 3-stage evolution chains (including Charizard X/Y post-evolution) and introduced Mega Magearna with Soul-Heart."],
