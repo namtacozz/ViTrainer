@@ -78,7 +78,7 @@ G.LevelUp = (() => {
         const typesStr = (mega.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
         out.push({
           w: 1200, type: 'mega_evo', key: 'mega_evo:' + mega.id,
-          icon: 'megaBadge', color: '#f43f5e', tag: 'MEGA EVOLUCIÓN',
+          icon: 'megaBadge', dex: mega.spriteDex || mega.baseDex || pl.dex, color: '#f43f5e', tag: 'MEGA EVOLUCIÓN',
           title: G.T(mega.name),
           desc: `Despierta la Megaevolución (${typesStr}). BST ${mega.bst}, habilidad ${G.T(mega.ability, 'ability') || mega.ability} y poder desatado.`,
           apply: p => {
@@ -168,7 +168,8 @@ G.LevelUp = (() => {
     const picked = [];
     const used = new Set();
     // Si hay cartas de evolución de Pokémon pendientes, salen primero
-    const evoMons = pool.filter(c => c.type === 'evo_mon');
+    // Si hay cartas de evolución de Pokémon o Megaevolución pendientes, salen primero
+    const evoMons = pool.filter(c => c.type === 'evo_mon' || c.type === 'mega_evo');
     if (evoMons.length > 0) {
       for (const c of evoMons) {
         if (picked.length < n) {
@@ -195,5 +196,11 @@ G.LevelUp = (() => {
     return picked;
   }
 
-  return { offer, STATS };
+  function open() {
+    if (typeof G !== 'undefined' && G.Game && G.Game.openLevelUp) {
+      G.Game.openLevelUp();
+    }
+  }
+
+  return { offer, STATS, open };
 })();

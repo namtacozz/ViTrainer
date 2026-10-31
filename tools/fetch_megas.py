@@ -55,32 +55,32 @@ SPRITE_MEGAS = [
     (10042, 142, "Mega Aerodactyl", "aerodactyl-mega", "0142", "0001"),
     (10044, 150, "Mega Mewtwo Y", "mewtwo-mega-y", "0150", "0002"),
     (10072, 208, "Mega Steelix", "steelix-mega", "0208", "0001"),
-    (10049, 229, "Mega Houndoom", "houndoom-mega", "0229", "0001"),
-    (10050, 248, "Mega Tyranitar", "tyranitar-mega", "0248", "0001"),
-    (10054, 282, "Mega Gardevoir", "gardevoir-mega", "0282", "0001"),
-    (10055, 302, "Mega Sableye", "sableye-mega", "0302", "0001"),
-    (10056, 303, "Mega Mawile", "mawile-mega", "0303", "0001"),
-    (10058, 308, "Mega Medicham", "medicham-mega", "0308", "0001"),
-    (10059, 310, "Mega Manectric", "manectric-mega", "0310", "0001"),
-    (10060, 319, "Mega Sharpedo", "sharpedo-mega", "0319", "0001"),
-    (10061, 323, "Mega Camerupt", "camerupt-mega", "0323", "0001"),
-    (10062, 334, "Mega Altaria", "altaria-mega", "0334", "0001"),
-    (10063, 354, "Mega Banette", "banette-mega", "0354", "0001"),
-    (10064, 359, "Mega Absol", "absol-mega", "0359", "0001"),
-    (10065, 362, "Mega Glalie", "glalie-mega", "0362", "0001"),
-    (10068, 380, "Mega Latias", "latias-mega", "0380", "0001"),
-    (10069, 381, "Mega Latios", "latios-mega", "0381", "0001"),
+    (10048, 229, "Mega Houndoom", "houndoom-mega", "0229", "0001"),
+    (10049, 248, "Mega Tyranitar", "tyranitar-mega", "0248", "0001"),
+    (10065, 254, "Mega Sceptile", "sceptile-mega", "0254", "0001"),
+    (10051, 282, "Mega Gardevoir", "gardevoir-mega", "0282", "0001"),
+    (10066, 302, "Mega Sableye", "sableye-mega", "0302", "0001"),
+    (10052, 303, "Mega Mawile", "mawile-mega", "0303", "0001"),
+    (10054, 308, "Mega Medicham", "medicham-mega", "0308", "0001"),
+    (10055, 310, "Mega Manectric", "manectric-mega", "0310", "0001"),
+    (10070, 319, "Mega Sharpedo", "sharpedo-mega", "0319", "0001"),
+    (10087, 323, "Mega Camerupt", "camerupt-mega", "0323", "0001"),
+    (10067, 334, "Mega Altaria", "altaria-mega", "0334", "0001"),
+    (10056, 354, "Mega Banette", "banette-mega", "0354", "0001"),
+    (10057, 359, "Mega Absol", "absol-mega", "0359", "0001"),
+    (10074, 362, "Mega Glalie", "glalie-mega", "0362", "0001"),
+    (10062, 380, "Mega Latias", "latias-mega", "0380", "0001"),
+    (10063, 381, "Mega Latios", "latios-mega", "0381", "0001"),
     (10077, 382, "Primal Kyogre", "kyogre-primal", "0382", "0001"),
     (10078, 383, "Primal Groudon", "groudon-primal", "0383", "0001"),
     (10079, 384, "Mega Rayquaza", "rayquaza-mega", "0384", "0001"),
-    (10087, 428, "Mega Lopunny", "lopunny-mega", "0428", "0001"),
-    (10089, 448, "Mega Lucario", "lucario-mega", "0448", "0001"),
-    (10091, 475, "Mega Gallade", "gallade-mega", "0475", "0001"),
+    (10088, 428, "Mega Lopunny", "lopunny-mega", "0428", "0001"),
+    (10059, 448, "Mega Lucario", "lucario-mega", "0448", "0001"),
+    (10068, 475, "Mega Gallade", "gallade-mega", "0475", "0001"),
     (10075, 719, "Mega Diancie", "diancie-mega", "0719", "0001"),
     # Formas Legendarias / Míticas Especiales con Sprite en SpriteCollab
     (10022, 646, "Black Kyurem", "kyurem-black", "0646", "0001"),
     (10023, 646, "White Kyurem", "kyurem-white", "0646", "0002"),
-    (10118, 718, "Zygarde 10%", "zygarde-10", "0718", "0001"),
     (10120, 718, "Zygarde Complete", "zygarde-complete", "0718", "0002"),
     (10157, 800, "Ultra Necrozma", "necrozma-ultra", "0800", "0003"),
     (10007, 487, "Giratina Origin", "giratina-origin", "0487", "0001"),
@@ -96,20 +96,22 @@ FALLBACK_MEGAS = [
     (10033, 3, "Mega Venusaur", "venusaur-mega", ["grass", "poison"], "thick-fat", 80, 82, 123, 100, 122, 80),
     (10035, 6, "Mega Charizard Y", "charizard-mega-y", ["fire", "flying"], "drought", 78, 104, 78, 159, 115, 100),
     (10036, 9, "Mega Blastoise", "blastoise-mega", ["water"], "mega-launcher", 79, 103, 120, 135, 115, 78),
+    (10090, 15, "Mega Beedrill", "beedrill-mega", ["bug", "poison"], "adaptability", 65, 150, 40, 15, 80, 145),
+    (10073, 18, "Mega Pidgeot", "pidgeot-mega", ["normal", "flying"], "no-guard", 83, 80, 80, 135, 80, 121),
     (10040, 127, "Mega Pinsir", "pinsir-mega", ["bug", "flying"], "aerilate", 65, 155, 120, 65, 90, 105),
     (10041, 130, "Mega Gyarados", "gyarados-mega", ["water", "dark"], "mold-breaker", 95, 155, 109, 70, 130, 81),
     (10043, 150, "Mega Mewtwo X", "mewtwo-mega-x", ["psychic", "fighting"], "steadfast", 106, 190, 100, 154, 100, 130),
     (10045, 181, "Mega Ampharos", "ampharos-mega", ["electric", "dragon"], "mold-breaker", 90, 95, 105, 165, 110, 45),
     (10046, 212, "Mega Scizor", "scizor-mega", ["bug", "steel"], "technician", 70, 150, 140, 65, 100, 75),
     (10047, 214, "Mega Heracross", "heracross-mega", ["bug", "fighting"], "skill-link", 80, 185, 115, 40, 105, 75),
-    (10051, 254, "Mega Sceptile", "sceptile-mega", ["grass", "dragon"], "lightning-rod", 70, 110, 75, 145, 85, 145),
-    (10052, 257, "Mega Blaziken", "blaziken-mega", ["fire", "fighting"], "speed-boost", 80, 160, 80, 130, 80, 100),
-    (10053, 260, "Mega Swampert", "swampert-mega", ["water", "ground"], "swift-swim", 100, 150, 110, 95, 110, 70),
-    (10057, 306, "Mega Aggron", "aggron-mega", ["steel"], "filter", 70, 140, 230, 60, 80, 50),
-    (10066, 373, "Mega Salamence", "salamence-mega", ["dragon", "flying"], "aerilate", 95, 145, 130, 120, 90, 120),
-    (10067, 376, "Mega Metagross", "metagross-mega", ["steel", "psychic"], "tough-claws", 80, 145, 150, 105, 110, 110),
-    (10088, 445, "Mega Garchomp", "garchomp-mega", ["dragon", "ground"], "sand-force", 108, 170, 115, 120, 95, 92),
-    (10090, 460, "Mega Abomasnow", "abomasnow-mega", ["grass", "ice"], "snow-warning", 90, 132, 105, 132, 105, 30),
+    (10050, 257, "Mega Blaziken", "blaziken-mega", ["fire", "fighting"], "speed-boost", 80, 160, 80, 130, 80, 100),
+    (10064, 260, "Mega Swampert", "swampert-mega", ["water", "ground"], "swift-swim", 100, 150, 110, 95, 110, 70),
+    (10053, 306, "Mega Aggron", "aggron-mega", ["steel"], "filter", 70, 140, 230, 60, 80, 50),
+    (10089, 373, "Mega Salamence", "salamence-mega", ["dragon", "flying"], "aerilate", 95, 145, 130, 120, 90, 120),
+    (10076, 376, "Mega Metagross", "metagross-mega", ["steel", "psychic"], "tough-claws", 80, 145, 150, 105, 110, 110),
+    (10058, 445, "Mega Garchomp", "garchomp-mega", ["dragon", "ground"], "sand-force", 108, 170, 115, 120, 95, 92),
+    (10060, 460, "Mega Abomasnow", "abomasnow-mega", ["grass", "ice"], "snow-warning", 90, 132, 105, 132, 105, 30),
+    (10069, 531, "Mega Audino", "audino-mega", ["normal", "fairy"], "healer", 103, 60, 126, 80, 126, 50),
 ]
 
 
@@ -386,6 +388,8 @@ def main():
     megas_by_base = {}
     for mid, m in mega_data_dict.items():
         bd = m['baseDex']
+        if bd == 718 and mid != 10120:
+            continue
         megas_by_base.setdefault(bd, []).append(mid)
 
     lines_megas = [
@@ -410,28 +414,23 @@ def main():
     print(f"✓ Đã ghi dữ liệu {len(mega_data_dict)} Mega vào {OUT_MEGAS}")
 
     # 5. Hợp nhất không phá hủy vào js/data/sprites-meta.js
-    # Đọc lại sprites-meta.js hiện tại
     with io.open(OUT_META, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # Tìm phần dictionary G.SPRITE_META = { ... };
-    # Ghép thêm các Mega mới vào trước dấu đóng '};'
-    insertion_lines = []
     for mid in sorted(mega_metas.keys()):
-        # Kiểm tra xem ID này đã có trong sprites-meta.js chưa
-        if f"  {mid}:" not in content and f"'{mid}':" not in content and f'"{mid}":' not in content:
-            meta_json = json.dumps(mega_metas[mid], separators=(",", ":"))
-            insertion_lines.append(f"  {mid}: {meta_json},")
+        meta_json = json.dumps(mega_metas[mid], separators=(",", ":"))
+        pattern = rf'^\s*["\']?{mid}["\']?:\s*\{{.*?}},?\r?\n'
+        new_line = f"  {mid}: {meta_json},\n"
+        if re.search(pattern, content, flags=re.MULTILINE):
+            content = re.sub(pattern, new_line, content, count=1, flags=re.MULTILINE)
+        else:
+            insert_idx = content.rfind('};')
+            if insert_idx != -1:
+                content = content[:insert_idx] + new_line + content[insert_idx:]
 
-    if insertion_lines:
-        insert_idx = content.rfind('};')
-        if insert_idx != -1:
-            new_content = content[:insert_idx] + '\n' + '\n'.join(insertion_lines) + '\n' + content[insert_idx:]
-            with io.open(OUT_META, 'w', encoding='utf-8', newline='\n') as f:
-                f.write(new_content)
-            print(f"✓ Đã bổ sung an toàn {len(insertion_lines)} sprite meta vào {OUT_META}")
-    else:
-        print("✓ Sprite meta đã cập nhật đầy đủ.")
+    with io.open(OUT_META, 'w', encoding='utf-8', newline='\n') as f:
+        f.write(content)
+    print(f"✓ Đã cập nhật an toàn sprite meta vào {OUT_META}")
 
     print("Hoàn tất Giai đoạn 1 thành công rực rỡ!\n")
 

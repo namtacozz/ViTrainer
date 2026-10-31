@@ -1119,7 +1119,18 @@ G.Game = (() => {
     /** Abandona la partida en curso (p. ej. al cerrar sesión desde Ajustes). */
     quit() { if (state !== 'ui' && state !== 'over') quitRun(); },
     /** Para grabar vídeos: abre las cartas de subir de nivel. */
-    debugLevelUp() { tampered = true; pl.level++; pendingLevels++; },
+    openLevelUp() {
+      pendingLevels++;
+      if (state === 'playing') maybeLevelUp();
+    },
+    /** Para grabar vídeos: abre las cartas de subir de nivel. */
+    debugLevelUp() {
+      tampered = true;
+      pl.level++;
+      pendingLevels++;
+      pl.checkInRunEvo();
+      if (state === 'playing') maybeLevelUp();
+    },
     toUI() { state = 'ui'; if (cv) cv.style.cursor = ''; Backdrop.restore(); },
     get state() { return state; }, get player() { return pl; }, st
   };

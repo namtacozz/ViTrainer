@@ -14,6 +14,8 @@ G.CHANGELOG = [
     ["Idiomas simplificados: interfaz centrada exclusivamente en inglés nativo y vietnamita completo.",
      "Streamlined Languages: game interface focused exclusively on native English and full Vietnamese."]
   ], fix: [
+    ["Megaevoluciones y Formas en partida: corregido el desbloqueo y activación de las formas Mega, Primigenias y Especiales al alcanzar nivel 30 (incluidos Salamence, Lucario, Charizard X/Y, Rayquaza y todas las especies con Mega). Unificada la primera evolución de especies de 2 fases a nivel 15 y asegurada la actualización inmediata del sprite de combate.",
+     "In-run Mega Evolutions & Forms: fixed unlocking and triggering of Mega, Primal, and Special forms upon reaching Level 30 (including Salamence, Lucario, Charizard X/Y, Rayquaza, and all Mega species). Unified 2-stage species first evolution to Level 15 and ensured immediate combat sprite and animation updates."],
     ["Daño a jefes: corregido el error que impedía que los jefes recibieran daño, con puntos de vida reequilibrados.",
      "Boss Damage Bug: fixed constant variable assignment preventing bosses from taking damage, with rebalanced health pools."],
     ["Evoluciones en partida para Bagon y todas las especies: eliminada la restricción de rango de Gacha para que todos los Pokémon evolucionen de forma natural a Nv. 15 y Nv. 30.",

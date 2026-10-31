@@ -529,15 +529,19 @@ G.Player = class Player {
       if (this.level >= 15 && this.awakeningTier === 0) {
         this.activateAwakening(1);
       }
-      if (this.level >= 30 && this.awakeningTier < 2) {
-        this.activateAwakening(2);
+      if (this.level >= 30) {
+        if (!this.isMega && this.hasMegaForm()) {
+          this.triggerMegaIfAvailable();
+        } else if (!this.isMega && !this.pendingMegaBranches && this.awakeningTier < 2) {
+          this.activateAwakening(2);
+        }
       }
       return;
     }
 
     // Especie de 2 fases
     if (chain.type === '2stage') {
-      if (this.level >= 18 && this.evoStage === 1) {
+      if (this.level >= 15 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           this.evolveTo(nextDex);
@@ -545,8 +549,12 @@ G.Player = class Player {
           this.activateAwakening(1);
         }
       }
-      if (this.level >= 30 && this.evoStage >= 2 && !this.isApex) {
-        this.activateApex();
+      if (this.level >= 30 && this.evoStage >= 2) {
+        if (!this.isMega && this.hasMegaForm()) {
+          this.triggerMegaIfAvailable();
+        } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
+          this.activateApex();
+        }
       }
       return;
     }
@@ -565,12 +573,14 @@ G.Player = class Player {
         const nextDex = chain.stages[2] && chain.stages[2][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           this.evolveTo(nextDex);
-        } else if (!this.isApex) {
-          this.activateApex();
         }
       }
-      if (this.level >= 30 && this.evoStage >= 3 && !this.isApex) {
-        this.activateApex();
+      if (this.level >= 30 && this.evoStage >= 3) {
+        if (!this.isMega && this.hasMegaForm()) {
+          this.triggerMegaIfAvailable();
+        } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
+          this.activateApex();
+        }
       }
       return;
     }
@@ -582,7 +592,7 @@ G.Player = class Player {
       if (this.evoStage === 1 && this.level >= 15) {
         if (nextList.length === 1) {
           this.evolveTo(nextList[0]);
-        } else if (nextList.length > 1) {
+        } else if (nextList.length > 1 && !this.pendingEvoBranches) {
           if (this.baseDex === 133) {
             const moveTypes = new Set(this.moves.map(m => m.type));
             const branchTypeMap = { 134: 'water', 135: 'electric', 136: 'fire', 196: 'psychic', 197: 'dark', 470: 'grass', 471: 'ice', 700: 'fairy' };
@@ -604,19 +614,26 @@ G.Player = class Player {
         if (chain.maxStage === 3 && this.level >= 30) {
           if (nextList.length === 1) {
             this.evolveTo(nextList[0]);
-          } else if (nextList.length > 1) {
+          } else if (nextList.length > 1 && !this.pendingEvoBranches) {
             this.pendingEvoBranches = nextList;
             if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
-          } else if (!this.isApex) {
-            this.activateApex();
           }
-        } else if (chain.maxStage === 2 && this.level >= 30 && !this.isApex) {
+        }
+      }
+      if (this.level >= 30 && this.evoStage >= chain.maxStage) {
+        if (!this.isMega && this.hasMegaForm()) {
+          this.triggerMegaIfAvailable();
+        } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
           this.activateApex();
         }
-      } else if (this.evoStage >= 3 && this.level >= 30 && !this.isApex) {
-        this.activateApex();
       }
     }
+  }
+
+  hasMegaForm() {
+    if (this.isMega) return false;
+    const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
+    return !!(megas && megas.length > 0);
   }
 
   canMegaEvolve() {
@@ -703,8 +720,16 @@ G.Player = class Player {
     this.maxHp = Math.max(this.maxHp + 30, Math.round(hpBonus * (1 + (this.level - 1) * 0.05)));
     this.hp = Math.round(this.maxHp * oldHpRatio);
 
-    if (mega.spriteDex && typeof G !== 'undefined' && G.SPRITE_META && G.SPRITE_META[mega.spriteDex]) {
-      this.dex = mega.spriteDex;
+    const targetDex = (mega.spriteDex && typeof G !== 'undefined' && G.SPRITE_META && G.SPRITE_META[mega.spriteDex])
+      ? mega.spriteDex
+      : this.dex;
+    this.dex = targetDex;
+    if (typeof G !== 'undefined' && G.Sprites) {
+      this.scale = G.Sprites.playerScale(targetDex);
+      this.anim = new G.Sprites.Animator(targetDex, this.scale, this.shiny);
+      this.r = G.Sprites.playerRadius(targetDex);
+      this.bodyH = G.Sprites.bodyHeight(targetDex, this.scale);
+      if (G.Sprites.preload) G.Sprites.preload([targetDex], 8000, this.shiny);
     }
     this.megaAura = true;
 
@@ -722,6 +747,7 @@ G.Player = class Player {
       }
       if (G.Audio) G.Audio.sfx('legend');
       if (G.Camera) G.Camera.kick(0.45);
+      if (G.UI && G.UI.toast) G.UI.toast(mega.name + ' AWAKENED!', 2500);
       if (G.Coop && G.Coop.active) {
         G.Coop.broadcast(['mega', this.uid, mega.id]);
       }

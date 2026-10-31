@@ -89,7 +89,7 @@ G.RunUI = (() => {
     list.forEach((c, i) => {
       const el = document.createElement('div');
       el.className = 'card';
-      const isEvo = c.type === 'evo' || c.type === 'evo_mon';
+      const isEvo = c.type === 'evo' || c.type === 'evo_mon' || c.type === 'mega_evo';
       const tag = c.type === 'new'
         ? `<span class="tag-chip" style="background:${c.color}">Nuevo · ${c.tag}</span>${c.cat ? `<span class="tag-chip cat">${c.cat}</span>` : ''}`
         : isEvo
