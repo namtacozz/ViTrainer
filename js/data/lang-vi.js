@@ -1,6 +1,5 @@
-/* ============ lang-vi.js: bản dịch Tiếng Việt ============
- * Tên Pokémon, tên chiêu thức, tên trang bị và hệ (types) giữ nguyên tiếng Anh chuẩn quốc tế.
- * Toàn bộ giao diện, mô tả chiêu thức, thẻ nâng cấp, trắc nghiệm và thông báo được Việt hóa hoàn chỉnh theo phong cách game.
+/* ============ lang-vi.js — Bản dịch tiếng Việt ============
+ * Tự động tạo và đồng bộ từ TRANSLATIONS.md
  */
 G.I18n.add({
   "Acero": "Steel",
