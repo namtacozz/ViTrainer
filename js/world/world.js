@@ -177,7 +177,7 @@ G.World = (() => {
   }
 
   const PROP = {
-    tree:  { solid: true,  hp: Infinity, r: 13 },
+    tree:  { solid: true,  hp: 42,       r: 13 },
     rock:  { solid: true,  hp: 34,       r: 12 },
     chest: { solid: true,  hp: 22,       r: 12 },
     pumpkin: { solid: true, hp: 26,      r: 11 },
@@ -386,6 +386,19 @@ G.World = (() => {
       const r = Math.random();
       if (r < 0.05) G.Pickups.drop('heal', p.x, p.y);
       else if (r < 0.11) G.Pickups.drop('coin', p.x, p.y, 1);
+      return;
+    }
+    if (p.type === 'tree') {
+      const leafCol = (B && B.leaf && B.leaf[1]) || '#45943f';
+      const trunkCol = (B && B.trunk && B.trunk[0]) || '#5b3b22';
+      const leafGlow = (B && B.leaf && B.leaf[2]) || '#64b252';
+      G.FX.burst(p.x, p.y - 12, leafCol, 18, 150);
+      G.FX.burst(p.x, p.y - 6, trunkCol, 10, 100);
+      G.FX.ring(p.x, p.y - 8, 4, 30, leafGlow, 0.35, 3);
+      const r = Math.random();
+      if (r < 0.40) G.Pickups.dropXp(p.x, p.y, 6);
+      if (r > 0.70) G.Pickups.drop('coin', p.x, p.y, 2);
+      if (r > 0.92) G.Pickups.drop('heal', p.x + 8, p.y);
       return;
     }
     if (p.type === 'rock') {

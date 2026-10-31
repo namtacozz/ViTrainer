@@ -104,6 +104,75 @@ G.HUD = (() => {
     ctx.textAlign = 'center';
     ctx.fillText(Math.ceil(pl.hp) + ' / ' + Math.round(pl.maxHp), px + 48 + 84, py + 26);
 
+    // ---------- Thanh tiến trình Thông thạo / Tiến hóa (Evo / Mastery Milestone Bar) ----------
+    const chain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(pl.baseDex || pl.dex) : null;
+    const stage = pl.evoStage || 1;
+    const tierUnlocked = pl.evoTierUnlocked || 1;
+    const lv = pl.level || 1;
+
+    let targetLv = 15;
+    let targetLabel = '';
+    let evoFrac = 0;
+
+    if (pl.isMega) {
+      targetLabel = G.T ? G.T('FORMA MEGA') : 'FORMA MEGA';
+      evoFrac = 1.0;
+    } else if (chain && chain.type === '3stage') {
+      if (stage === 1) {
+        targetLv = 15;
+        targetLabel = (tierUnlocked >= 2 ? '✦ ' : '🔒 ') + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
+        evoFrac = Math.min(1, lv / targetLv);
+      } else if (stage === 2) {
+        targetLv = 30;
+        targetLabel = (tierUnlocked >= 3 ? '✦ ' : '🔒 ') + (G.T ? G.T('Fase 3') : 'Fase 3') + ' (' + lv + '/' + targetLv + ')';
+        evoFrac = Math.min(1, lv / targetLv);
+      } else {
+        targetLv = 30;
+        targetLabel = pl.isApex ? (G.T ? G.T('Apex (+)') : 'Apex (+)') : '✦ Apex+ (Lv.30)';
+        evoFrac = pl.isApex ? 1.0 : Math.min(1, lv / targetLv);
+      }
+    } else if (chain && chain.type === '2stage') {
+      if (stage === 1) {
+        targetLv = 18;
+        targetLabel = (tierUnlocked >= 2 ? '✦ ' : '🔒 ') + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
+        evoFrac = Math.min(1, lv / targetLv);
+      } else {
+        targetLv = 30;
+        targetLabel = pl.isApex ? (G.T ? G.T('Apex (+)') : 'Apex (+)') : '✦ Apex+ (Lv.30)';
+        evoFrac = pl.isApex ? 1.0 : Math.min(1, lv / targetLv);
+      }
+    } else if (chain && chain.type === 'branch') {
+      if (stage === 1) {
+        targetLv = 15;
+        targetLabel = '✦ ' + (G.T ? G.T('Evolución') : 'Evolución') + ' (' + lv + '/' + targetLv + ')';
+        evoFrac = Math.min(1, lv / targetLv);
+      } else {
+        targetLv = 30;
+        targetLabel = pl.isApex ? (G.T ? G.T('Apex (+)') : 'Apex (+)') : '✦ Apex+ (Lv.30)';
+        evoFrac = pl.isApex ? 1.0 : Math.min(1, lv / targetLv);
+      }
+    } else {
+      if (pl.awakeningTier === 0) {
+        targetLv = 15;
+        targetLabel = (tierUnlocked >= 2 ? '✦ ' : '🔒 ') + (G.T ? G.T('Despertar I') : 'Despertar I') + ' (' + lv + '/' + targetLv + ')';
+        evoFrac = Math.min(1, lv / targetLv);
+      } else if (pl.awakeningTier === 1) {
+        targetLv = 30;
+        targetLabel = (tierUnlocked >= 3 ? '✦ ' : '🔒 ') + (G.T ? G.T('Despertar II (Apex+)') : 'Despertar II') + ' (' + lv + '/' + targetLv + ')';
+        evoFrac = Math.min(1, lv / targetLv);
+      } else {
+        targetLabel = G.T ? G.T('Apex (+)') : 'Apex (+)';
+        evoFrac = 1.0;
+      }
+    }
+
+    const evoY = py + 31;
+    bar(ctx, px + 48, evoY, 168, 8, evoFrac, '#ffd23f', 'rgba(0,0,0,.6)');
+    ctx.font = F(700, 8.5);
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.fillText(targetLabel, px + 48 + 84, evoY + 7);
+
     // buffs activos
     const COL = { atk: '#ff6b4d', patk: '#ff6b4d', satk: '#c47bff', spd: '#7fe0ff', def: '#b0b8c8', regen: '#5fe08a' };
     const LBL = { atk: 'ATK', patk: 'ATK', satk: 'AT.E', spd: 'VEL', def: 'DEF', regen: 'REG' };
@@ -115,10 +184,10 @@ G.HUD = (() => {
       ctx.font = F(800, 9);
       const txt = LBL[k] + ' ×' + b.n;
       const tw = ctx.measureText(txt).width + 12;
-      roundRect(ctx, bx, py + 34, tw, 15, 7);
+      roundRect(ctx, bx, py + 43, tw, 15, 7);
       ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fill();
       ctx.fillStyle = COL[k];
-      ctx.fillText(txt, bx + 6, py + 45);
+      ctx.fillText(txt, bx + 6, py + 54);
       bx += tw + 5;
     }
 
@@ -194,7 +263,7 @@ G.HUD = (() => {
       bx += tw + 5;
     }
 
-    if (G.Coop.active) drawCoop(ctx, w, h, pl, px, py + (bx > px ? 56 : 40));
+    if (G.Coop.active) drawCoop(ctx, w, h, pl, px, py + (bx > px ? 65 : 48));
 
     // Grieta: flecha grande que late en el borde si no se ve, y si se ve, una
     // flecha que bota encima; en la arena, cuenta atrás.

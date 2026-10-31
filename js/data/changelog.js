@@ -6,6 +6,16 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Jefes Renovados, Gráficos Oficiales Nintendo y Destrucción de Árboles", "Boss Overhaul, Official Nintendo Assets & Destructible Trees"], new: [
+    ["Reforma total de Jefes: los jefes ahora son auténticos desafíos de incursión con entre 3x y 5x más vida, tope de daño por impacto único, resistencia a ralentizaciones, combos rápidos y ataques elementales telegrafiados según su tipo (Infierno, Ventisca, Tormenta Eléctrica, Floración Tóxica, Vacío Sombrío y Carga Dragón). Al caer por debajo del 50% de vida, entran en Fase de Furia e invocan dos esbirros dorados de élite.",
+     "Boss Overhaul: bosses are now formidable raid-tier challenges with 3x-5x higher health pools, single-hit damage capping to prevent burst cheese, slow resistance, faster combos, and signature elemental moves (Inferno, Blizzard, Thunderstorm, Toxic Bloom, Shadow Void, Dragon Rush). Below 50% HP they enter an Enraged Phase, summoning two elite golden bodyguards."],
+    ["Gráficos oficiales de Nintendo: sustitución de iconos pixelados por sprites oficiales en alta definición de Pokémon Escarlata y Púrpura para todos los tipos y movimientos, así como iconos oficiales para los 21 objetos equipables.",
+     "Official Nintendo Assets: replaced pixelated icons with official Scarlet & Violet high-definition type badges for all types/moves, and official sprites for all 21 held items."],
+    ["Árboles destructibles: ahora tus ataques pueden talar y destruir los árboles del mapa igual que las rocas, despejando el paso y soltando experiencia, PokéMonedas o bayas.",
+     "Destructible Trees: trees can now be chopped down and destroyed by player attacks just like rocks, clearing obstructive paths and dropping XP, PokéCoins, or berries."],
+    ["Barra de maestría y evolución en pantalla: nueva barra dorada de hitos evolutivos bajo la barra de vida que indica en tiempo real tu nivel y progreso hacia la siguiente fase evolutiva o Apex+.",
+     "HUD Mastery & Evolution bar: new golden milestone bar beneath player HP displaying live progression towards the next evolution stage or Apex+."]
+  ]},
   { d: '2026-10-31', title: ["Misiones en Partida, Formas Legendarias y Ramificaciones de Eevee", "In-Run Quests, Legendary Forms & Eeveelutions"], new: [
     ["Panel de misiones en partida: nuevo panel interactivo compacto a la derecha de la pantalla. Misiones para desbloquear objetos de evolución como Mega Aro, Punta ADN, Ultranecrostal Z, Griseosfera y Meteorito Cósmico, con selector para mantener o cambiar de objeto al completarlas.",
      "In-run quest panel: new compact interactive panel on the right side of the screen. Quests to unlock evolution items like Mega Bracelet, DNA Splicers, Ultranecrozium Z, Griseous Orb, and Cosmic Meteorite, with standard keep-or-swap item selection upon completion."],

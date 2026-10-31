@@ -40,13 +40,13 @@ G.Enemies = (() => {
     { from: 500, bst: [530, 620], hp: 250, spd: 72, dmg: 28, xp: 38, cast: 7 }
   ];
 
-  // Franjas de jefe: minuto en que salen, PV base y franja de BST.
+  // Franjas de jefe: minuto en que salen, PV base y franja de BST (Nâng cấp sức mạnh chuẩn Raid Boss).
   const BOSS_SLOTS = [
-    { at: 180, hp: 1400,  dmg: 34, xp: 220,  bst: [490, 545] },
-    { at: 360, hp: 3200,  dmg: 42, xp: 420,  bst: [520, 580] },
-    { at: 540, hp: 5600,  dmg: 48, xp: 680,  bst: [540, 600] },
-    { at: 720, hp: 9000,  dmg: 56, xp: 1000, bst: [580, 700] },
-    { at: 900, hp: 16000, dmg: 68, xp: 1800, bst: [600, 700] }
+    { at: 180, hp: 4500,  dmg: 42,  xp: 320,  bst: [490, 545] },
+    { at: 360, hp: 12500, dmg: 55,  xp: 650,  bst: [520, 580] },
+    { at: 540, hp: 26000, dmg: 70,  xp: 1100, bst: [540, 600] },
+    { at: 720, hp: 52000, dmg: 88,  xp: 1800, bst: [580, 700] },
+    { at: 900, hp: 98000, dmg: 115, xp: 3200, bst: [600, 700] }
   ];
 
   // Stats base aproximados a partir de los de juego (inverso de fetch_pokedex).
@@ -187,7 +187,7 @@ G.Enemies = (() => {
    * Los jefes ya traen su vida base creciente (1.400 ... 16.000), así que
    * escalan mucho más suave: con la curva normal el último llegaba a 168.000 PV.
    */
-  function bossScale(t) { return { hp: 1 + t / 600, dmg: 1 + t / 600, spd: 1 }; }
+  function bossScale(t) { return { hp: 1 + t / 350, dmg: 1 + t / 400, spd: 1.05 }; }
 
   /** Tramo que toca en el segundo `t`. */
   function tierAt(t) { let ti = 0; TIERS.forEach((tr, i) => { if (t >= tr.from) ti = i; }); return ti; }

@@ -474,13 +474,89 @@ G.Icons = (() => {
     return w * Math.max(1, Math.round(size / w));
   }
 
-  /** <img> pixelado para el DOM. */
+  const OFFICIAL_ITEMS = new Set([
+    'leftovers', 'choiceband', 'quickclaw', 'focussash', 'shellbell', 'amuletcoin',
+    'luckyegg', 'lifeorb', 'choicescarf', 'rockyhelmet', 'assaultvest', 'eviolite',
+    'weaknesspolicy', 'expertbelt', 'loadeddice', 'heavydutyboots', 'keystone',
+    'dnasplicers', 'ultranecroziumz', 'griseousorb', 'meteorite'
+  ]);
+
+  const OFFICIAL_TYPES = new Set([
+    'normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost',
+    'steel', 'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon',
+    'dark', 'fairy'
+  ]);
+
+  const imgCache = new Map();
+  function getImg(src) {
+    let img = imgCache.get(src);
+    if (!img && typeof Image !== 'undefined') {
+      img = new Image();
+      img.src = src;
+      imgCache.set(src, img);
+    }
+    return img;
+  }
+
+  if (typeof Image !== 'undefined') {
+    OFFICIAL_ITEMS.forEach(it => getImg('assets/items/' + it + '.png'));
+    OFFICIAL_TYPES.forEach(t => getImg('assets/types/' + t + '.png'));
+  }
+
+  /** <img> cho DOM: ưu tiên sprite chính thức của Nintendo */
   function html(name, size = 20, cls = '') {
+    if (OFFICIAL_ITEMS.has(name)) {
+      return `<img class="official-item ${cls}" src="assets/items/${name}.png" width="${size}" height="${size}" alt="${name}" draggable="false" style="object-fit:contain;vertical-align:middle;display:inline-block;">`;
+    }
+    if (name.startsWith('type:')) {
+      const t = name.slice(5);
+      if (OFFICIAL_TYPES.has(t)) {
+        const h = Math.round(size * 0.45);
+        return `<img class="official-type ${cls}" src="assets/types/${t}.png" width="${size}" height="${h}" alt="${t}" draggable="false" style="object-fit:contain;vertical-align:middle;display:inline-block;">`;
+      }
+    }
+    if (name.startsWith('move:')) {
+      const mid = name.slice(5);
+      const m = (typeof G !== 'undefined' && G.Moves && G.Moves.BY_ID) ? G.Moves.BY_ID[mid] : null;
+      if (m && m.type && OFFICIAL_TYPES.has(m.type)) {
+        const h = Math.round(size * 0.45);
+        return `<img class="official-move-type ${cls}" src="assets/types/${m.type}.png" width="${size}" height="${h}" alt="${m.type}" draggable="false" style="object-fit:contain;vertical-align:middle;display:inline-block;">`;
+      }
+    }
     const cv = canvas(name), w = snap(name, size), h = w * cv.height / cv.width;
     return `<img class="pix ${cls}" src="${url(name)}" width="${w}" height="${h}" alt="" draggable="false">`;
   }
 
   function draw(ctx, name, x, y, size) {
+    if (OFFICIAL_ITEMS.has(name)) {
+      const img = getImg('assets/items/' + name + '.png');
+      if (img && img.complete && img.naturalWidth > 0) {
+        ctx.drawImage(img, Math.round(x), Math.round(y), size, size);
+        return;
+      }
+    } else if (name.startsWith('type:')) {
+      const t = name.slice(5);
+      if (OFFICIAL_TYPES.has(t)) {
+        const img = getImg('assets/types/' + t + '.png');
+        if (img && img.complete && img.naturalWidth > 0) {
+          const h = Math.round(size * (img.naturalHeight / img.naturalWidth));
+          ctx.drawImage(img, Math.round(x), Math.round(y + (size - h) / 2), size, h);
+          return;
+        }
+      }
+    } else if (name.startsWith('move:')) {
+      const mid = name.slice(5);
+      const m = (typeof G !== 'undefined' && G.Moves && G.Moves.BY_ID) ? G.Moves.BY_ID[mid] : null;
+      if (m && m.type && OFFICIAL_TYPES.has(m.type)) {
+        const img = getImg('assets/types/' + m.type + '.png');
+        if (img && img.complete && img.naturalWidth > 0) {
+          const h = Math.round(size * (img.naturalHeight / img.naturalWidth));
+          ctx.drawImage(img, Math.round(x), Math.round(y + (size - h) / 2), size, h);
+          return;
+        }
+      }
+    }
+
     const cv = canvas(name);
     const s2 = snap(name, size);
     x += (size - s2) / 2; y += (size - s2) / 2; size = s2;

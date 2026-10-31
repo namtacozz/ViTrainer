@@ -205,9 +205,29 @@ G.Spawner = (() => {
 
   function banner() { return announceT > 0 ? { text: announce, t: announceT } : null; }
 
+    function spawnMinionsForBoss(boss) {
+    if (!boss || boss.dead) return;
+    const t = G.Game.st ? G.Game.st.time : 0;
+    const bag = G.Enemies.bagAt(t);
+    const count = 2;
+    for (let i = 0; i < count; i++) {
+      const def = G.U.pick(bag);
+      const angle = (i * Math.PI) + (Math.random() - 0.5);
+      const dist = boss.r + 35;
+      const x = boss.x + Math.cos(angle) * dist;
+      const y = boss.y + Math.sin(angle) * dist;
+      const m = new G.Enemy(def, x, y, scaled(G.Enemies.scale(t), G.Coop.scaleHp(players.length) * hpK(t) * 1.8));
+      m.dmg *= DMG_K * 1.2;
+      m.xp = Math.round(m.xp * XP_K * 1.5);
+      m.makeGolden();
+      G.EnemyMgr.add(m);
+      G.FX.ring(x, y, 10, 40, '#f59e0b', 0.4, 3);
+    }
+  }
+
   /** Invitado en cooperativo: sólo corre el reloj del aviso. */
   function tickBanner(dt) { if (announceT > 0) announceT -= dt; }
 
-  return { reset, update, ahead, burst, outR, tickBanner, banner, say, rate, SHINY_RATE, CAP,
+  return { reset, update, ahead, burst, outR, tickBanner, banner, say, rate, spawnMinionsForBoss, SHINY_RATE, CAP,
            debugForceShiny(n = 1) { forceShiny = n; } };
 })();
