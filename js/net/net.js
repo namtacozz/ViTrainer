@@ -28,7 +28,8 @@ G.Net = (() => {
     'stun:stun2.l.google.com:19302',
     'stun:stun3.l.google.com:19302',
     'stun:stun4.l.google.com:19302',
-    'stun:stun.cloudflare.com:3478'
+    'stun:stun.cloudflare.com:3478',
+    'stun:stun.services.mozilla.com'
   ] }];
   const TURN_API = 'https://ice.pokesurvivor.com/v1/ice';
   // Primero se intenta sin TURN (lo normal es conectar directo) y sólo si falla se
@@ -151,7 +152,11 @@ G.Net = (() => {
       try { m = JSON.parse(raw); } catch (e) { return; }
       if (!m || !m.f) return;
       if (m.sig) onSignal(m.f, m.sig);
-      else deliver(m.f, m.d);
+      else {
+        const p = peers.get(m.f);
+        if (p && p.mode === 'connecting' && ALLOW_RELAY) useRelay(m.f);
+        deliver(m.f, m.d);
+      }
     };
     qref.on('child_added', onMsg);
     qref.on('child_changed', onMsg);
@@ -269,7 +274,9 @@ G.Net = (() => {
     p.mode = ALLOW_RELAY ? 'relay' : 'failed';
     emitPeer(u);
     if (!isHost) return;
-    p.timer = setTimeout(() => { if (peers.get(u) === p && (p.mode === 'failed' || p.mode === 'relay') && roomId) { drop(u, true); connect(u); } }, RETRY_MS);
+    if (p.mode === 'failed') {
+      p.timer = setTimeout(() => { if (peers.get(u) === p && p.mode === 'failed' && roomId) { drop(u, true); connect(u); } }, RETRY_MS);
+    }
   }
 
   /** Anfitrión: abre conexión con un invitado. */
@@ -378,7 +385,7 @@ G.Net = (() => {
     }
     // Sin relé, los datos de la partida no van por la base de datos (se pierden: esa
     // pareja no está conectada). Sólo pasa el aviso de empezar.
-    if ((!ALLOW_RELAY || !p || p.mode !== 'relay') && !(msg && msg.k === 'start')) return;
+    if ((!ALLOW_RELAY || !p || (p.mode !== 'relay' && p.mode !== 'connecting')) && !(msg && msg.k === 'start')) return;
     stats.relaySent++;
     relayPush(to, { f: uid, d: msg });
   }

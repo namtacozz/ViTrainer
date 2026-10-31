@@ -26,7 +26,7 @@ G.Coop = (() => {
   const COLORS = ['#ffcb3d', '#5fc8ff', '#7ee07a', '#ff8ad8'];
   // Mensajes por segundo: 15 por la conexión directa y 3 por el relé de la
   // Realtime Database (apagado: 1 $ el GB).
-  const RATE_FAST = 1 / 15, RATE_SLOW = 1 / 3;
+  const RATE_FAST = 1 / 15, RATE_SLOW = 1 / 4;
   const rateFor = u => (G.Net.slow(u) ? RATE_SLOW : RATE_FAST);
   const NEAR = 950;                     // radio de enemigos que se mandan a cada uno
   const EV_MAX = 500;                   // eventos por envío como mucho (el resto, en el siguiente)
@@ -216,7 +216,7 @@ G.Coop = (() => {
     }
   }
 
-  function enemyList(near) {
+  function enemyList(near, max = 0) {
     const out = [];
     const r2n = NEAR * NEAR;
     for (const e of G.EnemyMgr.all()) {
@@ -224,21 +224,24 @@ G.Coop = (() => {
       const a = ANIMS.indexOf(e.anim.cur);
       out.push([e.id, r1(e.x), r1(e.y), Math.ceil(e.hp), a < 0 ? 0 : a, e.anim.dir,
                 (e.burn > 0 ? 1 : 0) | (e.poison > 0 ? 2 : 0) | (e.shield > 0 ? 4 : 0) | (e.slow > 0 ? 8 : 0) | (e.sleepT > 0 ? 16 : 0)]);
+      if (max && out.length >= max) break;
     }
     return out;
   }
 
   function hostFrame(m) {
+    const isSlow = G.Net.slow(m.uid);
+    const maxEv = isSlow ? 80 : EV_MAX;
     const st = api.team();
     const p = { [me]: myState() };
     for (const o of mates.values()) {
       if (o.connected && o.uid !== m.uid && o.state) p[o.uid] = o.state;
     }
     // Tras una espera (ver tick) puede haber muchos: un mensaje enorme no saldría.
-    const ev = m.q.length > EV_MAX ? m.q.splice(0, EV_MAX) : m.q;
+    const ev = m.q.length > maxEv ? m.q.splice(0, maxEv) : m.q;
     if (ev === m.q) m.q = [];
     const f = { k: 'f', t: r2(st.time), lv: st.level, xp: r2(st.xp), xn: st.xpNext, ki: st.kills, bo: st.bosses, co: st.coins, tk: [st.t1, st.t10, st.cn || 0],
-                p, e: enemyList(viewOf(m)), ev };
+                p, e: enemyList(viewOf(m), isSlow ? 120 : 0), ev };
     const ja = G.Judgment.netState();       // Arceus en la Sentencia
     if (ja) f.ja = ja;
     // Siempre: quién está eligiendo y, si hay cartas de nivel, cuáles (ver arriba).
