@@ -1,15 +1,39 @@
 # BẢN DỊCH GAME POKÉSURVIVOR (VITRAINER)
 
-> **Mục đích:** File này chứa toàn bộ **1833 chuỗi dịch thuật** của game với 2 cột **Tiếng Anh (EN)** và **Tiếng Việt (VI)** để bạn dễ dàng rà soát và chỉnh sửa.
+> [!IMPORTANT]
+> ### 📌 QUY TẮC PHÂN ĐỊNH RÕ RÀNG (THEO YÊU CẦU CỦA BẠN):
+>
+> 🔒 **CÁC PHẦN GIỮ NGUYÊN TIẾNG ANH (KHỎI CẦN DỊCH / KHÔNG SỬA):**
+> 1. **Tên Hệ Pokémon (Types)** (Phần 1): *Fire, Water, Grass, Electric, Dragon, Steel, Ghost, Fairy, Ice...*
+> 2. **Tên Chiêu thức Pokémon (Move Names)** (Phần 2): *Ember, Flamethrower, Fire Blast, Hydro Pump, Thunderbolt, Razor Leaf, Shadow Ball, Close Combat, Swords Dance...*
+> 3. **Tên Trang bị mang theo (Hold Items)** (Phần 4): *Leftovers, Choice Band, Focus Sash, Quick Claw, Life Orb, Assault Vest, Shell Bell...*
+> 4. **Tên các Pokémon**: *Pikachu, Charmander, Squirtle, Machamp, Arceus...* (được giữ gốc 100% trong code game).
+> 5. **Các thuật ngữ quen thuộc**: *Shiny, Solo, Co-op, Host, DPS, HP, Exp...*
+>
+> ✏️ **CÁC PHẦN CẦN VIỆT HÓA (BẠN TỰ DO CHỈNH SỬA CỘT TIẾNG VIỆT):**
+> 1. **Mô tả chiêu thức** (Phần 3): Cách thi triển, gây sát thương, thiêu đốt, làm choáng, hiệu ứng buff.
+> 2. **Mô tả trang bị** (Phần 5): Hồi máu mỗi giây, tăng công, giảm hồi chiêu, giữ mạng 1 HP.
+> 3. **Thẻ lên cấp & Tiến hóa** (Phần 6): Tiến hóa, Thẻ mới, Nâng cấp chỉ số.
+> 4. **Nâng cấp vĩnh viễn** (Phần 7): Sinh lực, Sức mạnh, Tốc độ, May mắn...
+> 5. **Bản đồ & Khu vực** (Phần 8): Tên các đấu trường và vùng đất bí ẩn.
+> 6. **Cửa hàng Kecleon & Đặc tính** (Phần 9): Mua bán bạc hà, tác dụng của Đặc tính (Abilities) và Bản tính (Natures).
+> 7. **Quay Gacha & Ngọc** (Phần 10): Quay x1, x10, x100, ngọc ru ngủ, ngọc hóa đá.
+> 8. **Giao diện toàn game** (Phần 11-18): Menu chính, Bạn bè, Phòng chờ Co-op, Bảng xếp hạng, Cài đặt, Nhiệm vụ, Cảnh báo chiến đấu, Màn hình tạm dừng/kết thúc.
+> 9. **Sự kiện & Nhật ký cập nhật** (Phần 19-21): Halloween, thông báo bản vá.
+
+> [!TIP]
 > **Cách chỉnh sửa:**
-> 1. Bạn có thể sửa trực tiếp nội dung ở cột **Tiếng Việt (VI)** theo ý muốn.
-> 2. Giữ nguyên số thứ tự **#** ở cột đầu tiên (dùng để định danh chuỗi tương ứng trong game).
-> 3. Các ký hiệu như `{x}`, `<b>`, `</b>`, `<br>` là biến số hoặc định dạng của game, vui lòng giữ nguyên vị trí.
-> 4. Sau khi sửa xong, chỉ cần thông báo để hệ thống tự động đồng bộ lại vào game và deploy lên web!
+> - Mở file này, tìm đến các mục có gắn nhãn ✏️ **[CẦN VIỆT HÓA]** và sửa trực tiếp chữ ở cột **Tiếng Việt (VI)**.
+> - Các mục có nhãn 🔒 **[GIỮ NGUYÊN TIẾNG ANH - KHỎI DỊCH]** bạn cứ để nguyên.
+> - Giữ nguyên số **#** ở cột đầu tiên (đây là ID khóa định danh để hệ thống nạp lại vào game).
+> - Các ký hiệu `{x}`, `<b>`, `</b>` là biến số của game, vui lòng giữ nguyên vị trí trong câu.
+> - Sửa xong, bạn chỉ cần báo **"Đồng bộ bản dịch từ file md"** là game sẽ tự động cập nhật ngay lập tức!
 
 ---
 
-## 1. Hệ Pokémon & Vùng đất (Types & Regions)
+## 1. Hệ Pokémon & Vùng đất (Types & Regions) 🔒 [GIỮ NGUYÊN TIẾNG ANH - KHỎI DỊCH]
+
+> *Tất cả các hệ Pokémon (Fire, Water, Grass, Electric, Dragon...) và vùng đất (Unova...) được giữ nguyên tiếng Anh chuẩn quốc tế.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -32,7 +56,9 @@
 | 17 | Flying | Flying |
 | 18 | Unova | Unova |
 
-## 2. Chiêu thức Pokémon & Mô tả (Moves & Descriptions)
+## 2. Tên Chiêu thức Pokémon (Move Names) 🔒 [GIỮ NGUYÊN TIẾNG ANH - KHỎI DỊCH]
+
+> *Tất cả tên chiêu thức (Ember, Flamethrower, Thunderbolt, Hydro Pump, Razor Leaf, Shadow Ball...) giữ nguyên tiếng Anh gốc chuẩn Pokémon.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -99,6 +125,7 @@
 | 79 | Blizzard | Blizzard |
 | 80 | Icy Wind | Icy Wind |
 | 81 | Karate Chop | Karate Chop |
+| 82 | Aura Sphere | Aura Sphere |
 | 83 | Close Combat | Close Combat |
 | 84 | Focus Blast | Focus Blast |
 | 85 | Lick | Lick |
@@ -134,17 +161,67 @@
 | 115 | Agility | Agility |
 | 116 | Harden | Harden |
 | 117 | Surf | Surf |
+
+## 3. Mô tả Chiêu thức (Move Descriptions) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Giải thích cách thức tung chiêu, số tia đòn, hiệu ứng thiêu đốt/đóng băng/trúng độc, phạm vi sát thương... Bạn có thể sửa câu từ cho mượt mà, chuẩn phong cách game.*
+
+| # | Tiếng Anh (EN) | Tiếng Việt (VI) |
+| :---: | :--- | :--- |
 | 118 | A fan of three piercing leaves. | Chiếc quạt ba lá xuyên thấu. |
 | 119 | A quick poisonous sting. | Một vết chích độc nhanh chóng. |
 | 120 | A wide wing sweep that pushes foes back. | Một cú quét cánh rộng đẩy kẻ thù lùi lại. |
+| 121 | A fireball at the nearest enemy. | Một quả cầu lửa vào kẻ thù gần nhất. |
 | 122 | A magical breeze in every direction. | Một làn gió huyền diệu theo mọi hướng. |
+| 123 | A fan of bubbles that slows whatever they touch. | Một chiếc quạt bong bóng làm chậm bất cứ thứ gì chúng chạm vào. |
+| 124 | A permanent electric field around you. | Một điện trường vĩnh cửu xung quanh bạn. |
+| 125 | A slow but devastating water blast. | Một vụ nổ nước chậm nhưng tàn khốc. |
+| 126 | A jet of fire that pierces everything in a straight line. | Một tia lửa xuyên thẳng mọi thứ. |
+| 127 | A piercing jet. Reliable at any range. | Một chiếc máy bay phản lực xuyên thấu. Đáng tin cậy ở mọi phạm vi. |
+| 128 | A quick bite that knocks foes back. | Một cú cắn nhanh chóng đẩy lùi kẻ thù. |
+| 129 | A lightning-fast bolt that pierces several enemies. | Một tia sét xuyên qua nhiều kẻ thù. |
 | 130 | A flash of light all around you. | Một tia sáng xung quanh bạn. |
+| 131 | Drains life from everything nearby and heals you with every hit. | Hút sinh lực từ mọi thứ xung quanh và hồi máu cho bạn sau mỗi đòn đánh. |
+| 132 | Roots that snare and pound everything near you. | Rễ bẫy và đập nát mọi thứ gần bạn. |
+| 133 | Charges in an arc at everything in front of you. | Tấn công theo hình vòng cung vào mọi thứ trước mặt bạn. |
+| 134 | An energy sphere that never misses. | Một quả cầu năng lượng không bao giờ trượt. |
+| 135 | A shadowy orb that pierces several foes. | Một quả cầu bóng tối xuyên qua nhiều kẻ thù. |
+| 136 | A radial mental burst that seeks enemies. | Một vụ nổ tinh thần xuyên tâm tìm kiếm kẻ thù. |
+| 137 | Explodes in flames in every direction. | Phát nổ trong ngọn lửa ở mọi hướng. |
 | 138 | A sharp, powerful blow straight ahead. | Một đòn mạnh và sắc bén thẳng về phía trước. |
+| 139 | Sticky threads in every direction that slow foes a lot. | Những sợi tơ dính ở mọi hướng làm chậm kẻ địch rất nhiều. |
+| 140 | A ghostly lick that briefly paralyzes. | Một cú liếm ma quái làm tê liệt trong thời gian ngắn. |
+| 141 | Long-range whips in a wide arc. | Những đòn roi tầm xa theo hình vòng cung rộng. |
+| 142 | Draconic flames in a straight line. | Ngọn lửa khủng khiếp theo một đường thẳng. |
+| 143 | Flames that spin around you. Constant defense. | Ngọn lửa xoay quanh bạn. Phòng thủ liên tục. |
 | 144 | A rain of rocks all around you. | Một cơn mưa đá xung quanh bạn. |
+| 145 | Toxic sludge that poisons on impact. | Bùn độc gây ngộ độc khi va chạm. |
 | 146 | A quick bite in a short arc. | Một vết cắn nhanh chóng trong một vòng cung ngắn. |
+| 147 | Deals no damage: builds (physical) ATTACK faster than Swords Dance. | Không gây sát thương: tạo đòn tấn công (vật lý) nhanh hơn Swords Dance. |
+| 148 | Deals no damage: builds (physical) ATTACK while active. | Không gây sát thương: tạo ra ĐÁNH CÔNG (vật lý) khi hoạt động. |
+| 149 | Deals no damage: builds SPECIAL ATTACK while active. | Không gây sát thương: tạo Đòn tấn công ĐẶC BIỆT khi hoạt động. |
 | 150 | Nasty Plot | Nasty Plot |
+| 151 | Deals no damage: builds DEFENSE while active. | Không gây sát thương: xây dựng PHÒNG THỦ khi hoạt động. |
+| 152 | Deals no damage: builds health REGENERATION. | Không gây sát thương: tăng sức khỏe PHỤC HỒI. |
+| 153 | Deals no damage: builds SPEED while active. | Không gây sát thương: tăng TỐC ĐỘ khi hoạt động. |
+| 154 | A poisonous cloud around you that intoxicates. | Một đám mây độc xung quanh bạn làm bạn say mê. |
+| 155 | A wave of dark energy in every direction. | Một làn sóng năng lượng tối theo mọi hướng. |
+| 156 | A wave that homes in on its target. | Một làn sóng hướng tới mục tiêu của nó. |
+| 157 | A sound wave that spreads in every direction. | Một làn sóng âm thanh lan truyền theo mọi hướng. |
+| 158 | A heavy boulder that pushes the enemy back. | Một tảng đá nặng đẩy lùi kẻ thù. |
+| 159 | A full-weight tackle: slow, short and brutal. | Một pha xử lý toàn diện: chậm, ngắn và tàn bạo. |
+| 160 | A fast, steady flurry. Low damage, high rate. | Một sự bùng nổ nhanh chóng và ổn định. Thiệt hại thấp, tỷ lệ cao. |
 | 161 | A piercing beam of metallic light. | Một chùm ánh sáng kim loại xuyên thấu. |
+| 162 | An icy beam that almost freezes foes solid. | Một tia băng giá gần như đóng băng kẻ thù. |
 | 163 | A wide, heavy-hitting psychic beam. | Một chùm tâm linh rộng và nặng nề. |
+| 164 | Whirlwinds that escort you. | Những cơn lốc hộ tống bạn. |
+| 165 | Shakes the ground: damages and slows everything nearby. | Rung chuyển mặt đất: gây sát thương và làm chậm mọi thứ xung quanh. |
+| 166 | Splashes mud around and slows foes. | Bắn bùn xung quanh và làm chậm kẻ thù. |
+| 167 | A cyclone of leaves spins widely around you. | Một cơn lốc lá xoay tròn xung quanh bạn. |
+| 168 | An instant bolt that pierces in a line. | Một tia tức thời xuyên qua một đường thẳng. |
+| 169 | A shadow surrounds you and consumes what is near. | Một cái bóng bao quanh bạn và tiêu thụ những gì ở gần. |
+| 170 | A blizzard around you that slows foes. | Một trận bão tuyết xung quanh bạn làm chậm kẻ thù. |
+| 171 | A constant vibration that pounds everything nearby. | Một sự rung động liên tục đè nặng lên mọi thứ xung quanh. |
 | 172 | A steel swipe in an arc. | Một cú đánh thép theo hình vòng cung. |
 | 173 | +1 projectile | +1 đạn |
 | 174 | +1 projectile and +1 pierce | +1 đạn và +1 xuyên |
@@ -155,8 +232,10 @@
 | 179 | Hits in 360° and +50% damage | Đánh ở góc 360° và +50% sát thương |
 | 180 | +30% range and width | +30% phạm vi và chiều rộng |
 | 181 | +50% damage | +50% sát thương |
+| 182 | +1 orb | +1 quả cầu |
 | 183 | +55% damage | +55% sát thương |
 | 184 | +25% radius and spins faster | +25% bán kính và quay nhanh hơn |
+| 185 | +1 orb and +55% damage | +1 quả cầu và +55% sát thương |
 | 186 | +4 projectiles | +4 đạn |
 | 187 | +4 projectiles and +1 pierce | +4 đạn và +1 xuyên |
 | 188 | +30% radius | + bán kính 30% |
@@ -166,6 +245,11 @@
 | 192 | +50% duration | +50% thời lượng |
 | 193 | +1 stack and +40% power | +1 điểm cộng dồn và +40% sức mạnh |
 | 194 | Hits 40% more often | Lượt truy cập thường xuyên hơn 40% |
+| 195 | ×1.8 damage, +2 projectiles, +2 pierce and bigger | ×1,8 sát thương, +2 đạn, +2 xuyên và lớn hơn |
+| 196 | ×1.9 damage, more range and hits in 360° | ×1,9 sát thương, tầm bắn xa hơn và tấn công trong 360° |
+| 197 | ×1.8 damage, a 50% wider and longer beam | × sát thương 1,8, chùm tia rộng hơn và dài hơn 50% |
+| 198 | +2 orbs, ×1.7 damage and more radius | +2 quả cầu, ×1,7 sát thương và bán kính nhiều hơn |
+| 199 | +6 projectiles, ×1.6 damage and +1 pierce | +6 đạn, ×1,6 sát thương và +1 xuyên |
 | 200 | ×1.8 damage and 35% more radius | ×1,8 sát thương và bán kính thêm 35% |
 | 201 | Vigor | Sức sống |
 | 202 | Power | quyền lực |
@@ -173,827 +257,55 @@
 | 204 | Reflexes | phản xạ |
 | 205 | Armor | Giáp |
 | 206 | Synthesis | Tổng hợp |
+| 207 | Magnet | nam châm |
 | 208 | Learning | học tập |
-| 213 | Lv. | Cấp |
-| 216 | +7% movement speed. | +7% tốc độ di chuyển. |
-| 218 | +6% damage reduction. | +6% giảm sát thương. |
-| 221 | +12% experience gained. | +12% kinh nghiệm nhận được. |
-| 222 | Sitrus Berry | Quả Sitrus |
-| 226 | Choose a reward · | Chọn một phần thưởng · |
-| 227 | Choose your card | Chọn thẻ nâng cấp |
-| 228 | Still choosing: {x} | Vẫn đang chọn: {x} |
-| 229 | Waiting for {x}… | Đang chờ {x}… |
-| 230 | you | bạn |
-| 235 | Shell Bell | Shell Bell |
-| 237 | Lucky Egg | Lucky Egg |
-| 239 | Choice Scarf | Choice Scarf |
-| 240 | Rocky Helmet | Rocky Helmet |
-| 248 | +30% experience. | +30% kinh nghiệm. |
-| 250 | +35% speed. | +35% tốc độ. |
-| 254 | You can only hold one · | Bạn chỉ có thể giữ một · |
-| 255 | Keep | Giữ |
-| 256 | Switch to | Chuyển sang |
-| 258 | You already hold {x} | Bạn đã giữ {x} |
-| 266 | +8 HP | +8 mã lực |
-| 267 | +4% damage | +4% sát thương |
-| 268 | +3% speed | +3% tốc độ |
-| 269 | -3% cooldown | -3% thời gian hồi chiêu |
-| 270 | +2% defense | +2% phòng thủ |
-| 271 | +0.2 HP/s | +0,2 mã lực/giây |
-| 272 | +12% pickup | +12% nhận hàng |
-| 273 | +8% PokéCoins | +8% PokéCoin |
-| 274 | +5% experience | +5% kinh nghiệm |
-| 275 | Start with 2 moves | Bắt đầu với 2 bước |
-| 276 | Max. | Tối đa. |
-| 280 | Fury | cơn giận dữ |
-| 281 | Haste | vội vàng |
-| 282 | damage ×2 | sát thương ×2 |
-| 283 | +45% speed | +45% tốc độ |
-| 284 | -40% cooldown | -40% thời gian hồi chiêu |
-| 288 | Rain | Mưa |
-| 289 | Harsh sunlight | Nắng gay gắt |
-| 290 | Sandstorm | Bão cát |
-| 291 | Snowfall | Tuyết rơi |
-| 292 | Fog | Sương mù |
-| 302 | Volt Plant | nhà máy vôn |
-| 303 | Eternal Glacier | Sông băng vĩnh cửu |
-| 304 | Ancient Dojo | Võ đường cổ |
-| 305 | Toxic Swamp | đầm lầy độc hại |
-| 306 | Red Desert | Sa mạc đỏ |
-| 307 | Sky Peak | Đỉnh trời |
-| 308 | Mind Temple | chùa tâm |
-| 309 | Hive Forest | Rừng tổ ong |
-| 310 | Ancient Quarry | Mỏ đá cổ |
-| 312 | Dragon Sanctuary | Thánh Địa Rồng |
-| 313 | Dark Alley | Ngõ tối |
-| 314 | Steel Fortress | Pháo đài thép |
-| 315 | Enchanted Forest | Rừng mê hoặc |
-| 316 | Shady Forest | Rừng râm mát |
-| 319 | Rift · {x} | Rạn nứt · {x} |
-| 320 | Rift · | Rạn nứt · |
-| 321 | RIFT · | rạn nứt · |
-| 331 | Cryptocurrencies | Tiền điện tử |
-| 332 | Official website | Trang web chính thức |
-| 334 | Place the buttons | Đặt các nút |
-| 335 | Place | Địa điểm |
-| 340 | Floating | Nổi |
-| 341 | Fixed | Đã sửa |
-| 342 | Attacks | tấn công |
-| 344 | Reset | Đặt lại |
-| 345 | Save | Lưu |
-| 346 | Buttons placed | Nút được đặt |
-| 352 | Bond | Liên kết |
-| 353 | Back | Quay lại |
-| 355 | Choose which move joins {x} | Chọn chiêu thức để kết hợp với {x} |
-| 356 | Which move do you bond {x} with? | Bạn muốn liên kết {x} với chiêu thức nào? |
-| 359 | It will fire at the same time as {x}. | Sẽ tung ra cùng lúc với {x}. |
-| 363 | You entered the rift… | Bạn đã bước vào vết nứt… |
-| 364 | The rift threw you out… | Vết nứt đã đẩy bạn ra ngoài… |
-| 365 | {x} left the game | {x} đã rời trận đấu |
-| 366 | {x} is back | {x} đã quay lại |
-| 367 | {x}: reconnecting… | {x}: đang kết nối lại… |
-| 368 | +1 ticket | +1 vé |
-| 372 | Everyone is down… | Cả đội đều đã bị hạ… |
-| 374 | DOWN | BỊ HẠ |
-| 375 | Stay by their side | Đứng gần để cứu |
-| 376 | Rift · {x} m · {x} s | Vết nứt · {x} m · {x} s |
-| 377 | DEFEATED · | HẠ GỤC · |
-| 378 | COINS | ĐỒNG XU |
-| 379 | {x} · {x} DEFEATED · {x} COINS | {x} · {x} HẠ GỤC · {x} XU |
-| 387 | move · | di chuyển · |
-| 388 | move · | chiêu thức · |
-| 389 | cycle · | chuyển chiêu · |
-| 392 | You fell… | Bạn đã bị hạ… |
-| 393 | Run over | Trận đấu kết thúc |
-| 394 | Back to menu | Về Menu chính |
-| 395 | Leave the game | Rời trận đấu |
-| 396 | Time | Thời gian |
-| 397 | Level | Cấp độ |
-| 399 | Bosses | Trùm |
-| 400 | PokéCoins earned | PokéCoins nhận được |
-| 401 | Moves | Chiêu thức |
-| 403 | · new! | · mới! |
-| 404 | {x} shinies caught | {x} Shinies đã bị bắt |
-| 406 | Max level | Cấp tối đa |
-| 407 | Mystery Dungeon | Ngục tối bí ẩn |
-| 410 | Name | Tên |
-| 412 | Sign in with Google | Đăng nhập bằng Google |
-| 414 | 3-16 letters, numbers or _ | 3-16 chữ cái, số hoặc _ |
-| 417 | Loading… | Đang tải… |
-| 418 | Guide | hướng dẫn |
-| 419 | Legal notice & privacy | Thông báo pháp lý & quyền riêng tư |
-| 426 | That name is already taken. | Tên đó đã được sử dụng. |
-| 431 | No internet connection. | Không có kết nối internet. |
-| 437 | No connection to the database. | Không có kết nối với cơ sở dữ liệu. |
-| 441 | Error: | Lỗi: |
-| 442 | Guest | Khách |
-| 443 | Trainer | Huấn luyện viên |
-| 444 | Your personality is… | Tính cách của bạn là… |
-| 445 | Question {x} of {x} | Câu hỏi {x} của {x} |
-| 446 | Pick a Pokémon | Chọn một Pokémon |
-| 450 | Choose | Chọn |
-| 451 | Choose another | Chọn khác |
-| 455 | I jump in to help without thinking. | Tôi lao vào giúp đỡ mà không cần suy nghĩ. |
-| 456 | I look for someone who can stop it. | Tôi tìm người có thể ngăn chặn nó. |
-| 457 | I watch everything from afar. | Tôi quan sát mọi thứ từ xa. |
-| 458 | I laugh and cheer both of them on. | Tôi cười và cổ vũ cả hai. |
-| 460 | I take it to the police right away. | Tôi sẽ đưa nó đến cảnh sát ngay lập tức. |
-| 462 | First I check what's inside… | Đầu tiên tôi kiểm tra xem bên trong có gì… |
-| 463 | I don't even touch it, just in case. | Tôi thậm chí còn không chạm vào nó, chỉ để đề phòng thôi. |
-| 465 | I study until late at night. | Tôi học đến tận khuya. |
-| 466 | I review just enough: I trust myself. | Tôi xét vừa đủ: Tôi tin tưởng vào chính mình. |
-| 467 | I get really stressed. | Tôi thực sự bị căng thẳng. |
-| 468 | Exam? I'll see tomorrow. | Kỳ thi? Tôi sẽ thấy vào ngày mai. |
-| 470 | I answer back on the spot. | Tôi trả lời lại ngay tại chỗ. |
-| 471 | I hit back with a better joke. | Tôi đáp lại bằng một trò đùa hay hơn. |
-| 472 | I ignore them completely. | Tôi hoàn toàn phớt lờ họ. |
-| 473 | It hurts, even if I don't say it. | Đau lắm, dù tôi không nói ra. |
-| 474 | What matters most to you? | Điều gì quan trọng nhất với bạn? |
-| 475 | Being the best. | Là tốt nhất. |
-| 477 | Freedom. | Tự do. |
-| 478 | Calm. | Bình tĩnh. |
-| 480 | The dark one, more excitement! | Cái tối, phấn khích hơn! |
-| 481 | The long one, no rush. | Còn dài, không vội. |
-| 482 | I sit down to think it over. | Tôi ngồi xuống để suy nghĩ lại. |
-| 483 | Neither: I make a new shortcut. | Không: Tôi tạo một lối tắt mới. |
-| 485 | That they can always count on me. | Rằng họ luôn có thể tin tưởng vào tôi. |
-| 487 | That I'm a bit mysterious. | Rằng tôi hơi bí ẩn. |
-| 488 | That I never give up. | Rằng tôi không bao giờ bỏ cuộc. |
-| 489 | Your ideal day off is… | Ngày nghỉ lý tưởng của bạn là… |
-| 490 | Training to get better. | Đào tạo để trở nên tốt hơn. |
-| 492 | An adventure with no plan at all. | Một cuộc phiêu lưu không có kế hoạch nào cả. |
-| 493 | Reading, thinking, being calm. | Đọc, suy nghĩ, bình tĩnh. |
-| 496 | You measure every step before taking it. | Bạn đo lường từng bước trước khi thực hiện. |
-| 497 | You spread energy wherever you go. | Bạn lan tỏa năng lượng bất cứ nơi nào bạn đi. |
-| 502 | You do your own thing and don't care. | Bạn làm việc của riêng bạn và không quan tâm. |
-| 504 | Nothing fazes you. Nothing. | Không có gì làm bạn bối rối. Không có gì. |
-| 505 | You know how to wait for the right moment. | Bạn biết cách chờ đợi thời điểm thích hợp. |
-| 507 | Giving up isn't in your plans. | Từ bỏ không nằm trong kế hoạch của bạn. |
-| 511 | Enter the dungeon | Bước vào hầm ngục |
-| 514 | Upgrades | Nâng cấp |
-| 515 | Make every run stronger | Gia tăng sức mạnh cho mỗi trận đấu |
-| 516 | 9 regions · Pokémon and shinies | 9 khu vực · Pokémon và Shinies |
-| 522 | Who survives longest | Ai sống sót lâu nhất |
-| 525 | {x} reward to claim | {x} phần thưởng để nhận |
-| 526 | {x} rewards to claim | {x} phần thưởng để nhận |
-| 527 | reward to claim | phần thưởng để yêu cầu |
-| 528 | rewards to claim | phần thưởng để yêu cầu |
-| 530 | {x} online | {x} trực tuyến |
-| 531 | online | trực tuyến |
-| 532 | {x} request | {x} yêu cầu |
-| 533 | {x} requests | {x} yêu cầu |
-| 534 | Runs | Trận |
-| 535 | · Best time | · Kỷ lục |
-| 538 | Guest mode: not saved | Chế độ khách: chưa được lưu |
-| 542 | Legal notice | Thông báo pháp lý |
-| 543 | Back | Quay lại |
-| 544 | All | Tất cả |
-| 545 | Owned | Sở hữu |
-| 546 | Missing | Thiếu |
-| 547 | Legendary | Huyền thoại |
-| 548 | Epic | sử thi |
-| 549 | Rare | hiếm |
-| 550 | Uncommon | không phổ biến |
-| 551 | Common | chung |
-| 552 | None with this filter. | Không có bộ lọc này. |
-| 553 | Attack | Tấn công |
-| 554 | HP | HP |
-| 555 | Speed | Tốc độ |
-| 556 | Starts with | Bắt đầu với |
-| 559 | (shiny) | (sáng bóng) |
-| 560 | You don't have it yet. | Bạn chưa có nó. |
-| 561 | Get it from the banner of | Lấy nó từ biểu ngữ của |
-| 562 | or by defeating it when it shows up shiny. | hoặc bằng cách đánh bại nó khi nó sáng bóng. |
-| 565 | · {x} shiny | · {x} sáng bóng |
-| 568 | Mystery | bí ẩn |
-| 570 | You have {x} of {x} | Bạn có {x} trong tổng số {x} |
-| 571 | You have {x} | Bạn có {x} |
-| 572 | Gen {x} | Thế hệ {x} |
-| 573 | Odds | Tỷ lệ cược |
-| 581 | ×10 tickets | ×10 vé |
-| 582 | tickets and {x} | vé và {x} |
-| 586 | Duplicate · | Trùng lặp · |
-| 587 | · {x} {x} shiny | · {x} {x} sáng bóng |
-| 588 | {x} Shiny | {x} Sáng bóng |
-| 589 | Click to speed up | Bấm để tăng tốc |
-| 596 | SHINY · | SÁNG BÓNG · |
-| 599 | Daily | hàng ngày |
-| 600 | Weekly | hàng tuần |
-| 601 | Refreshes in {x} | Làm mới sau {x} |
-| 602 | Claim | Yêu cầu |
-| 603 | Claimed | Đã xác nhận quyền sở hữu |
-| 604 | In progress | Đang tiến hành |
-| 605 | Swap | Hoán đổi |
-| 611 | New title: {x} | Tiêu đề mới: {x} |
-| 614 | Legendaries defeated {x} / {x} | Huyền thoại đã đánh bại {x} / {x} |
-| 615 | · defeated! | · bị đánh bại! |
-| 617 | Your 3 favorite Pokémon | 3 Pokémon yêu thích của bạn |
-| 618 | Choose favorite {x} | Chọn yêu thích {x} |
-| 619 | Title | Tiêu đề |
-| 620 | Title: {x} | Tiêu đề: {x} |
-| 621 | (no title) | (không có tiêu đề) |
-| 626 | No favorites yet. | Chưa có mục yêu thích nào. |
-| 627 | No medals yet. | Chưa có huy chương. |
-| 629 | Best time | Kỷ lục thời gian |
-| 630 | In a group | Trong một nhóm |
-| 631 | Legendaries | Huyền thoại |
-| 632 | Close | Đóng |
-| 633 | Defeat {x} Pokémon | Đánh bại {x} Pokémon |
-| 634 | Defeat {x} {x}-type Pokémon | Đánh bại Pokémon loại {x} {x} |
-| 635 | Defeat {x} bosses | Đánh bại {x} tên trùm |
-| 636 | Defeat a boss | Đánh bại một Trùm |
-| 637 | Survive {x} minutes in a run | Sống sót {x} phút sau một trận đấu |
-| 640 | Collect {x} coins in your runs | Thu thập {x} xu trong các trận đấu của bạn |
-| 641 | Open a locked chest | Mở một chiếc rương bị khóa |
-| 642 | Open {x} locked chests | Mở {x} rương bị khóa |
-| 643 | Win a rift battle | Giành chiến thắng trong trận chiến rạn nứt |
-| 644 | Win {x} rift battles | Giành chiến thắng {x} trận chiến rạn nứt |
-| 645 | Evolve a move | Tiến hóa 1 chiêu thức |
-| 646 | Evolve {x} moves | Tiến hóa {x} chiêu thức |
-| 647 | Find a held item | Tìm một vật phẩm được giữ |
-| 650 | Survival | Sinh tồn |
-| 651 | Combat | chiến đấu |
-| 652 | Rifts | Rạn nứt |
-| 655 | Small team | Đội nhỏ |
-| 656 | Collector | Người sưu tầm |
-| 657 | Encyclopedia | Bách khoa toàn thư |
-| 658 | Pokémon Professor | Giáo sư Pokémon |
-| 659 | Pokémon Master | Bậc thầy Pokémon |
-| 660 | Antiquarian | Đồ cổ |
-| 661 | Own 1 Pokémon. | Sở hữu 1 Pokémon. |
-| 662 | Own 10 Pokémon. | Sở hữu 10 Pokémon. |
-| 663 | Own 50 Pokémon. | Sở hữu 50 Pokémon. |
-| 664 | Own 100 Pokémon. | Sở hữu 100 Pokémon. |
-| 665 | Own 250 Pokémon. | Sở hữu 250 Pokémon. |
-| 666 | Own 500 Pokémon. | Sở hữu 500 Pokémon. |
-| 667 | Own all {x} Pokémon in the game. | Sở hữu tất cả {x} Pokémon trong trò chơi. |
-| 668 | Own every Pokémon in the game. | Sở hữu mọi Pokémon trong trò chơi. |
-| 669 | Something shines | Một cái gì đó tỏa sáng |
-| 670 | An eye for shine | Một con mắt để tỏa sáng |
-| 671 | Shiny hunter | Thợ săn sáng bóng |
-| 672 | Get 1 shiny. | Nhận 1 cái sáng bóng. |
-| 673 | Get 5 shinies. | Nhận 5 bóng. |
-| 674 | Get 20 shinies. | Nhận 20 shinies. |
-| 675 | Warming up | Khởi động |
-| 676 | Survivor | Người sống sót |
-| 677 | Tough | Khó khăn |
-| 678 | Hard to beat | Khó đánh bại |
-| 679 | Unstoppable | Không thể ngăn cản |
-| 680 | Survive 5 minutes. | Sống sót sau 5 phút. |
-| 681 | Survive 10 minutes. | Sống sót sau 10 phút. |
-| 682 | Survive 15 minutes. | Sống sót sau 15 phút. |
-| 683 | Survive 20 minutes. | Sống sót sau 20 phút. |
-| 684 | Growing up | lớn lên |
-| 685 | Veteran | Cựu chiến binh |
-| 690 | First battles | Trận chiến đầu tiên |
-| 691 | Brave | dũng cảm |
-| 692 | Legend | Truyền thuyết |
-| 693 | Living legend | Huyền thoại sống |
-| 694 | Defeat 1,000 Pokémon. | Đánh bại 1.000 Pokémon. |
-| 695 | Defeat 10,000 Pokémon. | Đánh bại 10.000 Pokémon. |
-| 696 | Defeat 100,000 Pokémon. | Đánh bại 100.000 Pokémon. |
-| 697 | Defeat a boss. | Đánh bại một Trùm. |
-| 698 | Defeat 25 bosses. | Đánh bại 25 tên trùm. |
-| 699 | Defeat 100 bosses. | Đánh bại 100 tên trùm. |
-| 700 | Boss hunter | Thợ săn trùm |
-| 701 | Giant slayer | Kẻ giết người khổng lồ |
-| 702 | Terror of bosses | Khủng bố của các Trùm |
-| 703 | The other side | Phía bên kia |
-| 704 | Rift jumper | Nhảy rạn nứt |
-| 705 | Rift traveler | Lữ khách rạn nứt |
-| 706 | Explorer | Nhà thám hiểm |
-| 708 | Win 10 rift battles. | Chiến thắng 10 trận chiến rạn nứt. |
-| 710 | Legend hunter | Thợ săn huyền thoại |
-| 711 | Myth tamer | Người thuần hóa huyền thoại |
-| 712 | Defeat 10 different legendaries. | Đánh bại 10 huyền thoại khác nhau. |
-| 713 | Defeat 30 different legendaries. | Đánh bại 30 huyền thoại khác nhau. |
-| 714 | Defeat all {x} legendaries. | Đánh bại tất cả {x} huyền thoại. |
-| 715 | Defeat every legendary. | Đánh bại mọi huyền thoại. |
-| 716 | Defeat {x} | Đánh bại {x} |
-| 717 | Defeat {x} in a rift. | Đánh bại {x} trong một khe nứt. |
-| 720 | Move master | Bậc thầy chiêu thức |
-| 721 | Evolve a move. | Tiến hóa 1 chiêu thức. |
-| 722 | Evolve 25 moves. | Tiến hóa 25 chiêu thức. |
-| 725 | Item collector | Người sưu tầm vật phẩm |
-| 727 | Find 5 different items. | Tìm 5 vật phẩm khác nhau. |
-| 728 | Find all 11 items. | Tìm tất cả 11 mục. |
-| 729 | Reliable | đáng tin cậy |
-| 730 | Steady | Ổn định |
-| 731 | Tireless | không mệt mỏi |
-| 735 | In good company | Ở công ty tốt |
-| 739 | Loyal partner | Đối tác trung thành |
-| 741 | Lucky | May mắn |
-| 742 | Slot machine | Máy đánh bạc |
-| 744 | Brilliant | Rực rỡ |
-| 745 | Choose your nickname | Chọn biệt danh của bạn |
-| 746 | Save nickname | Lưu biệt hiệu |
-| 747 | Not now | Không phải bây giờ |
-| 749 | Your nickname: | Biệt danh của bạn: |
-| 751 | Your nickname is {x} | Biệt danh của bạn là {x} |
-| 756 | Request sent | Đã gửi yêu cầu |
-| 757 | Offline | Ngoại tuyến |
-| 759 | Online | trực tuyến |
-| 760 | Seen {x} min ago | Đã xem {x} phút trước |
-| 761 | Seen {x} h ago | Đã thấy {x} giờ trước |
-| 762 | Seen {x} days ago | Đã thấy {x} ngày trước |
-| 763 | {x} min ago | {x} phút trước |
-| 764 | {x} h ago | {x} giờ trước |
-| 765 | {x} days ago | {x} ngày trước |
-| 766 | Seen | Đã xem |
-| 767 | Accept | Chấp nhận |
-| 768 | Decline | Từ chối |
-| 769 | Remove | Xóa |
-| 770 | Invite | Mời |
-| 774 | Cancel | Hủy |
-| 777 | Choose your nickname first. | Chọn biệt hiệu của bạn trước tiên. |
-| 780 | That's you. | Đó là bạn. |
-| 782 | You already sent them a request. | Bạn đã gửi cho họ một yêu cầu. |
-| 783 | Request sent to {x} | Đã gửi lời mời tới {x} |
-| 785 | There's no request. | Không có yêu cầu. |
-| 788 | Couldn't save the nickname ({x}). | Không thể lưu biệt hiệu ({x}). |
-| 789 | Couldn't send it ({x}). | Không thể gửi nó ({x}). |
-| 790 | Couldn't accept it ({x}). | Không thể chấp nhận được ({x}). |
-| 791 | Couldn't remove it ({x}). | Không thể xóa nó ({x}). |
-| 792 | Couldn't send the invite ({x}). | Không thể gửi lời mời ({x}). |
-| 794 | Menu | Menu |
-| 797 | Start game | Bắt đầu trận đấu |
-| 798 | Start game ({x}) | Bắt đầu trận đấu ({x}) |
-| 800 | Free | Còn trống |
-| 801 | You | Bạn |
-| 802 | Connected | Đã kết nối |
-| 803 | Connected (via server) | Đã kết nối (qua máy chủ) |
-| 804 | Connecting… | Đang kết nối… |
-| 813 | Invite sent to {x} | Lời mời đã được gửi tới {x} |
-| 824 | Join | Tham gia |
-| 825 | No, thanks | Không, cảm ơn |
-| 835 | Filter by Pokémon (all-time) | Lọc theo Pokémon (mọi lúc) |
-| 836 | Clear filter | Xóa bộ lọc |
-| 837 | {x} Solo | {x} Đơn độc |
-| 838 | {x} Group | {x} Nhóm |
-| 839 | Group | Nhóm |
-| 849 | You don't have a record {x} {x} yet. | Bạn chưa có bản ghi {x} {x}. |
-| 850 | today | hôm nay |
-| 851 | this week | tuần này |
-| 852 | this month | tháng này |
-| 853 | this year | năm nay |
-| 854 | of all time | mọi thời đại |
-| 855 | solo | một mình |
-| 856 | in a group | trong một nhóm |
-| 857 | Lv. {x} · {x} defeated | Lv. {x} · {x} bị đánh bại |
-| 859 | of the week | trong tuần |
-| 860 | of the month | của tháng |
-| 861 | of the year | của năm |
-| 862 | all-time | mọi lúc |
-| 867 | About | Giới thiệu |
-| 870 | Mute all | Tắt toàn bộ âm thanh |
-| 871 | Unmute | Bật âm thanh |
-| 872 | Quality | Chất lượng |
-| 873 | Auto | Tự động |
-| 874 | High | Cao |
-| 875 | Medium | Trung bình |
-| 876 | Low | Thấp |
-| 880 | high | cao |
-| 881 | medium | trung bình |
-| 882 | low | thấp |
-| 884 | Damage numbers | Số thiệt hại |
-| 886 | Less shaking and flashing | Ít rung lắc và nhấp nháy |
-| 888 | Show FPS | Hiện FPS |
-| 890 | Fullscreen | Toàn màn hình |
-| 891 | Without browser bars. | Không có thanh trình duyệt. |
-| 892 | Turn on | Bật |
-| 893 | Yes | Có |
-| 894 | No | Không |
-| 895 | Language | Ngôn ngữ |
-| 896 | The game reloads when you change it. | Trò chơi sẽ tải lại khi bạn thay đổi nó. |
-| 897 | On mobile or tablet | Trên thiết bị di động hoặc máy tính bảng |
-| 898 | On PC | Trên PC |
-| 900 | How far you need to drag your finger. | Bạn cần kéo ngón tay của mình bao xa. |
-| 901 | Small | nhỏ |
-| 902 | Normal | Normal |
-| 903 | Large | lớn |
-| 904 | or arrow keys | hoặc phím mũi tên |
-| 905 | move | di chuyển |
-| 906 | or click its icon | hoặc nhấp vào biểu tượng của nó |
-| 907 | choose move | chọn chiêu thức |
-| 908 | previous / next move | chiêu trước / chiêu kế |
-| 911 | Nickname | Biệt danh |
-| 912 | It's unique and can't be changed. | Nó là duy nhất và không thể thay đổi. |
-| 914 | Save | Lưu |
-| 917 | Google | Google |
-| 924 | guest | khách |
-| 925 | Controller connected | Đã kết nối tay cầm |
-| 926 | With a controller | Dùng tay cầm |
-| 927 | Use controller | Dùng tay cầm |
-| 928 | Controller connected: | Đã kết nối tay cầm: |
-| 929 | Vibration | Rung |
-| 933 | Left stick | Thanh trái |
-| 934 | D-pad | D-pad |
-| 935 | Right stick | Thanh bên phải |
-| 936 | move · choose in menus | di chuyển · chọn trong menu |
-| 938 | back / close | quay lại / đóng |
-| 940 | scroll lists | danh sách cuộn |
-| 942 | Search by name or number | Tìm kiếm theo tên hoặc số |
-| 943 | Clear | Xóa |
-| 944 | All | Tất cả |
-| 945 | Favorites | Yêu thích |
-| 946 | Sort: | Sắp xếp: |
-| 947 | No. | Không. |
-| 948 | Rarity | Độ hiếm |
-| 949 | Recently caught | Bị bắt gần đây |
-| 951 | All types | Tất cả các loại |
-| 952 | Favorite | yêu thích |
-| 953 | Mark as favorite | Đánh dấu là yêu thích |
-| 954 | None with these filters. | Không có những bộ lọc này. |
-| 955 | {x} Pokémon | {x} Pokémon |
-| 956 | 1 Pokémon | 1 Pokémon |
-| 957 | Physical | Vật lý |
-| 958 | Special | Đặc biệt |
-| 959 | Sp. Atk | Đặc công |
-| 960 | Defense | Phòng thủ |
-| 961 | Sp. Def | Đặc thủ |
-| 962 | Hits harder with | Đánh mạnh hơn với |
-| 963 | special moves | chiêu thức đặc biệt |
-| 964 | physical moves | chiêu thức vật lý |
-| 967 | Your moves | Chiêu thức của bạn |
-| 968 | Damage | Sát thương |
-| 969 | Per second | Mỗi giây |
-| 970 | Your stats | Số liệu thống kê của bạn |
-| 971 | Critical | Chí mạng |
-| 972 | Damage reduction | Giảm sát thương |
-| 973 | Cooldown | Hồi chiêu |
-| 974 | Regeneration | tái sinh |
-| 975 | Item and cards | Vật phẩm và thẻ |
-| 976 | No item. | Không có mục nào. |
-| 978 | {x} physical | {x} thể chất |
-| 979 | {x} special | {x} đặc biệt |
-| 980 | Hyper Beam | Hyper Beam |
-| 981 | Rapid Spin | Rapid Spin |
-| 982 | Flame Charge | Flame Charge |
-| 983 | Whirlpool | Whirlpool |
-| 984 | Seed Bomb | Seed Bomb |
-| 985 | Energy Ball | Energy Ball |
-| 986 | Solar Beam | Solar Beam |
-| 987 | Thunder Wave | Thunder Wave |
-| 988 | Electro Ball | Electro Ball |
-| 989 | Extrasensory | Extrasensory |
-| 990 | Mist Ball | Mist Ball |
-| 991 | Acid Spray | Acid Spray |
-| 992 | Sand Tomb | Sand Tomb |
-| 993 | Magnitude | Magnitude |
-| 994 | Whirlwind | Whirlwind |
-| 995 | Air Slash | Air Slash |
-| 996 | Signal Beam | Signal Beam |
-| 997 | U-turn | U-turn |
-| 998 | Rock Tomb | Rock Tomb |
-| 999 | Ancient Power | Ancient Power |
-| 1000 | Power Gem | Power Gem |
-| 1001 | Ice Shard | Ice Shard |
-| 1002 | Freeze-Dry | Freeze-Dry |
-| 1003 | Rolling Kick | Rolling Kick |
-| 1004 | Vacuum Wave | Vacuum Wave |
-| 1005 | Dynamic Punch | Dynamic Punch |
-| 1006 | Shadow Sneak | Shadow Sneak |
-| 1007 | Ominous Wind | Ominous Wind |
-| 1008 | Dragon Breath | Dragon Breath |
-| 1009 | Dragon Claw | Dragon Claw |
-| 1010 | Outrage | Outrage |
-| 1011 | Draining Kiss | Draining Kiss |
-| 1013 | Disarming Voice | Disarming Voice |
-| 1014 | Mirror Shot | Mirror Shot |
-| 1015 | Gyro Ball | Gyro Ball |
-| 1016 | Sucker Punch | Sucker Punch |
-| 1017 | Night Slash | Night Slash |
-| 1018 | Prismatic Laser | Laser lăng trụ |
-| 1019 | Tri Attack | Tri tấn công |
-| 1020 | Heat Crash | Sự cố nhiệt |
-| 1021 | Brine | nước muối |
-| 1022 | Wood Hammer | Búa gỗ |
-| 1023 | Solar Blade | Lưỡi năng lượng mặt trời |
-| 1024 | Volt Tackle | Vôn giải quyết |
-| 1025 | Spark | tia lửa |
-| 1026 | Psywave | Sóng tâm lý |
-| 1027 | Luster Purge | Thanh lọc bóng |
-| 1028 | Sludge Wave | Sóng bùn |
-| 1029 | High Horsepower | Mã lực cao |
-| 1030 | Drill Run | Chạy khoan |
-| 1031 | Hurricane | Bão |
-| 1032 | Sky Attack | Tấn công bầu trời |
-| 1033 | Megahorn | Megahorn |
-| 1034 | Leech Life | Cuộc sống đỉa |
-| 1035 | Head Smash | đập đầu |
-| 1036 | Diamond Storm | Cơn bão kim cương |
-| 1037 | Meteor Beam | Chùm sao băng |
-| 1038 | Icicle Spear | Ngọn giáo băng |
-| 1039 | Sheer Cold | Lạnh lùng |
-| 1040 | High Jump Kick | Cú nhảy cao |
-| 1041 | Power-Up Punch | Cú đấm tăng sức mạnh |
-| 1042 | Mega Punch | cú đấm lớn |
-| 1043 | Shadow Claw | móng vuốt bóng tối |
-| 1044 | Shadow Force | Lực lượng bóng tối |
-| 1045 | Dragon Pulse | Xung rồng |
-| 1046 | Dragon Rush | Cơn sốt rồng |
-| 1047 | Dragon Darts | phi tiêu rồng |
-| 1048 | Moonlight | ánh trăng |
-| 1049 | Spirit Break | Phá vỡ tinh thần |
-| 1050 | Charm | Sự quyến rũ |
-| 1051 | Steel Beam | Dầm thép |
-| 1052 | Heavy Slam | Cuộc va chạm nặng nề |
-| 1054 | Darkest Lariat | Lariat đen tối nhất |
-| 1084 | A dragon claw swipe in an arc. | Vuốt rồng theo hình vòng cung. |
-| 1093 | Charges faster and -20% cooldown | Sạc nhanh hơn và -20% thời gian hồi chiêu |
-| 1094 | +25% radius | + bán kính 25% |
-| 1095 | +1 spin | +1 vòng quay |
-| 1096 | -25% cooldown and +30% damage | -25% hồi chiêu và +30% sát thương |
-| 1098 | +1 bounce | +1 lần trả lại |
-| 1099 | +1 projectile and +1 bounce | +1 đường đạn và +1 độ nảy |
-| 1100 | +1 projectile and +40% damage | +1 đạn và +40% sát thương |
-| 1101 | +50% stun | +50% choáng |
-| 1102 | +50% push and +40% damage | +50% đẩy và +40% sát thương |
-| 1103 | +2 waves | +2 sóng |
-| 1104 | +25% size | kích thước +25% |
-| 1105 | -25% cooldown and +2 waves | -25% hồi chiêu và +2 đợt |
-| 1109 | ×1.8 damage, +1 spin and more radius | ×1,8 sát thương, +1 vòng quay và bán kính nhiều hơn |
-| 1112 | ×1.8 damage, more radius and stronger push | ×1.8 sát thương, bán kính lớn hơn và lực đẩy mạnh hơn |
-| 1114 | Starting move | Chiêu thức khởi đầu |
-| 1116 | Choose: {x} | Chọn: {x} |
-| 1118 | (default) | (mặc định) |
-| 1119 | {x} will start with {x} | {x} sẽ bắt đầu với {x} |
-| 1120 | Second starting move | Chiêu thức khởi đầu thứ hai |
-| 1123 | {x} will also start with {x} | {x} cũng sẽ bắt đầu với {x} |
-| 1124 | The second move will be random | Chiêu thức thứ hai sẽ chọn ngẫu nhiên |
-| 1125 | Random | Ngẫu nhiên |
-| 1132 | Accessibility | Khả năng tiếp cận |
-| 1133 | Aiming | Nhắm mục tiêu |
-| 1134 | Manual aim | Mục tiêu thủ công |
-| 1145 | Saving… | Đang lưu… |
-| 1147 | Offline: it will upload when you're back | Ngoại tuyến: nó sẽ tải lên khi bạn quay lại |
-| 1148 | Saved only in this browser | Chỉ được lưu trong trình duyệt này |
-| 1149 | Guest: not saved | Khách: chưa được lưu |
-| 1151 | Reroll ( | Quay lại ( |
-| 1155 | Delete forever | Xóa vĩnh viễn |
-| 1160 | Fan game | trò chơi quạt |
-| 1161 | free and non-profit | miễn phí và phi lợi nhuận |
-| 1164 | Credits | Tín dụng |
-| 1165 | Sprites: | Yêu tinh: |
-| 1167 | Pokémon data: | Dữ liệu Pokémon: |
-| 1170 | Font: | Phông chữ: |
-| 1171 | Guide & FAQ | Hướng dẫn & Câu hỏi thường gặp |
-| 1172 | Pokédex | Pokédex |
-| 1173 | Contact | Liên hệ |
-| 1174 | Code (GitHub) | Mã (GitHub) |
-| 1175 | Rotate your phone | Xoay điện thoại của bạn |
-| 1178 | Reload | Tải lại |
-| 1179 | Fan project | Dự án quạt |
-| 1180 | is a game made by fans, | là một trò chơi do người hâm mộ tạo ra, |
-| 1183 | Third-party content | Nội dung của bên thứ ba |
-| 1184 | Sprites from | Sprites từ |
-| 1187 | Contact and content removal | Xóa liên hệ và nội dung |
-| 1189 | Source code: | Mã nguồn: |
-| 1190 | Privacy | Quyền riêng tư |
-| 1200 | Game guide | Hướng dẫn trò chơi |
-| 1201 | Support | Hỗ trợ |
-| 1202 | Support the project | Hỗ trợ dự án |
-| 1203 | Donate on Ko-fi | Đóng góp trên Ko-fi |
-| 1204 | More info | Thêm thông tin |
-| 1205 | PokéSurvivor is and will stay | PokéSurvivor đang và sẽ ở lại |
-| 1206 | free | miễn phí |
-| 1208 | voluntary donation | quyên góp tự nguyện |
-| 1209 | : all the money goes to the | : tất cả số tiền sẽ được chuyển đến |
-| 1210 | servers and the domain | máy chủ và miền |
-| 1211 | , nothing else. | , không có gì khác. |
-| 1213 | What it costs to keep it running | Chi phí để duy trì hoạt động là bao nhiêu |
-| 1216 | Domain pokesurvivor.com | Tên miền pokesurvivor.com |
-| 1217 | ≈€12 per year | ≈€12 mỗi năm |
-| 1222 | Partner | Bạn đồng hành |
-| 1223 | tickets and | vé và |
-| 1224 | directly | trực tiếp |
-| 1225 | You have | bạn có |
-| 1226 | Moves it can learn | Chiêu thức có thể học |
-| 1228 | Type: Null | Type: Null |
-| 1232 | RIFT · {x} m · {x} s | VẾT NỨT · {x} m · {x} s |
-| 1233 | RIFT · {x} s | VẾT NỨT · {x} s |
-| 1235 | Press to start | Nhấn để bắt đầu |
-| 1237 | Bonemerang | Bonemerang |
-| 1238 | Psycho Cut | Psycho Cut |
-| 1239 | Spikes | Spikes |
-| 1240 | Toxic Spikes | Toxic Spikes |
-| 1241 | Hail | Hail |
-| 1242 | Meteor Mash | Meteor Mash |
-| 1243 | Will-O-Wisp | Will-O-Wisp |
-| 1244 | Substitute | Substitute |
-| 1245 | Aerial Ace | Aerial Ace |
-| 1246 | Flame Wheel | Flame Wheel |
-| 1247 | Bubble Beam | Bubble Beam |
-| 1248 | Hex | Hex |
-| 1249 | Bone Rush | Cơn sốt xương |
-| 1250 | Psychic Fangs | Răng nanh tâm linh |
-| 1251 | Fissure | vết nứt |
-| 1252 | Gunk Shot | Bắn súng |
-| 1253 | Avalanche | trận tuyết lở |
-| 1254 | Magnet Bomb | Bom nam châm |
-| 1255 | Inferno | địa ngục |
-| 1256 | Double Team | Đội đôi |
-| 1257 | Acrobatics | Nhào lộn |
-| 1258 | Flare Blitz | Ngọn lửa chớp nhoáng |
-| 1259 | Aqua Tail | Đuôi Thủy |
-| 1260 | Poltergeist | yêu tinh |
-| 1280 | +1 boomerang | +1 boomerang |
-| 1281 | +30% range | + phạm vi 30% |
-| 1282 | +1 boomerang and +40% damage | +1 boomerang và +40% sát thương |
-| 1283 | +2 jumps | +2 lần nhảy |
-| 1284 | +2 jumps and +40% damage | +2 lần nhảy và +40% sát thương |
-| 1285 | +1 mine | +1 của tôi |
-| 1286 | +30% blast radius | + bán kính nổ 30% |
-| 1287 | +1 mine and -25% cooldown | +1 mìn và -25% thời gian hồi chiêu |
-| 1288 | +1 meteor | +1 sao băng |
-| 1289 | +2 meteors and -20% cooldown | +2 sao băng và -20% thời gian hồi chiêu |
-| 1290 | Fires 35% faster | Bắn nhanh hơn 35% |
-| 1291 | +1 at a time | +1 cùng một lúc |
-| 1292 | +50% duration and +40% damage | +50% thời gian và +40% sát thương |
-| 1293 | +30% distance | +30% khoảng cách |
-| 1294 | +60% damage and wider | +60% sát thương và rộng hơn |
-| 1295 | +40% duration | +40% thời lượng |
-| 1296 | Pools 30% bigger | Bể bơi lớn hơn 30% |
-| 1297 | +50% damage and +30% radius | +50% sát thương và +30% bán kính |
-| 1298 | +3 shots | +3 lần chụp |
-| 1299 | +3 shots and +1 pierce | +3 phát bắn và +1 xuyên thủng |
-| 1301 | ×1.7 damage and +3 jumps | ×1,7 sát thương và +3 lần nhảy |
-| 1303 | ×1.7 damage, +2 meteors and more radius | ×1,7 sát thương, +2 thiên thạch và bán kính nhiều hơn |
-| 1320 | GOLDEN HOUR · {x} s | GIỜ VÀNG · {x} s |
-| 1322 | Marker · {x} m | Điểm đánh dấu · {x} m |
-| 1324 | Support on Ko-fi | Hỗ trợ trên Ko-fi |
-| 1330 | What's new | Có gì mới |
-| 1336 | Move shortcuts | Di chuyển phím tắt |
-| 1338 | Critical Hit | đòn chí mạng |
-| 1339 | +3% critical chance (x1.5 damage) | +3% cơ hội chí mạng (x1,5 sát thương) |
-| 1340 | Card reroll | Nạp lại thẻ |
-| 1342 | Ban | Khóa chiêu |
-| 1344 | Choose ({x}) | Chọn ({x}) |
-| 1349 | THE JUDGMENT | PHÁN XÉT |
-| 1350 | OF ARCEUS | CỦA ARCEUS |
-| 1351 | Time has run out… | Thời gian đã hết… |
-| 1354 | Tap the screen to skip | Chạm vào màn hình để bỏ qua |
-| 1355 | Press Space to skip | Nhấn Space để bỏ qua |
-| 1358 | JUDGMENT · {x} · BOSSES {x} | PHÁN QUYẾT · {x} · Sếp {x} |
-| 1359 | Against Arceus | Chống lại Arceus |
-| 1360 | {x} · {x} legendaries | {x} · {x} huyền thoại |
-| 1361 | {x} · {x} legendary | {x} · {x} huyền thoại |
-| 1362 | The Judgment | Sự phán xét |
-| 1364 | Before the Creator | Trước Đấng Tạo Hóa |
-| 1365 | Survive 1 minute against Arceus. | Sống sót sau 1 phút chống lại Arceus. |
-| 1366 | Divine challenge | Thử thách thần thánh |
-| 1368 | Judged | bị phán xét |
-| 1369 | Chosen of Arceus | Người được chọn của Arceus |
-| 1372 | Link my Gmail | Liên kết Gmail của tôi |
-| 1373 | Don't ask again | Đừng hỏi lại |
-| 1377 | Report suspicious record | Báo cáo hồ sơ đáng ngờ |
-| 1378 | You already reported it | Bạn đã báo cáo rồi |
-| 1379 | You already reported this record | Bạn đã báo cáo hồ sơ này |
-| 1381 | Thanks: we will review it | Cảm ơn: chúng tôi sẽ xem xét nó |
-| 1383 | Type | loại |
-| 1387 | Got it | Hiểu rồi |
-| 1390 | You do not have a record yet. | Bạn chưa có bản ghi nào. |
-| 1404 | +25% damage with dashes. | +25% sát thương với dấu gạch ngang. |
-| 1405 | +25% damage with punches. | +25% sát thương khi đấm. |
-| 1406 | +30% damage with bites. | +30% sát thương khi bị cắn. |
-| 1408 | +30% damage with slicing moves. | +30% sát thương khi di chuyển cắt lát. |
-| 1419 | +50% speed in rain. | +50% tốc độ khi trời mưa. |
-| 1420 | +50% speed in sun. | +50% tốc độ dưới ánh nắng mặt trời. |
-| 1422 | +50% speed in snow. | +50% tốc độ trong tuyết. |
-| 1423 | +8% speed. | +8% tốc độ. |
-| 1433 | Takes half damage from Fire. | Nhận một nửa sát thương từ Lửa. |
-| 1440 | Takes 8% less damage. | Nhận ít sát thương hơn 8%. |
-| 1468 | Healing heals it 40% more. | Chữa bệnh chữa lành nó nhiều hơn 40%. |
-| 1469 | Healing heals it 30% more. | Chữa bệnh chữa lành nó nhiều hơn 30%. |
-| 1482 | +12% damage to bosses. | +12% sát thương lên trùm. |
-| 1487 | Without an item it is 15% faster. | Không có vật phẩm thì nhanh hơn 15%. |
-| 1496 | Without an item, +12% damage. | Không có vật phẩm, +12% sát thương. |
-| 1498 | The other way round: when slowed, it goes faster. | Ngược lại: khi chậm lại, nó sẽ đi nhanh hơn. |
-| 1502 | Takes 6% less damage. | Nhận ít hơn 6% sát thương. |
-| 1513 | In sun, +20% damage. | Dưới ánh nắng mặt trời, +20% sát thương. |
-| 1516 | Mints, Capsules and TMs | Bạc hà, viên nang và TM |
-| 1518 | Buy | Mua |
-| 1520 | Items | Mặt hàng |
-| 1521 | Today’s TMs | TM ngày nay |
-| 1523 | TM | TM |
-| 1524 | you have {x} | bạn có {x} |
-| 1525 | {x} can learn it | {x} có thể học nó |
-| 1526 | {x} already knows it | {x} đã biết rồi |
-| 1533 | That TM is no longer for sale. | TM đó không còn để bán nữa. |
-| 1534 | You do not have enough PokéCoins. | Bạn không có đủ PokéCoin. |
-| 1535 | Mint | bạc hà |
-| 1543 | neutral | trung tính |
-| 1544 | hidden | ẩn giấu |
-| 1545 | It has not learned any yet | Nó vẫn chưa học được gì |
-| 1546 | Capsule | Viên nang |
-| 1547 | Hidden Capsule | Viên nang ẩn |
-| 1548 | Teach TM | Dạy TM |
-| 1560 | Empty | trống |
-| 1561 | {x} items · {x} TMs | {x} mục · {x} TM |
-| 1564 | Items: {x} · TMs: {x} | Mục: {x} · TM: {x} |
-| 1566 | Watching {x} | Đang xem {x} |
-| 1567 | switch | chuyển đổi |
-| 1568 | Shiny Charms | Bùa sáng bóng |
-| 1569 | Shiny Charm | Sự quyến rũ sáng bóng |
-| 1571 | {x} Shiny Charm | {x} Quyến rũ sáng bóng |
-| 1572 | 2% shiny in the {x} banner | 2% sáng bóng trong biểu ngữ {x} |
-| 1573 | Complete the {x} Pokédex | Hoàn thành {x} Pokédex |
-| 1577 | Shiny Charms: {x} | Bùa sáng bóng: {x} |
-| 1580 | Skip | Bỏ qua |
-| 1582 | Shiny: {x} | Sáng bóng: {x} |
-| 1595 | X to use it | X để sử dụng nó |
-| 1596 | tap it above your moves | chạm vào nó phía trên bước di chuyển của bạn |
-| 1597 | key {x} | phím {x} |
-| 1602 | Flame Plate | Tấm lửa |
-| 1603 | Splash Plate | tấm giật gân |
-| 1604 | Zap Plate | Tấm Zap |
-| 1606 | Icicle Plate | Tấm băng |
-| 1607 | Fist Plate | Tấm nắm tay |
-| 1608 | Toxic Plate | Tấm độc hại |
-| 1609 | Earth Plate | Tấm đất |
-| 1610 | Sky Plate | Tấm trời |
-| 1611 | Mind Plate | tấm tâm trí |
-| 1612 | Insect Plate | Tấm côn trùng |
-| 1613 | Stone Plate | Tấm đá |
-| 1614 | Spooky Plate | Tấm ma quái |
-| 1615 | Draco Plate | Tấm Draco |
-| 1616 | Dread Plate | Tấm kinh hoàng |
-| 1617 | Iron Plate | Tấm sắt |
-| 1618 | Pixie Plate | Đĩa tiên |
-| 1623 | DAMAGE TO ARCEUS · {x} | THIỆT HẠI CHO ARCEUS · {x} |
-| 1624 | Damage to Arceus | Thiệt hại cho Arceus |
-| 1625 | Time survived | Thời gian sống sót |
-| 1628 | You're not in the damage top 50 yet. | Bạn chưa nằm trong top 50 thiệt hại. |
-| 1631 | LIVE | TRỰC TIẾP |
-| 1632 | My YouTube channel | Kênh YouTube của tôi |
-| 1635 | Haunted Graveyard | nghĩa địa ma ám |
-| 1636 | Gloomy Forest | Khu rừng u ám |
-| 1637 | Witch Gengar | phù thủy |
-| 1638 | Witch Pikachu | Phù Thủy Pikachu |
-| 1639 | Witch Umbreon | Chiếc ô phù thủy |
-| 1642 | THE NIGHT | ĐÊM |
-| 1643 | OF GENGAR | CỦA GENGER |
-| 1646 | DAMAGE TO GENGAR · {x} | THIỆT HẠI CHO GENGAR · {x} |
-| 1649 | GENGAR · {x} m | GENGAR · {x} m |
-| 1650 | Against the great Gengar | Chống lại Gengar vĩ đại |
-| 1651 | Damage to Gengar | Thiệt hại cho Gengar |
-| 1653 | +1 candy | +1 kẹo |
-| 1654 | +{x} candy | +{x} kẹo |
-| 1656 | You already have this skin. | Bạn đã có làn da này rồi. |
-| 1657 | You don't have enough candy. | Bạn không có đủ kẹo. |
-| 1661 | You have {x} candy | Bạn có {x} kẹo |
-| 1662 | Witch hat and cape for {x}. | Mũ và áo choàng phù thủy dành cho {x}. |
-| 1665 | Bought | đã mua |
-| 1666 | Skin | da |
-| 1667 | No skin | Không có da |
-| 1668 | Put on | mặc vào |
-| 1669 | Take off | Cất cánh |
-| 1670 | Spooky Night | Đêm ma quái |
-| 1676 | Witch hat for {x}. | Mũ phù thủy dành cho {x}. |
-| 1677 | Candy: {x} | Kẹo: {x} |
-| 1679 | {x} d {x} | {x} d {x} |
-| 1684 | Choose a reward | Chọn phần thưởng |
-| 1685 | You can only hold one | Bạn chỉ có thể giữ một |
-| 1692 | PokéCoins | PokéCoins |
-| 1700 | Anchored | neo |
-| 1704 | Impulsive | bốc đồng |
-| 1705 | Cautious | Thận trọng |
-| 1706 | Loyal | trung thành |
-| 1707 | Patient | bệnh nhân |
-| 1708 | Sweet | ngọt ngào |
-| 1709 | Shy | nhút nhát |
-| 1710 | Mischievous | tinh nghịch |
-| 1711 | Serene | Thanh thản |
-| 1712 | Clever | Thông minh |
-| 1713 | Cheerful | vui vẻ |
-| 1714 | Tenacious | ngoan cường |
-| 1715 | Proud | tự hào |
-| 1716 | Loner | cô đơn |
-| 1717 | Calm | bình tĩnh |
-| 1718 | Chaotic | hỗn loạn |
-| 1790 | 38 new moves | 38 chiêu mới |
-| 1826 | Important: save your game | Quan trọng: lưu tiến trình của bạn |
-| 1827 | Important: save your game | Quan trọng: lưu tiến trình của bạn |
-| 1830 | Lv. {x} | Cấp {x} |
-| 1831 | coins | xu |
-| 1833 | tiradas | lượt quay |
 
-## 3. Vật phẩm & Trang bị (Items & Hold Items)
+## 4. Tên Trang bị mang theo (Hold Items) 🔒 [GIỮ NGUYÊN TIẾNG ANH - KHỎI DỊCH]
+
+> *Tên các trang bị chính thống (Leftovers, Choice Band, Focus Sash, Life Orb, Quick Claw, Assault Vest...) giữ nguyên tiếng Anh.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
-| 207 | Magnet | nam châm |
 | 231 | Leftovers | Leftovers |
 | 232 | Choice Band | Choice Band |
 | 233 | Quick Claw | Quick Claw |
 | 234 | Focus Sash | Focus Sash |
+| 235 | Shell Bell | Shell Bell |
 | 236 | Amulet Coin | Amulet Coin |
+| 237 | Lucky Egg | Lucky Egg |
 | 238 | Life Orb | Life Orb |
+| 239 | Choice Scarf | Choice Scarf |
+| 240 | Rocky Helmet | Rocky Helmet |
 | 241 | Assault Vest | Assault Vest |
-| 259 | Focus Sash! | Focus Sash! |
-| 1760 | At minute 35, Arceus breaks everyone's item (Focus Sash included). | Ở phút thứ 35, Arceus phá vỡ vật phẩm của mọi người (bao gồm cả Focus Sash). |
 
-## 4. Thẻ lên cấp & Tiến hóa (Level-Up Cards & Evolution)
+## 5. Mô tả Trang bị (Item Descriptions) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Mô tả tác dụng hồi phục máu, tăng sức tấn công, giảm hồi chiêu, giữ mạng 1 HP khi bị dồn sát thương...*
+
+| # | Tiếng Anh (EN) | Tiếng Việt (VI) |
+| :---: | :--- | :--- |
+| 242 | You recover 1.5% of your HP per second. | Bạn phục hồi 1,5% HP mỗi giây. |
+| 243 | +40% damage, but you can't switch moves. | +40% sát thương, nhưng bạn không thể chuyển chiêu. |
+| 244 | -20% cooldown on all your moves. | -20% thời gian hồi chiêu tất cả chiêu thức. |
+| 245 | A hit that would knock you out leaves you at 1 HP (every 60 s). | Đòn đánh gây KO sẽ giữ lại 1 HP cho bạn (mỗi 60 giây). |
+| 246 | You heal from the damage you deal. | Hồi phục HP dựa trên lượng sát thương gây ra. |
+| 247 | +50% PokéCoins at the end of the run. | +50% PokéCoins khi kết thúc trận đấu. |
+| 248 | +30% experience. | +30% kinh nghiệm. |
+| 249 | +30% damage, but each attack costs a little HP. | +30% sát thương, nhưng mỗi đòn tấn công tốn một ít HP. |
+| 250 | +35% speed. | +35% tốc độ. |
+| 251 | Foes that hit you in melee take damage. | Kẻ địch đánh bạn trong cận chiến sẽ nhận sát thương. |
+| 252 | +20% damage reduction. | + Giảm 20% sát thương. |
+| 253 | An item! | Một món đồ! |
+| 254 | You can only hold one · | Bạn chỉ có thể giữ một · |
+| 255 | Keep | Giữ |
+| 256 | Switch to | Chuyển sang |
+| 257 | You're holding {x}! | Bạn đang cầm {x}! |
+| 258 | You already hold {x} | Bạn đã giữ {x} |
+| 259 | Focus Sash! | Focus Sash! |
+
+## 6. Thẻ lên cấp & Tiến hóa (Level-Up Cards & Evolution) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Thông báo tiến hóa, học chiêu thức mới, tăng cấp sao, nâng cấp sát thương/phạm vi/tốc độ.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1023,7 +335,9 @@
 | 1804 | Swords Dance and Dragon Dance now raise only (physical) Attack, like in the games, and Nasty Plot arrives, raising Special Attack, learnable by any Pokémon. When leveling up, moves on your Pokémon’s strong side show up twice as often. | Swords Dance và Dragon Dance chỉ tăng Tấn công (vật lý), giống như trong game, và Nasty Plot mới xuất hiện giúp tăng Tấn công đặc biệt, có thể học được bởi mọi Pokémon. Khi lên cấp, các chiêu thức về mặt mạnh của Pokémon của bạn xuất hiện thường xuyên gấp đôi. |
 | 1811 | Level-up, bond and item cards can’t be picked for a moment after they appear (they look dimmed): pressing 1-4 or tapping to switch attacks mid-fight no longer picks a card by accident. | Không thể chọn thẻ thăng cấp, trái phiếu và vật phẩm trong giây lát sau khi chúng xuất hiện (chúng trông mờ đi): nhấn 1-4 hoặc nhấn để chuyển đòn tấn công giữa trận đấu không còn ngẫu nhiên chọn thẻ nữa. |
 
-## 5. Nâng cấp vĩnh viễn (Permanent Upgrades)
+## 7. Nâng cấp vĩnh viễn (Permanent Upgrades) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Các chỉ số nâng cấp chung cho nhân vật: Sinh lực, Sức mạnh, Tốc độ, May mắn, Trí tuệ...*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1039,7 +353,9 @@
 | 1127 | Buy Repertoire first | Mua tiết mục đầu tiên |
 | 1774 | New upgrade, Second starting move: with Repertoire, buy it once per Pokémon and then choose for free the second move you start with (or leave it random). | Nâng cấp mới, chiêu thức bắt đầu thứ hai: với Tiết mục, mua nó một lần cho mỗi Pokémon và sau đó chọn miễn phí chiêu thức thứ hai mà bạn bắt đầu (hoặc để ngẫu nhiên). |
 
-## 6. Bản đồ & Khu vực (Arenas & Maps)
+## 8. Bản đồ & Khu vực (Arenas & Maps) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Tên các đấu trường: Đồng cỏ Vĩnh cửu, Núi lửa Rực lửa, Rừng rậm Ngọc lục bảo, Động Pha lê...*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1054,7 +370,9 @@
 | 1605 | Meadow Plate | Tấm đồng cỏ |
 | 1634 | Pumpkin Patch | Miếng bí ngô |
 
-## 7. Cửa hàng Kecleon, Đặc tính & Bản tính (Kecleon Shop & Abilities)
+## 9. Cửa hàng Kecleon, Đặc tính & Bản tính (Kecleon Shop & Abilities) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Mua bán bạc hà thay đổi bản tính, viên nang đặc tính, và mô tả tác dụng của từng đặc tính Pokémon.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1081,16 +399,12 @@
 | 1755 | The Kecleon Shop and What's new windows no longer slide under the top bar: they now start below it, like the other windows. | Cửa sổ Kecleon Shop và What's new không còn trượt dưới thanh trên cùng nữa: giờ đây chúng bắt đầu ở bên dưới thanh đó, giống như các cửa sổ khác. |
 | 1773 | The big update: Kecleon Shop | Bản cập nhật lớn: Cửa hàng Kecleon |
 
-## 8. Quay Gacha & Ngọc thần bí (Gacha & Mystery Orbs)
+## 10. Quay Gacha & Ngọc thần bí (Gacha & Mystery Orbs) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Quay gacha x1, x10, x100, ngọc ru ngủ, ngọc hóa đá, ngọc hồi máu từ Dungeon.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
-| 82 | Aura Sphere | Aura Sphere |
-| 134 | An energy sphere that never misses. | Một quả cầu năng lượng không bao giờ trượt. |
-| 135 | A shadowy orb that pierces several foes. | Một quả cầu bóng tối xuyên qua nhiều kẻ thù. |
-| 182 | +1 orb | +1 quả cầu |
-| 185 | +1 orb and +55% damage | +1 quả cầu và +55% sát thương |
-| 198 | +2 orbs, ×1.7 damage and more radius | +2 quả cầu, ×1,7 sát thương và bán kính nhiều hơn |
 | 285 | you pull everything from afar | bạn kéo mọi thứ từ xa |
 | 405 | Gacha tickets | Vé Gacha |
 | 567 | Gacha | Gacha |
@@ -1135,11 +449,12 @@
 | 1792 | New ways to attack: shots that chase enemies or bounce between them, beams you charge up, spins that hit everything around you, shockwaves that travel along the ground, vortexes that pull enemies in, waves that push them away and zones that stun them. | Những cách tấn công mới: những phát bắn đuổi theo kẻ thù hoặc nảy giữa chúng, lao tới, xoay tròn đánh vào mọi thứ xung quanh bạn, sóng xung kích truyền dọc theo mặt đất, xoáy kéo kẻ thù vào, sóng đẩy chúng ra xa và vùng làm choáng chúng. |
 | 1832 | Pulls | Lượt quay |
 
-## 9. Tài khoản, Đăng nhập & Lưu trữ Đám mây (Account & Cloud Save)
+## 11. Tài khoản, Đăng nhập & Lưu Đám mây (Account & Cloud Save) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Đăng nhập, tạo tài khoản, đồng bộ đám mây tự động, thông báo lưu dữ liệu.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
-| 154 | A poisonous cloud around you that intoxicates. | Một đám mây độc xung quanh bạn làm bạn say mê. |
 | 277 | Each Pokémon has its own upgrades: they only count when you play with it. | Mỗi Pokémon đều có những nâng cấp riêng: chúng chỉ được tính khi bạn chơi với nó. |
 | 408 | Log in | Đăng nhập |
 | 409 | Sign up | Tạo tài khoản |
@@ -1192,14 +507,14 @@
 | 1818 | Judgment of Arceus: speed has a soft cap (anything above a certain point counts much less) and legendaries run almost as fast as you. After 5 minutes of Judgment, Arceus keeps speeding up, and after 7 its touch takes more and more HP, until it knocks you out in one hit around minute 40. | Phán quyết của Arceus: tốc độ có giới hạn mềm (bất cứ điều gì trên một điểm nhất định sẽ ít hơn nhiều) và các di sản chạy gần như nhanh như bạn. Sau 5 phút Phán quyết, Arceus tiếp tục tăng tốc và sau 7 phút, cú chạm của nó ngày càng tốn nhiều HP hơn, cho đến khi nó hạ gục bạn chỉ bằng một đòn vào khoảng phút 40. |
 | 1828 | <p>Due to saving issues, from now on the game saves to the cloud automatically <b>every 10 minutes</b>.</p><p>We added a <b class="gold">Save</b> button on the top right. Use it before closing the game or switching devices: <b>it is very important to avoid losing your progress</b>.</p> | <p>Do sự cố khi lưu, từ giờ tiến trình sẽ tự động lưu lên đám mây <b>mỗi 10 phút</b>.</p><p>Chúng tôi đã bổ sung nút <b class="gold">Lưu</b> ở góc trên bên phải. Hãy dùng trước khi đóng game hoặc đổi thiết bị: <b>rất quan trọng để không mất dữ liệu của bạn</b>.</p> |
 
-## 10. Cảnh báo trong trận & Sự kiện (In-Game Combat Alerts)
+## 12. Cảnh báo trong trận & Sự kiện (In-Game Combat Alerts) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Cảnh báo Boss xuất hiện, Pokémon Shiny xuất hiện, Đợt horda quái vật, Giờ vàng nhân đôi kinh nghiệm, Khe nứt huyền thoại...*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
 | 224 | Level | Cấp |
 | 225 | Level {x}! | Lên cấp {x}! |
-| 253 | An item! | Một món đồ! |
-| 257 | You're holding {x}! | Bạn đang cầm {x}! |
 | 279 | {x} power! {x} for {x} s | {x} sức mạnh! {x} trong {x} giây |
 | 286 | Sticky! | Dính! |
 | 322 | A wild {x} appeared! | {x} hoang dã đã xuất hiện! |
@@ -1265,7 +580,9 @@
 | 1647 | Gengar is going to break your items! | Gengar sẽ phá vỡ vật phẩm của bạn! |
 | 1648 | The great Gengar has dragged you into its Spooky Night! | Gengar vĩ đại đã kéo bạn vào Đêm ma quái của nó! |
 
-## 11. Tạm dừng & Kết thúc trận đấu (Pause & Game Over)
+## 13. Tạm dừng & Kết thúc trận đấu (Pause & Game Over) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Tạm dừng, Bỏ cuộc, Thống kê sát thương từng chiêu, DPS, tổng thời gian sống sót, tiền thưởng.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1281,7 +598,9 @@
 | 1153 | Paused: {x} are choosing… | Đã tạm dừng: {x} đang chọn… |
 | 1805 | Run summary in the pause screen: each move with its category, the damage it has dealt and its damage per second; your stats with everything you have raised; and your item and the upgrade cards you have. | Chạy tóm tắt trong màn hình tạm dừng: mỗi chiêu thức có loại, sát thương mà nó gây ra và sát thương mỗi giây; số liệu thống kê của bạn với mọi thứ bạn đã huy động được; và vật phẩm của bạn cũng như các thẻ nâng cấp mà bạn có. |
 
-## 12. Giao diện Menu chính (Main Menu & Navigation)
+## 14. Giao diện Menu chính (Main Menu & Navigation) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Các nút chức năng: Chơi, Pokémon, Bộ sưu tập, Nâng cấp, Cửa hàng, Túi đồ, Bảng xếp hạng, Cài đặt...*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1328,7 +647,9 @@
 | 1798 | The game can only be played on its official website, pokesurvivor.com: if another site embeds it in its own page (for example, to put ads around it), a notice appears with a button to go to the official one. | Trò chơi chỉ có thể được chơi trên trang web chính thức của nó, pokesurvivor.com: nếu một trang web khác nhúng nó vào trang riêng của nó (ví dụ: để đặt quảng cáo xung quanh nó), một thông báo sẽ xuất hiện kèm theo một nút để chuyển đến trang chính thức. |
 | 1815 | Big Pokémon (Onix, Gyarados, Wailord, Eternatus, the legendaries...) are now properly playable: they look a bit smaller, while still being among the biggest, and collide like a normal one, so they fit through every corridor and don’t take extra hits because of their size. | Pokémon lớn (Onix, Gyarados, Wailord, Eternatus, các huyền thoại...) hiện có thể chơi được: chúng trông nhỏ hơn một chút, trong khi vẫn thuộc loại lớn nhất và va chạm như một con bình thường, vì vậy chúng có thể đi qua mọi hành lang và không nhận thêm đòn đánh vì kích thước của chúng. |
 
-## 13. Nhiệm vụ, Hồ sơ & Thành tựu (Missions, Profile & Achievements)
+## 15. Nhiệm vụ, Hồ sơ & Thành tựu (Missions, Profile & Achievements) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Nhiệm vụ hàng ngày, nhiệm vụ tuần, huy hiệu, kỷ lục sống sót cao nhất của từng Pokémon.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1353,11 +674,12 @@
 | 734 | Complete 200 missions. | Hoàn thành 200 nhiệm vụ. |
 | 1732 | Public profile: your records and medals reach other players at most every 6 hours (it was every 2). You always see them right away. | Hồ sơ công khai: hồ sơ và huy chương của bạn đến tay những người chơi khác nhiều nhất là 6 giờ một lần (cứ sau 2 giờ). Bạn luôn nhìn thấy chúng ngay lập tức. |
 
-## 14. Bạn bè, Phòng chờ & Chơi nhóm Co-op (Friends & Multiplayer)
+## 16. Bạn bè, Phòng chờ & Co-op (Friends & Multiplayer) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Chủ phòng, Đã kết nối, Mời bạn bè, Bắt đầu trò chơi, thông báo đồng đội hồi sinh, chia sẻ EXP...*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
-| 140 | A ghostly lick that briefly paralyzes. | Một cú liếm ma quái làm tê liệt trong thời gian ngắn. |
 | 278 | (partner) | (bạn đồng hành) |
 | 297 | Ghost, Fairy and Psychic are boosted | Ghost, Fairy và Psychic được tăng cường |
 | 371 | You're down: a teammate can revive you | Bạn đã bị hạ: đồng đội có thể hồi sinh bạn |
@@ -1444,7 +766,9 @@
 | 1785 | Upgrades: after changing your partner, the upgrades screen now opens on the new one instead of the last one you had looked at. | Nâng cấp: sau khi thay đổi đối tác của bạn, màn hình nâng cấp hiện sẽ mở trên màn hình mới thay vì màn hình cuối cùng bạn đã xem. |
 | 1787 | Co-op: a guest's Hex now deals its extra damage to burned, poisoned or slowed enemies. | Co-op: Hex của khách giờ đây gây thêm sát thương lên kẻ địch bị đốt cháy, nhiễm độc hoặc làm chậm. |
 
-## 15. Bảng xếp hạng (Leaderboards & Rankings)
+## 17. Bảng xếp hạng (Leaderboards & Rankings) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Bảng xếp hạng ngày, tuần, tháng, năm, toàn thời gian, sát thương gây lên Arceus.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1484,11 +808,12 @@
 | 1825 | The leaderboards have been reset | Bảng xếp hạng (rankings) đã được làm mới |
 | 1829 | <p>We adjusted <b>Arceus Judgment</b>: running away with max speed and poison no longer lets you survive forever.</p><p>So everyone competes on equal footing, <b>all leaderboards start from zero</b> (today, week, month, year and all-time). Go for first place!</p> | <p>Chúng tôi đã điều chỉnh <b>Phán Quyết Của Arceus</b>: việc chạy trốn với tốc độ tối đa và dùng độc không còn giúp bạn sống sót mãi mãi.</p><p>Để mọi người cạnh tranh công bằng, <b>toàn bộ bảng xếp hạng (rankings) bắt đầu lại từ đầu</b> (ngày, tuần, tháng, năm và lịch sử). Cùng tranh ngôi đầu bảng nhé!</p> |
 
-## 16. Cài đặt, Đồ họa, Âm thanh & Điều khiển (Settings & Controls)
+## 18. Cài đặt, Đồ họa, Âm thanh & Điều khiển (Settings & Controls) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Âm lượng nhạc, hiệu ứng, tùy chỉnh tay cầm (gamepad), nhắm bắn thủ công, rung phản hồi...*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
-| 157 | A sound wave that spreads in every direction. | Một làn sóng âm thanh lan truyền theo mọi hướng. |
 | 336 | Put the attacks, the pause button and the joystick (fixed, if you like) anywhere on the screen. | Đặt các đòn tấn công, nút tạm dừng và cần điều khiển (cố định, nếu bạn muốn) ở bất cứ đâu trên màn hình. |
 | 339 | Joystick | Cần điều khiển |
 | 433 | This domain is not authorized in Firebase (Authentication > Settings > Authorized domains). | Miền này không được ủy quyền trong Firebase (Xác thực> Cài đặt> Miền được ủy quyền). |
@@ -1512,7 +837,9 @@
 | 1809 | New Accessibility tab in Settings with “Manual aim”: your attacks go towards the mouse or wherever you push the controller’s right stick, instead of the nearest enemy. It is off by default. | Tab Trợ năng mới trong Cài đặt với “Nhắm thủ công”: các đòn tấn công của bạn hướng tới chuột hoặc bất cứ nơi nào bạn nhấn cần phải của tay cầm, thay vì kẻ thù gần nhất. Nó được tắt theo mặc định. |
 | 1812 | With a controller you can now select the Pokémon you don’t have yet in the collection, and on mobile the Settings tabs fit in one row that scrolls sideways. | Với tay cầm, giờ đây bạn có thể chọn Pokémon mà bạn chưa có trong bộ sưu tập và trên thiết bị di động, các tab Cài đặt nằm gọn trong một hàng cuộn sang một bên. |
 
-## 17. Sự kiện Halloween (Halloween Event)
+## 19. Sự kiện Halloween (Halloween Event) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Khu vườn bí ngô, đếm ngược sự kiện, quái vật bí ngô ma quái.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1533,7 +860,9 @@
 | 1725 | Halloween, one more day | Halloween, một ngày nữa |
 | 1726 | The Halloween event lasts one more day: from October 30 to November 2 (Spain time). | Sự kiện Halloween kéo dài thêm một ngày: từ ngày 30/10 đến ngày 2/11 (giờ Tây Ban Nha). |
 
-## 18. Nhật ký cập nhật & Bản vá (Changelog & Updates)
+## 20. Nhật ký cập nhật & Bản vá (Changelog & Updates) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Nội dung các bản cập nhật mới, sửa lỗi và tính năng mới.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
@@ -1567,136 +896,602 @@
 | 1784 | Co-op: a player with a tampered game can no longer freeze the others by sending impossible numbers (infinite experience froze the host and a giant effect froze the guests). | Co-op: người chơi có trò chơi giả mạo không còn có thể đóng băng những người khác bằng cách gửi những con số không thể (kinh nghiệm vô hạn đóng băng chủ phòng và hiệu ứng khổng lồ đóng băng khách). |
 | 1800 | Co-op: the boss due when coming back from a rift could appear thousands of metres away, where nobody could find it, and the run got no more rifts. Now it appears nearby, and if a boss ends up very far from everyone, it shows up close again after a few seconds. | Co-op: Boss khi trở về từ khe nứt có thể xuất hiện ở cách xa hàng nghìn mét, nơi không ai có thể tìm thấy và đường chạy không còn khe nứt nữa. Bây giờ nó xuất hiện ở gần và nếu một con trùm ở rất xa mọi người, nó sẽ xuất hiện lại ở gần sau vài giây. |
 
-## 19. Các văn bản & Giao diện chung khác (General UI & Miscellaneous)
+## 21. Các văn bản & Giao diện chung khác (General UI & Miscellaneous) ✏️ [CẦN VIỆT HÓA - BẠN TỰ DO CHỈNH SỬA]
+
+> *Các nút Xác nhận, Hủy, Đóng, Lỗi kết nối, và các nhãn phụ trợ trong game.*
 
 | # | Tiếng Anh (EN) | Tiếng Việt (VI) |
 | :---: | :--- | :--- |
-| 121 | A fireball at the nearest enemy. | Một quả cầu lửa vào kẻ thù gần nhất. |
-| 123 | A fan of bubbles that slows whatever they touch. | Một chiếc quạt bong bóng làm chậm bất cứ thứ gì chúng chạm vào. |
-| 124 | A permanent electric field around you. | Một điện trường vĩnh cửu xung quanh bạn. |
-| 125 | A slow but devastating water blast. | Một vụ nổ nước chậm nhưng tàn khốc. |
-| 126 | A jet of fire that pierces everything in a straight line. | Một tia lửa xuyên thẳng mọi thứ. |
-| 127 | A piercing jet. Reliable at any range. | Một chiếc máy bay phản lực xuyên thấu. Đáng tin cậy ở mọi phạm vi. |
-| 128 | A quick bite that knocks foes back. | Một cú cắn nhanh chóng đẩy lùi kẻ thù. |
-| 129 | A lightning-fast bolt that pierces several enemies. | Một tia sét xuyên qua nhiều kẻ thù. |
-| 131 | Drains life from everything nearby and heals you with every hit. | Hút sinh lực từ mọi thứ xung quanh và hồi máu cho bạn sau mỗi đòn đánh. |
-| 132 | Roots that snare and pound everything near you. | Rễ bẫy và đập nát mọi thứ gần bạn. |
-| 133 | Charges in an arc at everything in front of you. | Tấn công theo hình vòng cung vào mọi thứ trước mặt bạn. |
-| 136 | A radial mental burst that seeks enemies. | Một vụ nổ tinh thần xuyên tâm tìm kiếm kẻ thù. |
-| 137 | Explodes in flames in every direction. | Phát nổ trong ngọn lửa ở mọi hướng. |
-| 139 | Sticky threads in every direction that slow foes a lot. | Những sợi tơ dính ở mọi hướng làm chậm kẻ địch rất nhiều. |
-| 141 | Long-range whips in a wide arc. | Những đòn roi tầm xa theo hình vòng cung rộng. |
-| 142 | Draconic flames in a straight line. | Ngọn lửa khủng khiếp theo một đường thẳng. |
-| 143 | Flames that spin around you. Constant defense. | Ngọn lửa xoay quanh bạn. Phòng thủ liên tục. |
-| 145 | Toxic sludge that poisons on impact. | Bùn độc gây ngộ độc khi va chạm. |
-| 147 | Deals no damage: builds (physical) ATTACK faster than Swords Dance. | Không gây sát thương: tạo đòn tấn công (vật lý) nhanh hơn Swords Dance. |
-| 148 | Deals no damage: builds (physical) ATTACK while active. | Không gây sát thương: tạo ra ĐÁNH CÔNG (vật lý) khi hoạt động. |
-| 149 | Deals no damage: builds SPECIAL ATTACK while active. | Không gây sát thương: tạo Đòn tấn công ĐẶC BIỆT khi hoạt động. |
-| 151 | Deals no damage: builds DEFENSE while active. | Không gây sát thương: xây dựng PHÒNG THỦ khi hoạt động. |
-| 152 | Deals no damage: builds health REGENERATION. | Không gây sát thương: tăng sức khỏe PHỤC HỒI. |
-| 153 | Deals no damage: builds SPEED while active. | Không gây sát thương: tăng TỐC ĐỘ khi hoạt động. |
-| 155 | A wave of dark energy in every direction. | Một làn sóng năng lượng tối theo mọi hướng. |
-| 156 | A wave that homes in on its target. | Một làn sóng hướng tới mục tiêu của nó. |
-| 158 | A heavy boulder that pushes the enemy back. | Một tảng đá nặng đẩy lùi kẻ thù. |
-| 159 | A full-weight tackle: slow, short and brutal. | Một pha xử lý toàn diện: chậm, ngắn và tàn bạo. |
-| 160 | A fast, steady flurry. Low damage, high rate. | Một sự bùng nổ nhanh chóng và ổn định. Thiệt hại thấp, tỷ lệ cao. |
-| 162 | An icy beam that almost freezes foes solid. | Một tia băng giá gần như đóng băng kẻ thù. |
-| 164 | Whirlwinds that escort you. | Những cơn lốc hộ tống bạn. |
-| 165 | Shakes the ground: damages and slows everything nearby. | Rung chuyển mặt đất: gây sát thương và làm chậm mọi thứ xung quanh. |
-| 166 | Splashes mud around and slows foes. | Bắn bùn xung quanh và làm chậm kẻ thù. |
-| 167 | A cyclone of leaves spins widely around you. | Một cơn lốc lá xoay tròn xung quanh bạn. |
-| 168 | An instant bolt that pierces in a line. | Một tia tức thời xuyên qua một đường thẳng. |
-| 169 | A shadow surrounds you and consumes what is near. | Một cái bóng bao quanh bạn và tiêu thụ những gì ở gần. |
-| 170 | A blizzard around you that slows foes. | Một trận bão tuyết xung quanh bạn làm chậm kẻ thù. |
-| 171 | A constant vibration that pounds everything nearby. | Một sự rung động liên tục đè nặng lên mọi thứ xung quanh. |
-| 195 | ×1.8 damage, +2 projectiles, +2 pierce and bigger | ×1,8 sát thương, +2 đạn, +2 xuyên và lớn hơn |
-| 196 | ×1.9 damage, more range and hits in 360° | ×1,9 sát thương, tầm bắn xa hơn và tấn công trong 360° |
-| 197 | ×1.8 damage, a 50% wider and longer beam | × sát thương 1,8, chùm tia rộng hơn và dài hơn 50% |
-| 199 | +6 projectiles, ×1.6 damage and +1 pierce | +6 đạn, ×1,6 sát thương và +1 xuyên |
+| 213 | Lv. | Cấp |
 | 214 | +20 max HP (and heals it). | +20 HP tối đa (và chữa lành nó). |
 | 215 | +10% damage with every move. | +10% sát thương với mỗi lần di chuyển. |
+| 216 | +7% movement speed. | +7% tốc độ di chuyển. |
 | 217 | -8% cooldown on every move. | -8% thời gian hồi chiêu mỗi lần di chuyển. |
+| 218 | +6% damage reduction. | +6% giảm sát thương. |
 | 219 | +0.9 HP regenerated per second. | +0,9 HP được phục hồi mỗi giây. |
 | 220 | +30% experience pickup radius. | +30% bán kính đón kinh nghiệm. |
+| 221 | +12% experience gained. | +12% kinh nghiệm nhận được. |
+| 222 | Sitrus Berry | Quả Sitrus |
 | 223 | Restores 45% of your HP right now. | Hồi phục 45% HP ngay lập tức. |
-| 242 | You recover 1.5% of your HP per second. | Bạn phục hồi 1,5% HP mỗi giây. |
-| 243 | +40% damage, but you can't switch moves. | +40% sát thương, nhưng bạn không thể chuyển chiêu. |
-| 244 | -20% cooldown on all your moves. | -20% thời gian hồi chiêu tất cả chiêu thức. |
-| 245 | A hit that would knock you out leaves you at 1 HP (every 60 s). | Đòn đánh gây KO sẽ giữ lại 1 HP cho bạn (mỗi 60 giây). |
-| 246 | You heal from the damage you deal. | Hồi phục HP dựa trên lượng sát thương gây ra. |
-| 247 | +50% PokéCoins at the end of the run. | +50% PokéCoins khi kết thúc trận đấu. |
-| 249 | +30% damage, but each attack costs a little HP. | +30% sát thương, nhưng mỗi đòn tấn công tốn một ít HP. |
-| 251 | Foes that hit you in melee take damage. | Kẻ địch đánh bạn trong cận chiến sẽ nhận sát thương. |
-| 252 | +20% damage reduction. | + Giảm 20% sát thương. |
+| 226 | Choose a reward · | Chọn một phần thưởng · |
+| 227 | Choose your card | Chọn thẻ nâng cấp |
+| 228 | Still choosing: {x} | Vẫn đang chọn: {x} |
+| 229 | Waiting for {x}… | Đang chờ {x}… |
+| 230 | you | bạn |
+| 266 | +8 HP | +8 mã lực |
+| 267 | +4% damage | +4% sát thương |
+| 268 | +3% speed | +3% tốc độ |
+| 269 | -3% cooldown | -3% thời gian hồi chiêu |
+| 270 | +2% defense | +2% phòng thủ |
+| 271 | +0.2 HP/s | +0,2 mã lực/giây |
+| 272 | +12% pickup | +12% nhận hàng |
+| 273 | +8% PokéCoins | +8% PokéCoin |
+| 274 | +5% experience | +5% kinh nghiệm |
+| 275 | Start with 2 moves | Bắt đầu với 2 bước |
+| 276 | Max. | Tối đa. |
+| 280 | Fury | cơn giận dữ |
+| 281 | Haste | vội vàng |
+| 282 | damage ×2 | sát thương ×2 |
+| 283 | +45% speed | +45% tốc độ |
+| 284 | -40% cooldown | -40% thời gian hồi chiêu |
 | 287 | The spring has dried up (it refills on its own) | Lò xo đã cạn (nó tự chảy đầy) |
+| 288 | Rain | Mưa |
+| 289 | Harsh sunlight | Nắng gay gắt |
+| 290 | Sandstorm | Bão cát |
+| 291 | Snowfall | Tuyết rơi |
+| 292 | Fog | Sương mù |
 | 293 | Water is boosted and Fire is weakened | Nước được tăng cường và Lửa bị suy yếu |
 | 294 | Fire is boosted and Water is weakened | Lửa mạnh lên và Nước yếu đi |
 | 295 | Rock, Ground and Steel are boosted; the rest suffer | Đá, Đất và Thép được tăng cường; những người còn lại phải chịu đựng |
 | 296 | Ice is boosted; the rest suffer and slow down | Băng được tăng cường; phần còn lại đau khổ và chậm lại |
+| 302 | Volt Plant | nhà máy vôn |
+| 303 | Eternal Glacier | Sông băng vĩnh cửu |
+| 304 | Ancient Dojo | Võ đường cổ |
+| 305 | Toxic Swamp | đầm lầy độc hại |
+| 306 | Red Desert | Sa mạc đỏ |
+| 307 | Sky Peak | Đỉnh trời |
+| 308 | Mind Temple | chùa tâm |
+| 309 | Hive Forest | Rừng tổ ong |
+| 310 | Ancient Quarry | Mỏ đá cổ |
+| 312 | Dragon Sanctuary | Thánh Địa Rồng |
+| 313 | Dark Alley | Ngõ tối |
+| 314 | Steel Fortress | Pháo đài thép |
+| 315 | Enchanted Forest | Rừng mê hoặc |
+| 316 | Shady Forest | Rừng râm mát |
+| 319 | Rift · {x} | Rạn nứt · {x} |
+| 320 | Rift · | Rạn nứt · |
+| 321 | RIFT · | rạn nứt · |
+| 331 | Cryptocurrencies | Tiền điện tử |
+| 332 | Official website | Trang web chính thức |
 | 333 | This is not the official website: your game is only saved in this browser. The official, free game is at pokesurvivor.com. | Đây không phải là trang web chính thức: trò chơi của bạn chỉ được lưu trong trình duyệt này. Trò chơi chính thức, miễn phí có tại pokesurvivor.com. |
+| 334 | Place the buttons | Đặt các nút |
+| 335 | Place | Địa điểm |
 | 337 | Drag the buttons wherever you want | Kéo các nút đến bất cứ nơi nào bạn muốn |
+| 340 | Floating | Nổi |
+| 341 | Fixed | Đã sửa |
+| 342 | Attacks | tấn công |
 | 343 | Floating: it appears where you put your finger. Fixed: always in the same place. | Nổi: nó xuất hiện ở nơi bạn đặt ngón tay. Đã sửa: luôn ở cùng một nơi. |
+| 344 | Reset | Đặt lại |
+| 345 | Save | Lưu |
+| 346 | Buttons placed | Nút được đặt |
 | 347 | The only official PokéSurvivor website is pokesurvivor.com. The game is and always will be free: if anyone asks you to pay, it isn't us. | Trang web PokéSurvivor chính thức duy nhất là pokesurvivor.com. Trò chơi đang và sẽ luôn miễn phí: nếu có ai yêu cầu bạn trả tiền thì đó không phải là chúng tôi. |
 | 348 | Code license: PolyForm Noncommercial 1.0.0 (you may use, study and modify it, but not to make money). Versions up to 14-10-2026 remain under MIT. | Giấy phép mã: PolyForm Noncommercial 1.0.0 (bạn có thể sử dụng, nghiên cứu và sửa đổi nó nhưng không được kiếm tiền). Các phiên bản đến ngày 14-10-2026 vẫn thuộc MIT. |
 | 349 | Official website: pokesurvivor.com · if anyone asks you to pay, it isn't us | Trang web chính thức: pokesurvivor.com · nếu có ai yêu cầu bạn thanh toán thì đó không phải là chúng tôi |
 | 350 | PokéSurvivor has no official cryptocurrency, token or NFT, and its author has not created any. Any token using the game's name was created by third parties: we take no responsibility for any purchase, sale or investment you make with them, and nothing here is investment advice. | PokéSurvivor không có tiền điện tử, mã thông báo hoặc NFT chính thức và tác giả của nó cũng chưa tạo ra bất kỳ loại tiền nào. Bất kỳ mã thông báo nào sử dụng tên trò chơi đều do bên thứ ba tạo: chúng tôi không chịu trách nhiệm về bất kỳ giao dịch mua, bán hoặc đầu tư nào bạn thực hiện với họ và không có gì ở đây là lời khuyên đầu tư. |
+| 352 | Bond | Liên kết |
+| 353 | Back | Quay lại |
 | 354 | Bonded moves fire at the same time and take a single slot | Các chiêu thức liên kết sẽ tung ra cùng lúc và chỉ chiếm 1 ô |
+| 355 | Choose which move joins {x} | Chọn chiêu thức để kết hợp với {x} |
+| 356 | Which move do you bond {x} with? | Bạn muốn liên kết {x} với chiêu thức nào? |
 | 357 | Choose the first move to bond | Chọn chiêu thức đầu tiên để liên kết |
 | 358 | It will fire at the same time as {x}. A slot is freed. | Sẽ tung ra cùng lúc với {x}. Một ô trống được giải phóng. |
+| 359 | It will fire at the same time as {x}. | Sẽ tung ra cùng lúc với {x}. |
 | 361 | Bond saved: learn another move to use it | Đã lưu Liên kết: hãy học thêm chiêu khác để sử dụng |
+| 363 | You entered the rift… | Bạn đã bước vào vết nứt… |
+| 364 | The rift threw you out… | Vết nứt đã đẩy bạn ra ngoài… |
+| 365 | {x} left the game | {x} đã rời trận đấu |
+| 366 | {x} is back | {x} đã quay lại |
+| 367 | {x}: reconnecting… | {x}: đang kết nối lại… |
+| 368 | +1 ticket | +1 vé |
+| 372 | Everyone is down… | Cả đội đều đã bị hạ… |
+| 374 | DOWN | BỊ HẠ |
+| 375 | Stay by their side | Đứng gần để cứu |
+| 376 | Rift · {x} m · {x} s | Vết nứt · {x} m · {x} s |
+| 377 | DEFEATED · | HẠ GỤC · |
+| 378 | COINS | ĐỒNG XU |
+| 379 | {x} · {x} DEFEATED · {x} COINS | {x} · {x} HẠ GỤC · {x} XU |
 | 380 | Drag your finger to move · tap a move to switch | Kéo để di chuyển · chạm chiêu thức để đổi |
+| 387 | move · | di chuyển · |
+| 388 | move · | chiêu thức · |
+| 389 | cycle · | chuyển chiêu · |
 | 391 | Group game: the game keeps running while you're here. | Trận đấu tổ đội: trận đấu vẫn tiếp diễn trong khi bạn mở menu. |
+| 392 | You fell… | Bạn đã bị hạ… |
+| 393 | Run over | Trận đấu kết thúc |
+| 394 | Back to menu | Về Menu chính |
+| 395 | Leave the game | Rời trận đấu |
+| 396 | Time | Thời gian |
+| 397 | Level | Cấp độ |
+| 399 | Bosses | Trùm |
+| 400 | PokéCoins earned | PokéCoins nhận được |
+| 401 | Moves | Chiêu thức |
+| 403 | · new! | · mới! |
+| 404 | {x} shinies caught | {x} Shinies đã bị bắt |
+| 406 | Max level | Cấp tối đa |
+| 407 | Mystery Dungeon | Ngục tối bí ẩn |
+| 410 | Name | Tên |
+| 412 | Sign in with Google | Đăng nhập bằng Google |
+| 414 | 3-16 letters, numbers or _ | 3-16 chữ cái, số hoặc _ |
 | 416 | A Pokémon survival game, free in your browser and on mobile. | Trò chơi sinh tồn Pokémon, miễn phí trên trình duyệt của bạn và trên thiết bị di động. |
+| 417 | Loading… | Đang tải… |
+| 418 | Guide | hướng dẫn |
+| 419 | Legal notice & privacy | Thông báo pháp lý & quyền riêng tư |
+| 426 | That name is already taken. | Tên đó đã được sử dụng. |
 | 429 | The name must be 3-16 letters, numbers or _. | Tên phải có 3-16 chữ cái, số hoặc _. |
 | 430 | Too many attempts in a row. Please wait a moment. | Quá nhiều lần thử liên tiếp. Xin vui lòng chờ một lát. |
+| 431 | No internet connection. | Không có kết nối internet. |
 | 432 | The browser blocked the Google window. Please allow pop-ups. | Trình duyệt đã chặn cửa sổ Google. Vui lòng cho phép cửa sổ bật lên. |
 | 434 | Google sign-in needs the online version of the game. | Đăng nhập bằng Google cần có phiên bản trực tuyến của trò chơi. |
 | 436 | The database denied access (check the Firestore rules). | Cơ sở dữ liệu bị từ chối truy cập (kiểm tra các quy tắc của Firestore). |
+| 437 | No connection to the database. | Không có kết nối với cơ sở dữ liệu. |
 | 438 | The browser won't let us save data (incognito mode?). | Trình duyệt sẽ không cho phép chúng tôi lưu dữ liệu (chế độ ẩn danh?). |
+| 441 | Error: | Lỗi: |
+| 442 | Guest | Khách |
+| 443 | Trainer | Huấn luyện viên |
+| 444 | Your personality is… | Tính cách của bạn là… |
+| 445 | Question {x} of {x} | Câu hỏi {x} của {x} |
+| 446 | Pick a Pokémon | Chọn một Pokémon |
+| 450 | Choose | Chọn |
+| 451 | Choose another | Chọn khác |
+| 455 | I jump in to help without thinking. | Tôi lao vào giúp đỡ mà không cần suy nghĩ. |
+| 456 | I look for someone who can stop it. | Tôi tìm người có thể ngăn chặn nó. |
+| 457 | I watch everything from afar. | Tôi quan sát mọi thứ từ xa. |
+| 458 | I laugh and cheer both of them on. | Tôi cười và cổ vũ cả hai. |
 | 459 | You find a wallet on the ground. | Bạn tìm thấy một chiếc ví trên mặt đất. |
+| 460 | I take it to the police right away. | Tôi sẽ đưa nó đến cảnh sát ngay lập tức. |
 | 461 | I look for its owner even if it takes hours. | Tôi tìm kiếm chủ nhân của nó ngay cả khi phải mất hàng giờ. |
+| 462 | First I check what's inside… | Đầu tiên tôi kiểm tra xem bên trong có gì… |
+| 463 | I don't even touch it, just in case. | Tôi thậm chí còn không chạm vào nó, chỉ để đề phòng thôi. |
 | 464 | You have an important exam tomorrow. | Ngày mai bạn có một kỳ thi quan trọng. |
+| 465 | I study until late at night. | Tôi học đến tận khuya. |
+| 466 | I review just enough: I trust myself. | Tôi xét vừa đủ: Tôi tin tưởng vào chính mình. |
+| 467 | I get really stressed. | Tôi thực sự bị căng thẳng. |
+| 468 | Exam? I'll see tomorrow. | Kỳ thi? Tôi sẽ thấy vào ngày mai. |
 | 469 | Someone mocks you in front of everyone. | Ai đó chế nhạo bạn trước mặt mọi người. |
+| 470 | I answer back on the spot. | Tôi trả lời lại ngay tại chỗ. |
+| 471 | I hit back with a better joke. | Tôi đáp lại bằng một trò đùa hay hơn. |
+| 472 | I ignore them completely. | Tôi hoàn toàn phớt lờ họ. |
+| 473 | It hurts, even if I don't say it. | Đau lắm, dù tôi không nói ra. |
+| 474 | What matters most to you? | Điều gì quan trọng nhất với bạn? |
+| 475 | Being the best. | Là tốt nhất. |
+| 477 | Freedom. | Tự do. |
+| 478 | Calm. | Bình tĩnh. |
 | 479 | The path splits: one dark and short, the other long and sunny. | Con đường chia đôi: một bên tối và ngắn, một bên dài và đầy nắng. |
+| 480 | The dark one, more excitement! | Cái tối, phấn khích hơn! |
+| 481 | The long one, no rush. | Còn dài, không vội. |
+| 482 | I sit down to think it over. | Tôi ngồi xuống để suy nghĩ lại. |
+| 483 | Neither: I make a new shortcut. | Không: Tôi tạo một lối tắt mới. |
+| 485 | That they can always count on me. | Rằng họ luôn có thể tin tưởng vào tôi. |
 | 486 | That I'm the funniest one in the group. | Rằng tôi là người vui tính nhất nhóm. |
+| 487 | That I'm a bit mysterious. | Rằng tôi hơi bí ẩn. |
+| 488 | That I never give up. | Rằng tôi không bao giờ bỏ cuộc. |
+| 489 | Your ideal day off is… | Ngày nghỉ lý tưởng của bạn là… |
+| 490 | Training to get better. | Đào tạo để trở nên tốt hơn. |
+| 492 | An adventure with no plan at all. | Một cuộc phiêu lưu không có kế hoạch nào cả. |
+| 493 | Reading, thinking, being calm. | Đọc, suy nghĩ, bình tĩnh. |
 | 494 | You don't think twice when someone needs help. | Bạn không cần suy nghĩ kỹ khi ai đó cần giúp đỡ. |
+| 496 | You measure every step before taking it. | Bạn đo lường từng bước trước khi thực hiện. |
+| 497 | You spread energy wherever you go. | Bạn lan tỏa năng lượng bất cứ nơi nào bạn đi. |
 | 498 | You keep calm when things get complicated. | Bạn giữ bình tĩnh khi mọi thứ trở nên phức tạp. |
 | 499 | You act first and think later. Sometimes it works! | Bạn hành động trước và suy nghĩ sau. Đôi khi nó hoạt động! |
 | 500 | You push yourself to be the best, and you almost always are. | Bạn thúc đẩy bản thân trở thành người giỏi nhất và hầu như bạn luôn như vậy. |
 | 501 | You always have a joke ready. | Bạn luôn chuẩn bị sẵn một trò đùa. |
+| 502 | You do your own thing and don't care. | Bạn làm việc của riêng bạn và không quan tâm. |
 | 503 | It's hard for you to take the first step, but you feel deeply. | Thật khó để bạn thực hiện bước đầu tiên, nhưng bạn cảm nhận sâu sắc. |
+| 504 | Nothing fazes you. Nothing. | Không có gì làm bạn bối rối. Không có gì. |
+| 505 | You know how to wait for the right moment. | Bạn biết cách chờ đợi thời điểm thích hợp. |
 | 506 | Not even you know what you'll do next. | Ngay cả bạn cũng không biết mình sẽ làm gì tiếp theo. |
+| 507 | Giving up isn't in your plans. | Từ bỏ không nằm trong kế hoạch của bạn. |
 | 508 | You see solutions where others see problems. | Bạn nhìn thấy giải pháp trong khi người khác nhìn thấy vấn đề. |
 | 509 | Your kindness calms everyone around you. | Lòng tốt của bạn làm dịu mọi người xung quanh bạn. |
+| 511 | Enter the dungeon | Bước vào hầm ngục |
+| 514 | Upgrades | Nâng cấp |
+| 515 | Make every run stronger | Gia tăng sức mạnh cho mỗi trận đấu |
+| 516 | 9 regions · Pokémon and shinies | 9 khu vực · Pokémon và Shinies |
+| 522 | Who survives longest | Ai sống sót lâu nhất |
+| 525 | {x} reward to claim | {x} phần thưởng để nhận |
+| 526 | {x} rewards to claim | {x} phần thưởng để nhận |
+| 527 | reward to claim | phần thưởng để yêu cầu |
+| 528 | rewards to claim | phần thưởng để yêu cầu |
+| 530 | {x} online | {x} trực tuyến |
+| 531 | online | trực tuyến |
+| 532 | {x} request | {x} yêu cầu |
+| 533 | {x} requests | {x} yêu cầu |
+| 534 | Runs | Trận |
+| 535 | · Best time | · Kỷ lục |
+| 538 | Guest mode: not saved | Chế độ khách: chưa được lưu |
 | 540 | You're a guest: all your progress will be lost. Log out? | Bạn là khách: tất cả tiến trình của bạn sẽ bị mất. Đăng xuất? |
 | 541 | Non-profit fan project · Sprites: SpriteCollab (CC BY-NC 4.0) · Pokémon © Nintendo/Creatures/GAME FREAK · | Dự án dành cho người hâm mộ phi lợi nhuận · Sprites: SpriteCollab (CC BY-NC 4.0) · Pokémon © Nintendo/Creatures/GAME FREAK · |
+| 542 | Legal notice | Thông báo pháp lý |
+| 543 | Back | Quay lại |
+| 544 | All | Tất cả |
+| 545 | Owned | Sở hữu |
+| 546 | Missing | Thiếu |
+| 547 | Legendary | Huyền thoại |
+| 548 | Epic | sử thi |
+| 549 | Rare | hiếm |
+| 550 | Uncommon | không phổ biến |
+| 551 | Common | chung |
+| 552 | None with this filter. | Không có bộ lọc này. |
+| 553 | Attack | Tấn công |
+| 554 | HP | HP |
+| 555 | Speed | Tốc độ |
+| 556 | Starts with | Bắt đầu với |
+| 559 | (shiny) | (sáng bóng) |
+| 560 | You don't have it yet. | Bạn chưa có nó. |
+| 561 | Get it from the banner of | Lấy nó từ biểu ngữ của |
+| 562 | or by defeating it when it shows up shiny. | hoặc bằng cách đánh bại nó khi nó sáng bóng. |
+| 565 | · {x} shiny | · {x} sáng bóng |
+| 568 | Mystery | bí ẩn |
 | 569 | The {x} Pokémon of generation {x}. The legendaries await! | {x} Pokémon thuộc thế hệ {x}. Những huyền thoại đang chờ đợi! |
+| 570 | You have {x} of {x} | Bạn có {x} trong tổng số {x} |
+| 571 | You have {x} | Bạn có {x} |
+| 572 | Gen {x} | Thế hệ {x} |
+| 573 | Odds | Tỷ lệ cược |
 | 577 | · Duplicates give PokéCoins. Shinies never repeat. | · Pokémon trùng sẽ đổi thành PokéCoins. Bản Shiny không bao giờ bị trùng. |
+| 581 | ×10 tickets | ×10 vé |
+| 582 | tickets and {x} | vé và {x} |
+| 586 | Duplicate · | Trùng lặp · |
+| 587 | · {x} {x} shiny | · {x} {x} sáng bóng |
+| 588 | {x} Shiny | {x} Sáng bóng |
+| 589 | Click to speed up | Bấm để tăng tốc |
+| 596 | SHINY · | SÁNG BÓNG · |
+| 599 | Daily | hàng ngày |
+| 600 | Weekly | hàng tuần |
+| 601 | Refreshes in {x} | Làm mới sau {x} |
+| 602 | Claim | Yêu cầu |
+| 603 | Claimed | Đã xác nhận quyền sở hữu |
+| 604 | In progress | Đang tiến hành |
+| 605 | Swap | Hoán đổi |
+| 611 | New title: {x} | Tiêu đề mới: {x} |
+| 614 | Legendaries defeated {x} / {x} | Huyền thoại đã đánh bại {x} / {x} |
+| 615 | · defeated! | · bị đánh bại! |
+| 617 | Your 3 favorite Pokémon | 3 Pokémon yêu thích của bạn |
+| 618 | Choose favorite {x} | Chọn yêu thích {x} |
+| 619 | Title | Tiêu đề |
+| 620 | Title: {x} | Tiêu đề: {x} |
+| 621 | (no title) | (không có tiêu đề) |
+| 626 | No favorites yet. | Chưa có mục yêu thích nào. |
+| 627 | No medals yet. | Chưa có huy chương. |
+| 629 | Best time | Kỷ lục thời gian |
+| 630 | In a group | Trong một nhóm |
+| 631 | Legendaries | Huyền thoại |
+| 632 | Close | Đóng |
+| 633 | Defeat {x} Pokémon | Đánh bại {x} Pokémon |
+| 634 | Defeat {x} {x}-type Pokémon | Đánh bại Pokémon loại {x} {x} |
+| 635 | Defeat {x} bosses | Đánh bại {x} tên trùm |
+| 636 | Defeat a boss | Đánh bại một Trùm |
+| 637 | Survive {x} minutes in a run | Sống sót {x} phút sau một trận đấu |
 | 638 | Survive {x} minutes with a {x}-type Pokémon | Sống sót {x} phút với Pokémon loại {x} |
+| 640 | Collect {x} coins in your runs | Thu thập {x} xu trong các trận đấu của bạn |
+| 641 | Open a locked chest | Mở một chiếc rương bị khóa |
+| 642 | Open {x} locked chests | Mở {x} rương bị khóa |
+| 643 | Win a rift battle | Giành chiến thắng trong trận chiến rạn nứt |
+| 644 | Win {x} rift battles | Giành chiến thắng {x} trận chiến rạn nứt |
+| 645 | Evolve a move | Tiến hóa 1 chiêu thức |
+| 646 | Evolve {x} moves | Tiến hóa {x} chiêu thức |
+| 647 | Find a held item | Tìm một vật phẩm được giữ |
+| 650 | Survival | Sinh tồn |
+| 651 | Combat | chiến đấu |
+| 652 | Rifts | Rạn nứt |
+| 655 | Small team | Đội nhỏ |
+| 656 | Collector | Người sưu tầm |
+| 657 | Encyclopedia | Bách khoa toàn thư |
+| 658 | Pokémon Professor | Giáo sư Pokémon |
+| 659 | Pokémon Master | Bậc thầy Pokémon |
+| 660 | Antiquarian | Đồ cổ |
+| 661 | Own 1 Pokémon. | Sở hữu 1 Pokémon. |
+| 662 | Own 10 Pokémon. | Sở hữu 10 Pokémon. |
+| 663 | Own 50 Pokémon. | Sở hữu 50 Pokémon. |
+| 664 | Own 100 Pokémon. | Sở hữu 100 Pokémon. |
+| 665 | Own 250 Pokémon. | Sở hữu 250 Pokémon. |
+| 666 | Own 500 Pokémon. | Sở hữu 500 Pokémon. |
+| 667 | Own all {x} Pokémon in the game. | Sở hữu tất cả {x} Pokémon trong trò chơi. |
+| 668 | Own every Pokémon in the game. | Sở hữu mọi Pokémon trong trò chơi. |
+| 669 | Something shines | Một cái gì đó tỏa sáng |
+| 670 | An eye for shine | Một con mắt để tỏa sáng |
+| 671 | Shiny hunter | Thợ săn sáng bóng |
+| 672 | Get 1 shiny. | Nhận 1 cái sáng bóng. |
+| 673 | Get 5 shinies. | Nhận 5 bóng. |
+| 674 | Get 20 shinies. | Nhận 20 shinies. |
+| 675 | Warming up | Khởi động |
+| 676 | Survivor | Người sống sót |
+| 677 | Tough | Khó khăn |
+| 678 | Hard to beat | Khó đánh bại |
+| 679 | Unstoppable | Không thể ngăn cản |
+| 680 | Survive 5 minutes. | Sống sót sau 5 phút. |
+| 681 | Survive 10 minutes. | Sống sót sau 10 phút. |
+| 682 | Survive 15 minutes. | Sống sót sau 15 phút. |
+| 683 | Survive 20 minutes. | Sống sót sau 20 phút. |
+| 684 | Growing up | lớn lên |
+| 685 | Veteran | Cựu chiến binh |
+| 690 | First battles | Trận chiến đầu tiên |
+| 691 | Brave | dũng cảm |
+| 692 | Legend | Truyền thuyết |
+| 693 | Living legend | Huyền thoại sống |
+| 694 | Defeat 1,000 Pokémon. | Đánh bại 1.000 Pokémon. |
+| 695 | Defeat 10,000 Pokémon. | Đánh bại 10.000 Pokémon. |
+| 696 | Defeat 100,000 Pokémon. | Đánh bại 100.000 Pokémon. |
+| 697 | Defeat a boss. | Đánh bại một Trùm. |
+| 698 | Defeat 25 bosses. | Đánh bại 25 tên trùm. |
+| 699 | Defeat 100 bosses. | Đánh bại 100 tên trùm. |
+| 700 | Boss hunter | Thợ săn trùm |
+| 701 | Giant slayer | Kẻ giết người khổng lồ |
+| 702 | Terror of bosses | Khủng bố của các Trùm |
+| 703 | The other side | Phía bên kia |
+| 704 | Rift jumper | Nhảy rạn nứt |
+| 705 | Rift traveler | Lữ khách rạn nứt |
+| 706 | Explorer | Nhà thám hiểm |
 | 707 | Win your first rift battle. | Giành chiến thắng trong trận chiến rạn nứt đầu tiên của bạn. |
+| 708 | Win 10 rift battles. | Chiến thắng 10 trận chiến rạn nứt. |
 | 709 | Win in all 18 arenas (one per type). | Giành chiến thắng ở tất cả 18 đấu trường (mỗi loại một đấu trường). |
+| 710 | Legend hunter | Thợ săn huyền thoại |
+| 711 | Myth tamer | Người thuần hóa huyền thoại |
+| 712 | Defeat 10 different legendaries. | Đánh bại 10 huyền thoại khác nhau. |
+| 713 | Defeat 30 different legendaries. | Đánh bại 30 huyền thoại khác nhau. |
+| 714 | Defeat all {x} legendaries. | Đánh bại tất cả {x} huyền thoại. |
+| 715 | Defeat every legendary. | Đánh bại mọi huyền thoại. |
+| 716 | Defeat {x} | Đánh bại {x} |
+| 717 | Defeat {x} in a rift. | Đánh bại {x} trong một khe nứt. |
+| 720 | Move master | Bậc thầy chiêu thức |
+| 721 | Evolve a move. | Tiến hóa 1 chiêu thức. |
+| 722 | Evolve 25 moves. | Tiến hóa 25 chiêu thức. |
 | 723 | Evolve all {x} different moves. | Tiến hóa tất cả {x} chiêu thức khác nhau. |
 | 724 | Evolve all 47 different moves. | Tiến hóa tất cả 47 chiêu thức khác nhau. |
+| 725 | Item collector | Người sưu tầm vật phẩm |
+| 727 | Find 5 different items. | Tìm 5 vật phẩm khác nhau. |
+| 728 | Find all 11 items. | Tìm tất cả 11 mục. |
+| 729 | Reliable | đáng tin cậy |
+| 730 | Steady | Ổn định |
+| 731 | Tireless | không mệt mỏi |
+| 735 | In good company | Ở công ty tốt |
+| 739 | Loyal partner | Đối tác trung thành |
+| 741 | Lucky | May mắn |
+| 742 | Slot machine | Máy đánh bạc |
+| 744 | Brilliant | Rực rỡ |
+| 745 | Choose your nickname | Chọn biệt danh của bạn |
+| 746 | Save nickname | Lưu biệt hiệu |
+| 747 | Not now | Không phải bây giờ |
+| 749 | Your nickname: | Biệt danh của bạn: |
+| 751 | Your nickname is {x} | Biệt danh của bạn là {x} |
+| 756 | Request sent | Đã gửi yêu cầu |
+| 757 | Offline | Ngoại tuyến |
+| 759 | Online | trực tuyến |
+| 760 | Seen {x} min ago | Đã xem {x} phút trước |
+| 761 | Seen {x} h ago | Đã thấy {x} giờ trước |
+| 762 | Seen {x} days ago | Đã thấy {x} ngày trước |
+| 763 | {x} min ago | {x} phút trước |
+| 764 | {x} h ago | {x} giờ trước |
+| 765 | {x} days ago | {x} ngày trước |
+| 766 | Seen | Đã xem |
+| 767 | Accept | Chấp nhận |
+| 768 | Decline | Từ chối |
+| 769 | Remove | Xóa |
+| 770 | Invite | Mời |
+| 774 | Cancel | Hủy |
+| 777 | Choose your nickname first. | Chọn biệt hiệu của bạn trước tiên. |
+| 780 | That's you. | Đó là bạn. |
+| 782 | You already sent them a request. | Bạn đã gửi cho họ một yêu cầu. |
+| 783 | Request sent to {x} | Đã gửi lời mời tới {x} |
+| 785 | There's no request. | Không có yêu cầu. |
 | 786 | The nickname must be 3-16 letters, numbers or _. | Biệt hiệu phải có 3-16 chữ cái, số hoặc _. |
 | 787 | That nickname is already taken. | Biệt danh đó đã được sử dụng. |
+| 788 | Couldn't save the nickname ({x}). | Không thể lưu biệt hiệu ({x}). |
+| 789 | Couldn't send it ({x}). | Không thể gửi nó ({x}). |
+| 790 | Couldn't accept it ({x}). | Không thể chấp nhận được ({x}). |
+| 791 | Couldn't remove it ({x}). | Không thể xóa nó ({x}). |
+| 792 | Couldn't send the invite ({x}). | Không thể gửi lời mời ({x}). |
+| 794 | Menu | Menu |
+| 797 | Start game | Bắt đầu trận đấu |
+| 798 | Start game ({x}) | Bắt đầu trận đấu ({x}) |
+| 800 | Free | Còn trống |
+| 801 | You | Bạn |
+| 802 | Connected | Đã kết nối |
+| 803 | Connected (via server) | Đã kết nối (qua máy chủ) |
+| 804 | Connecting… | Đang kết nối… |
 | 810 | The game starts for everyone at once. | Trận đấu sẽ bắt đầu cho tất cả người chơi cùng lúc. |
+| 813 | Invite sent to {x} | Lời mời đã được gửi tới {x} |
+| 824 | Join | Tham gia |
+| 825 | No, thanks | Không, cảm ơn |
+| 835 | Filter by Pokémon (all-time) | Lọc theo Pokémon (mọi lúc) |
+| 836 | Clear filter | Xóa bộ lọc |
+| 837 | {x} Solo | {x} Đơn độc |
+| 838 | {x} Group | {x} Nhóm |
+| 839 | Group | Nhóm |
 | 840 | No records here yet. Be the first! | Chưa có hồ sơ nào ở đây. Hãy là người đầu tiên! |
 | 842 | {x} · Lv. {x} · {x} damage in total | {x} · Lv. Tổng cộng {x} · {x} thiệt hại |
 | 845 | There's no Pokémon with that name | Không có Pokémon nào có tên đó |
+| 849 | You don't have a record {x} {x} yet. | Bạn chưa có bản ghi {x} {x}. |
+| 850 | today | hôm nay |
+| 851 | this week | tuần này |
+| 852 | this month | tháng này |
+| 853 | this year | năm nay |
+| 854 | of all time | mọi thời đại |
+| 855 | solo | một mình |
+| 856 | in a group | trong một nhóm |
+| 857 | Lv. {x} · {x} defeated | Lv. {x} · {x} bị đánh bại |
+| 859 | of the week | trong tuần |
+| 860 | of the month | của tháng |
+| 861 | of the year | của năm |
+| 862 | all-time | mọi lúc |
+| 867 | About | Giới thiệu |
+| 870 | Mute all | Tắt toàn bộ âm thanh |
+| 871 | Unmute | Bật âm thanh |
+| 872 | Quality | Chất lượng |
+| 873 | Auto | Tự động |
+| 874 | High | Cao |
+| 875 | Medium | Trung bình |
+| 876 | Low | Thấp |
 | 877 | How many effects and particles are drawn. | Có bao nhiêu hiệu ứng và hạt được rút ra. |
 | 878 | lowers it automatically if the game stutters (now: | tự động giảm nó nếu trò chơi bị giật (bây giờ: |
 | 879 | How many effects and particles are drawn. {x} lowers it automatically if the game stutters (now: {x}). | Có bao nhiêu hiệu ứng và hạt được rút ra. {x} tự động hạ thấp nếu trò chơi bị giật (bây giờ: {x}). |
+| 880 | high | cao |
+| 881 | medium | trung bình |
+| 882 | low | thấp |
+| 884 | Damage numbers | Số thiệt hại |
 | 885 | The numbers that pop up when you hit or get hit. | Những con số hiện lên khi bạn đánh hoặc bị đánh. |
+| 886 | Less shaking and flashing | Ít rung lắc và nhấp nháy |
 | 887 | The camera shakes less and flashes are softer. | Máy ảnh ít rung hơn và đèn flash nhẹ hơn. |
+| 888 | Show FPS | Hiện FPS |
 | 889 | Frames per second, in the bottom corner. | Số khung hình trên giây, ở góc dưới cùng. |
+| 890 | Fullscreen | Toàn màn hình |
+| 891 | Without browser bars. | Không có thanh trình duyệt. |
+| 892 | Turn on | Bật |
+| 893 | Yes | Có |
+| 894 | No | Không |
+| 895 | Language | Ngôn ngữ |
+| 896 | The game reloads when you change it. | Trò chơi sẽ tải lại khi bạn thay đổi nó. |
+| 897 | On mobile or tablet | Trên thiết bị di động hoặc máy tính bảng |
+| 898 | On PC | Trên PC |
+| 900 | How far you need to drag your finger. | Bạn cần kéo ngón tay của mình bao xa. |
+| 901 | Small | nhỏ |
+| 902 | Normal | Normal |
+| 903 | Large | lớn |
+| 904 | or arrow keys | hoặc phím mũi tên |
+| 905 | move | di chuyển |
+| 906 | or click its icon | hoặc nhấp vào biểu tượng của nó |
+| 907 | choose move | chọn chiêu thức |
+| 908 | previous / next move | chiêu trước / chiêu kế |
+| 911 | Nickname | Biệt danh |
+| 912 | It's unique and can't be changed. | Nó là duy nhất và không thể thay đổi. |
+| 914 | Save | Lưu |
+| 917 | Google | Google |
 | 923 | : your progress isn't saved when you leave. | : tiến trình của bạn không được lưu khi bạn rời đi. |
+| 924 | guest | khách |
+| 925 | Controller connected | Đã kết nối tay cầm |
+| 926 | With a controller | Dùng tay cầm |
+| 927 | Use controller | Dùng tay cầm |
+| 928 | Controller connected: | Đã kết nối tay cầm: |
+| 929 | Vibration | Rung |
 | 931 | Move, switch attacks and use the menus with a controller. | Di chuyển, đổi chiêu thức và điều khiển menu bằng tay cầm. |
 | 932 | The controller vibrates when you take damage (if your controller and browser support it). | tay cầm rung khi bạn bị hư hại (nếu tay cầm và trình duyệt của bạn hỗ trợ). |
+| 933 | Left stick | Thanh trái |
+| 934 | D-pad | D-pad |
+| 935 | Right stick | Thanh bên phải |
+| 936 | move · choose in menus | di chuyển · chọn trong menu |
 | 937 | press (in menus) · skip the Arceus cutscene | nhấn (trong menu) · bỏ qua đoạn cắt cảnh Arceus |
+| 938 | back / close | quay lại / đóng |
+| 940 | scroll lists | danh sách cuộn |
 | 941 | scroll lists · aim (if you turn on Manual aim in Accessibility) | danh sách cuộn · nhắm mục tiêu (nếu bạn bật Mục tiêu thủ công trong Trợ năng) |
+| 942 | Search by name or number | Tìm kiếm theo tên hoặc số |
+| 943 | Clear | Xóa |
+| 944 | All | Tất cả |
+| 945 | Favorites | Yêu thích |
+| 946 | Sort: | Sắp xếp: |
+| 947 | No. | Không. |
+| 948 | Rarity | Độ hiếm |
+| 949 | Recently caught | Bị bắt gần đây |
+| 951 | All types | Tất cả các loại |
+| 952 | Favorite | yêu thích |
+| 953 | Mark as favorite | Đánh dấu là yêu thích |
+| 954 | None with these filters. | Không có những bộ lọc này. |
+| 955 | {x} Pokémon | {x} Pokémon |
+| 956 | 1 Pokémon | 1 Pokémon |
+| 957 | Physical | Vật lý |
+| 958 | Special | Đặc biệt |
+| 959 | Sp. Atk | Đặc công |
+| 960 | Defense | Phòng thủ |
+| 961 | Sp. Def | Đặc thủ |
+| 962 | Hits harder with | Đánh mạnh hơn với |
+| 963 | special moves | chiêu thức đặc biệt |
+| 964 | physical moves | chiêu thức vật lý |
 | 965 | With {x} it deals {x} %: it hits harder with special moves. | Với {x} đạt hiệu quả {x}%: tối ưu với chiêu thức đặc biệt. |
 | 966 | With {x} it deals {x} %: it hits harder with physical moves. | Với {x} đạt hiệu quả {x}%: tối ưu với chiêu thức vật lý. |
+| 967 | Your moves | Chiêu thức của bạn |
+| 968 | Damage | Sát thương |
+| 969 | Per second | Mỗi giây |
+| 970 | Your stats | Số liệu thống kê của bạn |
+| 971 | Critical | Chí mạng |
+| 972 | Damage reduction | Giảm sát thương |
+| 973 | Cooldown | Hồi chiêu |
+| 974 | Regeneration | tái sinh |
+| 975 | Item and cards | Vật phẩm và thẻ |
+| 976 | No item. | Không có mục nào. |
 | 977 | You haven’t picked any upgrade cards yet. | Bạn chưa chọn bất kỳ thẻ nâng cấp nào. |
+| 978 | {x} physical | {x} thể chất |
+| 979 | {x} special | {x} đặc biệt |
+| 980 | Hyper Beam | Hyper Beam |
+| 981 | Rapid Spin | Rapid Spin |
+| 982 | Flame Charge | Flame Charge |
+| 983 | Whirlpool | Whirlpool |
+| 984 | Seed Bomb | Seed Bomb |
+| 985 | Energy Ball | Energy Ball |
+| 986 | Solar Beam | Solar Beam |
+| 987 | Thunder Wave | Thunder Wave |
+| 988 | Electro Ball | Electro Ball |
+| 989 | Extrasensory | Extrasensory |
+| 990 | Mist Ball | Mist Ball |
+| 991 | Acid Spray | Acid Spray |
+| 992 | Sand Tomb | Sand Tomb |
+| 993 | Magnitude | Magnitude |
+| 994 | Whirlwind | Whirlwind |
+| 995 | Air Slash | Air Slash |
+| 996 | Signal Beam | Signal Beam |
+| 997 | U-turn | U-turn |
+| 998 | Rock Tomb | Rock Tomb |
+| 999 | Ancient Power | Ancient Power |
+| 1000 | Power Gem | Power Gem |
+| 1001 | Ice Shard | Ice Shard |
+| 1002 | Freeze-Dry | Freeze-Dry |
+| 1003 | Rolling Kick | Rolling Kick |
+| 1004 | Vacuum Wave | Vacuum Wave |
+| 1005 | Dynamic Punch | Dynamic Punch |
+| 1006 | Shadow Sneak | Shadow Sneak |
+| 1007 | Ominous Wind | Ominous Wind |
+| 1008 | Dragon Breath | Dragon Breath |
+| 1009 | Dragon Claw | Dragon Claw |
+| 1010 | Outrage | Outrage |
+| 1011 | Draining Kiss | Draining Kiss |
+| 1013 | Disarming Voice | Disarming Voice |
+| 1014 | Mirror Shot | Mirror Shot |
+| 1015 | Gyro Ball | Gyro Ball |
+| 1016 | Sucker Punch | Sucker Punch |
+| 1017 | Night Slash | Night Slash |
+| 1018 | Prismatic Laser | Laser lăng trụ |
+| 1019 | Tri Attack | Tri tấn công |
+| 1020 | Heat Crash | Sự cố nhiệt |
+| 1021 | Brine | nước muối |
+| 1022 | Wood Hammer | Búa gỗ |
+| 1023 | Solar Blade | Lưỡi năng lượng mặt trời |
+| 1024 | Volt Tackle | Vôn giải quyết |
+| 1025 | Spark | tia lửa |
+| 1026 | Psywave | Sóng tâm lý |
+| 1027 | Luster Purge | Thanh lọc bóng |
+| 1028 | Sludge Wave | Sóng bùn |
+| 1029 | High Horsepower | Mã lực cao |
+| 1030 | Drill Run | Chạy khoan |
+| 1031 | Hurricane | Bão |
+| 1032 | Sky Attack | Tấn công bầu trời |
+| 1033 | Megahorn | Megahorn |
+| 1034 | Leech Life | Cuộc sống đỉa |
+| 1035 | Head Smash | đập đầu |
+| 1036 | Diamond Storm | Cơn bão kim cương |
+| 1037 | Meteor Beam | Chùm sao băng |
+| 1038 | Icicle Spear | Ngọn giáo băng |
+| 1039 | Sheer Cold | Lạnh lùng |
+| 1040 | High Jump Kick | Cú nhảy cao |
+| 1041 | Power-Up Punch | Cú đấm tăng sức mạnh |
+| 1042 | Mega Punch | cú đấm lớn |
+| 1043 | Shadow Claw | móng vuốt bóng tối |
+| 1044 | Shadow Force | Lực lượng bóng tối |
+| 1045 | Dragon Pulse | Xung rồng |
+| 1046 | Dragon Rush | Cơn sốt rồng |
+| 1047 | Dragon Darts | phi tiêu rồng |
+| 1048 | Moonlight | ánh trăng |
+| 1049 | Spirit Break | Phá vỡ tinh thần |
+| 1050 | Charm | Sự quyến rũ |
+| 1051 | Steel Beam | Dầm thép |
+| 1052 | Heavy Slam | Cuộc va chạm nặng nề |
+| 1054 | Darkest Lariat | Lariat đen tối nhất |
 | 1055 | Charges for a moment and fires a huge beam that pierces everything. | Sạc trong giây lát và bắn ra một chùm tia khổng lồ xuyên qua mọi thứ. |
 | 1056 | You spin in place, hitting everything around you several times. | Bạn quay tại chỗ, va chạm vào mọi thứ xung quanh bạn nhiều lần. |
 | 1057 | You dash wrapped in flames, burning everything in your path. | Bạn lao đi trong ngọn lửa, đốt cháy mọi thứ trên đường đi của bạn. |
@@ -1725,6 +1520,7 @@
 | 1081 | A shadow that slips along the ground to the enemy. | Một cái bóng trượt dọc theo mặt đất tới kẻ thù. |
 | 1082 | A cursed wind that swirls enemies together and keeps damaging them. | Một cơn gió nguyền rủa cuốn kẻ thù lại với nhau và liên tục gây sát thương cho chúng. |
 | 1083 | A short fan of dragon breath that slows. | Một đoạn ngắn của hơi thở rồng chậm lại. |
+| 1084 | A dragon claw swipe in an arc. | Vuốt rồng theo hình vòng cung. |
 | 1085 | A fury of spinning blows that leaves no one standing. | Một cơn cuồng nộ của những cú đánh xoáy không khiến ai đứng vững. |
 | 1086 | A kiss that chases the enemy and heals you a little when it hits. | Một nụ hôn đuổi theo kẻ thù và hồi máu cho bạn một chút khi nó đánh trúng. |
 | 1088 | A charming cry that damages and pushes away those near you. | Một tiếng kêu quyến rũ có thể gây tổn thương và đẩy lùi những người ở gần bạn. |
@@ -1732,39 +1528,136 @@
 | 1090 | You spin like a steel ball, hitting everything around. | Bạn quay tròn như một quả bóng thép, đánh vào mọi thứ xung quanh. |
 | 1091 | A sneaky blow that seeks out the enemy. | Một đòn lén lút tìm kiếm kẻ thù. |
 | 1092 | Spinning slashes that reach everything around you. | Những nhát chém xoay tròn tiếp cận mọi thứ xung quanh bạn. |
+| 1093 | Charges faster and -20% cooldown | Sạc nhanh hơn và -20% thời gian hồi chiêu |
+| 1094 | +25% radius | + bán kính 25% |
+| 1095 | +1 spin | +1 vòng quay |
+| 1096 | -25% cooldown and +30% damage | -25% hồi chiêu và +30% sát thương |
+| 1098 | +1 bounce | +1 lần trả lại |
+| 1099 | +1 projectile and +1 bounce | +1 đường đạn và +1 độ nảy |
+| 1100 | +1 projectile and +40% damage | +1 đạn và +40% sát thương |
+| 1101 | +50% stun | +50% choáng |
+| 1102 | +50% push and +40% damage | +50% đẩy và +40% sát thương |
+| 1103 | +2 waves | +2 sóng |
+| 1104 | +25% size | kích thước +25% |
+| 1105 | -25% cooldown and +2 waves | -25% hồi chiêu và +2 đợt |
 | 1106 | ×1.8 damage, +2 projectiles and bigger | ×1,8 sát thương, +2 viên đạn và lớn hơn |
 | 1107 | ×1.8 damage, +2 bounces and +1 projectile | ×1,8 sát thương, +2 lần nảy và +1 đường đạn |
 | 1108 | ×1.8 damage, 50% thicker beam and faster charge | ×1,8 sát thương, chùm tia dày hơn 50% và sạc nhanh hơn |
+| 1109 | ×1.8 damage, +1 spin and more radius | ×1,8 sát thương, +1 vòng quay và bán kính nhiều hơn |
 | 1110 | ×1.8 damage, +3 waves and bigger waves | ×1.8 sát thương, +3 đợt và đợt lớn hơn |
+| 1112 | ×1.8 damage, more radius and stronger push | ×1.8 sát thương, bán kính lớn hơn và lực đẩy mạnh hơn |
 | 1113 | ×1.8 damage, more radius and longer stun | ×1.8 sát thương, bán kính lớn hơn và choáng lâu hơn |
+| 1114 | Starting move | Chiêu thức khởi đầu |
 | 1115 | Choose which move you start the run with | Chọn chiêu thức khởi đầu trận đấu |
+| 1116 | Choose: {x} | Chọn: {x} |
 | 1117 | Choose which move it starts with. You can change it any time, for free. | Chọn chiêu thức khởi đầu. Bạn có thể đổi bất cứ lúc nào, miễn phí. |
+| 1118 | (default) | (mặc định) |
+| 1119 | {x} will start with {x} | {x} sẽ bắt đầu với {x} |
+| 1120 | Second starting move | Chiêu thức khởi đầu thứ hai |
 | 1122 | Choose the second move it starts with. You can change it any time, for free. | Chọn chiêu thức thứ hai. Bạn có thể đổi bất cứ lúc nào, miễn phí. |
+| 1123 | {x} will also start with {x} | {x} cũng sẽ bắt đầu với {x} |
+| 1124 | The second move will be random | Chiêu thức thứ hai sẽ chọn ngẫu nhiên |
+| 1125 | Random | Ngẫu nhiên |
 | 1129 | Offline: press Save when you are back online | Ngoại tuyến: nhấn Lưu khi bạn trực tuyến trở lại |
 | 1131 | Single type: +20% damage with its {x}-type moves | Loại đơn: +20% sát thương khi di chuyển loại {x} |
+| 1132 | Accessibility | Khả năng tiếp cận |
+| 1133 | Aiming | Nhắm mục tiêu |
+| 1134 | Manual aim | Mục tiêu thủ công |
 | 1135 | Your attacks go towards the mouse (or wherever you push the controller’s right stick) instead of the nearest enemy. If you let go of the stick and don’t move the mouse, it aims by itself again. Chain and meteor moves still find enemies by themselves. | Các đòn tấn công của bạn hướng về phía chuột (hoặc bất cứ nơi nào bạn nhấn cần phải của tay cầm) thay vì kẻ thù gần nhất. Nếu bạn buông cần và không di chuyển chuột, nó sẽ tự nhắm mục tiêu trở lại. Các bước di chuyển của chuỗi và sao băng vẫn tự tìm ra kẻ thù. |
 | 1137 | Your game is saved in this browser. | Trò chơi của bạn được lưu trong trình duyệt này. |
 | 1138 | As a guest your game is not saved. | Với tư cách là khách, trò chơi của bạn không được lưu. |
 | 1140 | Offline: it will be saved as soon as you are back online. | Ngoại tuyến: nó sẽ được lưu ngay khi bạn trực tuyến trở lại. |
 | 1141 | Could not save. Try again in a moment. | Không thể lưu. Hãy thử lại sau giây lát. |
+| 1145 | Saving… | Đang lưu… |
 | 1146 | Waiting to upload (uploads when you leave the game) | Đang chờ tải lên (tải lên khi bạn thoát khỏi trò chơi) |
+| 1147 | Offline: it will upload when you're back | Ngoại tuyến: nó sẽ tải lên khi bạn quay lại |
+| 1148 | Saved only in this browser | Chỉ được lưu trong trình duyệt này |
+| 1149 | Guest: not saved | Khách: chưa được lưu |
+| 1151 | Reroll ( | Quay lại ( |
+| 1155 | Delete forever | Xóa vĩnh viễn |
+| 1160 | Fan game | trò chơi quạt |
+| 1161 | free and non-profit | miễn phí và phi lợi nhuận |
 | 1162 | Fan game {x}: no ads or payments. Pokémon and its characters are owned by Nintendo, Creatures and GAME FREAK; this project is not affiliated with them. | Trò chơi dành cho người hâm mộ {x}: không có quảng cáo hoặc thanh toán. Pokémon và các nhân vật của nó thuộc sở hữu của Nintendo, Creatures và GAME FREAK; dự án này không liên kết với họ. |
 | 1163 | : no ads or payments. Pokémon and its characters are owned by Nintendo, Creatures and GAME FREAK; this project is not affiliated with them. | : không có quảng cáo hoặc thanh toán. Pokémon và các nhân vật của nó thuộc sở hữu của Nintendo, Creatures và GAME FREAK; dự án này không liên kết với họ. |
+| 1164 | Credits | Tín dụng |
+| 1165 | Sprites: | Yêu tinh: |
 | 1166 | PMD SpriteCollab and its artists (CC BY-NC 4.0). | PMD SpriteCollab và các nghệ sĩ của nó (CC BY-NC 4.0). |
+| 1167 | Pokémon data: | Dữ liệu Pokémon: |
 | 1169 | original, generated by the game itself. | nguyên bản, do chính trò chơi tạo ra. |
+| 1170 | Font: | Phông chữ: |
+| 1171 | Guide & FAQ | Hướng dẫn & Câu hỏi thường gặp |
+| 1172 | Pokédex | Pokédex |
+| 1173 | Contact | Liên hệ |
+| 1174 | Code (GitHub) | Mã (GitHub) |
+| 1175 | Rotate your phone | Xoay điện thoại của bạn |
 | 1177 | The game couldn't fully load (did the connection drop?). | Trò chơi không thể tải đầy đủ (kết nối có bị rớt không?). |
+| 1178 | Reload | Tải lại |
+| 1179 | Fan project | Dự án quạt |
+| 1180 | is a game made by fans, | là một trò chơi do người hâm mộ tạo ra, |
 | 1181 | . It has no ads, no purchases and no source of income of any kind, and it never will. | . Nó không có quảng cáo, không mua hàng và không có bất kỳ nguồn thu nhập nào, và nó sẽ không bao giờ như vậy. |
 | 1182 | It is not affiliated with, sponsored or endorsed by Nintendo, Creatures Inc., GAME FREAK or The Pokémon Company. Pokémon and all related names and characters are trademarks and property of their respective owners. | Nó không được liên kết, tài trợ hoặc xác nhận bởi Nintendo, Creatures Inc., GAME FREAK hoặc The Pokémon Company. Pokémon cũng như tất cả các tên và nhân vật liên quan đều là thương hiệu và tài sản của chủ sở hữu tương ứng. |
+| 1183 | Third-party content | Nội dung của bên thứ ba |
+| 1184 | Sprites from | Sprites từ |
 | 1185 | (CC BY-NC 4.0, full credits in the repository's CREDITS.md). Pokédex data from | (CC BY-NC 4.0, ghi công đầy đủ trong CREDITS.md của kho lưu trữ). Dữ liệu Pokédex từ |
+| 1187 | Contact and content removal | Xóa liên hệ và nội dung |
 | 1188 | If you are a rights holder and want something removed, write to us and we'll take it down as soon as possible: | Nếu bạn là chủ sở hữu bản quyền và muốn xóa nội dung nào đó, hãy viết thư cho chúng tôi và chúng tôi sẽ gỡ nội dung đó xuống sớm nhất có thể: |
+| 1189 | Source code: | Mã nguồn: |
+| 1190 | Privacy | Quyền riêng tư |
 | 1194 | Group games: your browser connects | Trò chơi nhóm: trình duyệt của bạn kết nối |
+| 1200 | Game guide | Hướng dẫn trò chơi |
+| 1201 | Support | Hỗ trợ |
+| 1202 | Support the project | Hỗ trợ dự án |
+| 1203 | Donate on Ko-fi | Đóng góp trên Ko-fi |
+| 1204 | More info | Thêm thông tin |
+| 1205 | PokéSurvivor is and will stay | PokéSurvivor đang và sẽ ở lại |
+| 1206 | free | miễn phí |
 | 1207 | , with no ads or purchases. If you'd like to help keep it online, you can make a | , không có quảng cáo hoặc mua hàng. Nếu bạn muốn giúp giữ nó trực tuyến, bạn có thể tạo một |
+| 1208 | voluntary donation | quyên góp tự nguyện |
+| 1209 | : all the money goes to the | : tất cả số tiền sẽ được chuyển đến |
+| 1210 | servers and the domain | máy chủ và miền |
+| 1211 | , nothing else. | , không có gì khác. |
 | 1212 | Donating gives no advantage in the game. | Đóng góp không mang lại lợi thế trong trò chơi. |
+| 1213 | What it costs to keep it running | Chi phí để duy trì hoạt động là bao nhiêu |
+| 1216 | Domain pokesurvivor.com | Tên miền pokesurvivor.com |
+| 1217 | ≈€12 per year | ≈€12 mỗi năm |
 | 1219 | Fan game {x}: no ads or purchases. Pokémon and its characters are owned by Nintendo, Creatures and GAME FREAK; this project is not affiliated with them. | Trò chơi dành cho người hâm mộ {x}: không có quảng cáo hoặc mua hàng. Pokémon và các nhân vật của nó thuộc sở hữu của Nintendo, Creatures và GAME FREAK; dự án này không liên kết với họ. |
 | 1220 | : no ads or purchases. Pokémon and its characters are owned by Nintendo, Creatures and GAME FREAK; this project is not affiliated with them. | : không có quảng cáo hoặc mua hàng. Pokémon và các nhân vật của nó thuộc sở hữu của Nintendo, Creatures và GAME FREAK; dự án này không liên kết với họ. |
 | 1221 | . It has no ads or purchases. You can support it with voluntary donations, which are used only to pay for the servers and the domain and give no advantage in the game. | . Nó không có quảng cáo hoặc mua hàng. Bạn có thể hỗ trợ nó bằng các khoản đóng góp tự nguyện, số tiền này chỉ được sử dụng để trả tiền cho máy chủ và miền và không mang lại lợi ích gì trong trò chơi. |
+| 1222 | Partner | Bạn đồng hành |
+| 1223 | tickets and | vé và |
+| 1224 | directly | trực tiếp |
+| 1225 | You have | bạn có |
+| 1226 | Moves it can learn | Chiêu thức có thể học |
 | 1227 | Fan game {x} — no ads or payments. | Trò chơi fan-made {x} — hoàn toàn miễn phí & không quảng cáo. |
+| 1228 | Type: Null | Type: Null |
 | 1231 | Follow the purple arrow: a legendary awaits inside | Đi theo mũi tên tím: Pokémon huyền thoại đang chờ bên trong |
+| 1232 | RIFT · {x} m · {x} s | VẾT NỨT · {x} m · {x} s |
+| 1233 | RIFT · {x} s | VẾT NỨT · {x} s |
+| 1235 | Press to start | Nhấn để bắt đầu |
+| 1237 | Bonemerang | Bonemerang |
+| 1238 | Psycho Cut | Psycho Cut |
+| 1239 | Spikes | Spikes |
+| 1240 | Toxic Spikes | Toxic Spikes |
+| 1241 | Hail | Hail |
+| 1242 | Meteor Mash | Meteor Mash |
+| 1243 | Will-O-Wisp | Will-O-Wisp |
+| 1244 | Substitute | Substitute |
+| 1245 | Aerial Ace | Aerial Ace |
+| 1246 | Flame Wheel | Flame Wheel |
+| 1247 | Bubble Beam | Bubble Beam |
+| 1248 | Hex | Hex |
+| 1249 | Bone Rush | Cơn sốt xương |
+| 1250 | Psychic Fangs | Răng nanh tâm linh |
+| 1251 | Fissure | vết nứt |
+| 1252 | Gunk Shot | Bắn súng |
+| 1253 | Avalanche | trận tuyết lở |
+| 1254 | Magnet Bomb | Bom nam châm |
+| 1255 | Inferno | địa ngục |
+| 1256 | Double Team | Đội đôi |
+| 1257 | Acrobatics | Nhào lộn |
+| 1258 | Flare Blitz | Ngọn lửa chớp nhoáng |
+| 1259 | Aqua Tail | Đuôi Thủy |
+| 1260 | Poltergeist | yêu tinh |
 | 1261 | You dash at the enemy like lightning and hit everything on the way. | Bạn lao vào kẻ thù như tia chớp và đánh trúng mọi thứ trên đường đi. |
 | 1262 | A short fan of flames that burns. | Một chiếc quạt lửa ngắn đang cháy. |
 | 1263 | Two leaves that fly out and back, cutting both ways. | Hai chiếc lá bay ra bay về, cắt đôi. |
@@ -1784,27 +1677,83 @@
 | 1277 | You run wrapped in fire, leaving a trail of flames. | Bạn chạy trong lửa, để lại một vệt lửa. |
 | 1278 | A short fan of bubbles that slows. | Một fan hâm mộ ngắn của bong bóng chậm lại. |
 | 1279 | A curse that jumps between enemies. Much more damage if they are burned, poisoned or slowed. | Một lời nguyền nhảy giữa kẻ thù. Thiệt hại nhiều hơn nếu chúng bị đốt cháy, nhiễm độc hoặc làm chậm. |
+| 1280 | +1 boomerang | +1 boomerang |
+| 1281 | +30% range | + phạm vi 30% |
+| 1282 | +1 boomerang and +40% damage | +1 boomerang và +40% sát thương |
+| 1283 | +2 jumps | +2 lần nhảy |
+| 1284 | +2 jumps and +40% damage | +2 lần nhảy và +40% sát thương |
+| 1285 | +1 mine | +1 của tôi |
+| 1286 | +30% blast radius | + bán kính nổ 30% |
+| 1287 | +1 mine and -25% cooldown | +1 mìn và -25% thời gian hồi chiêu |
+| 1288 | +1 meteor | +1 sao băng |
+| 1289 | +2 meteors and -20% cooldown | +2 sao băng và -20% thời gian hồi chiêu |
+| 1290 | Fires 35% faster | Bắn nhanh hơn 35% |
+| 1291 | +1 at a time | +1 cùng một lúc |
+| 1292 | +50% duration and +40% damage | +50% thời gian và +40% sát thương |
+| 1293 | +30% distance | +30% khoảng cách |
+| 1294 | +60% damage and wider | +60% sát thương và rộng hơn |
+| 1295 | +40% duration | +40% thời lượng |
+| 1296 | Pools 30% bigger | Bể bơi lớn hơn 30% |
+| 1297 | +50% damage and +30% radius | +50% sát thương và +30% bán kính |
+| 1298 | +3 shots | +3 lần chụp |
+| 1299 | +3 shots and +1 pierce | +3 phát bắn và +1 xuyên thủng |
 | 1300 | ×1.8 damage, +1 boomerang and more range | ×1,8 sát thương, +1 boomerang và tầm xa hơn |
+| 1301 | ×1.7 damage and +3 jumps | ×1,7 sát thương và +3 lần nhảy |
 | 1302 | ×1.8 damage, +2 mines and a bigger blast | ×1,8 sát thương, +2 mìn và vụ nổ lớn hơn |
+| 1303 | ×1.7 damage, +2 meteors and more radius | ×1,7 sát thương, +2 thiên thạch và bán kính nhiều hơn |
 | 1304 | ×1.8 damage, +1 at a time and fires faster | ×1,8 sát thương, +1 mỗi lần và bắn nhanh hơn |
 | 1305 | ×1.9 damage, more distance and less cooldown | ×1,9 sát thương, khoảng cách xa hơn và thời gian hồi chiêu ít hơn |
 | 1306 | ×1.8 damage, bigger and longer-lasting pools | ×1,8 sát thương, bể lớn hơn và tồn tại lâu hơn |
 | 1307 | ×1.7 damage, +4 shots and +1 pierce | ×1,7 sát thương, +4 phát bắn và +1 xuyên thủng |
 | 1313 | {x} got tired of waiting and left… | {x} chờ đợi mỏi mệt và bỏ đi… |
+| 1320 | GOLDEN HOUR · {x} s | GIỜ VÀNG · {x} s |
+| 1322 | Marker · {x} m | Điểm đánh dấu · {x} m |
 | 1323 | Enjoying PokéSurvivor? I make it on my own and the servers cost money. If you'd like, you can help keep it online. | Bạn đang thưởng thức PokéSurvivor? Tôi tự làm nó và các máy chủ phải trả tiền. Nếu muốn, bạn có thể giúp giữ nó trực tuyến. |
+| 1324 | Support on Ko-fi | Hỗ trợ trên Ko-fi |
 | 1328 | The game crashed: your run has been saved up to this point | Trò chơi bị lỗi: đường chạy của bạn đã được lưu cho đến thời điểm này |
+| 1330 | What's new | Có gì mới |
 | 1331 | A new version of the game is out: updating in {x} s… | Phiên bản mới của trò chơi đã ra mắt: cập nhật sau {x} giây… |
 | 1332 | Required update: your run is saved and the game reloads in {x} s… | Cập nhật bắt buộc: lượt chạy của bạn được lưu và trò chơi sẽ tải lại sau {x} giây… |
 | 1333 | Could not connect (retrying…) | Không thể kết nối (đang thử lại…) |
+| 1336 | Move shortcuts | Di chuyển phím tắt |
 | 1337 | Choose which move always goes in each slot (keys 1-4 or the icons at the bottom), for muscle memory. If you do not have that many moves yet, it goes to the closest slot. | Chọn chiêu thức luôn đi trong mỗi ô (phím 1-4 hoặc các biểu tượng ở phía dưới), để ghi nhớ cơ. Nếu bạn chưa có nhiều chiêu thức, nó sẽ chuyển đến ô gần nhất. |
+| 1338 | Critical Hit | đòn chí mạng |
+| 1339 | +3% critical chance (x1.5 damage) | +3% cơ hội chí mạng (x1,5 sát thương) |
+| 1340 | Card reroll | Nạp lại thẻ |
+| 1342 | Ban | Khóa chiêu |
 | 1343 | Ban 1 move: it never shows up in your cards | Cấm 1 chiêu thức: nó không bao giờ xuất hiện trong thẻ của bạn |
+| 1344 | Choose ({x}) | Chọn ({x}) |
 | 1345 | Tap the moves you do not want in your cards ({x}). The starting move cannot be banned. | Nhấn vào các chiêu thức bạn không muốn có trong thẻ của mình ({x}). Việc di chuyển bắt đầu không thể bị cấm. |
 | 1346 | You already have {x} banned: remove one first | Bạn đã có {x} bị cấm: trước tiên hãy xóa một cái |
+| 1349 | THE JUDGMENT | PHÁN XÉT |
+| 1350 | OF ARCEUS | CỦA ARCEUS |
+| 1351 | Time has run out… | Thời gian đã hết… |
 | 1353 | It is invincible: run and survive as long as you can | Nó là bất khả chiến bại: chạy và tồn tại lâu nhất có thể |
+| 1354 | Tap the screen to skip | Chạm vào màn hình để bỏ qua |
+| 1355 | Press Space to skip | Nhấn Space để bỏ qua |
+| 1358 | JUDGMENT · {x} · BOSSES {x} | PHÁN QUYẾT · {x} · Sếp {x} |
+| 1359 | Against Arceus | Chống lại Arceus |
+| 1360 | {x} · {x} legendaries | {x} · {x} huyền thoại |
+| 1361 | {x} · {x} legendary | {x} · {x} huyền thoại |
+| 1362 | The Judgment | Sự phán xét |
 | 1363 | Reach the Judgment of Arceus (minute 30). | Đạt được Phán quyết của Arceus (phút 30). |
+| 1364 | Before the Creator | Trước Đấng Tạo Hóa |
+| 1365 | Survive 1 minute against Arceus. | Sống sót sau 1 phút chống lại Arceus. |
+| 1366 | Divine challenge | Thử thách thần thánh |
 | 1367 | Defeat 3 legendaries against Arceus in a single run. | Đánh bại 3 huyền thoại trước Arceus chỉ trong một lượt chạy. |
+| 1368 | Judged | bị phán xét |
+| 1369 | Chosen of Arceus | Người được chọn của Arceus |
+| 1372 | Link my Gmail | Liên kết Gmail của tôi |
+| 1373 | Don't ask again | Đừng hỏi lại |
+| 1377 | Report suspicious record | Báo cáo hồ sơ đáng ngờ |
+| 1378 | You already reported it | Bạn đã báo cáo rồi |
+| 1379 | You already reported this record | Bạn đã báo cáo hồ sơ này |
 | 1380 | Report {x}'s record as cheating? | Báo cáo hồ sơ của {x} là gian lận? |
+| 1381 | Thanks: we will review it | Cảm ơn: chúng tôi sẽ xem xét nó |
 | 1382 | PokéSurvivor – Free online Pokémon survival game (Survivor.io style) | PokéSurvivor – Trò chơi sinh tồn Pokémon trực tuyến miễn phí (kiểu Survivor.io) |
+| 1383 | Type | loại |
+| 1387 | Got it | Hiểu rồi |
+| 1390 | You do not have a record yet. | Bạn chưa có bản ghi nào. |
 | 1394 | +40% {x}-type damage and takes half damage from Fire. | +40% sát thương loại {x} và nhận một nửa sát thương từ Lửa. |
 | 1396 | +50% damage with physical moves. | +50% sát thương khi di chuyển vật lý. |
 | 1397 | +25% damage with physical moves, but 1 in 6 physical hits comes out weak. | +25% sát thương khi di chuyển vật lý, nhưng 1 trong 6 đòn đánh vật lý trở nên yếu. |
@@ -1814,6 +1763,10 @@
 | 1401 | +25% damage with moves that burn, poison, slow or push, but they lose that effect. | +25% sát thương với các chiêu thức đốt cháy, đầu độc, làm chậm hoặc đẩy nhưng chúng sẽ mất tác dụng đó. |
 | 1402 | Burns, poisons and slows from its moves are twice as strong. | Bỏng, nhiễm độc và làm chậm khi di chuyển của nó mạnh gấp đôi. |
 | 1403 | +25% damage with melee attacks and dashes. | +25% sát thương khi tấn công cận chiến và lao tới. |
+| 1404 | +25% damage with dashes. | +25% sát thương với dấu gạch ngang. |
+| 1405 | +25% damage with punches. | +25% sát thương khi đấm. |
+| 1406 | +30% damage with bites. | +30% sát thương khi bị cắn. |
+| 1408 | +30% damage with slicing moves. | +30% sát thương khi di chuyển cắt lát. |
 | 1410 | Its not very effective moves deal normal damage. | Những chiêu thức không hiệu quả của nó gây sát thương thông thường. |
 | 1412 | +30% Rock, Ground and Steel damage in a sandstorm. | +30% sát thương Đá, Đất và Thép trong bão cát. |
 | 1413 | +40% special damage in sun, but the sun drains some HP. | +40% sát thương đặc biệt dưới ánh nắng mặt trời, nhưng mặt trời làm tiêu hao một ít HP. |
@@ -1821,7 +1774,11 @@
 | 1416 | +6% critical hit chance. | +6% khả năng trúng đòn chí mạng. |
 | 1417 | Each enemy defeated gives +0.5% damage (up to +15%). | Mỗi kẻ địch bị đánh bại sẽ gây +0,5% sát thương (tối đa +15%). |
 | 1418 | Every 10 seconds it gets 1.5% faster (up to +30%). | Cứ sau 10 giây, nó sẽ nhanh hơn 1,5% (tối đa + 30%). |
+| 1419 | +50% speed in rain. | +50% tốc độ khi trời mưa. |
+| 1420 | +50% speed in sun. | +50% tốc độ dưới ánh nắng mặt trời. |
 | 1421 | +50% speed in a sandstorm. | +50% tốc độ khi có bão cát. |
+| 1422 | +50% speed in snow. | +50% tốc độ trong tuyết. |
+| 1423 | +8% speed. | +8% tốc độ. |
 | 1424 | Brings sun at the start of the run and every 3 minutes. | Mang ánh nắng khi bắt đầu chạy và cứ sau 3 phút. |
 | 1425 | Brings rain at the start of the run and every 3 minutes. | Mang theo mưa khi bắt đầu chạy và cứ sau 3 phút. |
 | 1426 | Brings a sandstorm at the start of the run and every 3 minutes. | Mang theo bão cát khi bắt đầu chạy và cứ sau 3 phút. |
@@ -1831,12 +1788,14 @@
 | 1430 | Water heals it and rain restores HP, but Fire deals 25% more. | Nước chữa lành vết thương và mưa phục hồi HP, nhưng Lửa gây thêm 25%. |
 | 1431 | Floats: unaffected by water, lava and traps, and Ground barely hurts it. | Nổi: không bị ảnh hưởng bởi nước, dung nham và bẫy, và Mặt đất hầu như không làm tổn thương nó. |
 | 1432 | Takes 40% less damage from Fire and Ice. | Nhận ít hơn 40% sát thương từ Lửa và Băng. |
+| 1433 | Takes half damage from Fire. | Nhận một nửa sát thương từ Lửa. |
 | 1434 | {x}-type attacks deal no damage: they heal it a little. | Các đòn tấn công loại {x} không gây sát thương: chúng hồi phục vết thương một chút. |
 | 1435 | Takes half damage while at (nearly) full HP. | Nhận một nửa sát thương khi ở (gần) đầy HP. |
 | 1436 | Super effective attacks deal 25% less. | Các đòn tấn công siêu hiệu quả gây ra ít hơn 25%. |
 | 1437 | Takes 40% less physical damage. | Nhận ít hơn 40% sát thương vật lý. |
 | 1438 | Takes 30% less physical damage. | Nhận ít hơn 30% sát thương vật lý. |
 | 1439 | Takes 40% less special damage. | Nhận ít hơn 40% sát thương đặc biệt. |
+| 1440 | Takes 8% less damage. | Nhận ít sát thương hơn 8%. |
 | 1441 | Enemies deal 12% less physical damage to it. | Kẻ địch gây sát thương vật lý ít hơn 12%. |
 | 1442 | A hit that would KO it leaves it with 1 HP (every 90 s). | Một đòn đánh KO sẽ khiến nó chỉ còn 1 HP (cứ sau 90 giây). |
 | 1443 | Recovers 0.6% of its HP per second. | Phục hồi 0,6% HP mỗi giây. |
@@ -1862,6 +1821,8 @@
 | 1463 | +5% critical hit chance. | +5% khả năng trúng đòn chí mạng. |
 | 1466 | In a sandstorm it dodges 15% of hits. | Trong bão cát nó né được 15% số đòn đánh. |
 | 1467 | In snow it dodges 15% of hits. | Trong tuyết nó né được 15% số cú đánh. |
+| 1468 | Healing heals it 40% more. | Chữa bệnh chữa lành nó nhiều hơn 40%. |
+| 1469 | Healing heals it 30% more. | Chữa bệnh chữa lành nó nhiều hơn 30%. |
 | 1470 | Makes enemies nervous: they deal 6% less damage to it. | Khiến kẻ địch lo lắng: chúng gây sát thương ít hơn 6% lên nó. |
 | 1471 | Its hits break enemy shields. | Đòn đánh của nó phá vỡ lá chắn của kẻ thù. |
 | 1472 | Reads intentions: dodges 8% of hits. | Đọc ý định: né được 8% số lần trúng đích. |
@@ -1873,10 +1834,12 @@
 | 1479 | Every 5 s it sheds: removes slows and recovers 2% HP. | Cứ sau 5 giây nó giảm đi: loại bỏ khả năng làm chậm và hồi phục 2% HP. |
 | 1480 | Recovers 0.3% of its HP per second. | Phục hồi 0,3% HP mỗi giây. |
 | 1481 | In sun nothing slows it and it takes 15% less damage. | Trong ánh nắng mặt trời không có gì làm chậm nó và nó gây sát thương ít hơn 15%. |
+| 1482 | +12% damage to bosses. | +12% sát thương lên trùm. |
 | 1483 | Explosions from kamikaze Pokémon do not hurt it. | Vụ nổ từ Pokémon cảm tử không làm nó bị thương. |
 | 1484 | +15% damage to enemies that share a type with it. | +15% sát thương cho kẻ địch cùng loại với nó. |
 | 1485 | Whoever hits it in melee takes part of the hit back. | Ai đánh nó trong cận chiến sẽ bị đánh trả. |
 | 1486 | Its boosting moves recharge 30% faster. | Các chiêu buff nạp lại nhanh hơn 30%. |
+| 1487 | Without an item it is 15% faster. | Không có vật phẩm thì nhanh hơn 15%. |
 | 1488 | Unimpressed: takes 8% less damage. | Không ấn tượng: nhận ít sát thương hơn 8%. |
 | 1489 | If it is slowed it fights back: +20% physical damage while it lasts. | Nếu bị làm chậm, nó sẽ đánh trả: +20% sát thương vật lý trong thời gian tồn tại. |
 | 1490 | If it is slowed it fights back: +20% special damage while it lasts. | Nếu bị làm chậm, nó sẽ đánh trả: +20% sát thương đặc biệt trong thời gian tồn tại. |
@@ -1885,10 +1848,13 @@
 | 1493 | Lava does not burn it and it takes half damage from Fire. | Dung nham không đốt cháy nó và phải nhận một nửa sát thương từ Lửa. |
 | 1494 | When hit, it sometimes snatches a coin. | Khi đánh, đôi khi nó giật được một đồng xu. |
 | 1495 | +15% damage to enemies below half HP. | +15% sát thương lên kẻ địch dưới nửa HP. |
+| 1496 | Without an item, +12% damage. | Không có vật phẩm, +12% sát thương. |
 | 1497 | +6% damage with physical moves. | +6% sát thương khi di chuyển vật lý. |
+| 1498 | The other way round: when slowed, it goes faster. | Ngược lại: khi chậm lại, nó sẽ đi nhanh hơn. |
 | 1499 | When slowed, it goes faster (instead of slower). | Khi bị chậm lại, nó sẽ chạy nhanh hơn (thay vì chậm hơn). |
 | 1500 | Takes 15% less special damage. | Nhận ít hơn 15% sát thương đặc biệt. |
 | 1501 | Takes 15% less special damage and dodges 10% of those hits. | Nhận ít hơn 15% sát thương đặc biệt và tránh được 10% số đòn đánh đó. |
+| 1502 | Takes 6% less damage. | Nhận ít hơn 6% sát thương. |
 | 1503 | Its hits sometimes slow (1 in 10). | Lượt truy cập của nó đôi khi chậm (1 trên 10). |
 | 1504 | The first time it drops below half HP it gets angry: +25% damage for the rest of the run. | Lần đầu tiên nó giảm xuống dưới một nửa HP, nó trở nên tức giận: +25% sát thương trong thời gian còn lại của đường chạy. |
 | 1505 | +15% damage to {x}-type Pokémon. | +15% sát thương lên Pokémon loại {x}. |
@@ -1898,21 +1864,122 @@
 | 1510 | Every 10 s, +10% to something at random: attack, special attack, speed or defense. | Cứ sau 10 giây, +10% cho một thứ gì đó ngẫu nhiên: tấn công, tấn công đặc biệt, tốc độ hoặc phòng thủ. |
 | 1511 | When slowed, it dodges 20% of hits. | Khi bị làm chậm, nó tránh được 20% số đòn đánh. |
 | 1512 | +25% damage with multi-hit moves. | +25% sát thương khi di chuyển nhiều đòn. |
+| 1513 | In sun, +20% damage. | Dưới ánh nắng mặt trời, +20% sát thương. |
 | 1514 | +8% damage with {x}-type moves. | +8% sát thương với chiêu thức loại {x}. |
+| 1516 | Mints, Capsules and TMs | Bạc hà, viên nang và TM |
+| 1518 | Buy | Mua |
+| 1520 | Items | Mặt hàng |
+| 1521 | Today’s TMs | TM ngày nay |
 | 1522 | There are 8 new ones every day. A TM teaches its move forever to a Pokémon that learns it in the games (it is used up). | Có 8 cái mới mỗi ngày. Một TM dạy cách di chuyển của nó mãi mãi cho Pokémon học nó trong trò chơi (nó đã được sử dụng hết). |
+| 1523 | TM | TM |
+| 1524 | you have {x} | bạn có {x} |
+| 1525 | {x} can learn it | {x} có thể học nó |
+| 1526 | {x} already knows it | {x} đã biết rồi |
 | 1531 | {x} of your Pokémon can learn it | {x} Pokémon của bạn có thể học nó |
 | 1532 | None of your Pokémon can learn it | Không có Pokémon nào của bạn có thể học được nó |
+| 1533 | That TM is no longer for sale. | TM đó không còn để bán nữa. |
+| 1534 | You do not have enough PokéCoins. | Bạn không có đủ PokéCoin. |
+| 1535 | Mint | bạc hà |
+| 1543 | neutral | trung tính |
+| 1544 | hidden | ẩn giấu |
+| 1545 | It has not learned any yet | Nó vẫn chưa học được gì |
+| 1546 | Capsule | Viên nang |
+| 1547 | Hidden Capsule | Viên nang ẩn |
+| 1548 | Teach TM | Dạy TM |
+| 1560 | Empty | trống |
+| 1561 | {x} items · {x} TMs | {x} mục · {x} TM |
+| 1564 | Items: {x} · TMs: {x} | Mục: {x} · TM: {x} |
+| 1566 | Watching {x} | Đang xem {x} |
+| 1567 | switch | chuyển đổi |
+| 1568 | Shiny Charms | Bùa sáng bóng |
+| 1569 | Shiny Charm | Sự quyến rũ sáng bóng |
 | 1570 | Complete a region's Pokédex (legendaries included) to get its Shiny Charm: in its banner, shinies are twice as likely (from 1% to 2%). | Hoàn thành Pokédex của một khu vực (bao gồm cả các huyền thoại) để nhận được Bùa sáng bóng: trong biểu ngữ của khu vực đó, khả năng tỏa sáng cao gấp đôi (từ 1% đến 2%). |
+| 1571 | {x} Shiny Charm | {x} Quyến rũ sáng bóng |
+| 1572 | 2% shiny in the {x} banner | 2% sáng bóng trong biểu ngữ {x} |
+| 1573 | Complete the {x} Pokédex | Hoàn thành {x} Pokédex |
+| 1577 | Shiny Charms: {x} | Bùa sáng bóng: {x} |
+| 1580 | Skip | Bỏ qua |
+| 1582 | Shiny: {x} | Sáng bóng: {x} |
 | 1589 | Puts the enemies on screen to sleep for 4 s (bosses, 1 s). | Khiến kẻ thù trên màn hình ngủ trong 4 giây (trùm, 1 giây). |
 | 1590 | Enemies on screen move 50% slower for 8 s (bosses, 20%). | Kẻ địch trên màn hình di chuyển chậm hơn 50% trong 8 giây (trùm, 20%). |
 | 1591 | Blows nearby enemies far away (bosses, half as far). | Thổi bay kẻ địch ở gần (trùm, xa bằng một nửa). |
+| 1595 | X to use it | X để sử dụng nó |
+| 1596 | tap it above your moves | chạm vào nó phía trên bước di chuyển của bạn |
+| 1597 | key {x} | phím {x} |
+| 1602 | Flame Plate | Tấm lửa |
+| 1603 | Splash Plate | tấm giật gân |
+| 1604 | Zap Plate | Tấm Zap |
+| 1606 | Icicle Plate | Tấm băng |
+| 1607 | Fist Plate | Tấm nắm tay |
+| 1608 | Toxic Plate | Tấm độc hại |
+| 1609 | Earth Plate | Tấm đất |
+| 1610 | Sky Plate | Tấm trời |
+| 1611 | Mind Plate | tấm tâm trí |
+| 1612 | Insect Plate | Tấm côn trùng |
+| 1613 | Stone Plate | Tấm đá |
+| 1614 | Spooky Plate | Tấm ma quái |
+| 1615 | Draco Plate | Tấm Draco |
+| 1616 | Dread Plate | Tấm kinh hoàng |
+| 1617 | Iron Plate | Tấm sắt |
+| 1618 | Pixie Plate | Đĩa tiên |
 | 1622 | It is invincible: survive and deal as much damage to it as you can | Nó là bất khả chiến bại: sống sót và gây ra nhiều thiệt hại nhất có thể cho nó |
+| 1623 | DAMAGE TO ARCEUS · {x} | THIỆT HẠI CHO ARCEUS · {x} |
+| 1624 | Damage to Arceus | Thiệt hại cho Arceus |
+| 1625 | Time survived | Thời gian sống sót |
 | 1627 | Nobody has damaged Arceus here yet. Reach minute 30 and hit it! | Chưa có ai làm hư hại Arceus ở đây. Đạt đến phút thứ 30 và đánh nó! |
+| 1628 | You're not in the damage top 50 yet. | Bạn chưa nằm trong top 50 thiệt hại. |
+| 1631 | LIVE | TRỰC TIẾP |
+| 1632 | My YouTube channel | Kênh YouTube của tôi |
+| 1635 | Haunted Graveyard | nghĩa địa ma ám |
+| 1636 | Gloomy Forest | Khu rừng u ám |
+| 1637 | Witch Gengar | phù thủy |
+| 1638 | Witch Pikachu | Phù Thủy Pikachu |
+| 1639 | Witch Umbreon | Chiếc ô phù thủy |
+| 1642 | THE NIGHT | ĐÊM |
+| 1643 | OF GENGAR | CỦA GENGER |
+| 1646 | DAMAGE TO GENGAR · {x} | THIỆT HẠI CHO GENGAR · {x} |
+| 1649 | GENGAR · {x} m | GENGAR · {x} m |
+| 1650 | Against the great Gengar | Chống lại Gengar vĩ đại |
+| 1651 | Damage to Gengar | Thiệt hại cho Gengar |
+| 1653 | +1 candy | +1 kẹo |
+| 1654 | +{x} candy | +{x} kẹo |
+| 1656 | You already have this skin. | Bạn đã có làn da này rồi. |
+| 1657 | You don't have enough candy. | Bạn không có đủ kẹo. |
+| 1661 | You have {x} candy | Bạn có {x} kẹo |
+| 1662 | Witch hat and cape for {x}. | Mũ và áo choàng phù thủy dành cho {x}. |
 | 1663 | Bought. Put it on or take it off from the Pokémon’s page. | Đã mua. Mặc vào hoặc cởi ra khỏi trang Pokémon. |
 | 1664 | Bought. You can wear it once you have {x}. | Đã mua. Bạn có thể đeo nó khi có {x}. |
+| 1665 | Bought | đã mua |
+| 1666 | Skin | da |
+| 1667 | No skin | Không có da |
+| 1668 | Put on | mặc vào |
+| 1669 | Take off | Cất cánh |
+| 1670 | Spooky Night | Đêm ma quái |
+| 1676 | Witch hat for {x}. | Mũ phù thủy dành cho {x}. |
+| 1677 | Candy: {x} | Kẹo: {x} |
 | 1678 | {x} · {x} DEFEATED · {x} COINS · {x} CANDY | {x} · {x} ĐÁNH BẠI · {x} XU · {x} KẸO |
+| 1679 | {x} d {x} | {x} d {x} |
+| 1684 | Choose a reward | Chọn phần thưởng |
+| 1685 | You can only hold one | Bạn chỉ có thể giữ một |
 | 1691 | The top bar (coins, tickets, candy, your name and the buttons) fits on any screen. Before, with everything showing, on many screens (tablets too) the coins and tickets went off the left edge and the buttons split into two lines. Now, when space is short, the buttons keep only their icon, your name is shortened and very large amounts are shown short (10M). | Thanh trên cùng (đồng xu, vé, kẹo, tên của bạn và các nút) phù hợp với mọi màn hình. Trước đây, với mọi thứ hiển thị, trên nhiều màn hình (cả máy tính bảng), đồng xu và vé lệch khỏi mép trái và các nút chia thành hai dòng. Bây giờ, khi không gian bị thiếu, các nút chỉ giữ lại biểu tượng của chúng, tên của bạn được rút ngắn và số lượng rất lớn được hiển thị ngắn (10 triệu). |
+| 1692 | PokéCoins | PokéCoins |
+| 1700 | Anchored | neo |
 | 1701 | Anchored: it appears where you put your finger and stays there until you lift it. | Đã neo: nó xuất hiện ở nơi bạn đặt ngón tay và ở đó cho đến khi bạn nhấc ngón tay lên. |
+| 1704 | Impulsive | bốc đồng |
+| 1705 | Cautious | Thận trọng |
+| 1706 | Loyal | trung thành |
+| 1707 | Patient | bệnh nhân |
+| 1708 | Sweet | ngọt ngào |
+| 1709 | Shy | nhút nhát |
+| 1710 | Mischievous | tinh nghịch |
+| 1711 | Serene | Thanh thản |
+| 1712 | Clever | Thông minh |
+| 1713 | Cheerful | vui vẻ |
+| 1714 | Tenacious | ngoan cường |
+| 1715 | Proud | tự hào |
+| 1716 | Loner | cô đơn |
+| 1717 | Calm | bình tĩnh |
+| 1718 | Chaotic | hỗn loạn |
 | 1720 | Weak Armor, Steadfast and Rattled no longer remove your Agility charges (or any better speed boost) when you get hit: they used to drop them to one. | Giáp Yếu, Kiên Định và Rắc rối không còn loại bỏ các điểm Agility của bạn (hoặc bất kỳ mức tăng tốc độ nào tốt hơn) khi bạn bị tấn công: chúng thường giảm chúng xuống còn một. |
 | 1722 | In very elongated windows (very wide and short), enemies no longer keep looping off screen without coming closer: it looked as if none were spawning. | Trong các cửa sổ rất dài (rất rộng và ngắn), kẻ thù không còn liên tục thoát khỏi màn hình mà không đến gần hơn: có vẻ như không có kẻ nào đang sinh sản. |
 | 1723 | Starting quiz: your personality traits ("Patient", "Tenacious"…) were shown in Spanish in every language. They are translated now. | Câu đố bắt đầu: đặc điểm tính cách của bạn ("Kiên nhẫn", "Kiên cường"…) được thể hiện bằng tiếng Tây Ban Nha bằng mọi ngôn ngữ. Bây giờ chúng được dịch. |
@@ -1922,11 +1989,13 @@
 | 1756 | YouTube button at the top, next to What's new: it takes you to the game's channel and, when there is a live stream, it turns red with "LIVE" and takes you to watch it. | Nút YouTube ở trên cùng, bên cạnh Tính năng mới: nút này sẽ đưa bạn đến kênh của trò chơi và khi có luồng trực tiếp, nó sẽ chuyển sang màu đỏ với dòng chữ "TRỰC TIẾP" và đưa bạn đến xem. |
 | 1758 | Arceus's Judgment: you can now hit it. It is invincible and only takes a small part of the damage (less and less over time), and your attacks aim at it when no legendary is left. | Phán quyết của Arceus: bây giờ bạn có thể đánh nó. Nó là bất khả chiến bại và chỉ nhận một phần sát thương nhỏ (ngày càng ít đi theo thời gian), và các cuộc tấn công của bạn nhắm vào nó khi không còn huyền thoại nào. |
 | 1759 | Plates: in every run Arceus holds a random one, which gives it its type (you are told when you enter the arena). No move type is always the best anymore. | Đĩa: trong mỗi trận đấu, Arceus giữ một đĩa ngẫu nhiên, mang theo loại của nó (bạn sẽ được thông báo khi bước vào đấu trường). Không có kiểu di chuyển nào luôn là tốt nhất nữa. |
+| 1760 | At minute 35, Arceus breaks everyone's item (Focus Sash included). | Ở phút thứ 35, Arceus phá vỡ vật phẩm của mọi người (bao gồm cả Focus Sash). |
 | 1762 | Evolved moves no longer change their name: they keep it with a "+" (Meteor Mash becomes Meteor Mash +). They work just like before and still stand out with their golden border. | Các chiêu thức tiến hóa không còn đổi tên nữa: chúng giữ nguyên tên đó bằng dấu "+" (Meteor Mash trở thành Meteor Mash +). Chúng hoạt động giống như trước đây và vẫn nổi bật với đường viền vàng. |
 | 1763 | Meteor Mash hits softer: 24 damage instead of 34 and a slightly smaller area. Maxed and evolved it dealt almost twice as much as Rock Slide; now they are on par. | Meteor Mash tấn công nhẹ nhàng hơn: 24 sát thương thay vì 34 và diện tích nhỏ hơn một chút. Được nâng cấp tối đa và phát triển, nó xử lý gần như gấp đôi so với Rock Slide; bây giờ họ ngang hàng. |
 | 1764 | In Arceus's Judgment, poison and burns deal a small, fixed amount to the legendaries (poison used to take a % of their HP): poisoning them and running away no longer works, you have to hit them. | Trong Arceus's Judgement, chất độc và vết bỏng gây ra một lượng nhỏ, cố định cho các quân huyền thoại (chất độc dùng để lấy % HP của chúng): đầu độc chúng và bỏ chạy không còn tác dụng nữa, bạn phải đánh chúng. |
 | 1779 | On mobile the "Manual aim" option is gone (it did not work with the touch screen): moves always aim on their own. | Trên thiết bị di động, tùy chọn "Nhắm thủ công" không còn nữa (nó không hoạt động với màn hình cảm ứng): các chuyển động luôn tự nhắm mục tiêu. |
 | 1788 | Acid Spray, Electro Ball, Seed Bomb, Signal Beam, Power Gem, Mist Ball, Energy Ball, Ice Shard, Shadow Sneak and Draining Kiss: once evolved, the shots flew off to the sides and hit nothing. Now they go forward, and the "+1 projectile" upgrade really adds one (it added none before). | Xịt axit, Bóng điện, Bom hạt giống, Tia tín hiệu, Đá quý sức mạnh, Bóng sương mù, Bóng năng lượng, Mảnh băng, Bóng lén và Nụ hôn hút máu: một khi đã tiến hóa, các phát bắn bay sang hai bên và không trúng đích gì. Bây giờ họ tiếp tục và bản nâng cấp "đạn +1" thực sự bổ sung thêm một (trước đây nó không được thêm vào). |
+| 1790 | 38 new moves | 38 chiêu mới |
 | 1793 | New upgrade, Starting move: buy it once per Pokémon and then choose for free which move it starts the run with. | Nâng cấp mới, chiêu thức bắt đầu: mua nó một lần cho mỗi Pokémon và sau đó chọn miễn phí chiêu thức mà nó bắt đầu chạy. |
 | 1795 | A joke line on the main menu title, like the ones in Minecraft. | Một dòng trò đùa trên tiêu đề menu chính, giống như trong Minecraft. |
 | 1796 | Single-type Pokémon deal 20% more damage with moves of their type, to make up for having less variety. | Pokémon đơn hệ gây thêm 20% sát thương với các chiêu thức cùng loại, để bù đắp cho việc ít đa dạng hơn. |
@@ -1936,4 +2005,9 @@
 | 1816 | There are at most 3 healers, 3 shielders and 3 summoners at a time. | Có tối đa 3 người chữa lành, 3 người che chắn và 3 người triệu hồi cùng một lúc. |
 | 1817 | Healers and shielders no longer make a boss unkillable: their healing and shields scale with the damage you are dealing to it, and it only gets one shield every 6 seconds. | Những người chữa lành và che chắn không còn khiến trùm trở nên bất khả chiến bại: khả năng hồi máu và lá chắn của chúng tăng theo sát thương mà bạn gây ra cho nó và nó chỉ nhận được một lá chắn sau mỗi 6 giây. |
 | 1819 | Poison still takes a percentage of HP, but against enemies with huge HP (the Judgment legendaries) that percentage is smaller. | Chất độc vẫn chiếm một phần trăm HP, nhưng đối với những kẻ thù có lượng HP khổng lồ (các huyền thoại của Judgement) thì phần trăm đó sẽ nhỏ hơn. |
+| 1826 | Important: save your game | Quan trọng: lưu tiến trình của bạn |
+| 1827 | Important: save your game | Quan trọng: lưu tiến trình của bạn |
+| 1830 | Lv. {x} | Cấp {x} |
+| 1831 | coins | xu |
+| 1833 | tiradas | lượt quay |
 
