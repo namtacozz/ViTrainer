@@ -58,13 +58,23 @@ G.Gacha = (() => {
   /** ¿Se puede tirar hoy en ese banner? (el de Halloween, sólo esos días) */
   const isOpen = gen => (gen === SPOOKY.gen ? !!(G.Halloween && G.Halloween.on) : !!BANNERS[gen - 1]);
 
+  function getRarity(p) {
+    if (typeof G !== 'undefined' && G.getEvoChain) {
+      const c = G.getEvoChain(p.dex);
+      if (c && c.baseRarity) return c.baseRarity;
+    }
+    return p.rarity;
+  }
+
   function inBanner(p, gen) {
     if (!G.SPRITE_META[p.dex]) return false;
+    // CHỈ cho phép Bậc 1 (Base Stage) và Pokémon Đơn bậc (Single Stage / Legendary)
+    if (typeof G !== 'undefined' && G.isBaseStage && !G.isBaseStage(p.dex)) return false;
     return gen === SPOOKY.gen ? p.types.includes('ghost') : p.gen === gen;
   }
 
   /** Pokémon de una rareza en un banner. */
-  function pool(rarity, gen) { return G.DEX.filter(p => inBanner(p, gen) && p.rarity === rarity); }
+  function pool(rarity, gen) { return G.DEX.filter(p => inBanner(p, gen) && getRarity(p) === rarity); }
 
   /** Pool no vacío más cercano (algunas generaciones tienen rarezas casi vacías). */
   function poolNear(rarity, gen) {
@@ -101,8 +111,12 @@ G.Gacha = (() => {
 
   /** Los 3 más fuertes de la generación, para el cartel del banner. */
   function featured(gen) {
-    return G.DEX.filter(p => inBanner(p, gen) && p.rarity === 5)
-      .sort((a, b) => b.bst - a.bst).slice(0, 3).map(p => p.dex);
+    return G.DEX.filter(p => inBanner(p, gen) && getRarity(p) === 5)
+      .sort((a, b) => {
+        const ca = typeof G !== 'undefined' && G.getEvoChain ? (G.getEvoChain(a.dex)?.maxBst || a.bst) : a.bst;
+        const cb = typeof G !== 'undefined' && G.getEvoChain ? (G.getEvoChain(b.dex)?.maxBst || b.bst) : b.bst;
+        return cb - ca;
+      }).slice(0, 3).map(p => p.dex);
   }
 
   /**
@@ -150,19 +164,124 @@ G.Gacha = (() => {
         else shiny = false;
       }
 
-      let isNew = false, refund = 0;
-      if (shiny) {
-        isNew = !save.shiny[mon.dex];
-        if (isNew) save.shiny[mon.dex] = { at: Date.now(), from: 'gacha' };
-        else refund = REFUND[rarity] * 3;
-        if (!save.owned[mon.dex]) save.owned[mon.dex] = { at: Date.now(), from: 'gacha' };
+      const effectiveRarity = getRarity(mon);
+      const chain = typeof G !== 'undefined' && G.getEvoChain ? G.getEvoChain(mon.dex) : null;
+      save.evoTiers = save.evoTiers || {};
+      save.evoBranches = save.evoBranches || {};
+
+      let isNew = false, refund = 0, evoStatus = '', unlockedDex = null;
+
+      if (!save.owned[mon.dex]) {
+        // Lần đầu sở hữu Bậc 1
+        isNew = true;
+        save.owned[mon.dex] = { at: Date.now(), from: 'gacha' };
+        save.evoTiers[mon.dex] = 1;
+        evoStatus = 'new';
       } else {
-        isNew = !save.owned[mon.dex];
-        if (isNew) save.owned[mon.dex] = { at: Date.now(), from: 'gacha' };
-        else refund = REFUND[rarity];
+        // Đã sở hữu Bậc 1 -> Xử lý Quay trùng (Duplicate Logic)
+        const curTier = save.evoTiers[mon.dex] || 1;
+        const chainType = chain ? chain.type : 'single';
+
+        if (chainType === '3stage') {
+          if (curTier === 1) {
+            const d2 = chain.stages[1] && chain.stages[1][0];
+            if (d2) {
+              save.evoTiers[mon.dex] = 2;
+              save.owned[d2] = { at: Date.now(), from: 'gacha_evo' };
+              if (save.shiny[mon.dex]) save.shiny[d2] = { at: Date.now(), from: 'inherited' };
+              evoStatus = 'stage2';
+              unlockedDex = d2;
+            } else {
+              refund = REFUND[effectiveRarity];
+              evoStatus = 'refund';
+            }
+          } else if (curTier === 2) {
+            const d3 = chain.stages[2] && chain.stages[2][0];
+            if (d3) {
+              save.evoTiers[mon.dex] = 3;
+              save.owned[d3] = { at: Date.now(), from: 'gacha_evo' };
+              if (save.shiny[mon.dex]) save.shiny[d3] = { at: Date.now(), from: 'inherited' };
+              evoStatus = 'stage3';
+              unlockedDex = d3;
+            } else {
+              refund = REFUND[effectiveRarity];
+              evoStatus = 'refund';
+            }
+          } else {
+            refund = REFUND[effectiveRarity];
+            evoStatus = 'refund';
+          }
+        } else if (chainType === '2stage') {
+          if (curTier === 1) {
+            const d2 = chain.stages[1] && chain.stages[1][0];
+            if (d2) {
+              save.evoTiers[mon.dex] = 2;
+              save.owned[d2] = { at: Date.now(), from: 'gacha_evo' };
+              if (save.shiny[mon.dex]) save.shiny[d2] = { at: Date.now(), from: 'inherited' };
+              evoStatus = 'stage2';
+              unlockedDex = d2;
+            } else {
+              refund = REFUND[effectiveRarity];
+              evoStatus = 'refund';
+            }
+          } else if (curTier === 2) {
+            save.evoTiers[mon.dex] = 3;
+            evoStatus = 'apex';
+          } else {
+            refund = REFUND[effectiveRarity];
+            evoStatus = 'refund';
+          }
+        } else if (chainType === 'single') {
+          if (curTier === 1) {
+            save.evoTiers[mon.dex] = 2;
+            evoStatus = 'awake1';
+          } else if (curTier === 2) {
+            save.evoTiers[mon.dex] = 3;
+            evoStatus = 'apex';
+          } else {
+            refund = REFUND[effectiveRarity];
+            evoStatus = 'refund';
+          }
+        } else if (chainType === 'branch') {
+          save.evoBranches[mon.dex] = save.evoBranches[mon.dex] || [];
+          const allBranches = (chain.stages[1] || []).concat(chain.stages[2] || []);
+          const locked = allBranches.filter(d => !save.evoBranches[mon.dex].includes(d));
+          if (locked.length > 0) {
+            const pickBranch = G.U.pick(locked);
+            save.evoBranches[mon.dex].push(pickBranch);
+            save.owned[pickBranch] = { at: Date.now(), from: 'gacha_branch' };
+            if (save.shiny[mon.dex]) save.shiny[pickBranch] = { at: Date.now(), from: 'inherited' };
+            save.evoTiers[mon.dex] = Math.max(save.evoTiers[mon.dex] || 1, G.getStage(pickBranch));
+            evoStatus = 'branch';
+            unlockedDex = pickBranch;
+          } else {
+            if (curTier < 3) {
+              save.evoTiers[mon.dex] = 3;
+              evoStatus = 'apex';
+            } else {
+              refund = REFUND[effectiveRarity];
+              evoStatus = 'refund';
+            }
+          }
+        }
       }
+
+      if (shiny) {
+        const isShinyNew = !save.shiny[mon.dex];
+        save.shiny[mon.dex] = { at: Date.now(), from: 'gacha' };
+        if (chain) {
+          for (const d of chain.members) {
+            if (save.owned[d] && !save.shiny[d]) {
+              save.shiny[d] = { at: Date.now(), from: 'inherited' };
+            }
+          }
+        }
+        if (!isShinyNew && refund > 0) refund *= 3;
+        else if (!isShinyNew && refund === 0 && !isNew) refund = REFUND[effectiveRarity] * 3;
+      }
+
       save.coins += refund;
-      out.push({ dex: mon.dex, rarity, shiny, isNew, refund });
+      out.push({ dex: mon.dex, rarity: effectiveRarity, shiny, isNew, refund, evoStatus, unlockedDex });
     }
     save.stats.pulls = (save.stats.pulls || 0) + n;
     out.iris = !hadIris && hasIris(save, gen) ? gen : 0;

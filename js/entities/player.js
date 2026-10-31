@@ -29,10 +29,22 @@ G.Player = class Player {
     this.xpMul = perks.xpMul || 1;
     this.coinMul = perks.coinMul || 1;
 
-    this.maxHp = mon.hp + (perks.hp || 0);
+    this.perksHp = perks.hp || 0;
+    this.bonusMaxHp = 0;
+    this.maxHp = mon.hp + this.perksHp;
     this.hp = this.maxHp;
     this.baseSpd = mon.spd;
     this.baseAtk = mon.atk;
+
+    // Estado de evolución en partida
+    this.chosenDex = mon.dex;
+    this.baseDex = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(mon.dex) : mon.dex;
+    this.evoStage = (typeof G !== 'undefined' && G.getStage) ? G.getStage(mon.dex) : 1;
+    this.evoChain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(this.baseDex) : null;
+    this.evoTierUnlocked = (typeof G !== 'undefined' && G.DB && G.DB.getEvoTier) ? G.DB.getEvoTier(this.baseDex) : 1;
+    this.isApex = false;
+    this.awakeningTier = 0;
+    this.pendingEvoBranches = null;
 
     this.moves = [];           // todos los movimientos aprendidos
     this.slots = [];           // huecos: cada uno, una lista de movimientos que se lanzan a la vez
@@ -287,7 +299,7 @@ G.Player = class Player {
     const close = this.activeGroup().some(m => m.kind === 'melee') ? 0.75 : 1;
     const d = pure ? Math.max(1, amount) : Math.max(1, amount * (1 - this.reduction) * close);
     this.hp -= d;
-    this.invuln = 0.45;
+    this.invuln = 0.52;
     this.flash = 0.14;
     G.Audio.sfx('hurt');
     G.Camera.kick(0.28);
@@ -325,7 +337,7 @@ G.Player = class Player {
     if (got >= 1) G.FX.dmgText(this.x, this.y - this.bodyH - 6, '+' + got, '#5fe08a');
   }
 
-  addMaxHp(amount) { this.maxHp += amount; this.hp += amount; }
+  addMaxHp(amount) { this.bonusMaxHp = (this.bonusMaxHp || 0) + amount; this.maxHp += amount; this.hp += amount; }
 
   /** Devuelve cuántos niveles ha subido (pueden ser varios de golpe). */
   gainXp(amount) {
@@ -339,7 +351,197 @@ G.Player = class Player {
       this.xpNext = Player.xpFor(this.level);
       leveled++;
     }
+    if (leveled > 0) {
+      this.checkInRunEvo();
+    }
     return leveled;
+  }
+
+  /** Evoluciona a un nuevo Pokémon en mitad de la partida. */
+  evolveTo(newDex, isApex = false, healPct = 0.4) {
+    const nextMon = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[newDex] : null;
+    if (!nextMon) return false;
+    this.dex = newDex;
+    this.mon = nextMon;
+    this.scale = G.Sprites.playerScale(newDex);
+    this.anim = new G.Sprites.Animator(newDex, this.scale, this.shiny);
+    const s = typeof G !== 'undefined' && G.DB && G.DB.save;
+    if (s && G.Skins) this.anim.skin = G.Skins.worn(s, newDex) || null;
+    this.r = G.Sprites.playerRadius(newDex);
+    this.bodyH = G.Sprites.bodyHeight(newDex, this.scale);
+
+    this.baseSpd = nextMon.spd;
+    this.baseAtk = nextMon.atk;
+    this.maxHp = nextMon.hp + (this.perksHp || 0) + (this.bonusMaxHp || 0);
+
+    if (isApex) {
+      this.isApex = true;
+      this.maxHp = Math.round(this.maxHp * 1.15);
+      this.baseAtk *= 1.15;
+      this.baseSpd *= 1.1;
+    }
+
+    this.evoStage = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
+    this.pendingEvoBranches = null;
+
+    if (healPct) this.heal(this.maxHp * healPct);
+
+    if (typeof G !== 'undefined') {
+      if (G.Sprites && G.Sprites.preload) G.Sprites.preload([newDex], 8000, this.shiny);
+      if (G.FX) {
+        G.FX.ring(this.x, this.y, 10, 160, isApex ? '#ff4081' : '#ffd23f', 1.0, 8);
+        G.FX.burst(this.x, this.y - this.bodyH * 0.5, isApex ? '#ff80ab' : '#ffe14d', 50, 280);
+      }
+      if (G.Audio) G.Audio.sfx('legend');
+      if (G.UI && G.UI.toast) G.UI.toast(nextMon.name + ' EVOLVED!', 2000);
+      if (G.Coop && G.Coop.active && G.Coop.broadcastEvo) {
+        G.Coop.broadcastEvo(newDex, isApex ? 1 : 0);
+      }
+    }
+    return true;
+  }
+
+  /** Activa el estado Apex (+) en nivel 30 para Pokémon de 2 fases o fase 3. */
+  activateApex(healPct = 0.4) {
+    if (this.isApex) return;
+    this.isApex = true;
+    this.maxHp = Math.round(this.maxHp * 1.20);
+    this.baseAtk *= 1.20;
+    this.baseSpd *= 1.12;
+    if (healPct) this.heal(this.maxHp * healPct);
+    if (typeof G !== 'undefined') {
+      if (G.FX) {
+        G.FX.ring(this.x, this.y, 12, 180, '#ff4081', 1.2, 8);
+        G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ff80ab', 60, 320);
+      }
+      if (G.Audio) G.Audio.sfx('legend');
+      if (G.UI && G.UI.toast) G.UI.toast(this.mon.name + ' APEX (+) ACTIVATED!', 2500);
+      if (G.Coop && G.Coop.active && G.Coop.broadcastEvo) {
+        G.Coop.broadcastEvo(this.dex, 1);
+      }
+    }
+  }
+
+  /** Activa Despertar I (Nv.15) o II (Nv.30) para Pokémon de fase única o legendarios. */
+  activateAwakening(tier, healPct = 0.4) {
+    if (this.awakeningTier >= tier) return;
+    this.awakeningTier = tier;
+    if (tier === 1) {
+      this.maxHp = Math.round(this.maxHp * 1.15);
+      this.baseAtk *= 1.15;
+      this.baseSpd *= 1.08;
+      if (healPct) this.heal(this.maxHp * healPct);
+      if (typeof G !== 'undefined') {
+        if (G.FX) {
+          G.FX.ring(this.x, this.y, 10, 150, '#ba68c8', 1.0, 7);
+          G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ce93d8', 45, 260);
+        }
+        if (G.Audio) G.Audio.sfx('legend');
+        if (G.UI && G.UI.toast) G.UI.toast(this.mon.name + ' AWAKENING I!', 2000);
+        if (G.Coop && G.Coop.active && G.Coop.broadcastEvo) {
+          G.Coop.broadcastEvo(this.dex, 2);
+        }
+      }
+    } else if (tier === 2) {
+      this.isApex = true;
+      this.maxHp = Math.round(this.maxHp * 1.20);
+      this.baseAtk *= 1.20;
+      this.baseSpd *= 1.12;
+      if (healPct) this.heal(this.maxHp * healPct);
+      if (typeof G !== 'undefined') {
+        if (G.FX) {
+          G.FX.ring(this.x, this.y, 12, 180, '#ff4081', 1.2, 8);
+          G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ff80ab', 60, 320);
+        }
+        if (G.Audio) G.Audio.sfx('legend');
+        if (G.UI && G.UI.toast) G.UI.toast(this.mon.name + ' AWAKENING II (APEX+)!', 2500);
+        if (G.Coop && G.Coop.active && G.Coop.broadcastEvo) {
+          G.Coop.broadcastEvo(this.dex, 1);
+        }
+      }
+    }
+  }
+
+  /** Comprueba y dispara la evolución o despertar al subir niveles en partida. */
+  checkInRunEvo() {
+    if (this.remote || !this.evoChain) return;
+    const chain = this.evoChain;
+    const s = (typeof G !== 'undefined' && G.DB) ? G.DB.save : null;
+    const tierUnlocked = this.evoTierUnlocked || 1;
+
+    // Especie de fase única (Legendarios / Singulares / Sin evolución)
+    if (chain.type === 'single') {
+      if (this.level >= 15 && this.awakeningTier === 0 && tierUnlocked >= 2) {
+        this.activateAwakening(1);
+      }
+      if (this.level >= 30 && this.awakeningTier < 2 && tierUnlocked >= 3) {
+        this.activateAwakening(2);
+      }
+      return;
+    }
+
+    // Especie de 2 fases
+    if (chain.type === '2stage') {
+      if (this.level >= 18 && this.evoStage === 1 && tierUnlocked >= 2) {
+        const nextDex = chain.stages[1] && chain.stages[1][0];
+        if (nextDex) this.evolveTo(nextDex);
+      }
+      if (this.level >= 30 && this.evoStage >= 2 && !this.isApex && tierUnlocked >= 3) {
+        this.activateApex();
+      }
+      return;
+    }
+
+    // Especie de 3 fases
+    if (chain.type === '3stage') {
+      if (this.level >= 15 && this.evoStage === 1 && tierUnlocked >= 2) {
+        const nextDex = chain.stages[1] && chain.stages[1][0];
+        if (nextDex) this.evolveTo(nextDex);
+      }
+      if (this.level >= 30 && this.evoStage === 2 && tierUnlocked >= 3) {
+        const nextDex = chain.stages[2] && chain.stages[2][0];
+        if (nextDex) this.evolveTo(nextDex);
+      }
+      if (this.level >= 30 && this.evoStage >= 3 && !this.isApex && tierUnlocked >= 3) {
+        this.activateApex();
+      }
+      return;
+    }
+
+    // Especie con ramificación (Eevee, Slowpoke, Tyrogue, Ralts...)
+    if (chain.type === 'branch') {
+      const info = (typeof G !== 'undefined' && G.getEvoInfo) ? G.getEvoInfo(this.dex) : null;
+      const nextList = info ? info.next : [];
+      if (this.evoStage === 1 && this.level >= 15) {
+        if (nextList.length === 1) {
+          if (tierUnlocked >= 2) this.evolveTo(nextList[0]);
+        } else if (nextList.length > 1) {
+          const unlocked = nextList.filter(d => s && s.evoBranches && s.evoBranches[this.baseDex] && s.evoBranches[this.baseDex].includes(d));
+          if (unlocked.length === 1) {
+            this.evolveTo(unlocked[0]);
+          } else if (unlocked.length > 1) {
+            this.pendingEvoBranches = unlocked;
+          }
+        }
+      } else if (this.evoStage === 2) {
+        if (chain.maxStage === 3 && this.level >= 30) {
+          if (nextList.length === 1) {
+            if (tierUnlocked >= 3) this.evolveTo(nextList[0]);
+          } else if (nextList.length > 1) {
+            const unlocked = nextList.filter(d => (s && s.evoBranches && s.evoBranches[this.baseDex] && s.evoBranches[this.baseDex].includes(d)) || tierUnlocked >= 3);
+            if (unlocked.length === 1) {
+              this.evolveTo(unlocked[0]);
+            } else if (unlocked.length > 1) {
+              this.pendingEvoBranches = unlocked;
+            }
+          }
+        } else if (chain.maxStage === 2 && this.level >= 30 && !this.isApex && tierUnlocked >= 3) {
+          this.activateApex();
+        }
+      } else if (this.evoStage >= 3 && this.level >= 30 && !this.isApex && tierUnlocked >= 3) {
+        this.activateApex();
+      }
+    }
   }
 
   // ---------------- objeto equipado ----------------
@@ -571,6 +773,15 @@ G.Player = class Player {
       ctx.globalAlpha = 0.35 + Math.sin(performance.now() / 120) * 0.15;
       ctx.strokeStyle = this.power.def.color; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.ellipse(this.x, this.y, this.r * 2.1, this.r * 0.85, 0, 0, 6.2832); ctx.stroke();
+      ctx.restore();
+    }
+
+    // Halo Apex (+) / Despertar
+    if (this.isApex && !this.dead) {
+      ctx.save();
+      ctx.globalAlpha = 0.4 + Math.sin(performance.now() / 150) * 0.2;
+      ctx.strokeStyle = '#ff4081'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.ellipse(this.x, this.y, this.r * 1.9, this.r * 0.75, 0, 0, 6.2832); ctx.stroke();
       ctx.restore();
     }
 

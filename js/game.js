@@ -199,6 +199,13 @@ G.Game = (() => {
     time = 0; pendingLevels = 0;
     runReal = performance.now(); tampered = false;
 
+    // Si no tiene activado "Fijar aspecto", empieza con la fase inicial para evolucionar en partida
+    const baseDex = (typeof G !== "undefined" && G.getBaseDex) ? G.getBaseDex(mon.dex) : mon.dex;
+    const keepApp = !!(save.keepApp && save.keepApp[baseDex]);
+    if (!keepApp && mon.dex !== baseDex && G.DEX_BY && G.DEX_BY[baseDex]) {
+      mon = G.DEX_BY[baseDex];
+    }
+
     pl = new G.Player(mon, perks, !!save.partnerShiny && G.DB.ownsShiny(mon.dex));
     G.Orbs.reset();
     pl.setAbility(G.Mons.abilityOf(mon.dex).id);

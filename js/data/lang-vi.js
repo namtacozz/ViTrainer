@@ -2,6 +2,15 @@
  * Tự động tạo và đồng bộ từ TRANSLATIONS.md
  */
 G.I18n.add({
+  "Línea evolutiva": "Dòng tiến hóa",
+  "Fijar aspecto": "Giữ ngoại hình",
+  "Al entrar a la partida empezarás con este Pokémon en vez de su fase inicial": "Khi vào trận bạn sẽ bắt đầu với Pokémon này thay vì dạng ban đầu",
+  "Fijado: empezarás la partida con este aspecto": "Đã khóa: bạn sẽ vào trận với ngoại hình này",
+  "Evolución normal en partida activada": "Đã bật tiến hóa giữa trận",
+  "Consigue duplicados en el Gacha para desbloquear esta forma": "Quay trùng trong Gacha để mở khóa hình thái này",
+  "Despertar I": "Thức Tỉnh I",
+  "Despertar II (Apex+)": "Thức Tỉnh II (Apex+)",
+
   "Acero": "Steel",
   "Agua": "Water",
   "Bicho": "Bug",

@@ -137,9 +137,20 @@ G.GachaUI = (() => {
       c.style.setProperty('--rc', r.shiny ? '#9ae6ff' : G.Gacha.RARITY_COLOR[r.rarity]);
       c.innerHTML = `<div class="stars">${G.UI.stars(r.rarity, 24)}</div>`;
       c.appendChild(G.UI.spriteCanvas(r.dex, 132, 120, { lively: r.rarity >= 4 || r.shiny, scale: 2, shiny: r.shiny }));
-      const tag = r.isNew
-        ? `<span class="new">${r.shiny ? '¡SHINY NUEVO!' : '¡NUEVO!'}</span>`
-        : `Repetido · <span class="coin"></span> +${r.refund}`;
+      let tag = '';
+      if (r.isNew) {
+        tag = `<span class="new">${r.shiny ? '¡SHINY NUEVO!' : '¡NUEVO!'}</span>`;
+      } else if (r.evoStatus === 'stage2' || r.evoStatus === 'stage3' || r.evoStatus === 'branch') {
+        const nextMon = G.DEX_BY[r.unlockedDex];
+        const nextName = nextMon ? nextMon.name : 'Evolución';
+        tag = `<span class="new" style="background:#ffd23f;color:#1c1400;font-size:11px;font-weight:bold;letter-spacing:0">${mon.name} → ${nextName} UNLOCKED!</span>`;
+      } else if (r.evoStatus === 'apex') {
+        tag = `<span class="new" style="background:#ff5f6d;color:#fff;font-size:11px;font-weight:bold;letter-spacing:0">APEX (+) UNLOCKED!</span>`;
+      } else if (r.evoStatus === 'awake1') {
+        tag = `<span class="new" style="background:#5fe08a;color:#0b2e13;font-size:11px;font-weight:bold;letter-spacing:0">DESPERTAR I UNLOCKED!</span>`;
+      } else {
+        tag = `Repetido · <span class="coin"></span> +${r.refund}`;
+      }
       // Nuevo: con qué naturaleza y habilidad te ha tocado (la oculta, en dorado).
       const ab = r.isNew ? G.Mons.abilityOf(r.dex) : null;
       const who = ab ? `<div class="pmon" translate="no">${G.Mons.name(G.Mons.natureOf(r.dex).n)} · <span class="${ab.slot === 2 ? 'gold' : ''}">${G.Mons.abilityName(ab.id)}</span></div>` : '';

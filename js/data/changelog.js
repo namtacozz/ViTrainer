@@ -6,6 +6,17 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Evolución en partida y renovación del Gacha", "In-Run Evolution & Gacha Rework"], new: [
+    ["Evolución en partida: tus Pokémon ahora evolucionan durante la partida al alcanzar los niveles 15 y 30 (nivel 18 para Pokémon de dos fases). Los Pokémon de fase única desbloquean Despertar I y II (Apex+).",
+     "In-run evolution: your Pokémon now evolve during runs upon reaching levels 15 and 30 (level 18 for two-stage species). Single-stage species unlock Awakening I and II (Apex+)."],
+    ["Árbol evolutivo en la Pokédex: visualiza las fases y ramas evolutivas de cada Pokémon, con opción de fijar aspecto inicial si prefieres empezar directamente con tu Pokémon evolucionado.",
+     "Evolution line in Pokédex: visualize evolution stages and branches for each Pokémon, with an option to keep your chosen appearance at the start of the run."],
+    ["Renovación del Gacha: los banners ahora contienen formas iniciales y Pokémon de fase única con rarezas basadas en sus estadísticas finales. Los duplicados desbloquean fases de evolución y ramas antes de convertirse en PokéCoins.",
+     "Gacha rework: banners now feature base stages and single-stage Pokémon with rarities reflecting their final stats. Duplicates unlock evolution tiers and branches before converting to PokéCoins."]
+  ], chg: [
+    ["Ajustado el equilibrio en partidas cooperativas: ritmo de aparición de enemigos más equilibrado, mayor ganancia de experiencia en grupo y ajuste en la vida de los jefes para evitar saturación injusta.",
+     "Balanced cooperative matches: smoother enemy spawn rate, fairer team experience gain, and adjusted boss health scaling to prevent unfair swarming."]
+  ]},
   { d: '2026-10-28', title: ["Halloween, un día más", "Halloween, one more day"], chg: [
     ["El evento de Halloween dura un día más: del 30 de octubre al 2 de noviembre (hora de España).",
      "The Halloween event lasts one more day: from October 30 to November 2 (Spain time)."]

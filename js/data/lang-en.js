@@ -4,6 +4,15 @@
  * son los oficiales en inglés.
  */
 G.I18n.add({
+  'Línea evolutiva': 'Evolution line',
+  'Fijar aspecto': 'Keep appearance',
+  'Al entrar a la partida empezarás con este Pokémon en vez de su fase inicial': 'When starting a run, you will start with this Pokémon instead of its base stage',
+  'Fijado: empezarás la partida con este aspecto': 'Locked: you will start the run with this appearance',
+  'Evolución normal en partida activada': 'In-run evolution enabled',
+  'Consigue duplicados en el Gacha para desbloquear esta forma': 'Get duplicates in Gacha to unlock this form',
+  'Despertar I': 'Awakening I',
+  'Despertar II (Apex+)': 'Awakening II (Apex+)',
+
   // ---------------- tipos y regiones ----------------
   'Acero': 'Steel', 'Agua': 'Water', 'Bicho': 'Bug', 'Dragón': 'Dragon', 'Eléctrico': 'Electric', 'Fantasma': 'Ghost',
   'Fuego': 'Fire', 'Hada': 'Fairy', 'Hielo': 'Ice', 'Lucha': 'Fighting', 'Planta': 'Grass', 'Psíquico': 'Psychic',

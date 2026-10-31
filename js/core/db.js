@@ -98,6 +98,9 @@ G.DB = (() => {
       // Halloween (25-10-2026, core/skins.js): los caramelos van en bag.candy.
       skins: {},              // id -> fecha: skins compradas (para siempre)
       pskin: {},              // dex -> [id, fecha]: la que lleva puesta ('' = ninguna; gana la elegida más tarde)
+      evoTiers: {},           // baseDex -> 1|2|3 (cấp tiến hóa/thức tỉnh đã mở)
+      evoBranches: {},        // baseDex -> [dex, ...] (các nhánh đã mở cho loài phân nhánh)
+      keepApp: {},            // baseDex -> boolean (giữ nguyên ngoại hình khi vào trận)
       tickets: { t1: 0, t10: 0 },   // tickets del gacha (x1 y x10)
       pity: {},               // generación del banner -> tiradas sin ★5
       legends: {},            // dex -> fecha: legendarios vencidos en grietas
@@ -110,6 +113,134 @@ G.DB = (() => {
       stats: { runs: 0, bestTime: 0, bestLevel: 0, totalKills: 0, pulls: 0, coinsEarned: 0, shinies: 0,
                bossesTotal: 0, riftWins: 0, evolutions: 0, missionsDone: 0, groupRuns: 0, bestGroupTime: 0 }
     };
+  }
+
+  /** Di dời dữ liệu bộ sưu tập theo chuỗi tiến hóa, hợp nhất nâng cấp & hoàn tiền. */
+  function migratePlayerCollection(s) {
+    if (!s || !s.owned || typeof G === 'undefined' || !G.EVO_BY_DEX) return s;
+    s.evoTiers = s.evoTiers || {};
+    s.evoBranches = s.evoBranches || {};
+    s.pupg = s.pupg || {};
+    s.ptm = s.ptm || {};
+    s.pnat = s.pnat || {};
+    s.pabil = s.pabil || {};
+    s.shiny = s.shiny || {};
+    s.keepApp = s.keepApp || {};
+
+    const ownedDexes = Object.keys(s.owned).map(Number).filter(d => G.DEX_BY && G.DEX_BY[d]);
+    const chainMembers = {};
+    for (const dex of ownedDexes) {
+      const evo = G.getEvoInfo(dex);
+      if (!evo) continue;
+      const base = evo.baseDex;
+      if (!chainMembers[base]) chainMembers[base] = new Set();
+      chainMembers[base].add(dex);
+    }
+
+    for (const baseStr of Object.keys(chainMembers)) {
+      const baseDex = Number(baseStr);
+      const members = chainMembers[baseDex];
+      const chain = G.getEvoChain(baseDex);
+      if (!chain) continue;
+
+      if (!s.owned[baseDex]) {
+        s.owned[baseDex] = { at: Date.now(), from: 'migrated' };
+      }
+
+      let maxOwnedStage = 1;
+      for (const d of members) {
+        const info = G.getEvoInfo(d);
+        if (info && info.stage > maxOwnedStage) maxOwnedStage = info.stage;
+      }
+      s.evoTiers[baseDex] = Math.max(s.evoTiers[baseDex] || 1, maxOwnedStage);
+
+      if (s.evoTiers[baseDex] >= 3 && chain.type === '3stage') {
+        const s2List = chain.stages[1] || [];
+        for (const d2 of s2List) {
+          if (!s.owned[d2]) s.owned[d2] = { at: Date.now(), from: 'migrated' };
+        }
+      }
+
+      if (chain.type === 'branch') {
+        s.evoBranches[baseDex] = s.evoBranches[baseDex] || [];
+        for (const d of members) {
+          const info = G.getEvoInfo(d);
+          if (info && info.stage >= 2 && !s.evoBranches[baseDex].includes(d)) {
+            s.evoBranches[baseDex].push(d);
+          }
+        }
+      }
+
+      const hasAnyShiny = [...members].some(d => s.shiny && s.shiny[d]);
+      if (hasAnyShiny) {
+        if (!s.shiny[baseDex]) s.shiny[baseDex] = { at: Date.now(), from: 'inherited' };
+        for (const d of members) {
+          if (!s.shiny[d]) s.shiny[d] = { at: Date.now(), from: 'inherited' };
+        }
+        if (s.evoTiers[baseDex] >= 3 && chain.type === '3stage') {
+          for (const d2 of (chain.stages[1] || [])) {
+            if (!s.shiny[d2]) s.shiny[d2] = { at: Date.now(), from: 'inherited' };
+          }
+        }
+      }
+
+      let refundCoins = 0;
+      const basePupg = s.pupg[baseDex] = s.pupg[baseDex] || {};
+      if (G.Upgrades && G.Upgrades.LIST) {
+        for (const u of G.Upgrades.LIST) {
+          const uid = u.id;
+          let maxLvl = basePupg[uid] || 0;
+          for (const d of members) {
+            if (d === baseDex) continue;
+            const otherPupg = s.pupg[d];
+            if (otherPupg && otherPupg[uid]) {
+              maxLvl = Math.max(maxLvl, otherPupg[uid]);
+            }
+          }
+          for (const d of members) {
+            if (d === baseDex) continue;
+            const otherPupg = s.pupg[d];
+            if (otherPupg && otherPupg[uid]) {
+              const lvl = otherPupg[uid];
+              for (let l = 0; l < lvl; l++) {
+                refundCoins += G.Upgrades.cost(uid, l);
+              }
+            }
+          }
+          if (maxLvl > 0) basePupg[uid] = maxLvl;
+        }
+      }
+
+      for (const d of members) {
+        if (d !== baseDex && s.pupg[d]) delete s.pupg[d];
+      }
+
+      if (refundCoins > 0) {
+        s.coins = (s.coins || 0) + refundCoins;
+      }
+
+      const allTms = new Set(s.ptm[baseDex] || []);
+      for (const d of members) {
+        if (d === baseDex) continue;
+        if (Array.isArray(s.ptm[d])) {
+          for (const tm of s.ptm[d]) allTms.add(tm);
+          delete s.ptm[d];
+        }
+      }
+      if (allTms.size > 0) s.ptm[baseDex] = [...allTms];
+
+      if (!s.pnat[baseDex]) {
+        for (const d of members) {
+          if (d !== baseDex && s.pnat[d]) { s.pnat[baseDex] = s.pnat[d]; break; }
+        }
+      }
+      if (!s.pabil[baseDex]) {
+        for (const d of members) {
+          if (d !== baseDex && s.pabil[d]) { s.pabil[baseDex] = s.pabil[d]; break; }
+        }
+      }
+    }
+    return s;
   }
 
   /** Rellena campos que falten en partidas de versiones anteriores. */
@@ -128,6 +259,7 @@ G.DB = (() => {
     }
     s.tickets = Object.assign({ t1: 0, t10: 0 }, s.tickets);
     sanitize(s);
+    migratePlayerCollection(s);
     s.v = VERSION;
     return s;
   }
@@ -393,6 +525,15 @@ G.DB = (() => {
     if (r.starter == null) r.starter = older.starter;
     if (r.personality == null) r.personality = older.personality;
     if (r.partner == null || !r.owned[r.partner]) { r.partner = older.partner; r.partnerShiny = older.partnerShiny; }
+    r.evoTiers = r.evoTiers || {};
+    for (const d in older.evoTiers || {}) r.evoTiers[d] = Math.max(r.evoTiers[d] || 0, older.evoTiers[d] || 0);
+    r.evoBranches = r.evoBranches || {};
+    for (const d in older.evoBranches || {}) {
+      r.evoBranches[d] = [...new Set((r.evoBranches[d] || []).concat(older.evoBranches[d] || []))];
+    }
+    r.keepApp = r.keepApp || {};
+    for (const d in older.keepApp || {}) if (!(d in r.keepApp)) r.keepApp[d] = older.keepApp[d];
+    migratePlayerCollection(r);
     r.created = Math.min(a.created || Date.now(), b.created || Date.now());
     r.updated = Math.max(a.updated || 0, b.updated || 0);
     return r;
@@ -1029,7 +1170,8 @@ G.DB = (() => {
   function upgradesOf(dex) {
     if (!save) return {};
     save.pupg = save.pupg || {};
-    return save.pupg[dex] || (save.pupg[dex] = {});
+    const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
+    return save.pupg[base] || (save.pupg[base] = {});
   }
 
   /** Da la versión shiny (y la normal, si no la tenía). Devuelve true si es nueva. */
@@ -1042,7 +1184,20 @@ G.DB = (() => {
 
   return {
     ready, register, login, loginWithGoogle, playAsGuest, logout, commit, deleteAccount, flush: pushNow, saveNow,
-    owns, grant, ownsShiny, grantShiny, merge, setName, upgradesOf, isFav, setFav,
+    owns, grant, ownsShiny, grantShiny,
+    getEvoTier(baseDex) { return (save && save.evoTiers && save.evoTiers[baseDex]) || 1; },
+    isEvoUnlocked(dex) {
+      if (!save) return false;
+      if (typeof G === 'undefined' || !G.getEvoInfo) return !!save.owned[dex];
+      const evo = G.getEvoInfo(dex);
+      if (!evo) return !!save.owned[dex];
+      const tier = (save.evoTiers && save.evoTiers[evo.baseDex]) || 1;
+      if (evo.type === 'branch' && evo.stage >= 2) {
+        return !!(save.evoBranches && save.evoBranches[evo.baseDex] && save.evoBranches[evo.baseDex].includes(dex));
+      }
+      return tier >= evo.stage;
+    },
+    migratePlayerCollection, merge, setName, upgradesOf, isFav, setFav,
     onSync(fn) { listeners.add(fn); },
     onLeave(fn) { leaveHooks.push(fn); },
     /** Acceso de bajo nivel para los módulos de red (sólo en modo nube). */

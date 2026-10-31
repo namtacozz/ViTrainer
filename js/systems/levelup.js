@@ -72,6 +72,24 @@ G.LevelUp = (() => {
       }
     }
 
+    // --- ramificaciones de evolución de Pokémon (Golden Cards) ---
+    if (pl.pendingEvoBranches && pl.pendingEvoBranches.length > 0) {
+      for (const branchDex of pl.pendingEvoBranches) {
+        const mon = G.DEX_BY[branchDex];
+        if (!mon) continue;
+        const typesStr = mon.types.map(t => G.U.TYPE_NAME[t] || t).join('/');
+        out.push({
+          w: 1000, type: 'evo_mon', key: 'evo_mon:' + branchDex,
+          icon: 'star', dex: branchDex, color: '#ffd23f', tag: 'EVOLUCIÓN',
+          title: 'Evolucionar a ' + G.T(mon.name),
+          desc: `Evoluciona a ${G.T(mon.name)} (${typesStr}). Recupera 40% de vida y actualiza estadísticas.`,
+          apply: p => {
+            p.evolveTo(branchDex);
+          }
+        });
+      }
+    }
+
     // --- evoluciones: movimiento al máximo + su condición cumplida ---
     const waiting = {};                   // stat -> movimiento que la espera para evolucionar
     for (const m of pl.moves) {
@@ -131,9 +149,21 @@ G.LevelUp = (() => {
     const pool = candidates(pl);
     const picked = [];
     const used = new Set();
+    // Si hay cartas de evolución de Pokémon pendientes, salen primero
+    const evoMons = pool.filter(c => c.type === 'evo_mon');
+    if (evoMons.length > 0) {
+      for (const c of evoMons) {
+        if (picked.length < n) {
+          const idx = pool.indexOf(c);
+          if (idx >= 0) pool.splice(idx, 1);
+          used.add(c.key);
+          picked.push(c);
+        }
+      }
+    }
     // Si hay una evolución lista, su carta dorada sale siempre.
     const evo = pool.findIndex(c => c.type === 'evo');
-    if (evo >= 0) { const c = pool.splice(evo, 1)[0]; used.add(c.key); picked.push(c); }
+    if (evo >= 0 && picked.length < n) { const c = pool.splice(evo, 1)[0]; used.add(c.key); picked.push(c); }
 
     while (picked.length < n && pool.length) {
       const total = pool.reduce((a, c) => a + c.w, 0);

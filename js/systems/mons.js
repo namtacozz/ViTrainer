@@ -41,15 +41,18 @@ G.Mons = (() => {
 
   /** La que le tocó (sin Menta). */
   function rolledNature(dex) { return G.NATURES[Math.floor(roll(dex, 'nat') * G.NATURES.length)]; }
-  /** La que tiene ahora: la de la Menta o la que le tocó. */
+  /** La que tiene ahora: la de la Menta o la que le tocó (heredada de la línea evolutiva). */
   function natureOf(dex) {
-    const s = save(), p = s && s.pnat && s.pnat[dex];
-    return (p && G.NATURE_BY[p[0]]) || rolledNature(dex);
+    const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
+    const s = save(), p = s && s.pnat && (s.pnat[dex] || s.pnat[base]);
+    return (p && G.NATURE_BY[p[0]]) || rolledNature(base);
   }
   function setNature(dex, id) {
+    const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
     const s = save();
     if (!s || !G.NATURE_BY[id]) return;
     s.pnat = s.pnat || {};
+    s.pnat[base] = [id, Date.now()];
     s.pnat[dex] = [id, Date.now()];
   }
 
@@ -78,9 +81,10 @@ G.Mons = (() => {
     if (l[2] && roll(dex, 'hid') < HIDDEN_RATE) return 2;
     return l[1] && roll(dex, 'abil') < 0.5 ? 1 : 0;
   }
-  /** { id, slot }: la de la Cápsula o la que le tocó. */
+  /** { id, slot }: la de la Cápsula o la que le tocó (heredada de la línea evolutiva). */
   function abilityOf(dex) {
-    const s = save(), p = s && s.pabil && s.pabil[dex], l = slots(dex);
+    const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
+    const s = save(), p = s && s.pabil && (s.pabil[dex] || s.pabil[base]), l = slots(dex);
     let slot = p && l[p[0]] ? p[0] : rolledSlot(dex);
     if (!l[slot]) slot = 0;
     return { id: l[slot] || '', slot };
@@ -91,19 +95,25 @@ G.Mons = (() => {
     return [0, 1, 2].filter(i => l[i] && i !== cur && (i < 2 || hidden) && !(i === 1 && l[1] === l[0]));
   }
   function setAbility(dex, slot) {
+    const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
     const s = save();
     if (!s || !slots(dex)[slot]) return;
     s.pabil = s.pabil || {};
+    s.pabil[base] = [slot, Date.now()];
     s.pabil[dex] = [slot, Date.now()];
   }
   const abilityName = id => (id && G.ABIL[id] ? name(G.ABIL[id]) : '');
 
   // ---------------- MT ----------------
 
-  /** Movimientos que ha aprendido con MT. */
+  /** Movimientos que ha aprendido con MT (heredados en toda la línea evolutiva). */
   function taught(dex) {
-    const s = save(), l = s && s.ptm && s.ptm[dex];
-    return Array.isArray(l) ? l.filter(id => G.Moves.BY_ID[id]) : [];
+    const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
+    const s = save();
+    const l1 = s && s.ptm && s.ptm[dex];
+    const l2 = s && s.ptm && s.ptm[base];
+    const combined = [...new Set((Array.isArray(l1) ? l1 : []).concat(Array.isArray(l2) ? l2 : []))];
+    return combined.filter(id => G.Moves.BY_ID[id]);
   }
   /** ¿Ya lo sabe sin MT (es de sus tipos)? */
   const natural = (dex, id) => G.Moves.poolFor(G.DEX_BY[dex], true).includes(id);
@@ -112,10 +122,13 @@ G.Mons = (() => {
   const canLearn = (dex, id) => learnable(dex).includes(id);
   /** Enseña una MT de la Mochila (se gasta). → true si se ha aprendido. */
   function teach(dex, id) {
+    const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
     const s = save();
     if (!s || !canLearn(dex, id) || !G.Shop.takeTm(id)) return false;
     s.ptm = s.ptm || {};
-    s.ptm[dex] = taught(dex).concat([id]);
+    const updated = [...new Set(taught(base).concat([id]))];
+    s.ptm[base] = updated;
+    s.ptm[dex] = updated;
     return true;
   }
 

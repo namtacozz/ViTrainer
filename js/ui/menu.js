@@ -345,6 +345,7 @@ G.MenuUI = (() => {
         ${bar('Velocidad', q.spd, max.spd, Math.round(q.spd), 'spd')}
         <p class="sub center" style="margin:6px 0 0">Pega mejor con ataques <b class="gold">${G.Stats.sideOf(q) === 'special' ? 'especiales' : 'físicos'}</b></p>
         ${monExtras(dex)}
+        ${renderEvoLine(dex)}
         ${p.types.length === 1 ? `<p class="sub center" style="margin:2px 0 0">Monotipo: +20 % de daño con sus ataques de tipo ${G.U.TYPE_NAME[p.types[0]]}</p>` : ''}
         <p style="font-size:14px;margin:10px 0 4px">Empieza con <b class="gold">${G.T(G.Moves.BY_ID[G.startMoveOf(dex)].name, 'move')}</b></p>
         <p class="move-icons" id="dex-moves">
@@ -374,8 +375,182 @@ G.MenuUI = (() => {
       G.UI.toast(p.name + (s.partnerShiny ? ' shiny' : '') + ' es ahora tu compañero');
       renderGrid(true); showDetail(dex);
     };
-    if (own) wireExtras(dex, box);
+    if (own) {
+      wireExtras(dex, box);
+      wireEvoLine(dex, box);
+    }
   }
+  function renderEvoLine(dex) {
+    if (typeof G === 'undefined' || !G.getBaseDex || !G.getEvoChain) return '';
+    const baseDex = G.getBaseDex(dex);
+    const chain = G.getEvoChain(baseDex);
+    if (!chain) return '';
+    const s = G.DB.save;
+    const tier = G.DB.getEvoTier ? G.DB.getEvoTier(baseDex) : 1;
+    const keepApp = !!(s.keepApp && s.keepApp[baseDex]);
+
+    const isOwn = d => !!(s.owned && s.owned[d]);
+    const isUnlocked = d => G.DB.isEvoUnlocked ? G.DB.isEvoUnlocked(d) : isOwn(d);
+
+    let nodesHtml = '';
+
+    if (chain.type === 'single') {
+      const p1 = G.DEX_BY[chain.baseDex];
+      const un1 = isOwn(chain.baseDex);
+      const un2 = tier >= 2;
+      const un3 = tier >= 3;
+      nodesHtml = `
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === chain.baseDex ? ' current' : ''}" data-dex="${chain.baseDex}">
+          <div class="evo-cv-wrap" data-dex="${chain.baseDex}" data-unlocked="${un1 ? 1 : 0}"></div>
+          <div class="evo-name">${p1 ? p1.name : '???'}</div>
+          <div class="evo-lvl">Nv. 1</div>
+        </div>
+        <span class="evo-arrow">→</span>
+        <div class="evo-node ${un2 ? 'unlocked' : 'locked'}" title="${un2 ? G.T('Despertar I') : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+          <div class="evo-apex-badge ${un2 ? 'awakening' : 'locked'}">${G.Icons.html('star', 16)}</div>
+          <div class="evo-name">${G.T('Despertar I')}</div>
+          <div class="evo-lvl">Nv. 15</div>
+          ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
+        </div>
+        <span class="evo-arrow">→</span>
+        <div class="evo-node ${un3 ? 'unlocked' : 'locked'}" title="${un3 ? G.T('Despertar II (Apex+)') : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+          <div class="evo-apex-badge ${un3 ? 'apex' : 'locked'}">${G.Icons.html('crown', 16)}</div>
+          <div class="evo-name">Apex (+)</div>
+          <div class="evo-lvl">Nv. 30</div>
+          ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
+        </div>
+      `;
+    } else if (chain.type === '2stage') {
+      const d1 = chain.stages[0][0], d2 = chain.stages[1][0];
+      const p1 = G.DEX_BY[d1], p2 = G.DEX_BY[d2];
+      const un1 = isOwn(d1);
+      const un2 = isUnlocked(d2);
+      const un3 = tier >= 3;
+      nodesHtml = `
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
+          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
+          <div class="evo-name">${p1 ? p1.name : '???'}</div>
+          <div class="evo-lvl">Nv. 1</div>
+        </div>
+        <span class="evo-arrow">→</span>
+        <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${un2 ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+          <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="${un2 ? 1 : 0}"></div>
+          <div class="evo-name">${un2 && p2 ? p2.name : '???'}</div>
+          <div class="evo-lvl">Nv. 18</div>
+          ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
+        </div>
+        <span class="evo-arrow">→</span>
+        <div class="evo-node ${un3 ? 'unlocked' : 'locked'}" title="${un3 ? 'Apex (+)' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+          <div class="evo-apex-badge ${un3 ? 'apex' : 'locked'}">${G.Icons.html('crown', 16)}</div>
+          <div class="evo-name">Apex (+)</div>
+          <div class="evo-lvl">Nv. 30</div>
+          ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
+        </div>
+      `;
+    } else if (chain.type === '3stage') {
+      const d1 = chain.stages[0][0], d2 = chain.stages[1][0], d3 = chain.stages[2][0];
+      const p1 = G.DEX_BY[d1], p2 = G.DEX_BY[d2], p3 = G.DEX_BY[d3];
+      const un1 = isOwn(d1);
+      const un2 = isUnlocked(d2);
+      const un3 = isUnlocked(d3);
+      nodesHtml = `
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
+          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
+          <div class="evo-name">${p1 ? p1.name : '???'}</div>
+          <div class="evo-lvl">Nv. 1</div>
+        </div>
+        <span class="evo-arrow">→</span>
+        <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${un2 ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+          <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="${un2 ? 1 : 0}"></div>
+          <div class="evo-name">${un2 && p2 ? p2.name : '???'}</div>
+          <div class="evo-lvl">Nv. 15</div>
+          ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
+        </div>
+        <span class="evo-arrow">→</span>
+        <div class="evo-node ${un3 ? 'unlocked' : 'locked'}${dex === d3 ? ' current' : ''}" data-dex="${d3}" title="${un3 ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+          <div class="evo-cv-wrap" data-dex="${d3}" data-unlocked="${un3 ? 1 : 0}"></div>
+          <div class="evo-name">${un3 && p3 ? p3.name : '???'}</div>
+          <div class="evo-lvl">Nv. 30</div>
+          ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
+        </div>
+      `;
+    } else if (chain.type === 'branch') {
+      const d1 = chain.baseDex;
+      const p1 = G.DEX_BY[d1];
+      const un1 = isOwn(d1);
+      const branchDexes = chain.members.filter(d => d !== d1);
+      const branchNodes = branchDexes.map(d => {
+        const pb = G.DEX_BY[d];
+        const unb = isUnlocked(d);
+        const stage = G.getStage(d);
+        const lvl = stage === 2 ? 'Nv. 15' : 'Nv. 30';
+        return `
+          <div class="evo-node ${unb ? 'unlocked' : 'locked'}${dex === d ? ' current' : ''}" data-dex="${d}" title="${unb ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+            <div class="evo-cv-wrap" data-dex="${d}" data-unlocked="${unb ? 1 : 0}"></div>
+            <div class="evo-name">${unb && pb ? pb.name : '???'}</div>
+            <div class="evo-lvl">${lvl}</div>
+            ${!unb ? '<div class="evo-lock-tag">🔒</div>' : ''}
+          </div>
+        `;
+      }).join('');
+
+      nodesHtml = `
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
+          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
+          <div class="evo-name">${p1 ? p1.name : '???'}</div>
+          <div class="evo-lvl">Nv. 1</div>
+        </div>
+        <span class="evo-arrow">→</span>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:240px;">
+          ${branchNodes}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="evo-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:11px;font-weight:bold;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;">${G.T('Línea evolutiva')}</span>
+          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);cursor:pointer;" title="${G.T('Al entrar a la partida empezarás con este Pokémon en vez de su fase inicial')}">
+            <input type="checkbox" id="evo-keep-toggle" ${keepApp ? 'checked' : ''} style="cursor:pointer;accent-color:var(--gold);" />
+            <span>${G.T('Fijar aspecto')}</span>
+          </label>
+        </div>
+        <div class="evo-tree-row">${nodesHtml}</div>
+      </div>
+    `;
+  }
+
+  function wireEvoLine(dex, box) {
+    const s = G.DB.save;
+    const baseDex = G.getBaseDex(dex);
+    const hasSh = G.DB.ownsShiny(dex);
+    box.querySelectorAll('.evo-cv-wrap').forEach(w => {
+      const d = +w.dataset.dex;
+      const un = w.dataset.unlocked === '1';
+      w.appendChild(G.UI.spriteCanvas(d, 40, 36, { scale: 1.5, silhouette: !un, shiny: hasSh && viewShiny }));
+    });
+    box.querySelectorAll('.evo-node[data-dex]').forEach(n => {
+      n.onclick = () => {
+        const d = +n.dataset.dex;
+        if (d && G.DB.save.owned[d]) {
+          showDetail(d);
+        } else if (d && !G.DB.save.owned[d]) {
+          G.UI.toast(G.T('Consigue duplicados en el Gacha para desbloquear esta forma'));
+        }
+      };
+    });
+    const keepTog = $('evo-keep-toggle');
+    if (keepTog) {
+      keepTog.onchange = e => {
+        s.keepApp = s.keepApp || {};
+        s.keepApp[baseDex] = e.target.checked;
+        G.DB.commit();
+        G.UI.toast(e.target.checked ? G.T('Fijado: empezarás la partida con este aspecto') : G.T('Evolución normal en partida activada'));
+      };
+    }
+  }
+
 
   // ---------------- ficha: lo que hace cada ataque (24-10-2026) ----------------
   /* Los iconos de los ataques que puede aprender: al pasar el ratón (o al

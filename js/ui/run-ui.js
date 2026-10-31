@@ -89,16 +89,21 @@ G.RunUI = (() => {
     list.forEach((c, i) => {
       const el = document.createElement('div');
       el.className = 'card';
+      const isEvo = c.type === 'evo' || c.type === 'evo_mon';
       const tag = c.type === 'new'
         ? `<span class="tag-chip" style="background:${c.color}">Nuevo · ${c.tag}</span>${c.cat ? `<span class="tag-chip cat">${c.cat}</span>` : ''}`
-        : c.type === 'up' || c.type === 'evo'
+        : isEvo
           ? `<span class="tag-chip" style="background:${c.color}">${c.tag}</span>`
           : `<span class="tag-chip" style="background:${c.color === '#ffd23f' ? '#ffd23f' : '#9fb1c9'}">${c.tag}</span>`;
-      if (c.type === 'evo') el.classList.add('evo');
+      if (isEvo) el.classList.add('evo');
       el.innerHTML =
-        `<div class="ico" style="background:${c.color}33">${G.Icons.html(c.icon, 32)}</div>
+        `<div class="ico" style="background:${c.color}33">${c.dex ? '' : G.Icons.html(c.icon, 32)}</div>
          <div class="txt"><div class="nm">${c.title} ${tag}</div><div class="ds">${c.desc}</div></div>
          <div class="key">${i + 1}</div>`;
+      if (c.dex) {
+        const ico = el.querySelector('.ico');
+        if (ico) ico.appendChild(G.UI.spriteCanvas(c.dex, 40, 40, { scale: 1.5, lively: true }));
+      }
       el.dataset.sfx = 'none';             // el juego pone su propio sonido al elegir
       onTap(el, () => pick(i));
       box.appendChild(el);

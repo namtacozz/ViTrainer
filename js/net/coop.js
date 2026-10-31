@@ -52,8 +52,8 @@ G.Coop = (() => {
 
   // ---------------- escalado de dificultad ----------------
 
-  const scaleRate = n => 1 + 0.75 * Math.max(0, n - 1);
-  const scaleHp = n => 1 + 0.3 * Math.max(0, n - 1);
+  const scaleRate = n => 1 + 0.45 * Math.max(0, n - 1);
+  const scaleHp = n => 1 + 0.25 * Math.max(0, n - 1);
 
   // ---------------- arranque / fin ----------------
 
@@ -122,7 +122,7 @@ G.Coop = (() => {
   function xpFactor() {
     let s = local.xpMul, n = 1;
     for (const m of mates.values()) if (m.connected) { s += m.xpMul || 1; n++; }
-    return (s / n) / local.xpMul / (1 + 0.6 * (n - 1));
+    return (s / n) / local.xpMul / (1 + 0.28 * (n - 1));
   }
 
   // ---------------- estado de un jugador ----------------
@@ -406,6 +406,14 @@ G.Coop = (() => {
           G.Combat.ghostCast(m.pl, ev[1], ev[2], ev[3], ev[4]);
           emit(['c', from, ev[1], ev[2], ev[3], ev[4]], from);
           break;
+        case 'evo': {
+          const targetUid = ev[1] || from;
+          const newDex = ev[2];
+          const isApex = ev[3];
+          applyMateEvo(targetUid, newDex, isApex);
+          emit(['evo', targetUid, newDex, isApex], from);
+          break;
+        }
         case 'pb':
           G.World.breakAt(ev[1], ev[2]);
           emit(['pb', ev[1], ev[2]], from);
@@ -518,6 +526,13 @@ G.Coop = (() => {
         if (G.U.dist2(ev[1], ev[2], local.x, local.y) < 500 * 500) G.Camera.kick(0.8);
         G.Audio.sfx('break');
         break;
+      case 'evo': {
+        const targetUid = ev[1];
+        const newDex = ev[2];
+        const isApex = ev[3];
+        applyMateEvo(targetUid, newDex, isApex);
+        break;
+      }
       case 'pb': G.World.breakAt(ev[1], ev[2]); break;
       case 'say': G.Spawner.say(ev[1], ev[2]); break;
       case 'heal': if (!local.dead) { local.heal(local.maxHp * ev[1]); G.FX.ring(local.x, local.y, 6, 60, '#5fe08a', 0.4, 3); } break;
@@ -547,6 +562,32 @@ G.Coop = (() => {
     if (!active || pl !== local) return;
     if (host) emit(['c', me, m.id, m.lvl, r2(pl.aim), m.evolved ? 1 : 0]);
     else outEv.push(['c', m.id, m.lvl, r2(pl.aim), m.evolved ? 1 : 0]);
+  }
+
+  function broadcastEvo(newDex, isApex = 0) {
+    if (!active) return;
+    if (host) emit(['evo', me, newDex, isApex]);
+    else outEv.push(['evo', me, newDex, isApex]);
+  }
+
+  function applyMateEvo(uid, newDex, isApex) {
+    const m = mates.get(uid);
+    if (!m || !m.pl) return;
+    const mon = G.DEX_BY[newDex];
+    if (!mon) return;
+    m.pl.dex = newDex;
+    m.pl.mon = mon;
+    m.pl.scale = G.Sprites.playerScale(newDex);
+    m.pl.anim = new G.Sprites.Animator(newDex, m.pl.scale, m.pl.shiny);
+    m.pl.r = G.Sprites.playerRadius(newDex);
+    m.pl.bodyH = G.Sprites.bodyHeight(newDex, m.pl.scale);
+    if (isApex) m.pl.isApex = true;
+    G.Sprites.preload([newDex], 8000, m.pl.shiny);
+    if (G.FX) {
+      G.FX.ring(m.pl.x, m.pl.y, 10, 160, isApex ? "#ff4081" : "#ffd23f", 1.0, 8);
+      G.FX.burst(m.pl.x, m.pl.y - m.pl.bodyH * 0.5, isApex ? "#ff80ab" : "#ffe14d", 50, 280);
+    }
+    if (G.Audio) G.Audio.sfx("legend");
   }
 
   // invitado
@@ -671,6 +712,8 @@ G.Coop = (() => {
     sums: teamSums,
     get active() { return active; },
     get isHost() { return active && host; },
+    broadcastEvo,
+    get myUid() { return me; },
     get local() { return local; }
   };
 })();

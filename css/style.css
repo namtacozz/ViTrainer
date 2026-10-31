@@ -1089,3 +1089,95 @@ html:lang(zh) .btn, html:lang(zh) .chip { letter-spacing: 0; }
   .topbar .btn.small { padding: 2px 4px; }
   .topbar img { width: 14px; height: 14px; }
 }
+
+/* --- Evolution Line in Menu Detail --- */
+.evo-section {
+  background: rgba(14, 18, 28, 0.65);
+  border: 1px solid rgba(140, 170, 210, 0.18);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 8px 0;
+}
+.evo-tree-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.evo-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 4px 6px;
+  min-width: 54px;
+  transition: transform 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+.evo-node.current {
+  border-color: var(--gold);
+  background: rgba(255, 210, 63, 0.12);
+}
+.evo-node.unlocked:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 210, 63, 0.6);
+}
+.evo-node.locked {
+  opacity: 0.55;
+  filter: grayscale(0.85);
+}
+.evo-node .evo-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  max-width: 66px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.evo-node .evo-lvl {
+  font-size: 9px;
+  color: var(--gold);
+  font-weight: 500;
+}
+.evo-node .evo-lock-tag {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 10px;
+  line-height: 1;
+}
+.evo-arrow {
+  color: rgba(140, 170, 210, 0.5);
+  font-size: 13px;
+  user-select: none;
+}
+.evo-apex-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 36px;
+  border-radius: 6px;
+  margin-bottom: 2px;
+}
+.evo-apex-badge.awakening {
+  background: radial-gradient(circle, rgba(186,104,200,0.4) 0%, rgba(20,24,35,0.8) 100%);
+  border: 1px solid #ba68c8;
+  box-shadow: 0 0 8px rgba(186,104,200,0.4);
+}
+.evo-apex-badge.apex {
+  background: radial-gradient(circle, rgba(255,64,129,0.4) 0%, rgba(20,24,35,0.8) 100%);
+  border: 1px solid #ff4081;
+  box-shadow: 0 0 8px rgba(255,64,129,0.4);
+}
+.evo-apex-badge.locked {
+  border: 1px dashed rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.03);
+}

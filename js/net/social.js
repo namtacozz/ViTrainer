@@ -272,9 +272,17 @@ G.Social = (() => {
 
   // ---------------- salas ----------------
 
+  function activePlayDex(partnerDex) {
+    const s = G.DB.save;
+    if (!partnerDex) return 25;
+    const base = (typeof G !== "undefined" && G.getBaseDex) ? G.getBaseDex(partnerDex) : partnerDex;
+    const keep = !!(s && s.keepApp && s.keepApp[base]);
+    return keep ? partnerDex : base;
+  }
+
   function memberInfo() {
     const s = G.DB.save;
-    return { name: me.name, dex: s.partner, shiny: !!s.partnerShiny && G.DB.ownsShiny(s.partner), at: ts() };
+    return { name: me.name, dex: activePlayDex(s.partner), shiny: !!s.partnerShiny && G.DB.ownsShiny(s.partner), at: ts() };
   }
 
   /**
@@ -485,7 +493,7 @@ G.Social = (() => {
   /** Actualiza tu Pokémon en la sala (si cambias de compañero). */
   function refreshMember() {
     if (room && me) fb.rtdb.ref('rooms/' + room.id + '/m/' + uid).update(
-      { dex: G.DB.save.partner, shiny: !!G.DB.save.partnerShiny && G.DB.ownsShiny(G.DB.save.partner) }).catch(() => {});
+      { dex: activePlayDex(G.DB.save.partner), shiny: !!G.DB.save.partnerShiny && G.DB.ownsShiny(G.DB.save.partner) }).catch(() => {});
   }
 
   // ---------------- invitaciones ----------------
