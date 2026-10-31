@@ -217,5 +217,5 @@ G.Pickups = (() => {
     ctx.globalAlpha = 1;
   }
 
-  return { clear, all, dropXp, drop, update, draw, addRemote, removeId, pullAll, KIND, get count() { return list.length; } };
+  return { clear, all, dropXp, drop, push, update, draw, addRemote, removeId, pullAll, KIND, get count() { return list.length; } };
 })();

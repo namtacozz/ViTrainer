@@ -227,8 +227,10 @@ G.InRunEvents = (() => {
           }
         }
 
-        if (current.progress >= 1.0) {
-          completeEvent();
+        if (authority()) {
+          if (current.progress >= 1.0) {
+            completeEvent();
+          }
         }
       }
     } else if (current.type === 'scavenger') {
@@ -337,19 +339,39 @@ G.InRunEvents = (() => {
       pl.buffs.atk.n = (pl.buffs.atk.n || 0) + 1;
     }
 
-    // 3. Generar racimo de recompensas de alto valor
+    // 3. Monedas directas para todos los jugadores
+    pl.coins = (pl.coins || 0) + 180;
+    if (G.DB && G.DB.save) {
+      G.DB.save.coins = (G.DB.save.coins || 0) + 180;
+    }
+
+    // 4. Generar racimo de recompensas de alto valor en el suelo
     if (authority() && G.Pickups) {
       const spot = centerOfPlayers();
       // Ticket de gacha garantizado
-      const hasT10 = Math.random() < 0.35;
-      G.Pickups.push({ kind: hasT10 ? 'ticket10' : 'ticket', x: spot.x, y: spot.y, value: 1 });
-
-      // Monedas y orbes de experiencia masivos
-      for (let i = 0; i < 10; i++) {
-        const a = Math.random() * 6.28, d = G.U.rand(20, 80);
-        G.Pickups.push({ kind: 'coin', x: spot.x + Math.cos(a) * d, y: spot.y + Math.sin(a) * d, value: 25 });
-        G.Pickups.push({ kind: 'xpBig', x: spot.x + Math.sin(a) * d, y: spot.y + Math.cos(a) * d, value: 120 });
+      const hasT10 = Math.random() < 0.40;
+      if (G.Pickups.drop) {
+        G.Pickups.drop(hasT10 ? 'ticket10' : 'ticket', spot.x, spot.y - 14, 1);
+        for (let i = 0; i < 14; i++) {
+          const a = Math.random() * 6.28, d = G.U.rand(15, 80);
+          G.Pickups.drop('coin', spot.x + Math.cos(a) * d, spot.y + Math.sin(a) * d, 25);
+        }
+        if (G.Pickups.dropXp) {
+          G.Pickups.dropXp(spot.x, spot.y, 950, true);
+        }
+        G.Pickups.drop('heal', spot.x + 24, spot.y, 0);
+        G.Pickups.drop('magnet', spot.x - 24, spot.y, 0);
+        if (G.Items && G.Items.roll) {
+          G.Pickups.drop('item', spot.x, spot.y + 24, G.Items.roll());
+        }
+        if (G.Orbs && G.Orbs.roll && Math.random() < 0.65) {
+          G.Pickups.drop('sphere', spot.x + 18, spot.y - 18, G.Orbs.roll());
+        }
       }
+      // Atraer los orbes hacia los jugadores tras un breve instante
+      setTimeout(() => {
+        if (G.Pickups && G.Pickups.pullAll) G.Pickups.pullAll();
+      }, 1000);
     }
   }
 
@@ -430,10 +452,24 @@ G.InRunEvents = (() => {
       const pulseK = 1 + Math.sin(current.pulse) * 0.04;
       const r = current.r * pulseK;
 
+      // Cột sáng định vị thiên không (Sky Beacon Beam)
+      const beamG = ctx.createLinearGradient(current.x, current.y, current.x, current.y - 500);
+      beamG.addColorStop(0, 'rgba(255, 210, 63, 0.45)');
+      beamG.addColorStop(0.35, 'rgba(255, 210, 63, 0.22)');
+      beamG.addColorStop(1, 'rgba(255, 210, 63, 0.0)');
+      ctx.fillStyle = beamG;
+      ctx.beginPath();
+      ctx.moveTo(current.x - 28, current.y);
+      ctx.lineTo(current.x - 8, current.y - 500);
+      ctx.lineTo(current.x + 8, current.y - 500);
+      ctx.lineTo(current.x + 28, current.y);
+      ctx.closePath();
+      ctx.fill();
+
       // Área interior coloreada
       const g = ctx.createRadialGradient(current.x, current.y, 10, current.x, current.y, r);
-      g.addColorStop(0, 'rgba(255, 210, 63, 0.25)');
-      g.addColorStop(0.85, 'rgba(255, 175, 20, 0.12)');
+      g.addColorStop(0, 'rgba(255, 210, 63, 0.28)');
+      g.addColorStop(0.85, 'rgba(255, 175, 20, 0.14)');
       g.addColorStop(1, 'rgba(255, 175, 20, 0.0)');
       ctx.fillStyle = g;
       ctx.beginPath();
@@ -441,7 +477,7 @@ G.InRunEvents = (() => {
       ctx.fill();
 
       // Anillo perimetral base
-      ctx.strokeStyle = 'rgba(255, 210, 63, 0.4)';
+      ctx.strokeStyle = 'rgba(255, 210, 63, 0.45)';
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.arc(current.x, current.y, r, 0, Math.PI * 2);
@@ -454,11 +490,9 @@ G.InRunEvents = (() => {
         ctx.lineWidth = 6;
         ctx.lineCap = 'round';
         ctx.beginPath();
-        // Empezar en la parte superior (-PI/2) y barrer en el sentido de las agujas del reloj
         ctx.arc(current.x, current.y, r, -Math.PI / 2, -Math.PI / 2 + sweepAngle);
         ctx.stroke();
 
-        // Relleno sectorial sutil
         ctx.fillStyle = 'rgba(95, 224, 138, 0.15)';
         ctx.beginPath();
         ctx.moveTo(current.x, current.y);
@@ -468,7 +502,7 @@ G.InRunEvents = (() => {
       }
 
       // Icono central e indicador de porcentaje
-      ctx.fillStyle = 'rgba(10, 16, 32, 0.85)';
+      ctx.fillStyle = 'rgba(10, 16, 32, 0.88)';
       ctx.beginPath();
       ctx.arc(current.x, current.y, 24, 0, Math.PI * 2);
       ctx.fill();
@@ -489,6 +523,20 @@ G.InRunEvents = (() => {
         if (it.collected) continue;
         const hoverY = it.y + Math.sin(it.bob) * 5;
 
+        // Cột sáng mảnh trên đầu mỗi tinh thể
+        const cBeam = ctx.createLinearGradient(it.x, hoverY, it.x, hoverY - 180);
+        cBeam.addColorStop(0, 'rgba(127, 224, 255, 0.45)');
+        cBeam.addColorStop(0.5, 'rgba(127, 224, 255, 0.18)');
+        cBeam.addColorStop(1, 'rgba(127, 224, 255, 0)');
+        ctx.fillStyle = cBeam;
+        ctx.beginPath();
+        ctx.moveTo(it.x - 10, hoverY);
+        ctx.lineTo(it.x - 3, hoverY - 180);
+        ctx.lineTo(it.x + 3, hoverY - 180);
+        ctx.lineTo(it.x + 10, hoverY);
+        ctx.closePath();
+        ctx.fill();
+
         // Sombra en el suelo
         ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
         ctx.beginPath();
@@ -496,12 +544,12 @@ G.InRunEvents = (() => {
         ctx.fill();
 
         // Resplandor del cristal
-        const g = ctx.createRadialGradient(it.x, hoverY, 2, it.x, hoverY, 18);
-        g.addColorStop(0, 'rgba(127, 224, 255, 0.8)');
+        const g = ctx.createRadialGradient(it.x, hoverY, 2, it.x, hoverY, 20);
+        g.addColorStop(0, 'rgba(127, 224, 255, 0.85)');
         g.addColorStop(1, 'rgba(127, 224, 255, 0.0)');
         ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(it.x, hoverY, 18, 0, Math.PI * 2);
+        ctx.arc(it.x, hoverY, 20, 0, Math.PI * 2);
         ctx.fill();
 
         // Dibujar cristal poligonal con canvas
@@ -522,21 +570,61 @@ G.InRunEvents = (() => {
 
     } else if (current.type === 'pursuit' && current.boss) {
       ctx.save();
-      // Aura oscura alrededor del boss de persecución
       const bx = current.boss.x, by = current.boss.y;
-      const g = ctx.createRadialGradient(bx, by, 10, bx, by, 65);
-      g.addColorStop(0, 'rgba(154, 77, 255, 0.55)');
-      g.addColorStop(0.7, 'rgba(255, 45, 90, 0.25)');
+      const g = ctx.createRadialGradient(bx, by, 10, bx, by, 70);
+      g.addColorStop(0, 'rgba(154, 77, 255, 0.6)');
+      g.addColorStop(0.7, 'rgba(255, 45, 90, 0.3)');
       g.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(bx, by, 65, 0, Math.PI * 2);
+      ctx.arc(bx, by, 70, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
   }
 
   // ---------------- Dibujado de HUD e Indicadores de Brújula ----------------
+
+  function edgeArrow(ctx, w, h, cam, x, y, col, label) {
+    if (!cam) return;
+    const sx = (x - cam.left()) * cam.scale;
+    const sy = (y - cam.top()) * cam.scale;
+    const pad = 44;
+    // Si ya está en pantalla cerca del centro, no dibuja flecha de borde
+    if (sx > pad && sx < w - pad && sy > pad && sy < h - pad) return;
+
+    const ex = G.U.clamp(sx, pad, w - pad);
+    const ey = G.U.clamp(sy, pad + 70, h - pad - 80);
+    const a = Math.atan2(sy - ey, sx - ex);
+    const ca = Math.cos(a), sa = Math.sin(a);
+    const pulse = 0.7 + Math.sin(performance.now() / 150) * 0.3;
+
+    ctx.save();
+    ctx.translate(ex, ey);
+    ctx.globalAlpha = pulse;
+
+    // Flecha triangular
+    ctx.beginPath();
+    ctx.moveTo(ca * 28, sa * 28);
+    ctx.lineTo(Math.cos(a + 2.4) * 14, Math.sin(a + 2.4) * 14);
+    ctx.lineTo(Math.cos(a - 2.4) * 14, Math.sin(a - 2.4) * 14);
+    ctx.closePath();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#051026';
+    ctx.stroke();
+    ctx.fillStyle = col;
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+    ctx.font = '800 11px Pixelify,sans-serif';
+    ctx.textAlign = ca > 0.3 ? 'right' : ca < -0.3 ? 'left' : 'center';
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(5,10,24,0.9)';
+    ctx.strokeText(label, -ca * 24, -sa * 22 + 4);
+    ctx.fillStyle = col;
+    ctx.fillText(label, -ca * 24, -sa * 22 + 4);
+    ctx.restore();
+  }
 
   function drawHUD(ctx, w, h, pl) {
     // 1. Banner superior de aviso de evento
@@ -566,52 +654,24 @@ G.InRunEvents = (() => {
       ctx.restore();
     }
 
-    if (!current) return;
+    if (!current || !pl || !G.Camera) return;
 
-    // 2. Indicadores de brújula HUD para cristales no recogidos fuera de pantalla
-    if (current.type === 'scavenger' && G.Camera) {
-      ctx.save();
-      const cx = G.Camera.x, cy = G.Camera.y;
-      const pad = 34;
-
-      for (const it of current.items) {
+    // 2. Indicadores de brújula HUD hacia la ubicación del evento
+    if (current.type === 'zone') {
+      const dM = Math.round(Math.hypot(current.x - pl.x, current.y - pl.y) / 32);
+      const label = `🚩 ${G.T('Toma de Zona')} (${dM}m)`;
+      edgeArrow(ctx, w, h, G.Camera, current.x, current.y, '#ffd23f', label);
+    } else if (current.type === 'scavenger') {
+      for (const it of current.items || []) {
         if (it.collected) continue;
-
-        // Coordenadas en pantalla
-        const sx = it.x - cx + w / 2;
-        const sy = it.y - cy + h / 2;
-
-        const isOffscreen = (sx < pad || sx > w - pad || sy < pad || sy > h - pad);
-        if (isOffscreen) {
-          const dx = sx - w / 2;
-          const dy = sy - h / 2;
-          const angle = Math.atan2(dy, dx);
-
-          // Limitar flecha al borde de la pantalla
-          const edgeX = G.U.clamp(w / 2 + Math.cos(angle) * (w / 2 - pad), pad, w - pad);
-          const edgeY = G.U.clamp(h / 2 + Math.sin(angle) * (h / 2 - pad), pad, h - pad);
-
-          // Flecha indicadora limpia
-          ctx.translate(edgeX, edgeY);
-          ctx.rotate(angle);
-
-          ctx.fillStyle = '#7fe0ff';
-          ctx.strokeStyle = '#051026';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(12, 0);
-          ctx.lineTo(-8, -7);
-          ctx.lineTo(-4, 0);
-          ctx.lineTo(-8, 7);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.rotate(-angle);
-          ctx.translate(-edgeX, -edgeY);
-        }
+        const dM = Math.round(Math.hypot(it.x - pl.x, it.y - pl.y) / 32);
+        const label = `💎 ${G.T('Cristal')} (${dM}m)`;
+        edgeArrow(ctx, w, h, G.Camera, it.x, it.y, '#7fe0ff', label);
       }
-      ctx.restore();
+    } else if (current.type === 'pursuit' && current.boss && !current.boss.dead) {
+      const dM = Math.round(Math.hypot(current.boss.x - pl.x, current.boss.y - pl.y) / 32);
+      const label = `⚠️ ${G.T('Jefe')} (${dM}m)`;
+      edgeArrow(ctx, w, h, G.Camera, current.boss.x, current.boss.y, '#ff4757', label);
     }
   }
 

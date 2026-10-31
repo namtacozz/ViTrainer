@@ -1016,6 +1016,7 @@ G.Game = (() => {
       ctx.fillRect(0, 0, w, h);
     }
     if (!G.Judgment.cinematic) G.HUD.draw(ctx, w, h, pl, st);
+    if (G.InRunEvents && G.InRunEvents.drawHUD) G.InRunEvents.drawHUD(ctx, w, h, pl);
     G.Judgment.drawOverlay(ctx, w, h);
     G.Touch.draw(ctx);
     drawAimMark();

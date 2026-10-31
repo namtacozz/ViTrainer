@@ -23,7 +23,7 @@ G.Rift = (() => {
   // probable (20 %, 40 %, 60 %, 80 %, 100 %): como mucho 2,5 min sin grieta.
   // Desde 2 min antes de la Sentencia de Arceus (minuto 30) ya no se abren.
   const CHECK = 30, CHANCE = 0.2, TTL = 45;
-  const ARENA_R = 11, ARENA_TIME = 120, FROM = 75;
+  const ARENA_R = 11, ARENA_TIME = 360, FROM = 75;
   let rift = null;          // { x, y, ttl, t }
   let arena = null;         // { tx, ty, r, dex, shiny, x, y, back, biome, t, phase, endT, bossId }
   let zone = null;          // dónde estaba la última arena { x, y, r } (ver leftBehind)
@@ -154,11 +154,11 @@ G.Rift = (() => {
     const ts = TS();
     const def = {
       dex: mon.dex, name: mon.name,
-      hp: Math.round((1200000 + t * 3500) * G.Coop.scaleHp(n) * (n > 1 ? 1.15 : 1)),
+      hp: Math.round((32000 + t * 80) * G.Coop.scaleHp(n) * (n > 1 ? 1.15 : 1)),
       spd: Math.round(G.U.clamp(48 + (mon.spd - 78) * 0.6, 48, 105)),
-      dmg: Math.round(36 + t / 20), xp: Math.round(500 + t * 1.2),
+      dmg: Math.round(26 + t / 25), xp: Math.round(650 + t * 1.5),
       behavior: mon.types.some(x => ['psychic', 'electric', 'ghost', 'fairy', 'fire', 'water', 'ice', 'dragon'].includes(x)) ? 'ranged' : 'charger',
-      shotDmg: Math.round(32 + t / 25), legend: true, shotCd: 0.9, range: 300
+      shotDmg: Math.round(20 + t / 30), legend: true, shotCd: 0.85, range: 320
     };
     const e = new G.Enemy(def, arena.x, arena.y - ts * 3.5, { hp: 1, spd: 1, dmg: 1 }, true);
     e.legend = true;

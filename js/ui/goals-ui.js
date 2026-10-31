@@ -36,6 +36,7 @@
       if (tab === 'missions') missions(box);
       else if (tab === 'ach') achievements(box);
       else profile(box);
+      if (typeof G !== "undefined" && G.I18n && G.I18n.walk) G.I18n.walk(box);
     }
 
     // ---------------- misiones ----------------

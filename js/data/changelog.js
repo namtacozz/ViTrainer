@@ -6,6 +6,18 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Rebalanceo de Vida de Jefes, Brújula e Indicadores Direccionales de Eventos en HUD", "Boss Health Rebalance, HUD Event Compass & Directional Indicators"], new: [
+    ["Brújula e indicadores de dirección para eventos en el HUD: ahora aparecen flechas direccionales en los bordes de la pantalla con distancia exacta en metros hacia la zona de captura, cristales y jefes perseguidores, además de un haz de baliza ascendente hacia el cielo visible a gran distancia.",
+     "HUD Event Compass & Directional Indicators: dynamic screen-edge compass arrows now point directly towards active zone captures, crystals, and pursuit bosses showing distance in meters, complemented by a radiant sky beacon beam visible from afar."],
+    ["Rebalanceo justo de vida de jefes en juego temprano: reducida la vida de los primeros jefes del mapa y grietas a niveles dinámicos y asequibles para los niveles iniciales (4.200 PV al minuto 3), manteniendo la tenacidad anti-aturdimiento (Inmune temporal a CC) sin batallas imposibles.",
+     "Early-Game Boss Health Rebalance: tuned map and rift boss health to fair, dynamic scaling curves for early game builds (4,200 HP at min 3), preserving anti-perma-stun tenacity without grueling early walls."]
+  ], chg: [
+    ["Optimización de diseño de la Pokédex y Misiones: restauradas las dimensiones naturales y scroll fluido en la Pokédex y registro de misiones para eliminar cortes en cabeceras o tarjetas.",
+     "Pokédex & Missions Screen Polish: restored native viewport flow and fluid scroll containers across Pokédex and quest logs eliminating clipped headers or cut-off cards."]
+  ], fix: [
+    ["Entrega garantizada de recompensas en eventos: corregido el reparto de botín al completar eventos en partida con entrega directa de monedas, imán automático y aparición de esferas y objetos.",
+     "Guaranteed Event Reward Drops: resolved reward spawning on in-run event completion with immediate coin grant, auto-magnet pull, and proper pickup drops."]
+  ]},
   { d: '2026-10-31', title: ["Línea Temporal Deslizante en HUD, Eventos Secuenciales en Partida y Correcciones", "HUD Infinite Timeline Bar, In-Run Sequential Events & Fixes"], new: [
     ["Barra de progreso continua en el HUD: nueva barra de tiempo deslizante en la parte superior central que visualiza la llegada continua de Jefes, Grietas y Eventos en tiempo real para runs infinitas, sincronizada en cooperativo y con distintivos canvas vectoriales nítidos sin emojis.",
      "HUD Infinite Sliding Timeline Bar: real-time sliding timeline at top-center displaying upcoming Bosses, Rifts, and In-Run Events continuously for infinite runs, synchronized across co-op peers with crisp vector canvas badges."],

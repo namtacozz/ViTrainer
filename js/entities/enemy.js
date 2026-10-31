@@ -194,6 +194,12 @@
     /** Aturdido: se queda quieto y no ataca `dur` s (Onda Trueno, Tumba Rocas...). */
     applyStun(dur) {
       if (this.arceus) return;          // (a Arceus no le afectan los estados)
+      if (this.boss || this.legend) {
+        // Kháng hiệu ứng / Tenacity: Boss không thể bị stun liên tục (chống perma-stun)
+        if (this.ccImmuneT > 0 || this.invuln > 0 || this.phase === 'dash') return;
+        dur = Math.min(0.22, dur * 0.18);
+        this.ccImmuneT = 3.2; // 3.2 giây miễn nhiễm hoàn toàn sau khi dính khống chế
+      }
       if (this.remote) { G.Coop.status(this, 't', dur); return; }
       this.stunT = Math.max(this.stunT || 0, dur);
     }
@@ -201,12 +207,21 @@
     /** Dormido (Soporesfera): quieto, sin atacar ni hacer daño al tocarte, aunque le peguen. */
     applySleep(dur) {
       if (this.remote || this.arceus) return;
+      if (this.boss || this.legend) {
+        if (this.ccImmuneT > 0 || this.invuln > 0) return;
+        dur = Math.min(0.25, dur * 0.15);
+        this.ccImmuneT = 3.5;
+      }
       this.sleepT = Math.max(this.sleepT || 0, dur);
     }
 
     applySlow(factor, dur = 1.2) {
       if (this.arceus) return;
-      if (this.boss && factor > 0.35) factor = 0.35;
+      if (this.boss || this.legend) {
+        if (this.ccImmuneT > 0) factor *= 0.25;
+        else if (factor > 0.20) factor = 0.20;
+        dur *= 0.35;
+      }
       if (this.remote) { G.Coop.status(this, 's', factor); return; }
       this.slow = Math.max(this.slow, factor);
       this.slowT = Math.max(this.slowT, dur);
@@ -231,7 +246,8 @@
       const hpMultiplier = phase === 2 ? 1.5 : 2.0;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
       this.hp = this.maxHp;
-      this.invuln = 1.2; // Ngưỡng hồi phục kịch tính 50%
+      this.invuln = 1.5;
+      this.ccImmuneT = 5.0; // 5s Unstoppable during phase transformation
 
       if (phase === 3) {
         const megas = (typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(this.dex)) || [];
@@ -388,14 +404,22 @@
         } else if (le.slow) terrainMul = le.slow < 0.5 ? 0.45 : 0.55;
       }
 
+      if (this.ccImmuneT > 0) this.ccImmuneT -= dt;
       if (this.sleepT > 0) {
         // Dormido no anda, pero un empujón (Rafagaesfera) sí lo mueve.
-        this.sleepT -= dt; this.anim.loop('Idle');
+        this.sleepT -= dt;
+        if (this.sleepT <= 0 && (this.boss || this.legend)) this.ccImmuneT = Math.max(this.ccImmuneT || 0, 3.2);
+        this.anim.loop('Idle');
         this.x += this.kx * dt; this.y += this.ky * dt;
         this.kx *= Math.pow(0.0015, dt); this.ky *= Math.pow(0.0015, dt);
         return;
       }
-      if (this.stunT > 0) { this.stunT -= dt; this.anim.loop('Idle'); return; }
+      if (this.stunT > 0) {
+        this.stunT -= dt;
+        if (this.stunT <= 0 && (this.boss || this.legend)) this.ccImmuneT = Math.max(this.ccImmuneT || 0, 3.2);
+        this.anim.loop('Idle');
+        return;
+      }
 
       const spd = this.spd * (1 - this.slow) * terrainMul * G.Weather.speedFor(this.types);
       let [dx, dy] = G.U.norm(pl.x - this.x, pl.y - this.y);
@@ -891,6 +915,18 @@
       ctx.restore();
 
       if (this.dead) return;
+      // Kháng hiệu ứng: Vòng hoàng kim kiên cường bao quanh Boss
+      if ((this.boss || this.legend) && this.ccImmuneT > 0) {
+        const now = performance.now() / 1000;
+        ctx.save();
+        ctx.globalAlpha = 0.45 + Math.sin(now * 7) * 0.2;
+        ctx.strokeStyle = '#ffd23f';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y - lift - this.bodyH * 0.45, this.r * 1.35, this.bodyH * 0.55, 0, 0, 6.2832);
+        ctx.stroke();
+        ctx.restore();
+      }
       // Aturdido: estrellitas girando sobre la cabeza.
       if (this.stunT > 0) {
         const now = performance.now() / 1000;
