@@ -6,6 +6,29 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Iconos Circulares, Mega en Pokédex, Corrección de Evoluciones y Jefes", "Circular Icons, Mega Pokédex Line, Evolution & Boss Fixes"], new: [
+    ["Iconos circulares de ataques: diseño limpio y circular 1:1 para los 18 tipos elementales sin textos superpuestos.",
+     "Circular Move Icons: clean 1:1 circular badges for all 18 elemental types without overlapping type labels."],
+    ["Visualización de Megas en la línea evolutiva: la Pokédex ahora muestra las formas Mega en la cadena evolutiva (desbloqueada si posees la fase previa, o con '?' y silueta si aún no la tienes).",
+     "Mega Forms in Evolution Line: the Pokédex now displays Mega evolutions directly in the chain (unlocked if you own the prior stage, or locked with '?' and silhouette if not yet owned)."],
+    ["Idiomas simplificados: interfaz centrada exclusivamente en inglés nativo y vietnamita completo.",
+     "Streamlined Languages: game interface focused exclusively on native English and full Vietnamese."]
+  ], fix: [
+    ["Daño a jefes: corregido el error que impedía que los jefes recibieran daño, con puntos de vida reequilibrados.",
+     "Boss Damage Bug: fixed constant variable assignment preventing bosses from taking damage, with rebalanced health pools."],
+    ["Evoluciones en partida para Bagon y todas las especies: eliminada la restricción de rango de Gacha para que todos los Pokémon evolucionen de forma natural a Nv. 15 y Nv. 30.",
+     "In-run Evolutions for Bagon & All Species: removed Gacha dupe rank gating so all Pokémon evolve naturally in-run at Lv. 15 and Lv. 30."],
+    ["Enemigos congelados tras elegir cartas: solucionado el empuje dentro de obstáculos sólidos y el vector nulo de movimiento.",
+     "Enemies Freezing After Card Pick: fixed knockback translating mobs into obstacles and resolved pathing zero-vectors."],
+    ["Tala de árboles: ahora únicamente los árboles de madera pueden ser talados con ataques; la hierba y los arbustos permanecen intactos.",
+     "Tree Chopping: only wooden trees can now be chopped down by player attacks; grass and bushes remain intact."]
+  ]},
+  { d: '2026-10-31', title: ["Mega Zeraora, Magearna Color Original y Expansión Masiva de Formas", "Mega Zeraora, Original Color Magearna & Massive Forms Expansion"], new: [
+    ["Mega Zeraora y Nuevas Megas / Primigenias: despierta a Mega Zeraora con un sprite de combate sensacional de PMDCollab (Eléctrico/Lucha, garras duras y velocidad vertiginosa). Añadidas también Primal Dialga, Mega Darkrai, Zacian y Zamazenta Corona, Ursaluna Luna Carmesí, Palafin Heroico, Mega Excadrill, Mega Eelektross, Mega Skarmory, Mega Dragalge y más.",
+     "Mega Zeraora & New Megas / Primals: awaken Mega Zeraora featuring breathtaking battle sprites from PMDCollab (Electric/Fighting, Tough Claws and blistering speed). Also added Primal Dialga, Mega Darkrai, Crowned Zacian & Zamazenta, Bloodmoon Ursaluna, Hero Palafin, Mega Excadrill, Mega Eelektross, Mega Skarmory, Mega Dragalge, and more."],
+    ["Magearna Color Original y 41 Formas Regionales: incorporadas todas las variantes regionales completas de Alola, Galar, Hisui y Paldea disponibles en PMDCollab, así como Magearna Forma Original, expandiendo la Pokédex a más de 1.020 Pokémon con estadísticas, tipos y habilidades fieles.",
+     "Original Color Magearna & 41 Regional Forms: integrated all complete regional variants across Alola, Galar, Hisui, and Paldea from PMDCollab, alongside Original Color Magearna, expanding the Pokédex beyond 1,020 Pokémon with full stats, types, and abilities."]
+  ]},
   { d: '2026-10-31', title: ["Cooperativo hasta 8 Jugadores, Reconexión y Formas Regionales", "8-Player Co-op, Rejoin & Regional Forms"], new: [
     ["Salas directas y cooperativo hasta 8 jugadores: ahora puedes crear una sala directamente desde el menú social sin depender de invitaciones, con capacidad ampliada hasta 8 entrenadores simultáneos.",
      "Direct Rooms & 8-Player Co-op: you can now create a room directly from the social menu without waiting for invitations, expanding lobby capacity up to 8 simultaneous trainers."],

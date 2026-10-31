@@ -432,6 +432,10 @@ G.Player = class Player {
     }
 
     this.evoStage = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
+    if (s && s.owned && !s.owned[newDex]) {
+      s.owned[newDex] = { at: Date.now(), from: 'run_evo' };
+      if (this.shiny && s.shiny && !s.shiny[newDex]) s.shiny[newDex] = { at: Date.now(), from: 'inherited' };
+    }
     this.pendingEvoBranches = null;
 
     if (healPct) this.heal(this.maxHp * healPct);
@@ -519,15 +523,13 @@ G.Player = class Player {
   checkInRunEvo() {
     if (this.remote || !this.evoChain) return;
     const chain = this.evoChain;
-    const s = (typeof G !== 'undefined' && G.DB) ? G.DB.save : null;
-    const tierUnlocked = this.evoTierUnlocked || 1;
 
     // Especie de fase única (Legendarios / Singulares / Sin evolución)
     if (chain.type === 'single') {
-      if (this.level >= 15 && this.awakeningTier === 0 && tierUnlocked >= 2) {
+      if (this.level >= 15 && this.awakeningTier === 0) {
         this.activateAwakening(1);
       }
-      if (this.level >= 30 && this.awakeningTier < 2 && tierUnlocked >= 3) {
+      if (this.level >= 30 && this.awakeningTier < 2) {
         this.activateAwakening(2);
       }
       return;
@@ -535,11 +537,15 @@ G.Player = class Player {
 
     // Especie de 2 fases
     if (chain.type === '2stage') {
-      if (this.level >= 18 && this.evoStage === 1 && tierUnlocked >= 2) {
+      if (this.level >= 18 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
-        if (nextDex) this.evolveTo(nextDex);
+        if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
+          this.evolveTo(nextDex);
+        } else if (this.awakeningTier === 0) {
+          this.activateAwakening(1);
+        }
       }
-      if (this.level >= 30 && this.evoStage >= 2 && !this.isApex && tierUnlocked >= 3) {
+      if (this.level >= 30 && this.evoStage >= 2 && !this.isApex) {
         this.activateApex();
       }
       return;
@@ -547,15 +553,23 @@ G.Player = class Player {
 
     // Especie de 3 fases
     if (chain.type === '3stage') {
-      if (this.level >= 15 && this.evoStage === 1 && tierUnlocked >= 2) {
+      if (this.level >= 15 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
-        if (nextDex) this.evolveTo(nextDex);
+        if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
+          this.evolveTo(nextDex);
+        } else if (this.awakeningTier === 0) {
+          this.activateAwakening(1);
+        }
       }
-      if (this.level >= 30 && this.evoStage === 2 && tierUnlocked >= 3) {
+      if (this.level >= 30 && this.evoStage === 2) {
         const nextDex = chain.stages[2] && chain.stages[2][0];
-        if (nextDex) this.evolveTo(nextDex);
+        if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
+          this.evolveTo(nextDex);
+        } else if (!this.isApex) {
+          this.activateApex();
+        }
       }
-      if (this.level >= 30 && this.evoStage >= 3 && !this.isApex && tierUnlocked >= 3) {
+      if (this.level >= 30 && this.evoStage >= 3 && !this.isApex) {
         this.activateApex();
       }
       return;
@@ -564,49 +578,42 @@ G.Player = class Player {
     // Especie con ramificación (Eevee, Slowpoke, Tyrogue, Ralts...)
     if (chain.type === 'branch') {
       const info = (typeof G !== 'undefined' && G.getEvoInfo) ? G.getEvoInfo(this.dex) : null;
-      const nextList = info ? info.next : [];
+      const nextList = (info ? info.next : []).filter(d => G.DEX_BY && G.DEX_BY[d]);
       if (this.evoStage === 1 && this.level >= 15) {
         if (nextList.length === 1) {
-          if (tierUnlocked >= 2) this.evolveTo(nextList[0]);
+          this.evolveTo(nextList[0]);
         } else if (nextList.length > 1) {
-          const unlocked = nextList.filter(d => s && s.evoBranches && s.evoBranches[this.baseDex] && s.evoBranches[this.baseDex].includes(d));
           if (this.baseDex === 133) {
             const moveTypes = new Set(this.moves.map(m => m.type));
             const branchTypeMap = { 134: 'water', 135: 'electric', 136: 'fire', 196: 'psychic', 197: 'dark', 470: 'grass', 471: 'ice', 700: 'fairy' };
-            const pool = (unlocked.length > 0 ? unlocked : nextList).slice();
-            pool.sort((a, b) => {
+            const pool = nextList.slice().sort((a, b) => {
               const ma = moveTypes.has(branchTypeMap[a]) ? 1 : 0;
               const mb = moveTypes.has(branchTypeMap[b]) ? 1 : 0;
               return mb - ma;
             });
             this.pendingEvoBranches = pool;
             if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
-          } else if (unlocked.length === 1) {
-            this.evolveTo(unlocked[0]);
-          } else if (unlocked.length > 1) {
-            this.pendingEvoBranches = unlocked;
-            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
-          } else if (tierUnlocked >= 2) {
+          } else {
             this.pendingEvoBranches = nextList;
             if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
           }
+        } else if (this.awakeningTier === 0) {
+          this.activateAwakening(1);
         }
       } else if (this.evoStage === 2) {
         if (chain.maxStage === 3 && this.level >= 30) {
           if (nextList.length === 1) {
-            if (tierUnlocked >= 3) this.evolveTo(nextList[0]);
+            this.evolveTo(nextList[0]);
           } else if (nextList.length > 1) {
-            const unlocked = nextList.filter(d => (s && s.evoBranches && s.evoBranches[this.baseDex] && s.evoBranches[this.baseDex].includes(d)) || tierUnlocked >= 3);
-            if (unlocked.length === 1) {
-              this.evolveTo(unlocked[0]);
-            } else if (unlocked.length > 1) {
-              this.pendingEvoBranches = unlocked;
-            }
+            this.pendingEvoBranches = nextList;
+            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
+          } else if (!this.isApex) {
+            this.activateApex();
           }
-        } else if (chain.maxStage === 2 && this.level >= 30 && !this.isApex && tierUnlocked >= 3) {
+        } else if (chain.maxStage === 2 && this.level >= 30 && !this.isApex) {
           this.activateApex();
         }
-      } else if (this.evoStage >= 3 && this.level >= 30 && !this.isApex && tierUnlocked >= 3) {
+      } else if (this.evoStage >= 3 && this.level >= 30 && !this.isApex) {
         this.activateApex();
       }
     }

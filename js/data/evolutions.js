@@ -4,157 +4,6 @@
  * độ hiếm Gacha cập nhật theo BST cao nhất của dòng.
  */
 G.EVO_CHAINS = {
-  "11015": {
-  "chainId": 11015,
-  "baseDex": 11037,
-  "name": "Alolan Vulpix",
-  "type": "2stage",
-  "maxStage": 2,
-  "maxBst": 505,
-  "baseRarity": 3,
-  "stages": [
-    [
-      11037
-    ],
-    [
-      11038
-    ]
-  ],
-  "members": [
-    11037,
-    11038
-  ]
-},
-  "11011": {
-  "chainId": 11011,
-  "baseDex": 11027,
-  "name": "Alolan Sandshrew",
-  "type": "2stage",
-  "maxStage": 2,
-  "maxBst": 450,
-  "baseRarity": 3,
-  "stages": [
-    [
-      11027
-    ],
-    [
-      11028
-    ]
-  ],
-  "members": [
-    11027,
-    11028
-  ]
-},
-  "11033": {
-  "chainId": 11033,
-  "baseDex": 11077,
-  "name": "Galarian Ponyta",
-  "type": "2stage",
-  "maxStage": 2,
-  "maxBst": 500,
-  "baseRarity": 3,
-  "stages": [
-    [
-      11077
-    ],
-    [
-      11078
-    ]
-  ],
-  "members": [
-    11077,
-    11078
-  ]
-},
-  "11135": {
-  "chainId": 11135,
-  "baseDex": 11263,
-  "name": "Galarian Zigzagoon",
-  "type": "3stage",
-  "maxStage": 3,
-  "maxBst": 520,
-  "baseRarity": 2,
-  "stages": [
-    [
-      11263
-    ],
-    [
-      11264
-    ],
-    [
-      862
-    ]
-  ],
-  "members": [
-    11263,
-    11264,
-    862
-  ]
-},
-  "11295": {
-  "chainId": 11295,
-  "baseDex": 11570,
-  "name": "Hisuian Zorua",
-  "type": "2stage",
-  "maxStage": 2,
-  "maxBst": 510,
-  "baseRarity": 4,
-  "stages": [
-    [
-      11570
-    ],
-    [
-      11571
-    ]
-  ],
-  "members": [
-    11570,
-    11571
-  ]
-},
-  "11024": {
-  "chainId": 11024,
-  "baseDex": 11058,
-  "name": "Hisuian Growlithe",
-  "type": "2stage",
-  "maxStage": 2,
-  "maxBst": 555,
-  "baseRarity": 3,
-  "stages": [
-    [
-      11058
-    ],
-    [
-      11059
-    ]
-  ],
-  "members": [
-    11058,
-    11059
-  ]
-},
-  "11097": {
-  "chainId": 11097,
-  "baseDex": 11194,
-  "name": "Paldean Wooper",
-  "type": "2stage",
-  "maxStage": 2,
-  "maxBst": 430,
-  "baseRarity": 2,
-  "stages": [
-    [
-      11194
-    ],
-    [
-      980
-    ]
-  ],
-  "members": [
-    11194,
-    980
-  ]
-},
   "1": {
     "chainId": 1,
     "baseDex": 1,
@@ -371,31 +220,6 @@ G.EVO_CHAINS = {
       24
     ]
   },
-  "172": {
-    "chainId": 10,
-    "baseDex": 172,
-    "name": "Pichu",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 485,
-    "baseRarity": 1,
-    "stages": [
-      [
-        172
-      ],
-      [
-        25
-      ],
-      [
-        26
-      ]
-    ],
-    "members": [
-      172,
-      25,
-      26
-    ]
-  },
   "27": {
     "chainId": 11,
     "baseDex": 27,
@@ -468,31 +292,6 @@ G.EVO_CHAINS = {
       34
     ]
   },
-  "173": {
-    "chainId": 14,
-    "baseDex": 173,
-    "name": "Cleffa",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 483,
-    "baseRarity": 1,
-    "stages": [
-      [
-        173
-      ],
-      [
-        35
-      ],
-      [
-        36
-      ]
-    ],
-    "members": [
-      173,
-      35,
-      36
-    ]
-  },
   "37": {
     "chainId": 15,
     "baseDex": 37,
@@ -513,31 +312,6 @@ G.EVO_CHAINS = {
     "members": [
       37,
       38
-    ]
-  },
-  "174": {
-    "chainId": 16,
-    "baseDex": 174,
-    "name": "Igglybuff",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 435,
-    "baseRarity": 1,
-    "stages": [
-      [
-        174
-      ],
-      [
-        39
-      ],
-      [
-        40
-      ]
-    ],
-    "members": [
-      174,
-      39,
-      40
     ]
   },
   "41": {
@@ -975,22 +749,17 @@ G.EVO_CHAINS = {
     "chainId": 35,
     "baseDex": 83,
     "name": "Farfetch’d",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 377,
     "baseRarity": 1,
     "stages": [
       [
         83
-      ],
-      [
-        865
-      ],
-      []
+      ]
     ],
     "members": [
-      83,
-      865
+      83
     ]
   },
   "84": {
@@ -1198,7 +967,7 @@ G.EVO_CHAINS = {
     "chainId": 45,
     "baseDex": 102,
     "name": "Exeggcute",
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "maxBst": 530,
     "baseRarity": 3,
@@ -1209,18 +978,21 @@ G.EVO_CHAINS = {
       [
         103
       ],
-      []
+      [
+        11103
+      ]
     ],
     "members": [
       102,
-      103
+      103,
+      11103
     ]
   },
   "104": {
     "chainId": 46,
     "baseDex": 104,
     "name": "Cubone",
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "maxBst": 425,
     "baseRarity": 1,
@@ -1231,37 +1003,14 @@ G.EVO_CHAINS = {
       [
         105
       ],
-      []
+      [
+        11105
+      ]
     ],
     "members": [
       104,
-      105
-    ]
-  },
-  "236": {
-    "chainId": 47,
-    "baseDex": 236,
-    "name": "Tyrogue",
-    "type": "branch",
-    "maxStage": 2,
-    "maxBst": 455,
-    "baseRarity": 1,
-    "stages": [
-      [
-        236
-      ],
-      [
-        106,
-        107,
-        237
-      ],
-      []
-    ],
-    "members": [
-      236,
-      106,
-      107,
-      237
+      105,
+      11105
     ]
   },
   "108": {
@@ -1290,7 +1039,7 @@ G.EVO_CHAINS = {
     "chainId": 49,
     "baseDex": 109,
     "name": "Koffing",
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "maxBst": 490,
     "baseRarity": 2,
@@ -1301,11 +1050,14 @@ G.EVO_CHAINS = {
       [
         110
       ],
-      []
+      [
+        11110
+      ]
     ],
     "members": [
       109,
-      110
+      110,
+      11110
     ]
   },
   "111": {
@@ -1331,31 +1083,6 @@ G.EVO_CHAINS = {
       111,
       112,
       464
-    ]
-  },
-  "440": {
-    "chainId": 51,
-    "baseDex": 440,
-    "name": "Happiny",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 540,
-    "baseRarity": 4,
-    "stages": [
-      [
-        440
-      ],
-      [
-        113
-      ],
-      [
-        242
-      ]
-    ],
-    "members": [
-      440,
-      113,
-      242
     ]
   },
   "114": {
@@ -1468,31 +1195,6 @@ G.EVO_CHAINS = {
       121
     ]
   },
-  "439": {
-    "chainId": 57,
-    "baseDex": 439,
-    "name": "Mime Jr.",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 460,
-    "baseRarity": 2,
-    "stages": [
-      [
-        439
-      ],
-      [
-        122
-      ],
-      [
-        866
-      ]
-    ],
-    "members": [
-      439,
-      122,
-      866
-    ]
-  },
   "123": {
     "chainId": 58,
     "baseDex": 123,
@@ -1515,78 +1217,6 @@ G.EVO_CHAINS = {
       123,
       212,
       900
-    ]
-  },
-  "238": {
-    "chainId": 59,
-    "baseDex": 238,
-    "name": "Smoochum",
-    "type": "2stage",
-    "maxStage": 2,
-    "maxBst": 455,
-    "baseRarity": 2,
-    "stages": [
-      [
-        238
-      ],
-      [
-        124
-      ],
-      []
-    ],
-    "members": [
-      238,
-      124
-    ]
-  },
-  "239": {
-    "chainId": 60,
-    "baseDex": 239,
-    "name": "Elekid",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 540,
-    "baseRarity": 4,
-    "stages": [
-      [
-        239
-      ],
-      [
-        125
-      ],
-      [
-        466
-      ]
-    ],
-    "members": [
-      239,
-      125,
-      466
-    ]
-  },
-  "240": {
-    "chainId": 61,
-    "baseDex": 240,
-    "name": "Magby",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 540,
-    "baseRarity": 4,
-    "stages": [
-      [
-        240
-      ],
-      [
-        126
-      ],
-      [
-        467
-      ]
-    ],
-    "members": [
-      240,
-      126,
-      467
     ]
   },
   "127": {
@@ -1811,28 +1441,6 @@ G.EVO_CHAINS = {
       142
     ]
   },
-  "446": {
-    "chainId": 72,
-    "baseDex": 446,
-    "name": "Munchlax",
-    "type": "2stage",
-    "maxStage": 2,
-    "maxBst": 540,
-    "baseRarity": 4,
-    "stages": [
-      [
-        446
-      ],
-      [
-        143
-      ],
-      []
-    ],
-    "members": [
-      446,
-      143
-    ]
-  },
   "144": {
     "chainId": 73,
     "baseDex": 144,
@@ -1982,7 +1590,7 @@ G.EVO_CHAINS = {
     "chainId": 80,
     "baseDex": 155,
     "name": "Cyndaquil",
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "maxBst": 534,
     "baseRarity": 3,
@@ -1994,13 +1602,15 @@ G.EVO_CHAINS = {
         156
       ],
       [
-        157
+        157,
+        11157
       ]
     ],
     "members": [
       155,
       156,
-      157
+      157,
+      11157
     ]
   },
   "158": {
@@ -2138,6 +1748,83 @@ G.EVO_CHAINS = {
       171
     ]
   },
+  "172": {
+    "chainId": 10,
+    "baseDex": 172,
+    "name": "Pichu",
+    "type": "branch",
+    "maxStage": 3,
+    "maxBst": 485,
+    "baseRarity": 1,
+    "stages": [
+      [
+        172
+      ],
+      [
+        25
+      ],
+      [
+        26,
+        11026
+      ]
+    ],
+    "members": [
+      172,
+      25,
+      26,
+      11026
+    ]
+  },
+  "173": {
+    "chainId": 14,
+    "baseDex": 173,
+    "name": "Cleffa",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 483,
+    "baseRarity": 1,
+    "stages": [
+      [
+        173
+      ],
+      [
+        35
+      ],
+      [
+        36
+      ]
+    ],
+    "members": [
+      173,
+      35,
+      36
+    ]
+  },
+  "174": {
+    "chainId": 16,
+    "baseDex": 174,
+    "name": "Igglybuff",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 435,
+    "baseRarity": 1,
+    "stages": [
+      [
+        174
+      ],
+      [
+        39
+      ],
+      [
+        40
+      ]
+    ],
+    "members": [
+      174,
+      39,
+      40
+    ]
+  },
   "175": {
     "chainId": 87,
     "baseDex": 175,
@@ -2208,53 +1895,6 @@ G.EVO_CHAINS = {
       179,
       180,
       181
-    ]
-  },
-  "298": {
-    "chainId": 90,
-    "baseDex": 298,
-    "name": "Azurill",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 420,
-    "baseRarity": 1,
-    "stages": [
-      [
-        298
-      ],
-      [
-        183
-      ],
-      [
-        184
-      ]
-    ],
-    "members": [
-      298,
-      183,
-      184
-    ]
-  },
-  "438": {
-    "chainId": 91,
-    "baseDex": 438,
-    "name": "Bonsly",
-    "type": "2stage",
-    "maxStage": 2,
-    "maxBst": 410,
-    "baseRarity": 1,
-    "stages": [
-      [
-        438
-      ],
-      [
-        185
-      ],
-      []
-    ],
-    "members": [
-      438,
-      185
     ]
   },
   "187": {
@@ -2433,28 +2073,6 @@ G.EVO_CHAINS = {
     ],
     "members": [
       201
-    ]
-  },
-  "360": {
-    "chainId": 100,
-    "baseDex": 360,
-    "name": "Wynaut",
-    "type": "2stage",
-    "maxStage": 2,
-    "maxBst": 405,
-    "baseRarity": 1,
-    "stages": [
-      [
-        360
-      ],
-      [
-        202
-      ],
-      []
-    ],
-    "members": [
-      360,
-      202
     ]
   },
   "203": {
@@ -2786,28 +2404,6 @@ G.EVO_CHAINS = {
       225
     ]
   },
-  "458": {
-    "chainId": 116,
-    "baseDex": 458,
-    "name": "Mantyke",
-    "type": "2stage",
-    "maxStage": 2,
-    "maxBst": 485,
-    "baseRarity": 2,
-    "stages": [
-      [
-        458
-      ],
-      [
-        226
-      ],
-      []
-    ],
-    "members": [
-      458,
-      226
-    ]
-  },
   "227": {
     "chainId": 117,
     "baseDex": 227,
@@ -2910,6 +2506,104 @@ G.EVO_CHAINS = {
     ],
     "members": [
       235
+    ]
+  },
+  "236": {
+    "chainId": 47,
+    "baseDex": 236,
+    "name": "Tyrogue",
+    "type": "branch",
+    "maxStage": 2,
+    "maxBst": 455,
+    "baseRarity": 1,
+    "stages": [
+      [
+        236
+      ],
+      [
+        106,
+        107,
+        237
+      ],
+      []
+    ],
+    "members": [
+      236,
+      106,
+      107,
+      237
+    ]
+  },
+  "238": {
+    "chainId": 59,
+    "baseDex": 238,
+    "name": "Smoochum",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 455,
+    "baseRarity": 2,
+    "stages": [
+      [
+        238
+      ],
+      [
+        124
+      ],
+      []
+    ],
+    "members": [
+      238,
+      124
+    ]
+  },
+  "239": {
+    "chainId": 60,
+    "baseDex": 239,
+    "name": "Elekid",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 540,
+    "baseRarity": 4,
+    "stages": [
+      [
+        239
+      ],
+      [
+        125
+      ],
+      [
+        466
+      ]
+    ],
+    "members": [
+      239,
+      125,
+      466
+    ]
+  },
+  "240": {
+    "chainId": 61,
+    "baseDex": 240,
+    "name": "Magby",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 540,
+    "baseRarity": 4,
+    "stages": [
+      [
+        240
+      ],
+      [
+        126
+      ],
+      [
+        467
+      ]
+    ],
+    "members": [
+      240,
+      126,
+      467
     ]
   },
   "241": {
@@ -3482,6 +3176,31 @@ G.EVO_CHAINS = {
       297
     ]
   },
+  "298": {
+    "chainId": 90,
+    "baseDex": 298,
+    "name": "Azurill",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 420,
+    "baseRarity": 1,
+    "stages": [
+      [
+        298
+      ],
+      [
+        183
+      ],
+      [
+        184
+      ]
+    ],
+    "members": [
+      298,
+      183,
+      184
+    ]
+  },
   "299": {
     "chainId": 147,
     "baseDex": 299,
@@ -3707,31 +3426,6 @@ G.EVO_CHAINS = {
     ],
     "members": [
       314
-    ]
-  },
-  "406": {
-    "chainId": 158,
-    "baseDex": 406,
-    "name": "Budew",
-    "type": "3stage",
-    "maxStage": 3,
-    "maxBst": 515,
-    "baseRarity": 3,
-    "stages": [
-      [
-        406
-      ],
-      [
-        315
-      ],
-      [
-        407
-      ]
-    ],
-    "members": [
-      406,
-      315,
-      407
     ]
   },
   "316": {
@@ -4263,28 +3957,6 @@ G.EVO_CHAINS = {
       357
     ]
   },
-  "433": {
-    "chainId": 184,
-    "baseDex": 433,
-    "name": "Chingling",
-    "type": "2stage",
-    "maxStage": 2,
-    "maxBst": 455,
-    "baseRarity": 2,
-    "stages": [
-      [
-        433
-      ],
-      [
-        358
-      ],
-      []
-    ],
-    "members": [
-      433,
-      358
-    ]
-  },
   "359": {
     "chainId": 185,
     "baseDex": 359,
@@ -4302,6 +3974,28 @@ G.EVO_CHAINS = {
     ],
     "members": [
       359
+    ]
+  },
+  "360": {
+    "chainId": 100,
+    "baseDex": 360,
+    "name": "Wynaut",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 405,
+    "baseRarity": 1,
+    "stages": [
+      [
+        360
+      ],
+      [
+        202
+      ],
+      []
+    ],
+    "members": [
+      360,
+      202
     ]
   },
   "361": {
@@ -4824,6 +4518,31 @@ G.EVO_CHAINS = {
       405
     ]
   },
+  "406": {
+    "chainId": 158,
+    "baseDex": 406,
+    "name": "Budew",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 515,
+    "baseRarity": 3,
+    "stages": [
+      [
+        406
+      ],
+      [
+        315
+      ],
+      [
+        407
+      ]
+    ],
+    "members": [
+      406,
+      315,
+      407
+    ]
+  },
   "408": {
     "chainId": 211,
     "baseDex": 408,
@@ -5065,6 +4784,28 @@ G.EVO_CHAINS = {
       432
     ]
   },
+  "433": {
+    "chainId": 184,
+    "baseDex": 433,
+    "name": "Chingling",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 455,
+    "baseRarity": 2,
+    "stages": [
+      [
+        433
+      ],
+      [
+        358
+      ],
+      []
+    ],
+    "members": [
+      433,
+      358
+    ]
+  },
   "434": {
     "chainId": 223,
     "baseDex": 434,
@@ -5107,6 +4848,74 @@ G.EVO_CHAINS = {
     "members": [
       436,
       437
+    ]
+  },
+  "438": {
+    "chainId": 91,
+    "baseDex": 438,
+    "name": "Bonsly",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 410,
+    "baseRarity": 1,
+    "stages": [
+      [
+        438
+      ],
+      [
+        185
+      ],
+      []
+    ],
+    "members": [
+      438,
+      185
+    ]
+  },
+  "439": {
+    "chainId": 57,
+    "baseDex": 439,
+    "name": "Mime Jr.",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 460,
+    "baseRarity": 2,
+    "stages": [
+      [
+        439
+      ],
+      [
+        122
+      ]
+    ],
+    "members": [
+      439,
+      122
+    ]
+  },
+  "440": {
+    "chainId": 51,
+    "baseDex": 440,
+    "name": "Happiny",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 540,
+    "baseRarity": 4,
+    "stages": [
+      [
+        440
+      ],
+      [
+        113
+      ],
+      [
+        242
+      ]
+    ],
+    "members": [
+      440,
+      113,
+      242
     ]
   },
   "441": {
@@ -5170,6 +4979,28 @@ G.EVO_CHAINS = {
       443,
       444,
       445
+    ]
+  },
+  "446": {
+    "chainId": 72,
+    "baseDex": 446,
+    "name": "Munchlax",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 540,
+    "baseRarity": 4,
+    "stages": [
+      [
+        446
+      ],
+      [
+        143
+      ],
+      []
+    ],
+    "members": [
+      446,
+      143
     ]
   },
   "447": {
@@ -5299,6 +5130,28 @@ G.EVO_CHAINS = {
     "members": [
       456,
       457
+    ]
+  },
+  "458": {
+    "chainId": 116,
+    "baseDex": 458,
+    "name": "Mantyke",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 485,
+    "baseRarity": 2,
+    "stages": [
+      [
+        458
+      ],
+      [
+        226
+      ],
+      []
+    ],
+    "members": [
+      458,
+      226
     ]
   },
   "459": {
@@ -5665,7 +5518,7 @@ G.EVO_CHAINS = {
     "chainId": 258,
     "baseDex": 501,
     "name": "Oshawott",
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "maxBst": 528,
     "baseRarity": 3,
@@ -5677,13 +5530,15 @@ G.EVO_CHAINS = {
         502
       ],
       [
-        503
+        503,
+        11503
       ]
     ],
     "members": [
       501,
       502,
-      503
+      503,
+      11503
     ]
   },
   "504": {
@@ -5781,44 +5636,34 @@ G.EVO_CHAINS = {
     "chainId": 263,
     "baseDex": 513,
     "name": "Pansear",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 316,
     "baseRarity": 1,
     "stages": [
       [
         513
-      ],
-      [
-        514
-      ],
-      []
+      ]
     ],
     "members": [
-      513,
-      514
+      513
     ]
   },
   "515": {
     "chainId": 264,
     "baseDex": 515,
     "name": "Panpour",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 316,
     "baseRarity": 1,
     "stages": [
       [
         515
-      ],
-      [
-        516
-      ],
-      []
+      ]
     ],
     "members": [
-      515,
-      516
+      515
     ]
   },
   "517": {
@@ -5847,8 +5692,8 @@ G.EVO_CHAINS = {
     "chainId": 266,
     "baseDex": 519,
     "name": "Pidove",
-    "type": "3stage",
-    "maxStage": 3,
+    "type": "2stage",
+    "maxStage": 2,
     "maxBst": 488,
     "baseRarity": 1,
     "stages": [
@@ -5856,15 +5701,11 @@ G.EVO_CHAINS = {
         519
       ],
       [
-        520
-      ],
-      [
         521
       ]
     ],
     "members": [
       519,
-      520,
       521
     ]
   },
@@ -6101,7 +5942,7 @@ G.EVO_CHAINS = {
     "chainId": 279,
     "baseDex": 548,
     "name": "Petilil",
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "maxBst": 480,
     "baseRarity": 2,
@@ -6112,11 +5953,14 @@ G.EVO_CHAINS = {
       [
         549
       ],
-      []
+      [
+        11549
+      ]
     ],
     "members": [
       548,
-      549
+      549,
+      11549
     ]
   },
   "550": {
@@ -6211,22 +6055,17 @@ G.EVO_CHAINS = {
     "chainId": 284,
     "baseDex": 557,
     "name": "Dwebble",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 325,
     "baseRarity": 1,
     "stages": [
       [
         557
-      ],
-      [
-        558
-      ],
-      []
+      ]
     ],
     "members": [
-      557,
-      558
+      557
     ]
   },
   "559": {
@@ -6546,22 +6385,17 @@ G.EVO_CHAINS = {
     "chainId": 300,
     "baseDex": 590,
     "name": "Foongus",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 294,
     "baseRarity": 1,
     "stages": [
       [
         590
-      ],
-      [
-        591
-      ],
-      []
+      ]
     ],
     "members": [
-      590,
-      591
+      590
     ]
   },
   "594": {
@@ -6790,25 +6624,20 @@ G.EVO_CHAINS = {
       615
     ]
   },
-  "616": {
+  "617": {
     "chainId": 312,
-    "baseDex": 616,
-    "name": "Shelmet",
-    "type": "2stage",
-    "maxStage": 2,
+    "baseDex": 617,
+    "name": "Accelgor",
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 495,
-    "baseRarity": 3,
+    "baseRarity": 4,
     "stages": [
       [
-        616
-      ],
-      [
         617
-      ],
-      []
+      ]
     ],
     "members": [
-      616,
       617
     ]
   },
@@ -6904,7 +6733,7 @@ G.EVO_CHAINS = {
     "chainId": 319,
     "baseDex": 627,
     "name": "Rufflet",
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "maxBst": 510,
     "baseRarity": 3,
@@ -6915,11 +6744,14 @@ G.EVO_CHAINS = {
       [
         628
       ],
-      []
+      [
+        11628
+      ]
     ],
     "members": [
       627,
-      628
+      628,
+      11628
     ]
   },
   "629": {
@@ -7408,22 +7240,17 @@ G.EVO_CHAINS = {
     "chainId": 343,
     "baseDex": 667,
     "name": "Litleo",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 369,
     "baseRarity": 1,
     "stages": [
       [
         667
-      ],
-      [
-        668
-      ],
-      []
+      ]
     ],
     "members": [
-      667,
-      668
+      667
     ]
   },
   "669": {
@@ -7565,22 +7392,17 @@ G.EVO_CHAINS = {
     "chainId": 350,
     "baseDex": 682,
     "name": "Spritzee",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 341,
     "baseRarity": 1,
     "stages": [
       [
         682
-      ],
-      [
-        683
-      ],
-      []
+      ]
     ],
     "members": [
-      682,
-      683
+      682
     ]
   },
   "684": {
@@ -7820,7 +7642,7 @@ G.EVO_CHAINS = {
     "chainId": 362,
     "baseDex": 704,
     "name": "Goomy",
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "maxBst": 600,
     "baseRarity": 4,
@@ -7829,16 +7651,20 @@ G.EVO_CHAINS = {
         704
       ],
       [
-        705
+        705,
+        11705
       ],
       [
-        706
+        706,
+        11706
       ]
     ],
     "members": [
       704,
       705,
-      706
+      11705,
+      706,
+      11706
     ]
   },
   "707": {
@@ -7908,7 +7734,7 @@ G.EVO_CHAINS = {
     "chainId": 366,
     "baseDex": 712,
     "name": "Bergmite",
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "maxBst": 514,
     "baseRarity": 3,
@@ -7919,11 +7745,14 @@ G.EVO_CHAINS = {
       [
         713
       ],
-      []
+      [
+        11713
+      ]
     ],
     "members": [
       712,
-      713
+      713,
+      11713
     ]
   },
   "714": {
@@ -8066,7 +7895,7 @@ G.EVO_CHAINS = {
     "chainId": 374,
     "baseDex": 722,
     "name": "Rowlet",
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "maxBst": 530,
     "baseRarity": 3,
@@ -8078,13 +7907,15 @@ G.EVO_CHAINS = {
         723
       ],
       [
-        724
+        724,
+        11724
       ]
     ],
     "members": [
       722,
       723,
-      724
+      724,
+      11724
     ]
   },
   "725": {
@@ -8141,47 +7972,34 @@ G.EVO_CHAINS = {
     "chainId": 377,
     "baseDex": 731,
     "name": "Pikipek",
-    "type": "3stage",
-    "maxStage": 3,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 265,
     "baseRarity": 1,
     "stages": [
       [
         731
-      ],
-      [
-        732
-      ],
-      [
-        733
       ]
     ],
     "members": [
-      731,
-      732,
-      733
+      731
     ]
   },
   "734": {
     "chainId": 378,
     "baseDex": 734,
     "name": "Yungoos",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 253,
     "baseRarity": 1,
     "stages": [
       [
         734
-      ],
-      [
-        735
-      ],
-      []
+      ]
     ],
     "members": [
-      734,
-      735
+      734
     ]
   },
   "736": {
@@ -8405,22 +8223,17 @@ G.EVO_CHAINS = {
     "chainId": 389,
     "baseDex": 755,
     "name": "Morelull",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 285,
     "baseRarity": 1,
     "stages": [
       [
         755
-      ],
-      [
-        756
-      ],
-      []
+      ]
     ],
     "members": [
-      755,
-      756
+      755
     ]
   },
   "757": {
@@ -10342,8 +10155,8 @@ G.EVO_CHAINS = {
     "chainId": 487,
     "baseDex": 928,
     "name": "Smoliv",
-    "type": "3stage",
-    "maxStage": 3,
+    "type": "2stage",
+    "maxStage": 2,
     "maxBst": 510,
     "baseRarity": 3,
     "stages": [
@@ -10351,15 +10164,11 @@ G.EVO_CHAINS = {
         928
       ],
       [
-        929
-      ],
-      [
         930
       ]
     ],
     "members": [
       928,
-      929,
       930
     ]
   },
@@ -10460,22 +10269,17 @@ G.EVO_CHAINS = {
     "chainId": 495,
     "baseDex": 946,
     "name": "Bramblin",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 275,
     "baseRarity": 1,
     "stages": [
       [
         946
-      ],
-      [
-        947
-      ],
-      []
+      ]
     ],
     "members": [
-      946,
-      947
+      946
     ]
   },
   "951": {
@@ -10504,44 +10308,34 @@ G.EVO_CHAINS = {
     "chainId": 499,
     "baseDex": 953,
     "name": "Rellor",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 270,
     "baseRarity": 1,
     "stages": [
       [
         953
-      ],
-      [
-        954
-      ],
-      []
+      ]
     ],
     "members": [
-      953,
-      954
+      953
     ]
   },
   "955": {
     "chainId": 500,
     "baseDex": 955,
     "name": "Flittle",
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 255,
     "baseRarity": 1,
     "stages": [
       [
         955
-      ],
-      [
-        956
-      ],
-      []
+      ]
     ],
     "members": [
-      955,
-      956
+      955
     ]
   },
   "957": {
@@ -10992,25 +10786,20 @@ G.EVO_CHAINS = {
       998
     ]
   },
-  "999": {
+  "1000": {
     "chainId": 528,
-    "baseDex": 999,
-    "name": "Gimmighoul",
-    "type": "2stage",
-    "maxStage": 2,
+    "baseDex": 1000,
+    "name": "Gholdengo",
+    "type": "single",
+    "maxStage": 1,
     "maxBst": 550,
     "baseRarity": 4,
     "stages": [
       [
-        999
-      ],
-      [
         1000
-      ],
-      []
+      ]
     ],
     "members": [
-      999,
       1000
     ]
   },
@@ -11224,6 +11013,570 @@ G.EVO_CHAINS = {
     ],
     "members": [
       1024
+    ]
+  },
+  "10801": {
+    "chainId": 11014,
+    "baseDex": 10801,
+    "name": "Magearna (Original)",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 600,
+    "baseRarity": 5,
+    "stages": [
+      [
+        10801
+      ]
+    ],
+    "members": [
+      10801
+    ]
+  },
+  "11019": {
+    "chainId": 11001,
+    "baseDex": 11019,
+    "name": "Alolan Rattata",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 413,
+    "baseRarity": 1,
+    "stages": [
+      [
+        11019
+      ],
+      [
+        11020
+      ]
+    ],
+    "members": [
+      11019,
+      11020
+    ]
+  },
+  "11027": {
+    "chainId": 11011,
+    "baseDex": 11027,
+    "name": "Alolan Sandshrew",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 450,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11027
+      ],
+      [
+        11028
+      ]
+    ],
+    "members": [
+      11027,
+      11028
+    ]
+  },
+  "11037": {
+    "chainId": 11015,
+    "baseDex": 11037,
+    "name": "Alolan Vulpix",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 505,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11037
+      ],
+      [
+        11038
+      ]
+    ],
+    "members": [
+      11037,
+      11038
+    ]
+  },
+  "11050": {
+    "chainId": 11002,
+    "baseDex": 11050,
+    "name": "Alolan Diglett",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 425,
+    "baseRarity": 1,
+    "stages": [
+      [
+        11050
+      ],
+      [
+        11051
+      ]
+    ],
+    "members": [
+      11050,
+      11051
+    ]
+  },
+  "11052": {
+    "chainId": 11003,
+    "baseDex": 11052,
+    "name": "Alolan Meowth",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 440,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11052
+      ],
+      [
+        11053
+      ]
+    ],
+    "members": [
+      11052,
+      11053
+    ]
+  },
+  "11058": {
+    "chainId": 11024,
+    "baseDex": 11058,
+    "name": "Hisuian Growlithe",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 555,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11058
+      ],
+      [
+        11059
+      ]
+    ],
+    "members": [
+      11058,
+      11059
+    ]
+  },
+  "11074": {
+    "chainId": 11004,
+    "baseDex": 11074,
+    "name": "Alolan Geodude",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 495,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11074
+      ],
+      [
+        11075
+      ],
+      [
+        11076
+      ]
+    ],
+    "members": [
+      11074,
+      11075,
+      11076
+    ]
+  },
+  "11077": {
+    "chainId": 11033,
+    "baseDex": 11077,
+    "name": "Galarian Ponyta",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 500,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11077
+      ],
+      [
+        11078
+      ]
+    ],
+    "members": [
+      11077,
+      11078
+    ]
+  },
+  "11079": {
+    "chainId": 11007,
+    "baseDex": 11079,
+    "name": "Galarian Slowpoke",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 490,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11079
+      ],
+      [
+        11080
+      ]
+    ],
+    "members": [
+      11079,
+      11080
+    ]
+  },
+  "11083": {
+    "chainId": 11015,
+    "baseDex": 11083,
+    "name": "Galarian Farfetch'd",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 377,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11083
+      ]
+    ],
+    "members": [
+      11083
+    ]
+  },
+  "11088": {
+    "chainId": 11005,
+    "baseDex": 11088,
+    "name": "Alolan Grimer",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 500,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11088
+      ],
+      [
+        11089
+      ]
+    ],
+    "members": [
+      11088,
+      11089
+    ]
+  },
+  "11100": {
+    "chainId": 11011,
+    "baseDex": 11100,
+    "name": "Hisuian Voltorb",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 490,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11100
+      ],
+      [
+        11101
+      ]
+    ],
+    "members": [
+      11100,
+      11101
+    ]
+  },
+  "11122": {
+    "chainId": 11016,
+    "baseDex": 11122,
+    "name": "Galarian Mr. Mime",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 460,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11122
+      ]
+    ],
+    "members": [
+      11122
+    ]
+  },
+  "11128": {
+    "chainId": 11021,
+    "baseDex": 11128,
+    "name": "Paldean Tauros",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 490,
+    "baseRarity": 4,
+    "stages": [
+      [
+        11128
+      ]
+    ],
+    "members": [
+      11128
+    ]
+  },
+  "11144": {
+    "chainId": 11018,
+    "baseDex": 11144,
+    "name": "Galarian Articuno",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 580,
+    "baseRarity": 5,
+    "stages": [
+      [
+        11144
+      ]
+    ],
+    "members": [
+      11144
+    ]
+  },
+  "11145": {
+    "chainId": 11019,
+    "baseDex": 11145,
+    "name": "Galarian Zapdos",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 580,
+    "baseRarity": 5,
+    "stages": [
+      [
+        11145
+      ]
+    ],
+    "members": [
+      11145
+    ]
+  },
+  "11146": {
+    "chainId": 11020,
+    "baseDex": 11146,
+    "name": "Galarian Moltres",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 580,
+    "baseRarity": 5,
+    "stages": [
+      [
+        11146
+      ]
+    ],
+    "members": [
+      11146
+    ]
+  },
+  "11194": {
+    "chainId": 11097,
+    "baseDex": 11194,
+    "name": "Paldean Wooper",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 430,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11194
+      ],
+      [
+        980
+      ]
+    ],
+    "members": [
+      11194,
+      980
+    ]
+  },
+  "11211": {
+    "chainId": 11012,
+    "baseDex": 11211,
+    "name": "Hisuian Qwilfish",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 510,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11211
+      ],
+      [
+        904
+      ]
+    ],
+    "members": [
+      11211,
+      904
+    ]
+  },
+  "11215": {
+    "chainId": 11013,
+    "baseDex": 11215,
+    "name": "Hisuian Sneasel",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 510,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11215
+      ],
+      [
+        903
+      ]
+    ],
+    "members": [
+      11215,
+      903
+    ]
+  },
+  "11222": {
+    "chainId": 11008,
+    "baseDex": 11222,
+    "name": "Galarian Corsola",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 510,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11222
+      ],
+      [
+        864
+      ]
+    ],
+    "members": [
+      11222,
+      864
+    ]
+  },
+  "11263": {
+    "chainId": 11135,
+    "baseDex": 11263,
+    "name": "Galarian Zigzagoon",
+    "type": "3stage",
+    "maxStage": 3,
+    "maxBst": 520,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11263
+      ],
+      [
+        11264
+      ],
+      [
+        862
+      ]
+    ],
+    "members": [
+      11263,
+      11264,
+      862
+    ]
+  },
+  "11554": {
+    "chainId": 11009,
+    "baseDex": 11554,
+    "name": "Galarian Darumaka",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 540,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11554
+      ],
+      [
+        11555
+      ]
+    ],
+    "members": [
+      11554,
+      11555
+    ]
+  },
+  "11562": {
+    "chainId": 11010,
+    "baseDex": 11562,
+    "name": "Galarian Yamask",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 483,
+    "baseRarity": 2,
+    "stages": [
+      [
+        11562
+      ],
+      [
+        867
+      ]
+    ],
+    "members": [
+      11562,
+      867
+    ]
+  },
+  "11570": {
+    "chainId": 11295,
+    "baseDex": 11570,
+    "name": "Hisuian Zorua",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 510,
+    "baseRarity": 4,
+    "stages": [
+      [
+        11570
+      ],
+      [
+        11571
+      ]
+    ],
+    "members": [
+      11570,
+      11571
+    ]
+  },
+  "11618": {
+    "chainId": 11017,
+    "baseDex": 11618,
+    "name": "Galarian Stunfisk",
+    "type": "single",
+    "maxStage": 1,
+    "maxBst": 471,
+    "baseRarity": 3,
+    "stages": [
+      [
+        11618
+      ]
+    ],
+    "members": [
+      11618
+    ]
+  },
+  "12052": {
+    "chainId": 11006,
+    "baseDex": 12052,
+    "name": "Galarian Meowth",
+    "type": "2stage",
+    "maxStage": 2,
+    "maxBst": 440,
+    "baseRarity": 2,
+    "stages": [
+      [
+        12052
+      ],
+      [
+        863
+      ]
+    ],
+    "members": [
+      12052,
+      863
     ]
   }
 };
@@ -11475,25 +11828,15 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 23
   },
-  "172": {
-    "chainId": 10,
-    "baseDex": 172,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      25
-    ],
-    "prev": null
-  },
   "25": {
     "chainId": 10,
     "baseDex": 172,
     "stage": 2,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [
-      26
+      26,
+      11026
     ],
     "prev": 172
   },
@@ -11501,7 +11844,7 @@ G.EVO_BY_DEX = {
     "chainId": 10,
     "baseDex": 172,
     "stage": 3,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [],
     "prev": 25
@@ -11588,17 +11931,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 33
   },
-  "173": {
-    "chainId": 14,
-    "baseDex": 173,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      35
-    ],
-    "prev": null
-  },
   "35": {
     "chainId": 14,
     "baseDex": 173,
@@ -11638,17 +11970,6 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 37
-  },
-  "174": {
-    "chainId": 16,
-    "baseDex": 174,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      39
-    ],
-    "prev": null
   },
   "39": {
     "chainId": 16,
@@ -11692,15 +12013,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": 41
   },
-  "169": {
-    "chainId": 17,
-    "baseDex": 41,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 42
-  },
   "43": {
     "chainId": 18,
     "baseDex": 43,
@@ -11725,15 +12037,6 @@ G.EVO_BY_DEX = {
     "prev": 43
   },
   "45": {
-    "chainId": 18,
-    "baseDex": 43,
-    "stage": 3,
-    "type": "branch",
-    "maxStage": 3,
-    "next": [],
-    "prev": 44
-  },
-  "182": {
     "chainId": 18,
     "baseDex": 43,
     "stage": 3,
@@ -11823,15 +12126,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 52
   },
-  "863": {
-    "chainId": 22,
-    "baseDex": 52,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 52
-  },
   "54": {
     "chainId": 23,
     "baseDex": 54,
@@ -11873,15 +12167,6 @@ G.EVO_BY_DEX = {
       979
     ],
     "prev": 56
-  },
-  "979": {
-    "chainId": 24,
-    "baseDex": 56,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 57
   },
   "58": {
     "chainId": 25,
@@ -11927,15 +12212,6 @@ G.EVO_BY_DEX = {
     "prev": 60
   },
   "62": {
-    "chainId": 26,
-    "baseDex": 60,
-    "stage": 3,
-    "type": "branch",
-    "maxStage": 3,
-    "next": [],
-    "prev": 61
-  },
-  "186": {
     "chainId": 26,
     "baseDex": 60,
     "stage": 3,
@@ -12129,15 +12405,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 79
   },
-  "199": {
-    "chainId": 33,
-    "baseDex": 79,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 79
-  },
   "81": {
     "chainId": 34,
     "baseDex": 81,
@@ -12160,34 +12427,14 @@ G.EVO_BY_DEX = {
     ],
     "prev": 81
   },
-  "462": {
-    "chainId": 34,
-    "baseDex": 81,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 82
-  },
   "83": {
     "chainId": 35,
     "baseDex": 83,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      865
-    ],
-    "prev": null
-  },
-  "865": {
-    "chainId": 35,
-    "baseDex": 83,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
+    "type": "single",
+    "maxStage": 1,
     "next": [],
-    "prev": 83
+    "prev": null
   },
   "84": {
     "chainId": 36,
@@ -12311,15 +12558,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "208": {
-    "chainId": 41,
-    "baseDex": 95,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 95
-  },
   "96": {
     "chainId": 42,
     "baseDex": 96,
@@ -12384,10 +12622,11 @@ G.EVO_BY_DEX = {
     "chainId": 45,
     "baseDex": 102,
     "stage": 1,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [
-      103
+      103,
+      11103
     ],
     "prev": null
   },
@@ -12404,10 +12643,11 @@ G.EVO_BY_DEX = {
     "chainId": 46,
     "baseDex": 104,
     "stage": 1,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [
-      105
+      105,
+      11105
     ],
     "prev": null
   },
@@ -12419,19 +12659,6 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 104
-  },
-  "236": {
-    "chainId": 47,
-    "baseDex": 236,
-    "stage": 1,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [
-      106,
-      107,
-      237
-    ],
-    "prev": null
   },
   "106": {
     "chainId": 47,
@@ -12451,15 +12678,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 236
   },
-  "237": {
-    "chainId": 47,
-    "baseDex": 236,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 236
-  },
   "108": {
     "chainId": 48,
     "baseDex": 108,
@@ -12471,23 +12689,15 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "463": {
-    "chainId": 48,
-    "baseDex": 108,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 108
-  },
   "109": {
     "chainId": 49,
     "baseDex": 109,
     "stage": 1,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [
-      110
+      110,
+      11110
     ],
     "prev": null
   },
@@ -12522,26 +12732,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": 111
   },
-  "464": {
-    "chainId": 50,
-    "baseDex": 111,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 112
-  },
-  "440": {
-    "chainId": 51,
-    "baseDex": 440,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      113
-    ],
-    "prev": null
-  },
   "113": {
     "chainId": 51,
     "baseDex": 440,
@@ -12553,15 +12743,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": 440
   },
-  "242": {
-    "chainId": 51,
-    "baseDex": 440,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 113
-  },
   "114": {
     "chainId": 52,
     "baseDex": 114,
@@ -12572,15 +12753,6 @@ G.EVO_BY_DEX = {
       465
     ],
     "prev": null
-  },
-  "465": {
-    "chainId": 52,
-    "baseDex": 114,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 114
   },
   "115": {
     "chainId": 53,
@@ -12612,15 +12784,6 @@ G.EVO_BY_DEX = {
       230
     ],
     "prev": 116
-  },
-  "230": {
-    "chainId": 54,
-    "baseDex": 116,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 117
   },
   "118": {
     "chainId": 55,
@@ -12662,36 +12825,14 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 120
   },
-  "439": {
-    "chainId": 57,
-    "baseDex": 439,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      122
-    ],
-    "prev": null
-  },
   "122": {
     "chainId": 57,
     "baseDex": 439,
     "stage": 2,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      866
-    ],
-    "prev": 439
-  },
-  "866": {
-    "chainId": 57,
-    "baseDex": 439,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
+    "type": "2stage",
+    "maxStage": 2,
     "next": [],
-    "prev": 122
+    "prev": 439
   },
   "123": {
     "chainId": 58,
@@ -12705,35 +12846,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "212": {
-    "chainId": 58,
-    "baseDex": 123,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 123
-  },
-  "900": {
-    "chainId": 58,
-    "baseDex": 123,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 123
-  },
-  "238": {
-    "chainId": 59,
-    "baseDex": 238,
-    "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      124
-    ],
-    "prev": null
-  },
   "124": {
     "chainId": 59,
     "baseDex": 238,
@@ -12742,17 +12854,6 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 238
-  },
-  "239": {
-    "chainId": 60,
-    "baseDex": 239,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      125
-    ],
-    "prev": null
   },
   "125": {
     "chainId": 60,
@@ -12765,26 +12866,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": 239
   },
-  "466": {
-    "chainId": 60,
-    "baseDex": 239,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 125
-  },
-  "240": {
-    "chainId": 61,
-    "baseDex": 240,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      126
-    ],
-    "prev": null
-  },
   "126": {
     "chainId": 61,
     "baseDex": 240,
@@ -12795,15 +12876,6 @@ G.EVO_BY_DEX = {
       467
     ],
     "prev": 240
-  },
-  "467": {
-    "chainId": 61,
-    "baseDex": 240,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 126
   },
   "127": {
     "chainId": 62,
@@ -12906,51 +12978,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 133
   },
-  "196": {
-    "chainId": 67,
-    "baseDex": 133,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 133
-  },
-  "197": {
-    "chainId": 67,
-    "baseDex": 133,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 133
-  },
-  "470": {
-    "chainId": 67,
-    "baseDex": 133,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 133
-  },
-  "471": {
-    "chainId": 67,
-    "baseDex": 133,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 133
-  },
-  "700": {
-    "chainId": 67,
-    "baseDex": 133,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 133
-  },
   "137": {
     "chainId": 68,
     "baseDex": 137,
@@ -12961,26 +12988,6 @@ G.EVO_BY_DEX = {
       233
     ],
     "prev": null
-  },
-  "233": {
-    "chainId": 68,
-    "baseDex": 137,
-    "stage": 2,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      474
-    ],
-    "prev": 137
-  },
-  "474": {
-    "chainId": 68,
-    "baseDex": 137,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 233
   },
   "138": {
     "chainId": 69,
@@ -13029,17 +13036,6 @@ G.EVO_BY_DEX = {
     "type": "single",
     "maxStage": 1,
     "next": [],
-    "prev": null
-  },
-  "446": {
-    "chainId": 72,
-    "baseDex": 446,
-    "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      143
-    ],
     "prev": null
   },
   "143": {
@@ -13173,10 +13169,11 @@ G.EVO_BY_DEX = {
     "chainId": 80,
     "baseDex": 155,
     "stage": 2,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [
-      157
+      157,
+      11157
     ],
     "prev": 155
   },
@@ -13300,6 +13297,15 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 167
   },
+  "169": {
+    "chainId": 17,
+    "baseDex": 41,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 42
+  },
   "170": {
     "chainId": 86,
     "baseDex": 170,
@@ -13319,6 +13325,39 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 170
+  },
+  "172": {
+    "chainId": 10,
+    "baseDex": 172,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      25
+    ],
+    "prev": null
+  },
+  "173": {
+    "chainId": 14,
+    "baseDex": 173,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      35
+    ],
+    "prev": null
+  },
+  "174": {
+    "chainId": 16,
+    "baseDex": 174,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      39
+    ],
+    "prev": null
   },
   "175": {
     "chainId": 87,
@@ -13341,15 +13380,6 @@ G.EVO_BY_DEX = {
       468
     ],
     "prev": 175
-  },
-  "468": {
-    "chainId": 87,
-    "baseDex": 175,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 176
   },
   "177": {
     "chainId": 88,
@@ -13402,16 +13432,14 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 180
   },
-  "298": {
-    "chainId": 90,
-    "baseDex": 298,
-    "stage": 1,
-    "type": "3stage",
+  "182": {
+    "chainId": 18,
+    "baseDex": 43,
+    "stage": 3,
+    "type": "branch",
     "maxStage": 3,
-    "next": [
-      183
-    ],
-    "prev": null
+    "next": [],
+    "prev": 44
   },
   "183": {
     "chainId": 90,
@@ -13433,17 +13461,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 183
   },
-  "438": {
-    "chainId": 91,
-    "baseDex": 438,
-    "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      185
-    ],
-    "prev": null
-  },
   "185": {
     "chainId": 91,
     "baseDex": 438,
@@ -13452,6 +13469,15 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 438
+  },
+  "186": {
+    "chainId": 26,
+    "baseDex": 60,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 61
   },
   "187": {
     "chainId": 92,
@@ -13495,15 +13521,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "424": {
-    "chainId": 93,
-    "baseDex": 190,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 190
-  },
   "191": {
     "chainId": 94,
     "baseDex": 191,
@@ -13535,15 +13552,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "469": {
-    "chainId": 95,
-    "baseDex": 193,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 193
-  },
   "194": {
     "chainId": 96,
     "baseDex": 194,
@@ -13565,14 +13573,23 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 194
   },
-  "980": {
-    "chainId": 96,
-    "baseDex": 194,
+  "196": {
+    "chainId": 67,
+    "baseDex": 133,
     "stage": 2,
     "type": "branch",
     "maxStage": 2,
     "next": [],
-    "prev": 194
+    "prev": 133
+  },
+  "197": {
+    "chainId": 67,
+    "baseDex": 133,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 133
   },
   "198": {
     "chainId": 97,
@@ -13585,14 +13602,14 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "430": {
-    "chainId": 97,
-    "baseDex": 198,
+  "199": {
+    "chainId": 33,
+    "baseDex": 79,
     "stage": 2,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [],
-    "prev": 198
+    "prev": 79
   },
   "200": {
     "chainId": 98,
@@ -13605,15 +13622,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "429": {
-    "chainId": 98,
-    "baseDex": 200,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 200
-  },
   "201": {
     "chainId": 99,
     "baseDex": 201,
@@ -13621,17 +13629,6 @@ G.EVO_BY_DEX = {
     "type": "single",
     "maxStage": 1,
     "next": [],
-    "prev": null
-  },
-  "360": {
-    "chainId": 100,
-    "baseDex": 360,
-    "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      202
-    ],
     "prev": null
   },
   "202": {
@@ -13653,15 +13650,6 @@ G.EVO_BY_DEX = {
       981
     ],
     "prev": null
-  },
-  "981": {
-    "chainId": 101,
-    "baseDex": 203,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 203
   },
   "204": {
     "chainId": 102,
@@ -13694,15 +13682,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "982": {
-    "chainId": 103,
-    "baseDex": 206,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 206
-  },
   "207": {
     "chainId": 104,
     "baseDex": 207,
@@ -13714,14 +13693,14 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "472": {
-    "chainId": 104,
-    "baseDex": 207,
+  "208": {
+    "chainId": 41,
+    "baseDex": 95,
     "stage": 2,
     "type": "2stage",
     "maxStage": 2,
     "next": [],
-    "prev": 207
+    "prev": 95
   },
   "209": {
     "chainId": 105,
@@ -13754,14 +13733,14 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "904": {
-    "chainId": 106,
-    "baseDex": 211,
+  "212": {
+    "chainId": 58,
+    "baseDex": 123,
     "stage": 2,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [],
-    "prev": 211
+    "prev": 123
   },
   "213": {
     "chainId": 107,
@@ -13793,24 +13772,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "461": {
-    "chainId": 109,
-    "baseDex": 215,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 215
-  },
-  "903": {
-    "chainId": 109,
-    "baseDex": 215,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 215
-  },
   "216": {
     "chainId": 110,
     "baseDex": 216,
@@ -13832,15 +13793,6 @@ G.EVO_BY_DEX = {
       901
     ],
     "prev": 216
-  },
-  "901": {
-    "chainId": 110,
-    "baseDex": 216,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 217
   },
   "218": {
     "chainId": 111,
@@ -13884,15 +13836,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": 220
   },
-  "473": {
-    "chainId": 112,
-    "baseDex": 220,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 221
-  },
   "222": {
     "chainId": 113,
     "baseDex": 222,
@@ -13903,15 +13846,6 @@ G.EVO_BY_DEX = {
       864
     ],
     "prev": null
-  },
-  "864": {
-    "chainId": 113,
-    "baseDex": 222,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 222
   },
   "223": {
     "chainId": 114,
@@ -13940,17 +13874,6 @@ G.EVO_BY_DEX = {
     "type": "single",
     "maxStage": 1,
     "next": [],
-    "prev": null
-  },
-  "458": {
-    "chainId": 116,
-    "baseDex": 458,
-    "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      226
-    ],
     "prev": null
   },
   "226": {
@@ -13991,6 +13914,15 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 228
   },
+  "230": {
+    "chainId": 54,
+    "baseDex": 116,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 117
+  },
   "231": {
     "chainId": 119,
     "baseDex": 231,
@@ -14011,6 +13943,17 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 231
   },
+  "233": {
+    "chainId": 68,
+    "baseDex": 137,
+    "stage": 2,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      474
+    ],
+    "prev": 137
+  },
   "234": {
     "chainId": 120,
     "baseDex": 234,
@@ -14022,15 +13965,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "899": {
-    "chainId": 120,
-    "baseDex": 234,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 234
-  },
   "235": {
     "chainId": 121,
     "baseDex": 235,
@@ -14038,6 +13972,61 @@ G.EVO_BY_DEX = {
     "type": "single",
     "maxStage": 1,
     "next": [],
+    "prev": null
+  },
+  "236": {
+    "chainId": 47,
+    "baseDex": 236,
+    "stage": 1,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [
+      106,
+      107,
+      237
+    ],
+    "prev": null
+  },
+  "237": {
+    "chainId": 47,
+    "baseDex": 236,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 236
+  },
+  "238": {
+    "chainId": 59,
+    "baseDex": 238,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      124
+    ],
+    "prev": null
+  },
+  "239": {
+    "chainId": 60,
+    "baseDex": 239,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      125
+    ],
+    "prev": null
+  },
+  "240": {
+    "chainId": 61,
+    "baseDex": 240,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      126
+    ],
     "prev": null
   },
   "241": {
@@ -14048,6 +14037,15 @@ G.EVO_BY_DEX = {
     "maxStage": 1,
     "next": [],
     "prev": null
+  },
+  "242": {
+    "chainId": 51,
+    "baseDex": 440,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 113
   },
   "243": {
     "chainId": 123,
@@ -14269,15 +14267,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": 263
   },
-  "862": {
-    "chainId": 134,
-    "baseDex": 263,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 264
-  },
   "265": {
     "chainId": 135,
     "baseDex": 265,
@@ -14464,15 +14453,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 281
   },
-  "475": {
-    "chainId": 140,
-    "baseDex": 280,
-    "stage": 3,
-    "type": "branch",
-    "maxStage": 3,
-    "next": [],
-    "prev": 281
-  },
   "283": {
     "chainId": 141,
     "baseDex": 283,
@@ -14625,6 +14605,17 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 296
   },
+  "298": {
+    "chainId": 90,
+    "baseDex": 298,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      183
+    ],
+    "prev": null
+  },
   "299": {
     "chainId": 147,
     "baseDex": 299,
@@ -14635,15 +14626,6 @@ G.EVO_BY_DEX = {
       476
     ],
     "prev": null
-  },
-  "476": {
-    "chainId": 147,
-    "baseDex": 299,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 299
   },
   "300": {
     "chainId": 148,
@@ -14790,17 +14772,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": null
   },
-  "406": {
-    "chainId": 158,
-    "baseDex": 406,
-    "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      315
-    ],
-    "prev": null
-  },
   "315": {
     "chainId": 158,
     "baseDex": 406,
@@ -14811,15 +14782,6 @@ G.EVO_BY_DEX = {
       407
     ],
     "prev": 406
-  },
-  "407": {
-    "chainId": 158,
-    "baseDex": 406,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 315
   },
   "316": {
     "chainId": 159,
@@ -15226,15 +15188,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": 355
   },
-  "477": {
-    "chainId": 182,
-    "baseDex": 355,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 356
-  },
   "357": {
     "chainId": 183,
     "baseDex": 357,
@@ -15242,17 +15195,6 @@ G.EVO_BY_DEX = {
     "type": "single",
     "maxStage": 1,
     "next": [],
-    "prev": null
-  },
-  "433": {
-    "chainId": 184,
-    "baseDex": 433,
-    "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      358
-    ],
     "prev": null
   },
   "358": {
@@ -15273,6 +15215,17 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": null
   },
+  "360": {
+    "chainId": 100,
+    "baseDex": 360,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      202
+    ],
+    "prev": null
+  },
   "361": {
     "chainId": 186,
     "baseDex": 361,
@@ -15286,15 +15239,6 @@ G.EVO_BY_DEX = {
     "prev": null
   },
   "362": {
-    "chainId": 186,
-    "baseDex": 361,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 361
-  },
-  "478": {
     "chainId": 186,
     "baseDex": 361,
     "stage": 2,
@@ -15729,6 +15673,26 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 404
   },
+  "406": {
+    "chainId": 158,
+    "baseDex": 406,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      315
+    ],
+    "prev": null
+  },
+  "407": {
+    "chainId": 158,
+    "baseDex": 406,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 315
+  },
   "408": {
     "chainId": 211,
     "baseDex": 408,
@@ -15888,6 +15852,15 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 422
   },
+  "424": {
+    "chainId": 93,
+    "baseDex": 190,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 190
+  },
   "425": {
     "chainId": 219,
     "baseDex": 425,
@@ -15928,6 +15901,24 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 427
   },
+  "429": {
+    "chainId": 98,
+    "baseDex": 200,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 200
+  },
+  "430": {
+    "chainId": 97,
+    "baseDex": 198,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 198
+  },
   "431": {
     "chainId": 221,
     "baseDex": 431,
@@ -15947,6 +15938,17 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 431
+  },
+  "433": {
+    "chainId": 184,
+    "baseDex": 433,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      358
+    ],
+    "prev": null
   },
   "434": {
     "chainId": 223,
@@ -15987,6 +15989,39 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 436
+  },
+  "438": {
+    "chainId": 91,
+    "baseDex": 438,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      185
+    ],
+    "prev": null
+  },
+  "439": {
+    "chainId": 57,
+    "baseDex": 439,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      122
+    ],
+    "prev": null
+  },
+  "440": {
+    "chainId": 51,
+    "baseDex": 440,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      113
+    ],
+    "prev": null
   },
   "441": {
     "chainId": 228,
@@ -16036,6 +16071,17 @@ G.EVO_BY_DEX = {
     "maxStage": 3,
     "next": [],
     "prev": 444
+  },
+  "446": {
+    "chainId": 72,
+    "baseDex": 446,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      143
+    ],
+    "prev": null
   },
   "447": {
     "chainId": 232,
@@ -16146,6 +16192,17 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 456
   },
+  "458": {
+    "chainId": 116,
+    "baseDex": 458,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      226
+    ],
+    "prev": null
+  },
   "459": {
     "chainId": 239,
     "baseDex": 459,
@@ -16165,6 +16222,168 @@ G.EVO_BY_DEX = {
     "maxStage": 2,
     "next": [],
     "prev": 459
+  },
+  "461": {
+    "chainId": 109,
+    "baseDex": 215,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 215
+  },
+  "462": {
+    "chainId": 34,
+    "baseDex": 81,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 82
+  },
+  "463": {
+    "chainId": 48,
+    "baseDex": 108,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 108
+  },
+  "464": {
+    "chainId": 50,
+    "baseDex": 111,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 112
+  },
+  "465": {
+    "chainId": 52,
+    "baseDex": 114,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 114
+  },
+  "466": {
+    "chainId": 60,
+    "baseDex": 239,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 125
+  },
+  "467": {
+    "chainId": 61,
+    "baseDex": 240,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 126
+  },
+  "468": {
+    "chainId": 87,
+    "baseDex": 175,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 176
+  },
+  "469": {
+    "chainId": 95,
+    "baseDex": 193,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 193
+  },
+  "470": {
+    "chainId": 67,
+    "baseDex": 133,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 133
+  },
+  "471": {
+    "chainId": 67,
+    "baseDex": 133,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 133
+  },
+  "472": {
+    "chainId": 104,
+    "baseDex": 207,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 207
+  },
+  "473": {
+    "chainId": 112,
+    "baseDex": 220,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 221
+  },
+  "474": {
+    "chainId": 68,
+    "baseDex": 137,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 233
+  },
+  "475": {
+    "chainId": 140,
+    "baseDex": 280,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 281
+  },
+  "476": {
+    "chainId": 147,
+    "baseDex": 299,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 299
+  },
+  "477": {
+    "chainId": 182,
+    "baseDex": 355,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 356
+  },
+  "478": {
+    "chainId": 186,
+    "baseDex": 361,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 361
   },
   "479": {
     "chainId": 240,
@@ -16389,10 +16608,11 @@ G.EVO_BY_DEX = {
     "chainId": 258,
     "baseDex": 501,
     "stage": 2,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [
-      503
+      503,
+      11503
     ],
     "prev": 501
   },
@@ -16500,11 +16720,9 @@ G.EVO_BY_DEX = {
     "chainId": 263,
     "baseDex": 513,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      514
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "514": {
@@ -16520,11 +16738,9 @@ G.EVO_BY_DEX = {
     "chainId": 264,
     "baseDex": 515,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      516
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "516": {
@@ -16560,10 +16776,10 @@ G.EVO_BY_DEX = {
     "chainId": 266,
     "baseDex": 519,
     "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
+    "type": "2stage",
+    "maxStage": 2,
     "next": [
-      520
+      521
     ],
     "prev": null
   },
@@ -16581,11 +16797,11 @@ G.EVO_BY_DEX = {
   "521": {
     "chainId": 266,
     "baseDex": 519,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
     "next": [],
-    "prev": 520
+    "prev": 519
   },
   "524": {
     "chainId": 268,
@@ -16824,10 +17040,11 @@ G.EVO_BY_DEX = {
     "chainId": 279,
     "baseDex": 548,
     "stage": 1,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [
-      549
+      549,
+      11549
     ],
     "prev": null
   },
@@ -16850,15 +17067,6 @@ G.EVO_BY_DEX = {
       902
     ],
     "prev": null
-  },
-  "902": {
-    "chainId": 280,
-    "baseDex": 550,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 550
   },
   "551": {
     "chainId": 281,
@@ -16924,11 +17132,9 @@ G.EVO_BY_DEX = {
     "chainId": 284,
     "baseDex": 557,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      558
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "558": {
@@ -16982,15 +17188,6 @@ G.EVO_BY_DEX = {
     "prev": null
   },
   "563": {
-    "chainId": 287,
-    "baseDex": 562,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 2,
-    "next": [],
-    "prev": 562
-  },
-  "867": {
     "chainId": 287,
     "baseDex": 562,
     "stage": 2,
@@ -17245,11 +17442,9 @@ G.EVO_BY_DEX = {
     "chainId": 300,
     "baseDex": 590,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      591
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "591": {
@@ -17496,12 +17691,12 @@ G.EVO_BY_DEX = {
   },
   "617": {
     "chainId": 312,
-    "baseDex": 616,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
+    "baseDex": 617,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
     "next": [],
-    "prev": 616
+    "prev": null
   },
   "619": {
     "chainId": 314,
@@ -17574,23 +17769,15 @@ G.EVO_BY_DEX = {
     ],
     "prev": 624
   },
-  "983": {
-    "chainId": 317,
-    "baseDex": 624,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [],
-    "prev": 625
-  },
   "627": {
     "chainId": 319,
     "baseDex": 627,
     "stage": 1,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [
-      628
+      628,
+      11628
     ],
     "prev": null
   },
@@ -17979,11 +18166,9 @@ G.EVO_BY_DEX = {
     "chainId": 343,
     "baseDex": 667,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      668
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "668": {
@@ -18130,11 +18315,9 @@ G.EVO_BY_DEX = {
     "chainId": 350,
     "baseDex": 682,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      683
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "683": {
@@ -18306,6 +18489,15 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 698
   },
+  "700": {
+    "chainId": 67,
+    "baseDex": 133,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 133
+  },
   "701": {
     "chainId": 359,
     "baseDex": 701,
@@ -18337,10 +18529,11 @@ G.EVO_BY_DEX = {
     "chainId": 362,
     "baseDex": 704,
     "stage": 1,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [
-      705
+      705,
+      11705
     ],
     "prev": null
   },
@@ -18348,7 +18541,7 @@ G.EVO_BY_DEX = {
     "chainId": 362,
     "baseDex": 704,
     "stage": 2,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [
       706
@@ -18359,7 +18552,7 @@ G.EVO_BY_DEX = {
     "chainId": 362,
     "baseDex": 704,
     "stage": 3,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [],
     "prev": 705
@@ -18417,10 +18610,11 @@ G.EVO_BY_DEX = {
     "chainId": 366,
     "baseDex": 712,
     "stage": 1,
-    "type": "2stage",
+    "type": "branch",
     "maxStage": 2,
     "next": [
-      713
+      713,
+      11713
     ],
     "prev": null
   },
@@ -18522,10 +18716,11 @@ G.EVO_BY_DEX = {
     "chainId": 374,
     "baseDex": 722,
     "stage": 2,
-    "type": "3stage",
+    "type": "branch",
     "maxStage": 3,
     "next": [
-      724
+      724,
+      11724
     ],
     "prev": 722
   },
@@ -18604,11 +18799,9 @@ G.EVO_BY_DEX = {
     "chainId": 377,
     "baseDex": 731,
     "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
-    "next": [
-      732
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "732": {
@@ -18635,11 +18828,9 @@ G.EVO_BY_DEX = {
     "chainId": 378,
     "baseDex": 734,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      735
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "735": {
@@ -18844,11 +19035,9 @@ G.EVO_BY_DEX = {
     "chainId": 389,
     "baseDex": 755,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      756
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "756": {
@@ -19661,26 +19850,6 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 840
   },
-  "1011": {
-    "chainId": 442,
-    "baseDex": 840,
-    "stage": 2,
-    "type": "branch",
-    "maxStage": 3,
-    "next": [
-      1019
-    ],
-    "prev": 840
-  },
-  "1019": {
-    "chainId": 442,
-    "baseDex": 840,
-    "stage": 3,
-    "type": "branch",
-    "maxStage": 3,
-    "next": [],
-    "prev": 1011
-  },
   "843": {
     "chainId": 443,
     "baseDex": 843,
@@ -19872,6 +20041,60 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": 860
   },
+  "862": {
+    "chainId": 134,
+    "baseDex": 263,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 264
+  },
+  "863": {
+    "chainId": 11006,
+    "baseDex": 12052,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 12052
+  },
+  "864": {
+    "chainId": 11008,
+    "baseDex": 11222,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11222
+  },
+  "865": {
+    "chainId": 35,
+    "baseDex": 83,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 83
+  },
+  "866": {
+    "chainId": 57,
+    "baseDex": 439,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 122
+  },
+  "867": {
+    "chainId": 11010,
+    "baseDex": 11562,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11562
+  },
   "868": {
     "chainId": 452,
     "baseDex": 868,
@@ -20004,15 +20227,6 @@ G.EVO_BY_DEX = {
     ],
     "prev": null
   },
-  "1018": {
-    "chainId": 465,
-    "baseDex": 884,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [],
-    "prev": 884
-  },
   "885": {
     "chainId": 466,
     "baseDex": 885,
@@ -20135,6 +20349,60 @@ G.EVO_BY_DEX = {
     "maxStage": 1,
     "next": [],
     "prev": null
+  },
+  "899": {
+    "chainId": 120,
+    "baseDex": 234,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 234
+  },
+  "900": {
+    "chainId": 58,
+    "baseDex": 123,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 123
+  },
+  "901": {
+    "chainId": 110,
+    "baseDex": 216,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 217
+  },
+  "902": {
+    "chainId": 280,
+    "baseDex": 550,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 550
+  },
+  "903": {
+    "chainId": 11013,
+    "baseDex": 11215,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11215
+  },
+  "904": {
+    "chainId": 11012,
+    "baseDex": 11211,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11211
   },
   "905": {
     "chainId": 477,
@@ -20373,10 +20641,10 @@ G.EVO_BY_DEX = {
     "chainId": 487,
     "baseDex": 928,
     "stage": 1,
-    "type": "3stage",
-    "maxStage": 3,
+    "type": "2stage",
+    "maxStage": 2,
     "next": [
-      929
+      930
     ],
     "prev": null
   },
@@ -20394,11 +20662,11 @@ G.EVO_BY_DEX = {
   "930": {
     "chainId": 487,
     "baseDex": 928,
-    "stage": 3,
-    "type": "3stage",
-    "maxStage": 3,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
     "next": [],
-    "prev": 929
+    "prev": 928
   },
   "932": {
     "chainId": 489,
@@ -20505,11 +20773,9 @@ G.EVO_BY_DEX = {
     "chainId": 495,
     "baseDex": 946,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      947
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "947": {
@@ -20545,11 +20811,9 @@ G.EVO_BY_DEX = {
     "chainId": 499,
     "baseDex": 953,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      954
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "954": {
@@ -20565,11 +20829,9 @@ G.EVO_BY_DEX = {
     "chainId": 500,
     "baseDex": 955,
     "stage": 1,
-    "type": "2stage",
-    "maxStage": 2,
-    "next": [
-      956
-    ],
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
     "prev": null
   },
   "956": {
@@ -20777,6 +21039,51 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": null
   },
+  "979": {
+    "chainId": 24,
+    "baseDex": 56,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 57
+  },
+  "980": {
+    "chainId": 96,
+    "baseDex": 194,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 194
+  },
+  "981": {
+    "chainId": 101,
+    "baseDex": 203,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 203
+  },
+  "982": {
+    "chainId": 103,
+    "baseDex": 206,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 206
+  },
+  "983": {
+    "chainId": 317,
+    "baseDex": 624,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 625
+  },
   "984": {
     "chainId": 515,
     "baseDex": 984,
@@ -20902,12 +21209,12 @@ G.EVO_BY_DEX = {
   },
   "1000": {
     "chainId": 528,
-    "baseDex": 999,
-    "stage": 2,
-    "type": "2stage",
-    "maxStage": 2,
+    "baseDex": 1000,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
     "next": [],
-    "prev": 999
+    "prev": null
   },
   "1004": {
     "chainId": 532,
@@ -20963,6 +21270,17 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": null
   },
+  "1011": {
+    "chainId": 442,
+    "baseDex": 840,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [
+      1019
+    ],
+    "prev": 840
+  },
   "1012": {
     "chainId": 539,
     "baseDex": 1012,
@@ -21010,6 +21328,24 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": null
   },
+  "1018": {
+    "chainId": 465,
+    "baseDex": 884,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 884
+  },
+  "1019": {
+    "chainId": 442,
+    "baseDex": 840,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 1011
+  },
   "1024": {
     "chainId": 1004,
     "baseDex": 1024,
@@ -21019,20 +21355,547 @@ G.EVO_BY_DEX = {
     "next": [],
     "prev": null
   },
-  "11037": {"chainId":11015,"baseDex":11037,"stage":1,"type":"2stage","maxStage":2,"next":[11038],"prev":null},
-  "11038": {"chainId":11015,"baseDex":11037,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11037},
-  "11027": {"chainId":11011,"baseDex":11027,"stage":1,"type":"2stage","maxStage":2,"next":[11028],"prev":null},
-  "11028": {"chainId":11011,"baseDex":11027,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11027},
-  "11026": {"chainId":10,"baseDex":25,"stage":2,"type":"branch","maxStage":2,"next":[],"prev":25},
-  "11077": {"chainId":11033,"baseDex":11077,"stage":1,"type":"2stage","maxStage":2,"next":[11078],"prev":null},
-  "11078": {"chainId":11033,"baseDex":11077,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11077},
-  "11263": {"chainId":11135,"baseDex":11263,"stage":1,"type":"3stage","maxStage":3,"next":[11264],"prev":null},
-  "11264": {"chainId":11135,"baseDex":11263,"stage":2,"type":"3stage","maxStage":3,"next":[862],"prev":11263},
-  "11570": {"chainId":11295,"baseDex":11570,"stage":1,"type":"2stage","maxStage":2,"next":[11571],"prev":null},
-  "11571": {"chainId":11295,"baseDex":11570,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11570},
-  "11058": {"chainId":11024,"baseDex":11058,"stage":1,"type":"2stage","maxStage":2,"next":[11059],"prev":null},
-  "11059": {"chainId":11024,"baseDex":11058,"stage":2,"type":"2stage","maxStage":2,"next":[],"prev":11058},
-  "11194": {"chainId":11097,"baseDex":11194,"stage":1,"type":"2stage","maxStage":2,"next":[980],"prev":null},
+  "10801": {
+    "chainId": 11014,
+    "baseDex": 10801,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11019": {
+    "chainId": 11001,
+    "baseDex": 11019,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11020
+    ],
+    "prev": null
+  },
+  "11020": {
+    "chainId": 11001,
+    "baseDex": 11019,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11019
+  },
+  "11026": {
+    "chainId": 10,
+    "baseDex": 172,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 25
+  },
+  "11027": {
+    "chainId": 11011,
+    "baseDex": 11027,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11028
+    ],
+    "prev": null
+  },
+  "11028": {
+    "chainId": 11011,
+    "baseDex": 11027,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11027
+  },
+  "11037": {
+    "chainId": 11015,
+    "baseDex": 11037,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11038
+    ],
+    "prev": null
+  },
+  "11038": {
+    "chainId": 11015,
+    "baseDex": 11037,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11037
+  },
+  "11050": {
+    "chainId": 11002,
+    "baseDex": 11050,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11051
+    ],
+    "prev": null
+  },
+  "11051": {
+    "chainId": 11002,
+    "baseDex": 11050,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11050
+  },
+  "11052": {
+    "chainId": 11003,
+    "baseDex": 11052,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11053
+    ],
+    "prev": null
+  },
+  "11053": {
+    "chainId": 11003,
+    "baseDex": 11052,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11052
+  },
+  "11058": {
+    "chainId": 11024,
+    "baseDex": 11058,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11059
+    ],
+    "prev": null
+  },
+  "11059": {
+    "chainId": 11024,
+    "baseDex": 11058,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11058
+  },
+  "11074": {
+    "chainId": 11004,
+    "baseDex": 11074,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      11075
+    ],
+    "prev": null
+  },
+  "11075": {
+    "chainId": 11004,
+    "baseDex": 11074,
+    "stage": 2,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      11076
+    ],
+    "prev": 11074
+  },
+  "11076": {
+    "chainId": 11004,
+    "baseDex": 11074,
+    "stage": 3,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [],
+    "prev": 11075
+  },
+  "11077": {
+    "chainId": 11033,
+    "baseDex": 11077,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11078
+    ],
+    "prev": null
+  },
+  "11078": {
+    "chainId": 11033,
+    "baseDex": 11077,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11077
+  },
+  "11079": {
+    "chainId": 11007,
+    "baseDex": 11079,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11080
+    ],
+    "prev": null
+  },
+  "11080": {
+    "chainId": 11007,
+    "baseDex": 11079,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11079
+  },
+  "11083": {
+    "chainId": 11015,
+    "baseDex": 11083,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11088": {
+    "chainId": 11005,
+    "baseDex": 11088,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11089
+    ],
+    "prev": null
+  },
+  "11089": {
+    "chainId": 11005,
+    "baseDex": 11088,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11088
+  },
+  "11100": {
+    "chainId": 11011,
+    "baseDex": 11100,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11101
+    ],
+    "prev": null
+  },
+  "11101": {
+    "chainId": 11011,
+    "baseDex": 11100,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11100
+  },
+  "11103": {
+    "chainId": 45,
+    "baseDex": 102,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 102
+  },
+  "11105": {
+    "chainId": 46,
+    "baseDex": 104,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 104
+  },
+  "11110": {
+    "chainId": 49,
+    "baseDex": 109,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 109
+  },
+  "11122": {
+    "chainId": 11016,
+    "baseDex": 11122,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11128": {
+    "chainId": 11021,
+    "baseDex": 11128,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11144": {
+    "chainId": 11018,
+    "baseDex": 11144,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11145": {
+    "chainId": 11019,
+    "baseDex": 11145,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11146": {
+    "chainId": 11020,
+    "baseDex": 11146,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11157": {
+    "chainId": 80,
+    "baseDex": 155,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 156
+  },
+  "11194": {
+    "chainId": 11097,
+    "baseDex": 11194,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      980
+    ],
+    "prev": null
+  },
+  "11211": {
+    "chainId": 11012,
+    "baseDex": 11211,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      904
+    ],
+    "prev": null
+  },
+  "11215": {
+    "chainId": 11013,
+    "baseDex": 11215,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      903
+    ],
+    "prev": null
+  },
+  "11222": {
+    "chainId": 11008,
+    "baseDex": 11222,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      864
+    ],
+    "prev": null
+  },
+  "11263": {
+    "chainId": 11135,
+    "baseDex": 11263,
+    "stage": 1,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      11264
+    ],
+    "prev": null
+  },
+  "11264": {
+    "chainId": 11135,
+    "baseDex": 11263,
+    "stage": 2,
+    "type": "3stage",
+    "maxStage": 3,
+    "next": [
+      862
+    ],
+    "prev": 11263
+  },
+  "11503": {
+    "chainId": 258,
+    "baseDex": 501,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 502
+  },
+  "11549": {
+    "chainId": 279,
+    "baseDex": 548,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 548
+  },
+  "11554": {
+    "chainId": 11009,
+    "baseDex": 11554,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11555
+    ],
+    "prev": null
+  },
+  "11555": {
+    "chainId": 11009,
+    "baseDex": 11554,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11554
+  },
+  "11562": {
+    "chainId": 11010,
+    "baseDex": 11562,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      867
+    ],
+    "prev": null
+  },
+  "11570": {
+    "chainId": 11295,
+    "baseDex": 11570,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      11571
+    ],
+    "prev": null
+  },
+  "11571": {
+    "chainId": 11295,
+    "baseDex": 11570,
+    "stage": 2,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [],
+    "prev": 11570
+  },
+  "11618": {
+    "chainId": 11017,
+    "baseDex": 11618,
+    "stage": 1,
+    "type": "single",
+    "maxStage": 1,
+    "next": [],
+    "prev": null
+  },
+  "11628": {
+    "chainId": 319,
+    "baseDex": 627,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 627
+  },
+  "11705": {
+    "chainId": 362,
+    "baseDex": 704,
+    "stage": 2,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [
+      11706
+    ],
+    "prev": 704
+  },
+  "11706": {
+    "chainId": 362,
+    "baseDex": 704,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 11705
+  },
+  "11713": {
+    "chainId": 366,
+    "baseDex": 712,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 2,
+    "next": [],
+    "prev": 712
+  },
+  "11724": {
+    "chainId": 374,
+    "baseDex": 722,
+    "stage": 3,
+    "type": "branch",
+    "maxStage": 3,
+    "next": [],
+    "prev": 723
+  },
+  "12052": {
+    "chainId": 11006,
+    "baseDex": 12052,
+    "stage": 1,
+    "type": "2stage",
+    "maxStage": 2,
+    "next": [
+      863
+    ],
+    "prev": null
+  }
 };
 
 G.getEvoChain = function(dex) {

@@ -42,11 +42,11 @@ G.Enemies = (() => {
 
   // Franjas de jefe: minuto en que salen, PV base y franja de BST (Nâng cấp sức mạnh chuẩn Raid Boss).
   const BOSS_SLOTS = [
-    { at: 180, hp: 4500,  dmg: 42,  xp: 320,  bst: [490, 545] },
-    { at: 360, hp: 12500, dmg: 55,  xp: 650,  bst: [520, 580] },
-    { at: 540, hp: 26000, dmg: 70,  xp: 1100, bst: [540, 600] },
-    { at: 720, hp: 52000, dmg: 88,  xp: 1800, bst: [580, 700] },
-    { at: 900, hp: 98000, dmg: 115, xp: 3200, bst: [600, 700] }
+    { at: 180, hp: 2400,  dmg: 36,  xp: 320,  bst: [490, 545] },
+    { at: 360, hp: 6500,  dmg: 46,  xp: 650,  bst: [520, 580] },
+    { at: 540, hp: 14000, dmg: 58,  xp: 1100, bst: [540, 600] },
+    { at: 720, hp: 28000, dmg: 72,  xp: 1800, bst: [580, 700] },
+    { at: 900, hp: 48000, dmg: 92,  xp: 3200, bst: [600, 700] }
   ];
 
   // Stats base aproximados a partir de los de juego (inverso de fetch_pokedex).

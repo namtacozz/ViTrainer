@@ -100,6 +100,40 @@ G.RunQuests = (() => {
         icon: 'meteorite',
         completed: false
       });
+    } else if (dex === 888) {
+      // Zacian Crowned
+      activeQuests.push({
+        id: 'legend_zacian',
+        type: 'legend_form',
+        title: 'GƯƠM BÁ VƯƠNG',
+        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
+        targetKills: 350,
+        targetLv: 25,
+        kills: 0,
+        rewardType: 'item',
+        rewardItem: 'keystone',
+        rewardName: 'Gươm Rỉ Sét (Crowned)',
+        color: '#38bdf8',
+        icon: 'star',
+        completed: false
+      });
+    } else if (dex === 889) {
+      // Zamazenta Crowned
+      activeQuests.push({
+        id: 'legend_zamazenta',
+        type: 'legend_form',
+        title: 'KHIÊN HỘ QUỐC',
+        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
+        targetKills: 350,
+        targetLv: 25,
+        kills: 0,
+        rewardType: 'item',
+        rewardItem: 'keystone',
+        rewardName: 'Khiên Rỉ Sét (Crowned)',
+        color: '#f43f5e',
+        icon: 'star',
+        completed: false
+      });
     } else if (dex === 718) {
       // Zygarde
       activeQuests.push({

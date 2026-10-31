@@ -96,7 +96,9 @@ G.Path = (() => {
     // Si va descentrado y el atajo hasta esa casilla roza un obstáculo,
     // primero al centro de la suya (así no se engancha en las esquinas).
     if (!clearLine(f, e.x, e.y, gx, gy, e.r)) { gx = (f.ox + tx + 0.5) * TS; gy = (f.oy + ty + 0.5) * TS; }
-    return G.U.norm(gx - e.x, gy - e.y);
+    const norm = G.U.norm(gx - e.x, gy - e.y);
+    if (norm[0] === 0 && norm[1] === 0) return null;
+    return norm;
   }
 
   /** ¿Cabe un cuerpo de radio r en línea recta de (ax,ay) a (bx,by)? */

@@ -511,16 +511,14 @@ G.Icons = (() => {
     if (name.startsWith('type:')) {
       const t = name.slice(5);
       if (OFFICIAL_TYPES.has(t)) {
-        const h = Math.round(size * 0.45);
-        return `<img class="official-type ${cls}" src="assets/types/${t}.png" width="${size}" height="${h}" alt="${t}" draggable="false" style="object-fit:contain;vertical-align:middle;display:inline-block;">`;
+        return `<img class="official-type ${cls}" src="assets/types/${t}.png" width="${size}" height="${size}" alt="${t}" draggable="false" style="object-fit:contain;vertical-align:middle;display:inline-block;">`;
       }
     }
     if (name.startsWith('move:')) {
       const mid = name.slice(5);
       const m = (typeof G !== 'undefined' && G.Moves && G.Moves.BY_ID) ? G.Moves.BY_ID[mid] : null;
       if (m && m.type && OFFICIAL_TYPES.has(m.type)) {
-        const h = Math.round(size * 0.45);
-        return `<img class="official-move-type ${cls}" src="assets/types/${m.type}.png" width="${size}" height="${h}" alt="${m.type}" draggable="false" style="object-fit:contain;vertical-align:middle;display:inline-block;">`;
+        return `<img class="official-move-type ${cls}" src="assets/types/${m.type}.png" width="${size}" height="${size}" alt="${m.type}" draggable="false" style="object-fit:contain;vertical-align:middle;display:inline-block;">`;
       }
     }
     const cv = canvas(name), w = snap(name, size), h = w * cv.height / cv.width;
@@ -539,8 +537,7 @@ G.Icons = (() => {
       if (OFFICIAL_TYPES.has(t)) {
         const img = getImg('assets/types/' + t + '.png');
         if (img && img.complete && img.naturalWidth > 0) {
-          const h = Math.round(size * (img.naturalHeight / img.naturalWidth));
-          ctx.drawImage(img, Math.round(x), Math.round(y + (size - h) / 2), size, h);
+          ctx.drawImage(img, Math.round(x), Math.round(y), size, size);
           return;
         }
       }
@@ -550,8 +547,7 @@ G.Icons = (() => {
       if (m && m.type && OFFICIAL_TYPES.has(m.type)) {
         const img = getImg('assets/types/' + m.type + '.png');
         if (img && img.complete && img.naturalWidth > 0) {
-          const h = Math.round(size * (img.naturalHeight / img.naturalWidth));
-          ctx.drawImage(img, Math.round(x), Math.round(y + (size - h) / 2), size, h);
+          ctx.drawImage(img, Math.round(x), Math.round(y), size, size);
           return;
         }
       }

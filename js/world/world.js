@@ -181,7 +181,7 @@ G.World = (() => {
     rock:  { solid: true,  hp: 34,       r: 12 },
     chest: { solid: true,  hp: 22,       r: 12 },
     pumpkin: { solid: true, hp: 26,      r: 11 },
-    grass: { solid: false, hp: 1,        r: 14 },
+    grass: { solid: false, hp: Infinity, r: 14 },
     altar:    { solid: true,  hp: Infinity, r: 9 },
     spring:   { solid: false, hp: Infinity, r: 22, flat: true },
     bigchest: { solid: true,  hp: Infinity, r: 14 },

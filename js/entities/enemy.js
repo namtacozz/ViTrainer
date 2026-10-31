@@ -127,7 +127,7 @@
     /** @param eff  'super' | 'weak' | null (tabla de tipos, sólo para enseñarlo) */
     hurt(amount, color = '#fff', dirX = 0, dirY = 0, knock = 0, eff = null) {
       if (this.dead) return;
-      const d = Math.max(1, Math.round(amount));
+      let d = Math.max(1, Math.round(amount));
       // Arceus en la Sentencia: no cae nunca; el golpe suma a su cuenta de daño
       // (la lleva quien manda: el invitado se lo manda al anfitrión).
       if (this.arceus) {
@@ -154,10 +154,10 @@
         const a = Math.min(this.shield, d);
         this.shield -= a;
         if (a >= d) { G.FX.dmgText(this.x, this.y - this.bodyH - 4, d, '#9fd8ff'); this.flash = 0.05; return; }
-        amount = d - a;
+        d = d - a;
       }
-      this.hp -= Math.max(1, Math.round(amount));
-      G.Judgment.noteDmg(amount, this);
+      this.hp -= d;
+      G.Judgment.noteDmg(d, this);
       this.showHurt(d, color, dirX, dirY, eff);
       if (knock > 0 && !this.boss) {
         const [nx, ny] = G.U.norm(dirX, dirY);
@@ -404,7 +404,7 @@
       // Camino alrededor de los obstáculos (los que no vuelan).
       if (!this.flying && this.phase !== 'dash' && this.sideT <= 0) {
         const pd = G.Path.dirFor(this, pl);
-        if (pd && !(this.keepsDistance() && dist < (this.def.range || 200) * 0.82)) { dx = pd[0]; dy = pd[1]; }
+        if (pd && (pd[0] !== 0 || pd[1] !== 0) && !(this.keepsDistance() && dist < (this.def.range || 200) * 0.82)) { dx = pd[0]; dy = pd[1]; }
       }
 
       let vx = dx * spd, vy = dy * spd;

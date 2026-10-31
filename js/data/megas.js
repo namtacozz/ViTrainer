@@ -1148,10 +1148,350 @@ G.MEGAS = {
     "sd": 105,
     "bst": 594,
     "spriteDex": 460
-  }
+  },
+  "10807": {
+    "id": 10807,
+    "baseDex": 807,
+    "name": "Mega Zeraora",
+    "slug": "zeraora-mega",
+    "types": [
+      "electric",
+      "fighting"
+    ],
+    "ability": "tough-claws",
+    "hp": 115,
+    "spd": 155,
+    "atk": 1.6,
+    "pa": 1.6,
+    "sa": 1.45,
+    "df": 95,
+    "sd": 95,
+    "bst": 700,
+    "spriteDex": 10807
+  },
+  "10483": {
+    "id": 10483,
+    "baseDex": 483,
+    "name": "Primal Dialga",
+    "slug": "dialga-primal",
+    "types": [
+      "steel",
+      "dragon"
+    ],
+    "ability": "pressure",
+    "hp": 120,
+    "spd": 115,
+    "atk": 1.65,
+    "pa": 1.45,
+    "sa": 1.65,
+    "df": 130,
+    "sd": 120,
+    "bst": 780,
+    "spriteDex": 10483
+  },
+  "10491": {
+    "id": 10491,
+    "baseDex": 491,
+    "name": "Mega Darkrai",
+    "slug": "darkrai-mega",
+    "types": [
+      "dark",
+      "ghost"
+    ],
+    "ability": "bad-dreams",
+    "hp": 105,
+    "spd": 140,
+    "atk": 1.65,
+    "pa": 1.2,
+    "sa": 1.65,
+    "df": 105,
+    "sd": 105,
+    "bst": 700,
+    "spriteDex": 10491
+  },
+  "10227": {
+    "id": 10227,
+    "baseDex": 227,
+    "name": "Mega Skarmory",
+    "slug": "skarmory-mega",
+    "types": [
+      "steel",
+      "flying"
+    ],
+    "ability": "tough-claws",
+    "hp": 95,
+    "spd": 105,
+    "atk": 1.35,
+    "pa": 1.35,
+    "sa": 0.7,
+    "df": 165,
+    "sd": 95,
+    "bst": 565,
+    "spriteDex": 10227
+  },
+  "10530": {
+    "id": 10530,
+    "baseDex": 530,
+    "name": "Mega Excadrill",
+    "slug": "excadrill-mega",
+    "types": [
+      "ground",
+      "steel"
+    ],
+    "ability": "sand-force",
+    "hp": 130,
+    "spd": 108,
+    "atk": 1.65,
+    "pa": 1.65,
+    "sa": 0.85,
+    "df": 90,
+    "sd": 85,
+    "bst": 608,
+    "spriteDex": 10530
+  },
+  "10604": {
+    "id": 10604,
+    "baseDex": 604,
+    "name": "Mega Eelektross",
+    "slug": "eelektross-mega",
+    "types": [
+      "electric"
+    ],
+    "ability": "levitate",
+    "hp": 110,
+    "spd": 80,
+    "atk": 1.55,
+    "pa": 1.55,
+    "sa": 1.5,
+    "df": 105,
+    "sd": 105,
+    "bst": 615,
+    "spriteDex": 10604
+  },
+  "10670": {
+    "id": 10670,
+    "baseDex": 670,
+    "name": "Mega Floette",
+    "slug": "floette-mega",
+    "types": [
+      "fairy"
+    ],
+    "ability": "flower-veil",
+    "hp": 100,
+    "spd": 115,
+    "atk": 1.5,
+    "pa": 0.95,
+    "sa": 1.5,
+    "df": 95,
+    "sd": 150,
+    "bst": 651,
+    "spriteDex": 10670
+  },
+  "10691": {
+    "id": 10691,
+    "baseDex": 691,
+    "name": "Mega Dragalge",
+    "slug": "dragalge-mega",
+    "types": [
+      "poison",
+      "dragon"
+    ],
+    "ability": "adaptability",
+    "hp": 95,
+    "spd": 75,
+    "atk": 1.45,
+    "pa": 1.1,
+    "sa": 1.45,
+    "df": 115,
+    "sd": 145,
+    "bst": 594,
+    "spriteDex": 10691
+  },
+  "10780": {
+    "id": 10780,
+    "baseDex": 780,
+    "name": "Mega Drampa",
+    "slug": "drampa-mega",
+    "types": [
+      "normal",
+      "dragon"
+    ],
+    "ability": "berserk",
+    "hp": 105,
+    "spd": 65,
+    "atk": 1.55,
+    "pa": 1.0,
+    "sa": 1.55,
+    "df": 110,
+    "sd": 115,
+    "bst": 585,
+    "spriteDex": 10780
+  },
+  "10008": {
+    "id": 10008,
+    "baseDex": 483,
+    "name": "Origin Dialga",
+    "slug": "dialga-origin",
+    "types": [
+      "steel",
+      "dragon"
+    ],
+    "ability": "telepathy",
+    "hp": 120,
+    "spd": 110,
+    "atk": 1.65,
+    "pa": 1.35,
+    "sa": 1.65,
+    "df": 130,
+    "sd": 140,
+    "bst": 700,
+    "spriteDex": 10008
+  },
+  "10009": {
+    "id": 10009,
+    "baseDex": 484,
+    "name": "Origin Palkia",
+    "slug": "palkia-origin",
+    "types": [
+      "water",
+      "dragon"
+    ],
+    "ability": "telepathy",
+    "hp": 115,
+    "spd": 130,
+    "atk": 1.65,
+    "pa": 1.35,
+    "sa": 1.65,
+    "df": 110,
+    "sd": 140,
+    "bst": 700,
+    "spriteDex": 10009
+  },
+  "10188": {
+    "id": 10188,
+    "baseDex": 888,
+    "name": "Crowned Zacian",
+    "slug": "zacian-crowned",
+    "types": [
+      "fairy",
+      "steel"
+    ],
+    "ability": "intrepid-sword",
+    "hp": 115,
+    "spd": 148,
+    "atk": 1.7,
+    "pa": 1.7,
+    "sa": 1.0,
+    "df": 115,
+    "sd": 115,
+    "bst": 720,
+    "spriteDex": 10188
+  },
+  "10189": {
+    "id": 10189,
+    "baseDex": 889,
+    "name": "Crowned Zamazenta",
+    "slug": "zamazenta-crowned",
+    "types": [
+      "fighting",
+      "steel"
+    ],
+    "ability": "dauntless-shield",
+    "hp": 115,
+    "spd": 128,
+    "atk": 1.5,
+    "pa": 1.5,
+    "sa": 1.0,
+    "df": 145,
+    "sd": 145,
+    "bst": 720,
+    "spriteDex": 10189
+  },
+  "10271": {
+    "id": 10271,
+    "baseDex": 901,
+    "name": "Bloodmoon Ursaluna",
+    "slug": "ursaluna-bloodmoon",
+    "types": [
+      "ground",
+      "normal"
+    ],
+    "ability": "mind-eye",
+    "hp": 125,
+    "spd": 78,
+    "atk": 1.5,
+    "pa": 0.9,
+    "sa": 1.5,
+    "df": 120,
+    "sd": 80,
+    "bst": 550,
+    "spriteDex": 10271
+  },
+  "10256": {
+    "id": 10256,
+    "baseDex": 964,
+    "name": "Hero Palafin",
+    "slug": "palafin-hero",
+    "types": [
+      "water"
+    ],
+    "ability": "zero-to-hero",
+    "hp": 120,
+    "spd": 120,
+    "atk": 1.6,
+    "pa": 1.6,
+    "sa": 1.3,
+    "df": 115,
+    "sd": 105,
+    "bst": 650,
+    "spriteDex": 10256
+  },
 };
 
 G.MEGAS_BY_BASE = {
+  "964": [
+    10256
+  ],
+  "901": [
+    10271
+  ],
+  "889": [
+    10189
+  ],
+  "888": [
+    10188
+  ],
+  "484": [
+    10009
+  ],
+  "780": [
+    10780
+  ],
+  "691": [
+    10691
+  ],
+  "670": [
+    10670
+  ],
+  "604": [
+    10604
+  ],
+  "530": [
+    10530
+  ],
+  "227": [
+    10227
+  ],
+  "491": [
+    10491
+  ],
+  "483": [
+    10008,
+    10483
+  ],
+  "807": [
+    10807
+  ],
   "6": [
     10034,
     10035

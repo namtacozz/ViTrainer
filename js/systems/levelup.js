@@ -101,6 +101,7 @@ G.LevelUp = (() => {
           title: 'Evolucionar a ' + G.T(mon.name),
           desc: `Evoluciona a ${G.T(mon.name)} (${typesStr}). Recupera 40% de vida y actualiza estadísticas.`,
           apply: p => {
+            p.pendingEvoBranches = null;
             p.evolveTo(branchDex);
           }
         });

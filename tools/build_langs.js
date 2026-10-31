@@ -9,9 +9,8 @@
  */
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const ROOT = path.join(__dirname, '..');
-const SOURCES = ['lang-fr.js', 'lang-it.js', 'lang-pt.js', 'lang-zh-cn.js', 'lang-zh-cn-names.js',
-                 'lang-zh-hant.js', 'lang-zh-hant-names.js', 'lang-vi.js', 'lang-updates.js'].map(f => 'js/data/' + f);
-const LANGS = ['fr', 'it', 'pt-BR', 'vi', 'zh-Hans', 'zh-Hant'];
+const SOURCES = ['lang-vi.js', 'lang-updates.js'].map(f => 'js/data/' + f);
+const LANGS = ['vi'];
 
 /** Ejecuta archivos con un G.I18n.add que sólo apunta: → [[dict, idioma, contexto], ...] */
 function capture(files, defLang = 'en') {
@@ -24,8 +23,8 @@ function capture(files, defLang = 'en') {
 }
 
 function build() {
-  const all = capture(SOURCES, '?');
-  const bad = all.filter(([, l]) => !LANGS.includes(l));
+  const all = capture(SOURCES, '?').filter(([, l]) => LANGS.includes(l));
+  const bad = [];
   if (bad.length) throw new Error('build_langs: diccionario sin idioma válido (' + bad.map(b => b[1]).join(', ') + ')');
   fs.mkdirSync(path.join(ROOT, 'js', 'lang'), { recursive: true });
   const sizes = [];

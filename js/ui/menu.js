@@ -441,6 +441,28 @@ G.MenuUI = (() => {
     const isOwn = d => !!(s.owned && s.owned[d]);
     const isUnlocked = d => G.DB.isEvoUnlocked ? G.DB.isEvoUnlocked(d) : isOwn(d);
 
+    const renderMega = targetDex => {
+      if (typeof G === 'undefined' || !G.getMegasFor) return '';
+      const megas = G.getMegasFor(targetDex);
+      if (!megas || !megas.length) return '';
+      const preOwn = isOwn(targetDex);
+      return megas.map(m => {
+        const isCur = dex === m.id || dex === m.spriteDex;
+        const mName = preOwn ? (m.name.replace(/^Mega\s+/, 'M-').replace(/^Primal\s+/, 'P-')) : '???';
+        const mTypes = (m.types || []).join(' / ');
+        const desc = preOwn ? `${m.name} (${mTypes}) · Atk: x${(m.atk || 1).toFixed(2)}` : G.T('Desbloquea la forma anterior para ver esta Mega Evolución');
+        return `
+          <span class="evo-arrow">→</span>
+          <div class="evo-node ${preOwn ? 'unlocked' : 'locked'}${isCur ? ' current' : ''}" data-mega-id="${m.id}" data-mega-dex="${m.spriteDex || m.baseDex}" title="${desc}">
+            <div class="evo-cv-wrap" data-dex="${m.spriteDex || m.baseDex}" data-unlocked="${preOwn ? 1 : 0}"></div>
+            <div class="evo-name">${mName}</div>
+            <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Mega</div>
+            ${!preOwn ? '<div class="evo-lock-tag">🔒</div>' : ''}
+          </div>
+        `;
+      }).join('');
+    };
+
     let nodesHtml = '';
 
     if (chain.type === 'single') {
@@ -448,6 +470,7 @@ G.MenuUI = (() => {
       const un1 = isOwn(chain.baseDex);
       const un2 = tier >= 2;
       const un3 = tier >= 3;
+      const megaHtml = renderMega(chain.baseDex);
       nodesHtml = `
         <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === chain.baseDex ? ' current' : ''}" data-dex="${chain.baseDex}">
           <div class="evo-cv-wrap" data-dex="${chain.baseDex}" data-unlocked="${un1 ? 1 : 0}"></div>
@@ -468,6 +491,7 @@ G.MenuUI = (() => {
           <div class="evo-lvl">Nv. 30</div>
           ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
+        ${megaHtml}
       `;
     } else if (chain.type === '2stage') {
       const d1 = chain.stages[0][0], d2 = chain.stages[1][0];
@@ -475,6 +499,7 @@ G.MenuUI = (() => {
       const un1 = isOwn(d1);
       const un2 = isUnlocked(d2);
       const un3 = tier >= 3;
+      const megaHtml = renderMega(d2);
       nodesHtml = `
         <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
           <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
@@ -495,6 +520,7 @@ G.MenuUI = (() => {
           <div class="evo-lvl">Nv. 30</div>
           ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
+        ${megaHtml}
       `;
     } else if (chain.type === '3stage') {
       const d1 = chain.stages[0][0], d2 = chain.stages[1][0], d3 = chain.stages[2][0];
@@ -502,6 +528,7 @@ G.MenuUI = (() => {
       const un1 = isOwn(d1);
       const un2 = isUnlocked(d2);
       const un3 = isUnlocked(d3);
+      const megaHtml = renderMega(d3);
       nodesHtml = `
         <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
           <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
@@ -522,6 +549,7 @@ G.MenuUI = (() => {
           <div class="evo-lvl">Nv. 30</div>
           ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
+        ${megaHtml}
       `;
     } else if (chain.type === 'branch') {
       const d1 = chain.baseDex;
@@ -533,12 +561,16 @@ G.MenuUI = (() => {
         const unb = isUnlocked(d);
         const stage = G.getStage(d);
         const lvl = stage === 2 ? 'Nv. 15' : 'Nv. 30';
+        const megaSub = renderMega(d);
         return `
-          <div class="evo-node ${unb ? 'unlocked' : 'locked'}${dex === d ? ' current' : ''}" data-dex="${d}" title="${unb ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
-            <div class="evo-cv-wrap" data-dex="${d}" data-unlocked="${unb ? 1 : 0}"></div>
-            <div class="evo-name">${unb && pb ? pb.name : '???'}</div>
-            <div class="evo-lvl">${lvl}</div>
-            ${!unb ? '<div class="evo-lock-tag">🔒</div>' : ''}
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div class="evo-node ${unb ? 'unlocked' : 'locked'}${dex === d ? ' current' : ''}" data-dex="${d}" title="${unb ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
+              <div class="evo-cv-wrap" data-dex="${d}" data-unlocked="${unb ? 1 : 0}"></div>
+              <div class="evo-name">${unb && pb ? pb.name : '???'}</div>
+              <div class="evo-lvl">${lvl}</div>
+              ${!unb ? '<div class="evo-lock-tag">🔒</div>' : ''}
+            </div>
+            ${megaSub}
           </div>
         `;
       }).join('');
@@ -550,7 +582,7 @@ G.MenuUI = (() => {
           <div class="evo-lvl">Nv. 1</div>
         </div>
         <span class="evo-arrow">→</span>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:240px;">
+        <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:260px;">
           ${branchNodes}
         </div>
       `;
@@ -585,9 +617,19 @@ G.MenuUI = (() => {
         }
       };
     });
-
+    box.querySelectorAll('.evo-node[data-mega-id]').forEach(n => {
+      n.onclick = () => {
+        const mid = +n.dataset.megaId;
+        const m = G.MEGAS && G.MEGAS[mid];
+        if (m) {
+          const types = (m.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
+          const title = `${m.name} [${types}]`;
+          const details = `ATK: x${(m.atk || 1).toFixed(2)} · DEF: ${m.df || 0} · SP.DEF: ${m.sd || 0} · SPD: ${m.spd || 0} · Ability: ${m.ability || 'None'}`;
+          G.UI.toast(`${title} — ${details}`, 4000);
+        }
+      };
+    });
   }
-
 
   // ---------------- ficha: lo que hace cada ataque (24-10-2026) ----------------
   /* Los iconos de los ataques que puede aprender: al pasar el ratón (o al
