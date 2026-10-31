@@ -242,6 +242,7 @@ G.Game = (() => {
     if (!coop || G.Coop.isHost) G.Ranking.runStarted();
     deathT = 0;
 
+    if (G.RunQuests && G.RunQuests.startRun) G.RunQuests.startRun(pl);
     state = 'playing';
   }
 
@@ -349,6 +350,7 @@ G.Game = (() => {
     },
     lost(msg) { G.UI.toast(msg, 3600); endRun(false); },
     item(id) { offerItem(id); },
+    offerItem(id) { offerItem(id); },
     /** El anfitrión te da una esfera que has cogido. */
     orb(id) { if (pl && state !== 'over') G.Orbs.got(pl, id); },
     /** Grupo: quién está eligiendo fusión. Mientras haya alguien, todo parado. */
@@ -862,6 +864,7 @@ G.Game = (() => {
     G.Events.update(dt, all, time);
     G.Weather.update(dt, time, pl);
     G.FX.update(dt);
+    if (G.RunQuests && G.RunQuests.update) G.RunQuests.update(dt, pl, { time, biome });
 
     G.Audio.music(G.Judgment.active ? G.Judgment.music : G.Rift.inArena ? 'rift' : G.EnemyMgr.bossAlive() ? 'boss' : G.BIOME_MUSIC[biome % G.BIOME_MUSIC.length]);
     if (!coop || G.Coop.isHost) maybeLevelUp();

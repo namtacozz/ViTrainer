@@ -46,14 +46,38 @@ G.Items = (() => {
       on: p => { p.heavydutyboots = true; }, off: p => { p.heavydutyboots = false; } },
     { id: 'keystone', name: 'Mega Aro', desc: '+10% estadísticas, activa la Megaevolución al instante y +15% de bonus STAB.',
       on: p => { p.keystone = true; p.atkMul *= 1.10; p.spdMul *= 1.10; if (p.triggerMegaIfAvailable) p.triggerMegaIfAvailable(); },
-      off: p => { p.keystone = false; p.atkMul /= 1.10; p.spdMul /= 1.10; } }
+      off: p => { p.keystone = false; p.atkMul /= 1.10; p.spdMul /= 1.10; } },
+    { id: 'dnasplicers', name: 'Punta ADN', desc: '+20% Daño Dragón y Hielo. Permite fusionar a Kyurem en Kyurem Negro o Kyurem Blanco.',
+      on: p => { p.dnasplicers = true; if (p.triggerFormIfAvailable) p.triggerFormIfAvailable(); },
+      off: p => { p.dnasplicers = false; } },
+    { id: 'ultranecroziumz', name: 'Ultranecrostal Z', desc: '+25% Daño Psíquico y Dragón. Desata la Luz de Ultra Necrozma.',
+      on: p => { p.ultranecroziumz = true; if (p.triggerFormIfAvailable) p.triggerFormIfAvailable(); },
+      off: p => { p.ultranecroziumz = false; } },
+    { id: 'griseousorb', name: 'Griseosfera', desc: '+20% Daño Fantasma y Dragón. Transforma a Giratina a su Forma Origen.',
+      on: p => { p.griseousorb = true; if (p.triggerFormIfAvailable) p.triggerFormIfAvailable(); },
+      off: p => { p.griseousorb = false; } },
+    { id: 'meteorite', name: 'Meteorito Cósmico', desc: 'Permite sintonizar la forma de Deoxys (Ataque, Defensa o Velocidad).',
+      on: p => { p.meteorite = true; if (p.triggerFormIfAvailable) p.triggerFormIfAvailable(); },
+      off: p => { p.meteorite = false; } }
   ];
   const BY = {};
   for (const it of LIST) BY[it.id] = it;
 
   /** Uno al azar, distinto del que ya llevas. */
-  function roll(except) {
-    const pool = LIST.filter(i => i.id !== except);
+  function roll(except, pl) {
+    const specialIds = ['keystone', 'dnasplicers', 'ultranecroziumz', 'griseousorb', 'meteorite'];
+    const pool = LIST.filter(i => {
+      if (i.id === except) return false;
+      if (specialIds.includes(i.id)) {
+        if (!pl) return false;
+        if (i.id === 'keystone' && (!G.getMegasFor || G.getMegasFor(pl.dex).length === 0)) return false;
+        if (i.id === 'dnasplicers' && pl.dex !== 646) return false;
+        if (i.id === 'ultranecroziumz' && pl.dex !== 800) return false;
+        if (i.id === 'griseousorb' && pl.dex !== 487) return false;
+        if (i.id === 'meteorite' && pl.dex !== 386) return false;
+      }
+      return true;
+    });
     return G.U.pick(pool).id;
   }
 

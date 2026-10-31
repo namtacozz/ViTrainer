@@ -131,9 +131,22 @@ G.Player = class Player {
    * Ataque con un movimiento: el físico o el especial de tu Pokémon (ver
    * G.Stats), con las danzas que sean de su lado (las de mejora, sin ninguna).
    */
+  hasTrialBonus(key) {
+    if (this[key + 'Active']) return true;
+    const s = typeof G !== 'undefined' && G.DB && G.DB.save;
+    const dex = this.baseDex || this.dex;
+    if (s && s.trials && s.trials[dex] && s.trials[dex][key]) return true;
+    return false;
+  }
+
   atkFor(m) {
     const cat = m && m.cat, b = cat === 'physical' ? this.buffs.patk : cat === 'special' ? this.buffs.satk : null;
-    return this.atk * G.Stats.fit(this.mon, cat) * (b ? 1 + b.n * b.amount : 1) * (m && this.monoType(m.type) ? Player.MONO_K : 1);
+    const monoK = (this.puristActive || this.hasTrialBonus('purist')) ? 1.35 : Player.MONO_K;
+    let mult = (b ? 1 + b.n * b.amount : 1) * (m && this.monoType(m.type) ? monoK : 1);
+    if (cat === 'physical' && (this.berserkerActive || this.hasTrialBonus('berserker'))) {
+      mult *= 1.15;
+    }
+    return this.atk * G.Stats.fit(this.mon, cat) * mult;
   }
   /** Monotipo (19-10-2026): los de un solo tipo pegan un +20 % con los ataques de su tipo (tienen menos variedad). */
   static get MONO_K() { return 1.2; }
@@ -344,6 +357,9 @@ G.Player = class Player {
       G.FX.ring(this.x, this.y, 6, 70, '#c9b48a', 0.5, 4);
     }
     if (ab && ab.hurt && this.hp > 0) ab.hurt(this, type, cls);
+    if (this.hp > 0 && this.hp <= this.maxHp * 0.5 && (this.dex === 718 || this.baseDex === 718) && !this.isMega) {
+      this.triggerZygardeComplete();
+    }
     if (this.hp <= 0) {
       this.hp = 0; this.dead = true;
       this.anim.play('Faint', { hold: true });
@@ -419,6 +435,9 @@ G.Player = class Player {
       if (G.UI && G.UI.toast) G.UI.toast(nextMon.name + ' EVOLVED!', 2000);
       if (G.Coop && G.Coop.active && G.Coop.broadcastEvo) {
         G.Coop.broadcastEvo(newDex, isApex ? 1 : 0);
+      }
+      if (G.RunQuests && G.RunQuests.onEvolve) {
+        G.RunQuests.onEvolve(newDex, this);
       }
     }
     return true;
@@ -540,10 +559,25 @@ G.Player = class Player {
           if (tierUnlocked >= 2) this.evolveTo(nextList[0]);
         } else if (nextList.length > 1) {
           const unlocked = nextList.filter(d => s && s.evoBranches && s.evoBranches[this.baseDex] && s.evoBranches[this.baseDex].includes(d));
-          if (unlocked.length === 1) {
+          if (this.baseDex === 133) {
+            const moveTypes = new Set(this.moves.map(m => m.type));
+            const branchTypeMap = { 134: 'water', 135: 'electric', 136: 'fire', 196: 'psychic', 197: 'dark', 470: 'grass', 471: 'ice', 700: 'fairy' };
+            const pool = (unlocked.length > 0 ? unlocked : nextList).slice();
+            pool.sort((a, b) => {
+              const ma = moveTypes.has(branchTypeMap[a]) ? 1 : 0;
+              const mb = moveTypes.has(branchTypeMap[b]) ? 1 : 0;
+              return mb - ma;
+            });
+            this.pendingEvoBranches = pool;
+            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
+          } else if (unlocked.length === 1) {
             this.evolveTo(unlocked[0]);
           } else if (unlocked.length > 1) {
             this.pendingEvoBranches = unlocked;
+            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
+          } else if (tierUnlocked >= 2) {
+            this.pendingEvoBranches = nextList;
+            if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
           }
         }
       } else if (this.evoStage === 2) {
@@ -571,6 +605,45 @@ G.Player = class Player {
     if (this.isMega) return false;
     const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
     return megas && megas.length > 0 && (this.level >= 30 || (this.hasItem && this.hasItem('keystone')));
+  }
+
+  triggerFormIfAvailable() {
+    if (this.isMega) return;
+    if (this.dex === 646 && this.hasItem('dnasplicers')) {
+      const kyurems = [G.MEGAS['10022'], G.MEGAS['10023']].filter(Boolean);
+      if (kyurems.length > 0) {
+        this.pendingMegaBranches = kyurems;
+        if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
+      }
+      return;
+    }
+    if (this.dex === 800 && this.hasItem('ultranecroziumz')) {
+      this.megaEvolve(10157);
+      return;
+    }
+    if (this.dex === 487 && this.hasItem('griseousorb')) {
+      this.megaEvolve(10007);
+      return;
+    }
+    if (this.dex === 386 && this.hasItem('meteorite')) {
+      const deoxysForms = [G.MEGAS['10001'], G.MEGAS['10002'], G.MEGAS['10003']].filter(Boolean);
+      if (deoxysForms.length > 0) {
+        this.pendingMegaBranches = deoxysForms;
+        if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
+      }
+      return;
+    }
+  }
+
+  triggerZygardeComplete() {
+    if (this.isMega || (this.dex !== 718 && this.baseDex !== 718)) return;
+    this.megaEvolve(10120);
+    this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.5);
+    if (G.Audio && G.Audio.sfx) G.Audio.sfx('legend');
+    if (G.Camera && G.Camera.kick) G.Camera.kick(0.6);
+    if (G.FX && G.FX.burst) G.FX.burst(this.x, this.y, '#22c55e', 50, 260);
+    if (G.FX && G.FX.ring) G.FX.ring(this.x, this.y, 10, 160, '#22c55e', 0.8, 8);
+    if (G.Spawner && G.Spawner.say) G.Spawner.say('¡Construcción Cósmica! ¡Zygarde Forma Completa despertó!', 3.5, true);
   }
 
   triggerMegaIfAvailable() {
@@ -688,6 +761,26 @@ G.Player = class Player {
     if (this.power && (this.power.t -= dt) <= 0) { this.power.def.off(this); this.power = null; }
     if (this.regen > 0) this.hp = Math.min(this.maxHp, this.hp + this.regen * dt);
     if (this.abil && this.abil.tick) this.abil.tick(this, dt);
+    if ((this.juggernautActive || this.hasTrialBonus('juggernaut')) && !this.dead) {
+      this.juggernautTimer = (this.juggernautTimer || 0) + dt;
+      if (this.juggernautTimer >= 5.0) {
+        this.juggernautTimer = 0;
+        if (G.FX && G.FX.ring) G.FX.ring(this.x, this.y, 10, 180, '#eab308', 0.6, 6);
+        if (G.Audio && G.Audio.sfx) G.Audio.sfx('break');
+        if (G.EnemyMgr && G.EnemyMgr.all) {
+          const jDmg = (this.maxHp * 0.4 + (this.mon.df || 50) * 2.5) * (this.atkMul || 1);
+          const r2 = 180 * 180;
+          for (const e of G.EnemyMgr.all()) {
+            if (e.dead) continue;
+            const d2 = G.U.dist2(this.x, this.y, e.x, e.y);
+            if (d2 <= r2) {
+              const ang = Math.atan2(e.y - this.y, e.x - this.x);
+              e.hurt(jDmg, '#eab308', Math.cos(ang) * 40, Math.sin(ang) * 40, 40, 'shockwave');
+            }
+          }
+        }
+      }
+    }
     // Sequía, Llovizna...: su clima al empezar y cada 3 min, si no hay otro. En
     // grupo lo pone el anfitrión, que es quien manda el clima a todos: el de un
     // invitado se lo pide (coop.js, 'wxq'; antes del 25-10-2026 el clima de los

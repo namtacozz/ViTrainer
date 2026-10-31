@@ -130,6 +130,7 @@ G.Progress = (() => {
   // ---------------- eventos ----------------
 
   function event(kind, d = {}) {
+    if (G.RunQuests && G.RunQuests.onProgressEvent) G.RunQuests.onProgressEvent(kind, d);
     const s = G.DB.save;
     if (!s) return;
     ensure(s);

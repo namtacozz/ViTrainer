@@ -77,6 +77,18 @@ SPRITE_MEGAS = [
     (10089, 448, "Mega Lucario", "lucario-mega", "0448", "0001"),
     (10091, 475, "Mega Gallade", "gallade-mega", "0475", "0001"),
     (10075, 719, "Mega Diancie", "diancie-mega", "0719", "0001"),
+    # Formas Legendarias / Míticas Especiales con Sprite en SpriteCollab
+    (10022, 646, "Black Kyurem", "kyurem-black", "0646", "0001"),
+    (10023, 646, "White Kyurem", "kyurem-white", "0646", "0002"),
+    (10118, 718, "Zygarde 10%", "zygarde-10", "0718", "0001"),
+    (10120, 718, "Zygarde Complete", "zygarde-complete", "0718", "0002"),
+    (10157, 800, "Ultra Necrozma", "necrozma-ultra", "0800", "0003"),
+    (10007, 487, "Giratina Origin", "giratina-origin", "0487", "0001"),
+    (10006, 492, "Shaymin Sky", "shaymin-sky", "0492", "0001"),
+    (10086, 720, "Hoopa Unbound", "hoopa-unbound", "0720", "0001"),
+    (10001, 386, "Deoxys Attack", "deoxys-attack", "0386", "0001"),
+    (10002, 386, "Deoxys Defense", "deoxys-defense", "0386", "0002"),
+    (10003, 386, "Deoxys Speed", "deoxys-speed", "0386", "0003"),
 ]
 
 # Megas canónicas sin sprite dedicado en PMD (usan sprite base con aura Mega brillante)

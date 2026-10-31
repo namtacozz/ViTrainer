@@ -6,6 +6,14 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Misiones en Partida, Formas Legendarias y Ramificaciones de Eevee", "In-Run Quests, Legendary Forms & Eeveelutions"], new: [
+    ["Panel de misiones en partida: nuevo panel interactivo compacto a la derecha de la pantalla. Misiones para desbloquear objetos de evolución como Mega Aro, Punta ADN, Ultranecrostal Z, Griseosfera y Meteorito Cósmico, con selector para mantener o cambiar de objeto al completarlas.",
+     "In-run quest panel: new compact interactive panel on the right side of the screen. Quests to unlock evolution items like Mega Bracelet, DNA Splicers, Ultranecrozium Z, Griseous Orb, and Cosmic Meteorite, with standard keep-or-swap item selection upon completion."],
+    ["5 Pruebas Arquetípicas para todos los Pokémon: Furia Berserker (+15% tamaño y daño físico), Destructor Arcano (-12% recarga y +1 perforación especial), Coloso Blindado (onda de choque cada 5 s), Cazador Veloz (conversión de velocidad en crítico) y Monotipo Puro (+35% STAB).",
+     "5 Archetype Trials for all Pokémon: Berserker (+15% physical damage/size), Arcane Blaster (-12% cooldown and +1 pierce for special), Juggernaut (shockwave pulse every 5s), Speedster (bonus speed converted to crit), and Purist Build (+35% STAB)."],
+    ["Ramificaciones completas de Eevee y Formas Legendarias: las 8 evoluciones de Eevee disponibles en partida mediante cartas doradas según tus movimientos; transformación de Zygarde Forma Completa al caer al 50% de vida con Construcción Cósmica; fusiones de Kyurem Negro/Blanco, Ultra Necrozma y formas de Deoxys.",
+     "Complete Eeveelutions & Legendary Forms: all 8 Eevee evolutions available in-run via golden cards tuned to your move types; Zygarde Complete Form transforms at 50% HP via Power Construct; Black/White Kyurem fusions, Ultra Necrozma, and Deoxys forms."]
+  ]},
   { d: '2026-10-31', title: ["Megaevolución, Primal Reversion y Nuevos Objetos", "Mega Evolution, Primal Reversion & New Items"], new: [
     ["Megaevolución y Regresión Primigenia en partida: los Pokémon compatibles alcanzan su forma Mega al nivel 30 o con el Mega Aro, obteniendo aumentos colosales de estadísticas, nuevos tipos, habilidades devastadoras y auras luminosas con el emblema de ADN.",
      "Mega Evolution and Primal Reversion: eligible Pokémon can now Mega Evolve in battle at Lv.30 or via the Mega Bracelet, gaining colossal stat boosts, new type combinations, signature abilities, and glowing iridescent DNA auras."],

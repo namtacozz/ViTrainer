@@ -35,7 +35,8 @@ G.Combat = (() => {
       return;
     }
     // (Bromista: los potenciadores se recargan antes, ver data/ability-fx.js.)
-    m.t = Math.max(0.05, m.cd * pl.cdMul * (m.kind === 'buff' && pl.abil && pl.abil.statusCd || 1));
+    const arcaneCd = (m && m.cat === 'special' && pl && (pl.arcaneActive || (pl.hasTrialBonus && pl.hasTrialBonus('arcane')))) ? 0.88 : 1;
+    m.t = Math.max(0.05, m.cd * pl.cdMul * arcaneCd * (m.kind === 'buff' && pl.abil && pl.abil.statusCd || 1));
     pl.cast(m);
     if (G.Coop.active) G.Coop.cast(pl, m);
     // Vínculo: su icono destella en el HUD al lanzarse (uno que explota pegado al
@@ -118,11 +119,13 @@ G.Combat = (() => {
 
   /** Un proyectil del movimiento m, de pl hacia el ángulo a. */
   function shot(pl, m, a, col, vis) {
+    const extraPierce = (pl && m && m.cat === 'special' && (pl.arcaneActive || (pl.hasTrialBonus && pl.hasTrialBonus('arcane')))) ? 1 : 0;
+    const sizeMul = (pl && m && m.cat === 'physical' && (pl.berserkerActive || (pl.hasTrialBonus && pl.hasTrialBonus('berserker')))) ? 1.15 : 1;
     G.Projectiles.spawn(Object.assign({
       x: pl.x + Math.cos(a) * 3, y: pl.y + Math.sin(a) * 3,
       vx: Math.cos(a) * m.speed, vy: Math.sin(a) * m.speed,
-      dmg: m.dmg * pl.atkFor(m), r: m.size, life: m.life,
-      pierce: m.pierce | 0, color: col, homing: m.homing || 0,
+      dmg: m.dmg * pl.atkFor(m), r: m.size * sizeMul, life: m.life,
+      pierce: (m.pierce | 0) + extraPierce, color: col, homing: m.homing || 0,
       hits: new Set(), vis, ghost, owner: pl
     }, payload(m)));
   }
@@ -746,12 +749,27 @@ G.Combat = (() => {
 
   // Golpe crítico (Mejoras → Golpe Crítico): x1,5 de daño, número naranja y grande.
   const CRIT_MUL = 1.5;
-  const isCrit = pl => !ghost && pl.critChance > 0 && Math.random() < pl.critChance;
+  const isCrit = pl => {
+    if (ghost) return false;
+    let c = pl.critChance || 0;
+    if (pl && (pl.speedsterActive || (pl.hasTrialBonus && pl.hasTrialBonus('speedster')))) {
+      const bonusSpd = Math.max(0, (pl.spdMul || 1) - 1);
+      c += bonusSpd * 0.25;
+    }
+    return c > 0 && Math.random() < c;
+  };
 
   // Habilidad de quien pega (data/ability-fx.js): × al daño, crítico, estados y
   // lo que hace al golpear. (Los compañeros no la llevan aquí: pegan en su ordenador.)
   const abilOut = (pl, m, e) => (pl.abil && pl.abil.out && m ? pl.abil.out(pl, m, e) : 1);
-  const critMul = pl => (pl.abil && pl.abil.critMul) || CRIT_MUL;
+  const critMul = pl => {
+    let mul = (pl.abil && pl.abil.critMul) || CRIT_MUL;
+    if (pl && (pl.speedsterActive || (pl.hasTrialBonus && pl.hasTrialBonus('speedster')))) {
+      const bonusSpd = Math.max(0, (pl.spdMul || 1) - 1);
+      mul += bonusSpd * 0.25;
+    }
+    return mul;
+  };
   /** × a quemaduras, venenos, frenazos y empujones: Potencia Bruta los quita, Dicha los dobla. */
   const statusK = pl => (!pl.abil ? 1 : pl.abil.sheer ? 0 : pl.abil.serene ? 2 : 1);
   function afterHit(pl, e, m) {
@@ -772,6 +790,10 @@ G.Combat = (() => {
     if (pl && pl.hasItem && pl.hasItem('keystone') && (pl.mon.types || []).includes(m.type)) {
       k *= 1.15;
     }
+    if (m && m.cat === 'physical' && pl && (pl.berserkerActive || (pl.hasTrialBonus && pl.hasTrialBonus('berserker')))) {
+      dmg *= 1.15;
+    }
+    e.lastHitMove = m;
     const crit = isCrit(pl), sk = statusK(pl);
     dmg *= k * (crit ? critMul(pl) : 1);
     e.hurt(dmg, col, dx, dy, sk ? knock : 0, crit ? 'crit' : G.Types.label(G.Types.mult(m.type, e.types)));

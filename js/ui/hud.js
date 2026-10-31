@@ -506,6 +506,11 @@ G.HUD = (() => {
                          : 'WASD moverse  ·  1-4 / Q / E o clic en un ataque para cambiarlo  ·  Esc pausa', w / 2, h - 4);
     }
 
+    // ---------- Bảng nhiệm vụ & Thử thách trong Run (Middle-Right) ----------
+    if (G.RunQuests && G.RunQuests.draw) {
+      G.RunQuests.draw(ctx, w, h, pl, st, F, roundRect, bar);
+    }
+
     ctx.restore();
   }
 

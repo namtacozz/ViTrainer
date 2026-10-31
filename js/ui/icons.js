@@ -217,6 +217,30 @@ G.Icons = (() => {
     keystone: { pal: { s: '#94a3b8', d: '#475569', w: '#ffffff', r: '#f43f5e', b: '#38bdf8', y: '#facc15' }, rows: [
       '....kkkk....', '..kksssskk..', '.ksrwwrrdsk.', 'kswrwwrrbssk', 'ksrryybbbsdk', 'ksrryybbbsdk',
       'kswrrbbbbssk', '.ksbbbdddsk.', '..kkddddkk..', '.kssssssssk.', '..kkkkkkkk..', '............'] },
+    dnasplicers: { pal: { c: '#38bdf8', o: '#fb923c', w: '#ffffff', d: '#1e3a8a' }, rows: [
+      '...k....k...', '..kck..kok..', '.kcwk..kowk.', '.kcck..kook.', '..kck..kok..', '...kk..kk...',
+      '...kk..kk...', '..kok..kck..', '.kowk..kcwk.', '.kook..kcck.', '..kok..kck..', '...k....k...'] },
+    ultranecroziumz: { pal: { y: '#facc15', c: '#38bdf8', w: '#ffffff', d: '#a16207' }, rows: [
+      '.....kk.....', '....kyyk....', '...kcyyyk...', '..kcyywyyk..', '.kcyyyyyyyk.', 'kcyyyyyyyyyd',
+      'kcyyyyyyyyyd', '.kcyyyyyyyd.', '..kcyyyyyd..', '...kcyyyd...', '....kcyyd...', '.....kkd....'] },
+    griseousorb: { pal: { r: '#ef4444', s: '#94a3b8', w: '#ffffff', d: '#475569' }, rows: [
+      '....kkkk....', '..kksrrskk..', '.kssswrrdsk.', 'kssrrrrdsssk', 'krrrrrrddssk', 'kssddddddssk',
+      'kssrrrrdsssk', 'kssrrrrdsssk', '.ksddddddsk.', '..kkddddkk..', '....kkkk....', '............'] },
+    meteorite: { pal: { p: '#c084fc', m: '#7c3aed', w: '#f5d0fe', d: '#3b0764' }, rows: [
+      '....kkkk....', '..kkpmmmkk..', '.kppwmmmddk.', 'kppwwmmmdddk', 'kppwwmmmdddk', 'kpppmmmddddk',
+      'kpppmmmddddk', '.kpmmmddddk.', '..kkddddkk..', '....kkkk....', '............', '............'] },
+    quest: { pal: { y: '#fef08a', b: '#ca8a04', w: '#ffffff', r: '#f43f5e' }, rows: [
+      '...kkkkkkk..', '..kyyyyyybk.', '.kywwyyybybk', 'kywyyyyyybyk', 'kyyyyyybyyyk', 'kyyyyybyyyyy',
+      'kyyyybyyyyyk', 'kyyybyyyyyyk', '.kybyyyyybk.', '..krryyybk..', '..krrrkkk...', '...kk.......'] },
+    sword: { pal: { s: '#cbd5e1', w: '#ffffff', d: '#64748b', r: '#ef4444', g: '#eab308' }, rows: [
+      '.......kk...', '......kwwk..', '.....kwwsk..', '....kwwsdk..', '...kwwsdk...', '..kwwsdk....',
+      '.krrrsdk....', '.kggggk.....', '..krggk.....', '.k..kggk....', '.....kk.....', '............'] },
+    spark: { pal: { p: '#c084fc', w: '#ffffff', m: '#9333ea' }, rows: [
+      '.....kk.....', '....kwwk....', '...kwwwpk...', '..kwwwpppk..', 'kkkwwwppppkk', 'kwwwwppppppk',
+      'kkkwwwppppkk', '..kwwwpppk..', '...kwwwpk...', '....kwwk....', '.....kk.....', '............'] },
+    speed: { pal: { c: '#38bdf8', w: '#ffffff', b: '#0284c7' }, rows: [
+      '....kkkkkk..', '..kkcccccck.', '.kccccwcck..', 'kccccwcck...', 'kcccwcck....', 'kccwcck..kk.',
+      'kcwcck.kkcck', 'kcccckkcccck', '.kcccccccck.', '..kcccccck..', '...kkkkkk...', '............'] },
     megaBadge: { pal: { r: '#f43f5e', b: '#38bdf8', y: '#facc15', w: '#ffffff' }, rows: [
       '.....kk.....', '...kkrrkk...', '..krrrbrrk..', '.krrrbbyrrk.', 'krwwrbyywwrk', 'krrrbbyyrrrk',
       'krwwbbyywwrk', '.kbbbbyyyk..', '..kbbbyyk...', '...kkyykk...', '.....kk.....', '............'] },

@@ -594,6 +594,223 @@ G.MEGAS = {
     "bst": 700,
     "spriteDex": 10075
   },
+  "10022": {
+    "id": 10022,
+    "baseDex": 646,
+    "name": "Black Kyurem",
+    "slug": "kyurem-black",
+    "types": [
+      "dragon",
+      "ice"
+    ],
+    "ability": "teravolt",
+    "hp": 126,
+    "spd": 118,
+    "atk": 1.64,
+    "pa": 1.64,
+    "sa": 1.36,
+    "df": 100,
+    "sd": 90,
+    "bst": 700,
+    "spriteDex": 10022
+  },
+  "10023": {
+    "id": 10023,
+    "baseDex": 646,
+    "name": "White Kyurem",
+    "slug": "kyurem-white",
+    "types": [
+      "dragon",
+      "ice"
+    ],
+    "ability": "turboblaze",
+    "hp": 126,
+    "spd": 118,
+    "atk": 1.64,
+    "pa": 1.36,
+    "sa": 1.64,
+    "df": 90,
+    "sd": 100,
+    "bst": 700,
+    "spriteDex": 10023
+  },
+  "10118": {
+    "id": 10118,
+    "baseDex": 718,
+    "name": "Zygarde 10%",
+    "slug": "zygarde-10",
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "ability": "power-construct",
+    "hp": 94,
+    "spd": 126,
+    "atk": 1.25,
+    "pa": 1.25,
+    "sa": 1.04,
+    "df": 71,
+    "sd": 85,
+    "bst": 486,
+    "spriteDex": 10118
+  },
+  "10120": {
+    "id": 10120,
+    "baseDex": 718,
+    "name": "Zygarde Complete",
+    "slug": "zygarde-complete",
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "ability": "power-construct",
+    "hp": 167,
+    "spd": 114,
+    "atk": 1.25,
+    "pa": 1.25,
+    "sa": 1.2,
+    "df": 121,
+    "sd": 95,
+    "bst": 708,
+    "spriteDex": 10120
+  },
+  "10157": {
+    "id": 10157,
+    "baseDex": 800,
+    "name": "Ultra Necrozma",
+    "slug": "necrozma-ultra",
+    "types": [
+      "psychic",
+      "dragon"
+    ],
+    "ability": "neuroforce",
+    "hp": 114,
+    "spd": 132,
+    "atk": 1.62,
+    "pa": 1.62,
+    "sa": 1.62,
+    "df": 97,
+    "sd": 97,
+    "bst": 754,
+    "spriteDex": 10157
+  },
+  "10007": {
+    "id": 10007,
+    "baseDex": 487,
+    "name": "Giratina Origin",
+    "slug": "giratina-origin",
+    "types": [
+      "ghost",
+      "dragon"
+    ],
+    "ability": "levitate",
+    "hp": 138,
+    "spd": 116,
+    "atk": 1.36,
+    "pa": 1.36,
+    "sa": 1.36,
+    "df": 100,
+    "sd": 100,
+    "bst": 680,
+    "spriteDex": 10007
+  },
+  "10006": {
+    "id": 10006,
+    "baseDex": 492,
+    "name": "Shaymin Sky",
+    "slug": "shaymin-sky",
+    "types": [
+      "grass",
+      "flying"
+    ],
+    "ability": "serene-grace",
+    "hp": 115,
+    "spd": 131,
+    "atk": 1.36,
+    "pa": 1.27,
+    "sa": 1.36,
+    "df": 75,
+    "sd": 75,
+    "bst": 600,
+    "spriteDex": 10006
+  },
+  "10086": {
+    "id": 10086,
+    "baseDex": 720,
+    "name": "Hoopa Unbound",
+    "slug": "hoopa-unbound",
+    "types": [
+      "psychic",
+      "dark"
+    ],
+    "ability": "magician",
+    "hp": 106,
+    "spd": 112,
+    "atk": 1.64,
+    "pa": 1.58,
+    "sa": 1.64,
+    "df": 60,
+    "sd": 130,
+    "bst": 680,
+    "spriteDex": 10086
+  },
+  "10001": {
+    "id": 10001,
+    "baseDex": 386,
+    "name": "Deoxys Attack",
+    "slug": "deoxys-attack",
+    "types": [
+      "psychic"
+    ],
+    "ability": "pressure",
+    "hp": 92,
+    "spd": 141,
+    "atk": 1.69,
+    "pa": 1.69,
+    "sa": 1.69,
+    "df": 20,
+    "sd": 20,
+    "bst": 600,
+    "spriteDex": 10001
+  },
+  "10002": {
+    "id": 10002,
+    "baseDex": 386,
+    "name": "Deoxys Defense",
+    "slug": "deoxys-defense",
+    "types": [
+      "psychic"
+    ],
+    "ability": "pressure",
+    "hp": 92,
+    "spd": 116,
+    "atk": 1.08,
+    "pa": 1.08,
+    "sa": 1.08,
+    "df": 160,
+    "sd": 160,
+    "bst": 600,
+    "spriteDex": 10002
+  },
+  "10003": {
+    "id": 10003,
+    "baseDex": 386,
+    "name": "Deoxys Speed",
+    "slug": "deoxys-speed",
+    "types": [
+      "psychic"
+    ],
+    "ability": "pressure",
+    "hp": 92,
+    "spd": 154,
+    "atk": 1.22,
+    "pa": 1.22,
+    "sa": 1.22,
+    "df": 90,
+    "sd": 90,
+    "bst": 600,
+    "spriteDex": 10003
+  },
   "10033": {
     "id": 10033,
     "baseDex": 3,
@@ -1026,6 +1243,31 @@ G.MEGAS_BY_BASE = {
   ],
   "719": [
     10075
+  ],
+  "646": [
+    10022,
+    10023
+  ],
+  "718": [
+    10118,
+    10120
+  ],
+  "800": [
+    10157
+  ],
+  "487": [
+    10007
+  ],
+  "492": [
+    10006
+  ],
+  "720": [
+    10086
+  ],
+  "386": [
+    10001,
+    10002,
+    10003
   ],
   "3": [
     10033
