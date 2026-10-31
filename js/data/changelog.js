@@ -6,6 +6,23 @@
  * Cada línea en español y en inglés.
  */
 G.CHANGELOG = [
+  { d: '2026-10-31', title: ["Vista Previa de Formas en Pokédex, Evolución de Movimientos +/++/+++, Jefes Multifase y Rebalanceo de Slaking", "Pokédex Form Preview, Multi-Tier Move Evolution (+/++/+++), Multi-Phase Bosses & Slaking Rebalance"], new: [
+    ["Vista previa interactiva en la Pokédex: ahora puedes previsualizar todas las formas Mega, Primigenias y las 54 variantes regionales directamente en la cadena evolutiva con sprites nítidos, estadísticas completas y tipos, incluso sin haberlas desbloqueado.",
+     "Interactive Form Preview in Pokédex: you can now preview all Mega, Primal, and 54 regional variants directly in the evolution chain with clear sprites, full stats, and typing, even before unlocking them."],
+    ["Evolución de movimientos de 3 niveles (+ / ++ / +++): los movimientos ahora pueden alcanzar el nivel + con su objeto equipable, el nivel ++ cumpliendo misiones en partida, y la sinergia definitiva +++ al reunir un movimiento ++ y tres movimientos +.",
+     "Multi-Tier Move Evolution (+ / ++ / +++): moves can now evolve to Tier + with matching held items, ascend to Tier ++ through in-run combat quests, and reach supreme Tier +++ synergy with one ++ move and three + moves."],
+    ["Insignias de tipo de ataque en el HUD: cada ranura de movimiento cuenta con un distintivo visual en la esquina inferior derecha que indica su estilo (Rayo, Melee, Proyectil, Aura, Buff, Aturdimiento).",
+     "Move Kind Badges on HUD: each move slot now sports a clean 10x10 badge in the bottom-right corner showing attack style (Beam, Melee, Projectile, Aura, Buff, Stun)."],
+    ["Jefes de incursión multifase con vida aumentada (x25+): los jefes ahora resisten el daño explosivo con fases secuenciales; al agotar su primera barra de vida, desatan una onda de choque, recuperan el 100% de PS con furia (+35% daño, +15% velocidad) y en la Fase 3 despiertan en su forma Mega o Primigenia.",
+     "Multi-Phase Raid Bosses with Massive Health (25x+): bosses now withstand burst damage with sequential phases; upon depleting Phase 1, they release a shockwave, restore 100% HP with rage (+35% dmg, +15% spd), and in Phase 3 awaken into Mega or Primal form."],
+    ["Nuevas misiones y logros: añadidas nuevas misiones diarias y semanales (activar Megas, talar árboles, esquivar ataques, subir movimientos a ++) y nuevos logros de combate de alto nivel.",
+     "New Missions & Achievements: added fresh daily and weekly missions (activate Megas, fell trees, dodge attacks, upgrade moves to ++) and high-tier combat achievements."],
+    ["Documentación completa del sistema: creados manuales exhaustivos en /docs (GAMEPLAY_MANUAL.md, ARCHITECTURE_AND_SYSTEMS.md, UI_UX_AND_AUDIO.md) que detallan todo el juego sin necesidad de consultar el código fuente.",
+     "Comprehensive System Documentation: created exhaustive reference manuals in /docs (GAMEPLAY_MANUAL.md, ARCHITECTURE_AND_SYSTEMS.md, UI_UX_AND_AUDIO.md) detailing the entire game without inspecting source code."]
+  ], chg: [
+    ["Ajuste de Slaking a rareza 3 estrellas: Slaking se reclasifica correctamente como Pokémon normal de fase final de 3 etapas con rareza 3, saliendo del grupo de legendarios.",
+     "Slaking Rebalanced to 3-Star Rarity: Slaking is now properly categorized as a regular 3-stage family final evolution with rarity 3, removed from the legendary group."]
+  ]},
   { d: '2026-10-31', title: ["Iconos Circulares, Mega en Pokédex, Corrección de Evoluciones y Jefes", "Circular Icons, Mega Pokédex Line, Evolution & Boss Fixes"], new: [
     ["Iconos circulares de ataques: diseño limpio y circular 1:1 para los 18 tipos elementales sin textos superpuestos.",
      "Circular Move Icons: clean 1:1 circular badges for all 18 elemental types without overlapping type labels."],

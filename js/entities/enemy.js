@@ -55,6 +55,10 @@
       this.x = x; this.y = y;
       this.boss = boss;
       this.scale = boss ? bossScale(def.dex) : 1;
+      if (boss) {
+        this.bossPhase = 1;
+        this.maxBossPhase = this.legend ? 3 : ((typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(def.dex).length > 0) ? 3 : 2);
+      }
       this.anim = new G.Sprites.Animator(def.dex, this.scale);
       this.r = G.Sprites.bodyRadius(def.dex, this.scale);
       this.bodyH = G.Sprites.bodyHeight(def.dex, this.scale);
@@ -145,7 +149,7 @@
         return;
       }
       if (this.boss) {
-        if (d > this.maxHp * 0.15) d = this.maxHp * 0.15 + (d - this.maxHp * 0.15) * 0.25;
+        if (d > this.maxHp * 0.04) d = this.maxHp * 0.04 + (d - this.maxHp * 0.04) * 0.15;
         d = Math.max(1, Math.round(d * 0.85));
         this.rd += d;
       }
@@ -165,7 +169,13 @@
         this.ky += ny * knock;
       }
       if (G.Coop.isHost) G.Coop.hurtShown(this, d, color);
-      if (this.hp <= 0) this.die();
+      if (this.hp <= 0) {
+        if (this.boss && this.bossPhase < this.maxBossPhase && !this.arceus && !this.judge) {
+          this.advanceBossPhase();
+        } else {
+          this.die();
+        }
+      }
     }
 
     /** Lo que se VE al recibir un golpe. */
@@ -208,6 +218,40 @@
       if (this.arceus) return;
       if (this.remote) { G.Coop.status(this, 'p', stacks); return; }
       this.poison = Math.min(8, this.poison + stacks); this.poisonT = 4;
+    }
+
+    advanceBossPhase() {
+      this.bossPhase++;
+      const phase = this.bossPhase;
+      this.dmg = Math.round(this.dmg * 1.35);
+      this.spd = Math.round(this.spd * 1.15);
+      const hpMultiplier = phase === 2 ? 1.25 : 1.5;
+      this.maxHp = Math.round(this.maxHp * hpMultiplier);
+      this.hp = this.maxHp;
+
+      if (phase === 3) {
+        const megas = (typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(this.dex)) || [];
+        if (megas.length > 0) {
+          const mega = megas[0];
+          this.name = mega.name;
+          this.dex = mega.spriteDex || mega.id || this.dex;
+          this.anim = new G.Sprites.Animator(this.dex, this.scale);
+          if (mega.types) this.types = mega.types;
+          if (mega.types && mega.types[0]) this.atkType = mega.types[0];
+        }
+      }
+
+      const title = '¡FASE ' + phase + ': ' + this.name.toUpperCase() + ' SE REGENERA!';
+      if (typeof G !== 'undefined' && G.Spawner && G.Spawner.say) G.Spawner.say(title, 3.5, true);
+      if (typeof G !== 'undefined' && G.Camera && G.Camera.kick) G.Camera.kick(1.4);
+      if (typeof G !== 'undefined' && G.Audio && G.Audio.sfx) { G.Audio.sfx('boss'); G.Audio.sfx('legend'); }
+      if (typeof G !== 'undefined' && G.FX) {
+        G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ffd23f', 40, 280);
+        G.FX.ring(this.x, this.y, this.r, this.r * 8, '#f43f5e', 0.8, 8);
+      }
+      if (typeof G !== 'undefined' && G.Spawner && G.Spawner.spawnMinionsForBoss) {
+        G.Spawner.spawnMinionsForBoss(this);
+      }
     }
 
     die() {

@@ -55,6 +55,10 @@ G.AchDefs = (() => {
     { id: 'evoAll', cat: 'combate', tier: 3, name: 'Maestro de movimientos', desc: 'Evoluciona los 47 movimientos distintos.', value: count('evoMoves'), goal: 47, reward: { t10: 3 }, title: 'Maestro de movimientos' },
     { id: 'items5', cat: 'combate', tier: 1, name: 'Bolsa llena', desc: 'Encuentra 5 objetos distintos.', value: count('itemsFound'), goal: 5, reward: { t1: 3 } },
     { id: 'itemsAll', cat: 'combate', tier: 2, name: 'Coleccionista de objetos', desc: 'Encuentra los 11 objetos.', value: count('itemsFound'), goal: 11, reward: { t10: 1 }, title: 'Anticuario' },
+    { id: 'bossPhase3', cat: 'combate', tier: 2, name: 'Cazador de fases', desc: 'Derrota a un jefe que alcance la Fase 3.', value: st('bossPhase3'), goal: 1, reward: { t10: 1 }, title: 'Cazador de Fases' },
+    { id: 'evoTier2', cat: 'combate', tier: 2, name: 'Poder Reforzado (+)', desc: 'Mejora un movimiento a nivel ++.', value: st('evoTier2'), goal: 1, reward: { t10: 1 }, title: 'Potenciado' },
+    { id: 'evoTier3', cat: 'combate', tier: 3, name: 'Sinergia Perfecta (+++)', desc: 'Desbloquea la evolución máxima +++ de un movimiento.', value: st('evoTier3'), goal: 1, reward: { t10: 2 }, title: 'Trascendente' },
+    { id: 'boss500', cat: 'combate', tier: 3, name: 'Destructor de Titanes', desc: 'Derrota a 500 jefes.', value: st('bossesTotal'), goal: 500, reward: { t10: 3 }, title: 'Destructor de Titanes' },
 
     // ---------- grietas ----------
     { id: 'rift1', cat: 'grietas', tier: 1, name: 'Al otro lado', desc: 'Gana tu primera pelea en una grieta.', value: st('riftWins'), goal: 1, reward: { t1: 3 }, title: 'Valiente' },

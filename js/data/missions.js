@@ -33,7 +33,19 @@ G.MissionDefs = (() => {
     { id: 'item', ev: 'item', goals: [1], reward: { t1: 2, coins: 150 },
       text: () => 'Encuentra un objeto equipable' },
     { id: 'evolve', ev: 'evolve', goals: [1], reward: { t1: 3, coins: 250 },
-      text: () => 'Evoluciona un movimiento' }
+      text: () => 'Evoluciona un movimiento' },
+    { id: 'mega', ev: 'mega', goals: [1, 2], reward: { t1: 3, coins: 250 },
+      text: n => (n === 1 ? 'Activa una Mega Evolución' : `Activa ${n} Mega Evoluciones`) },
+    { id: 'dodge', ev: 'dodge', goals: [30, 50], reward: { t1: 2, coins: 200 },
+      text: n => `Esquiva ${n} ataques de peligro` },
+    { id: 'trees', ev: 'trees', goals: [10, 20], reward: { t1: 2, coins: 150 },
+      text: n => `Derriba ${n} árboles con tus ataques` },
+    { id: 'evoMulti', ev: 'evo_plus', goals: [1, 2], reward: { t1: 3, coins: 300 },
+      text: n => (n === 1 ? 'Mejora un movimiento a nivel +' : `Mejora ${n} movimientos a nivel + o superior`) },
+    { id: 'legendKill', ev: 'kill', match: d => d.legend, goals: [1], reward: { t1: 4, coins: 350 },
+      text: () => 'Derrota a un Pokémon Legendario en una grieta' },
+    { id: 'coopPlay', ev: 'runEnd', match: d => d.group, goals: [1], reward: { t1: 3, coins: 250 },
+      text: () => 'Juega una partida en cooperativo' }
   ];
 
   const weekly = [
@@ -48,7 +60,19 @@ G.MissionDefs = (() => {
     { id: 'wevolve', ev: 'evolve', goals: [3, 5], reward: { t10: 1, coins: 900 },
       text: n => `Evoluciona ${n} movimientos` },
     { id: 'wdaily', ev: 'missionDone', match: d => d.daily, goals: [8, 12], reward: { t10: 1, coins: 800 },
-      text: n => `Completa ${n} misiones diarias` }
+      text: n => `Completa ${n} misiones diarias` },
+    { id: 'wmega', ev: 'mega', goals: [5, 8], reward: { t10: 1, coins: 1000 },
+      text: n => `Activa ${n} Mega Evoluciones en tus runs` },
+    { id: 'wtrees', ev: 'trees', goals: [50, 80], reward: { t10: 1, coins: 800 },
+      text: n => `Derriba ${n} árboles en total` },
+    { id: 'wevoPlus', ev: 'evo_plus', match: d => d.tier >= 2, goals: [3, 5], reward: { t10: 1, coins: 1200 },
+      text: n => `Alcanza el nivel ++ o +++ en ${n} movimientos` },
+    { id: 'wmaster', ev: 'kill', match: d => d.legend, goals: [4, 6], reward: { t10: 2, coins: 1500 },
+      text: n => `Derrota a ${n} Pokémon Legendarios` },
+    { id: 'wjudge', ev: 'judge', goals: [1, 2], reward: { t10: 1, coins: 1200 },
+      text: n => (n === 1 ? 'Llega a la Sentencia de Arceus (minuto 30)' : `Llega ${n} veces a la Sentencia de Arceus`) },
+    { id: 'wcoop', ev: 'runEnd', match: d => d.group, goals: [3, 5], reward: { t10: 1, coins: 1000 },
+      text: n => `Juega ${n} partidas en cooperativo con amigos` }
   ];
 
   const BY = {};

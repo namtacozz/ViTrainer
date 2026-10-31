@@ -138,6 +138,7 @@ G.Progress = (() => {
     switch (kind) {
       case 'kill':
         if (d.boss) S.bossesTotal = (S.bossesTotal || 0) + 1;
+        if (d.bossPhase >= 3) S.bossPhase3 = (S.bossPhase3 || 0) + 1;
         if (d.legend) { s.legends = s.legends || {}; if (!s.legends[d.legend]) s.legends[d.legend] = Date.now(); }
         break;
       case 'rift':
@@ -147,6 +148,10 @@ G.Progress = (() => {
       case 'evolve':
         S.evolutions = (S.evolutions || 0) + 1;
         s.evoMoves = s.evoMoves || {}; s.evoMoves[d.move] = s.evoMoves[d.move] || Date.now();
+        break;
+      case 'evo_plus':
+        if (d.tier === 2) S.evoTier2 = (S.evoTier2 || 0) + 1;
+        if (d.tier >= 3) S.evoTier3 = (S.evoTier3 || 0) + 1;
         break;
       case 'item':
         s.itemsFound = s.itemsFound || {}; s.itemsFound[d.id] = s.itemsFound[d.id] || Date.now();
@@ -176,7 +181,7 @@ G.Progress = (() => {
     // misiones ni para logros de jefes): tienen su propio contador.
     if (G.Judgment.active && e.boss) { G.Judgment.bossDown(); event('kill', { types: e.types || [], boss: false, legend: 0 }); return; }
     const legend = e.legend || (G.Rift.inArena && e.boss) ? e.dex : 0;
-    event('kill', { types: e.types || [], boss: !!e.boss, legend });
+    event('kill', { types: e.types || [], boss: !!e.boss, legend, bossPhase: e.bossPhase || 1 });
   }
 
   // ---------------- logros ----------------

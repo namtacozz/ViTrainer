@@ -108,22 +108,33 @@ G.LevelUp = (() => {
       }
     }
 
-    // --- evoluciones: movimiento al máximo + su condición cumplida ---
+    // --- evoluciones escalonadas (+ / ++ / +++) ---
     const waiting = {};                   // stat -> movimiento que la espera para evolucionar
     for (const m of pl.moves) {
-      const ev = G.Moves.evoInfo(m, pl.statsTaken);
+      const ev = G.Moves.evoInfo(m, pl.statsTaken, pl.moves);
       if (!ev) continue;
-      if (!ev.ready) { waiting[ev.needs] = m; continue; }
+      if (!ev.ready) { if (ev.tier === 1) waiting[ev.needs] = m; continue; }
+      const tierTag = ev.tier === 1 ? 'EVOLUCIÓN +' : ev.tier === 2 ? 'MAESTRÍA ++' : 'DOMINIO +++';
+      const tierColor = ev.tier === 1 ? '#ffd23f' : ev.tier === 2 ? '#38bdf8' : '#ec4899';
+      const weight = ev.tier === 3 ? 120 : ev.tier === 2 ? 80 : 40;
       out.push({
-        w: 40, type: 'evo', key: 'evo:' + m.id,
-        icon: 'move:' + m.id, color: '#ffd23f', tag: 'EVOLUCIÓN',
+        w: weight, type: 'evo', key: 'evo:' + m.id + ':' + ev.tier,
+        icon: 'move:' + m.id, color: tierColor, tag: tierTag,
         title: G.T(m.name, 'move') + ' → ' + G.T(ev.name, 'move'), desc: ev.text,
         apply: p => {
-          G.Moves.evolve(m);
-          G.FX.ring(p.x, p.y, 8, 120, '#ffd23f', 0.8, 6);
-          G.FX.burst(p.x, p.y - p.bodyH * 0.5, '#ffe14d', 40, 240);
+          G.Moves.evolve(m, ev.tier);
+          G.FX.ring(p.x, p.y, 8, ev.tier * 60 + 80, tierColor, 0.8, 6);
+          G.FX.burst(p.x, p.y - p.bodyH * 0.5, tierColor, 40, 240);
           G.Audio.sfx('legend');
-          G.Progress.event('evolve', { move: m.id });
+          G.Progress.event('evolve', { move: m.id, tier: ev.tier });
+          if (ev.tier >= 2) {
+            G.Progress.event('evo_plus', { tier: ev.tier });
+            const s = G.DB && G.DB.save;
+            if (s && s.stats) {
+              if (ev.tier === 2) s.stats.movesPlusPlus = (s.stats.movesPlusPlus || 0) + 1;
+              if (ev.tier === 3) s.stats.movesPlusPlusPlus = (s.stats.movesPlusPlusPlus || 0) + 1;
+            }
+          }
         }
       });
     }

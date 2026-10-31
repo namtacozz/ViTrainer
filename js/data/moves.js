@@ -594,7 +594,48 @@
       cd: 0.7, dmg: 22, speed: 330, life: 1.6, size: 7, homing: 6 },
     { id: 'night-slash', name: 'Tajo Umbrío', type: 'dark', kind: 'spin',
       desc: 'Cortes en giro que alcanzan a todo lo que te rodea.',
-      cd: 1.0, dmg: 11, count: 3, radius: 62 }
+      cd: 1.0, dmg: 11, count: 3, radius: 62 },
+
+    // ================= NUEVOS MOVIMIENTOS CANÓNICOS COMPETITIVOS =================
+    { id: 'close-combat', name: 'A Bocajarro', type: 'fighting', kind: 'melee',
+      desc: 'Una ráfaga de golpes demoledores a corta distancia.',
+      cd: 0.45, dmg: 32, radius: 68, arc: 2.2, knock: 90 },
+    { id: 'thunder-punch', name: 'Puño Trueno', type: 'electric', kind: 'melee',
+      desc: 'Un puñetazo electrizante que aturde levemente.',
+      cd: 0.50, dmg: 24, radius: 58, arc: 1.8, knock: 80, stun: 0.4 },
+    { id: 'fire-punch', name: 'Puño Fuego', type: 'fire', kind: 'melee',
+      desc: 'Un puñetazo envuelto en llamas que quema al impacto.',
+      cd: 0.50, dmg: 24, radius: 58, arc: 1.8, knock: 80, burn: 1 },
+    { id: 'ice-punch', name: 'Puño Hielo', type: 'ice', kind: 'melee',
+      desc: 'Un puñetazo helado que ralentiza severamente a los enemigos.',
+      cd: 0.50, dmg: 24, radius: 58, arc: 1.8, knock: 80, slow: 0.45 },
+    { id: 'bullet-punch', name: 'Puño Bala', type: 'steel', kind: 'melee',
+      desc: 'Puñetazos a velocidad sónica con retroceso inmediato.',
+      cd: 0.35, dmg: 18, radius: 54, arc: 1.6, knock: 60 },
+    { id: 'plasma-fists', name: 'Puños Plasma', type: 'electric', kind: 'melee',
+      desc: 'Impactos de plasma puro de Zeraora que electrifican el entorno.',
+      cd: 0.48, dmg: 34, radius: 72, arc: 2.4, knock: 120 },
+    { id: 'dragon-ascent', name: 'Ascenso Draco', type: 'flying', kind: 'dash',
+      desc: 'Vuelo en picado a velocidad celestial que arrolla todo a su paso.',
+      cd: 0.70, dmg: 38, radius: 140, width: 48, knock: 150 },
+    { id: 'oblivion-wing', name: 'Ala Mortífera', type: 'flying', kind: 'beam',
+      desc: 'Haz carmesí destructor que drena vida de todos los enemigos cruzados.',
+      cd: 1.4, dmg: 30, radius: 320, width: 36, drain: 1 },
+    { id: 'roost', name: 'Respiro', type: 'flying', kind: 'buff', stat: 'def',
+      desc: 'Aterriza un instante para recuperar vida y reforzar defensas.',
+      cd: 3.5, dur: 4.0, amount: 0.15, stacks: 3 },
+    { id: 'fiery-dance', name: 'Danza Llama', type: 'fire', kind: 'spin',
+      desc: 'Danza flamígera envolvente que gira incinerando el entorno.',
+      cd: 0.85, dmg: 18, count: 4, radius: 75, burn: 1 },
+    { id: 'fleur-cannon', name: 'Cañón Floral', type: 'fairy', kind: 'charge',
+      desc: 'Magearna canaliza la energía del Núcleo Casto y desata un torrente floral.',
+      cd: 2.1, charge: 0.70, dmg: 68, radius: 310, width: 50 },
+    { id: 'gear-grind', name: 'Rueda Doble', type: 'steel', kind: 'spin',
+      desc: 'Engranajes afilados giran a toda velocidad golpeando a los rivales.',
+      cd: 0.90, dmg: 16, count: 3, radius: 66 },
+    { id: 'spectral-thief', name: 'Robasombra', type: 'ghost', kind: 'dash',
+      desc: 'Se oculta en la sombra del rival asestando un golpe crítico furtivo.',
+      cd: 0.65, dmg: 28, radius: 125, width: 38, knock: 80 }
   ];
 
   // Cuerpo a cuerpo (12-10-2026): +20 % de daño y +25 % de alcance y de arco
@@ -617,7 +658,7 @@
    * Demora, Sustituto); efectos y energía, especiales (Tóxico, Granizo, Fuego
    * Fatuo). Los potenciadores (buff) no tienen: no hacen daño.
    */
-  const PHYSICAL = new Set(['tackle', 'quick-attack', 'vine-whip', 'razor-leaf', 'wing-attack', 'body-slam', 'poison-sting',
+  const PHYSICAL = new Set(['close-combat', 'thunder-punch', 'fire-punch', 'ice-punch', 'bullet-punch', 'plasma-fists', 'dragon-ascent', 'fiery-dance', 'gear-grind', 'spectral-thief', 'tackle', 'quick-attack', 'vine-whip', 'razor-leaf', 'wing-attack', 'body-slam', 'poison-sting',
     'bulldoze', 'bug-bite', 'string-shot', 'rock-throw', 'rock-slide', 'karate-chop', 'lick', 'metal-claw', 'bite',
     'bonemerang', 'psycho-cut', 'spikes', 'toxic-spikes', 'meteor-mash', 'substitute', 'aerial-ace', 'flame-wheel',
     // nuevos del 19-10-2026
@@ -764,7 +805,13 @@
     'outrage': 'hp',          'draining-kiss': 'rgn',
     'play-rough': 'atk',      'disarming-voice': 'def',
     'mirror-shot': 'atk',     'gyro-ball': 'def',
-    'sucker-punch': 'atk',    'night-slash': 'spd'
+    'sucker-punch': 'atk',    'night-slash': 'spd',
+    'close-combat': 'atk',    'thunder-punch': 'atk',
+    'fire-punch': 'atk',      'ice-punch': 'def',
+    'bullet-punch': 'spd',    'plasma-fists': 'atk',
+    'dragon-ascent': 'spd',   'oblivion-wing': 'hp',
+    'fiery-dance': 'rgn',     'fleur-cannon': 'mag',
+    'gear-grind': 'def',      'spectral-thief': 'spd'
   };
   // Lo que gana al evolucionar, según cómo funcione.
   const EVO_MODS = {
@@ -792,23 +839,94 @@
     stun:       { t: '×1,8 daño, más radio y aturde más rato', m: { dmg: 1.8, radius: 1.3, stun: 1.4 } }
   };
 
-  const evoName = name => name + ' +';
+  const evoName = (name, tier = 1) => name + ' ' + '+'.repeat(tier);
 
-  /** ¿Puede evolucionar ya? → { name, needs, needName, text, ready } o null */
-  function evoInfo(m, statsTaken) {
-    const needs = EVO[m.id];
-    if (!needs || m.evolved || m.lvl < m.def.maxLvl || !EVO_MODS[m.kind]) return null;
-    return { name: evoName(m.def.name), needs, needName: NEED_NAME[needs], text: EVO_MODS[m.kind].t,
-             ready: !!(statsTaken && statsTaken[needs]) };
+  /** Meta de maestría para pasar de + a ++ */
+  function getMasteryGoal(m) {
+    // Si aturde: 15 aturdimientos; si hace daño: 200.000 dmg o 40 lanzamientos
+    return {
+      type: m.stun ? 'stun' : 'dmg',
+      goal: m.stun ? 15 : 200000,
+      prog: m.stun ? (m.stunsDone || 0) : (m.dealt || 0)
+    };
   }
 
-  /** Evoluciona una instancia (cambia nombre y potencia; sigue siendo del mismo tipo). */
-  function evolve(m) {
-    if (!EVO[m.id] || m.evolved) return false;
-    applyMods(m, EVO_MODS[m.kind].m);
-    m.baseName = m.name;
-    m.name = evoName(m.baseName);
-    m.evolved = true;
+  function isMasteryComplete(m) {
+    const g = getMasteryGoal(m);
+    return g.prog >= g.goal;
+  }
+
+  /** ¿Puede evolucionar ya? Soporta Rango + (Tier 1), ++ (Tier 2), +++ (Tier 3) */
+  function evoInfo(m, statsTaken, allMoves = []) {
+    const needs = EVO[m.id];
+    if (!needs || !EVO_MODS[m.kind]) return null;
+
+    // Rango 1 (+): requiere maxLvl y statTaken
+    if (!m.evoTier && !m.evolved) {
+      if (m.lvl < m.def.maxLvl) return null;
+      return {
+        name: evoName(m.def.name, 1), needs, needName: NEED_NAME[needs], text: EVO_MODS[m.kind].t,
+        ready: !!(statsTaken && statsTaken[needs]), tier: 1
+      };
+    }
+
+    // Rango 2 (++): requiere haber alcanzado Rango 1 (+) y haber completado la misión de maestría de ese movimiento
+    if ((m.evoTier === 1 || (m.evolved && !m.evoTier)) && m.evoTier !== 2 && m.evoTier !== 3) {
+      const g = getMasteryGoal(m);
+      const ready = g.prog >= g.goal;
+      const metric = g.type === 'stun' ? `${Math.min(g.goal, g.prog)}/${g.goal} aturdimientos` : `${Math.floor(Math.min(g.goal, g.prog) / 1000)}k/${Math.floor(g.goal / 1000)}k daño`;
+      return {
+        name: evoName(m.def.name, 2), needs, needName: 'Maestría',
+        text: `Despierta Rango ++ (×1,4 daño extra, +1 proyectil/área y -15% recarga). Progreso: ${metric}`,
+        ready, tier: 2
+      };
+    }
+
+    // Rango 3 (+++): requiere tener este movimiento en Rango ++ y los otros 3 movimientos activos al menos en Rango +
+    if (m.evoTier === 2) {
+      const otherMoves = allMoves.filter(other => other !== m);
+      const ready = otherMoves.length >= 3 && otherMoves.every(other => other.evoTier >= 1 || other.evolved);
+      const countPlus = otherMoves.filter(other => other.evoTier >= 1 || other.evolved).length;
+      return {
+        name: evoName(m.def.name, 3), needs, needName: 'Sincronía Dominio',
+        text: `Despierta Rango SUPREMO +++ (×2,0 daño colosal, efectos duplicados). Requiere 3 ataques compañeros en Rango + o superior (${countPlus}/3 listos)`,
+        ready, tier: 3
+      };
+    }
+
+    return null;
+  }
+
+  /** Evoluciona una instancia a +, ++ o +++ */
+  function evolve(m, targetTier = null) {
+    if (!EVO[m.id]) return false;
+    const currentTier = m.evoTier || (m.evolved ? 1 : 0);
+    const nextTier = targetTier || (currentTier + 1);
+
+    if (nextTier === 1) {
+      applyMods(m, EVO_MODS[m.kind].m);
+      m.baseName = m.baseName || m.name;
+      m.evoTier = 1;
+      m.name = evoName(m.baseName, 1);
+      m.evolved = true;
+    } else if (nextTier === 2) {
+      // Potenciador ++: +40% dmg, -15% cd, +1 count / radius
+      m.dmg = (m.dmg || 20) * 1.4;
+      m.cd = (m.cd || 1) * 0.85;
+      if (m.count) m.count += 1;
+      if (m.radius) m.radius *= 1.2;
+      m.evoTier = 2;
+      m.name = evoName(m.baseName || m.def.name, 2);
+    } else if (nextTier === 3) {
+      // Potenciador +++: +100% dmg (doble), +2 count / +40% radius, +1 pierce/dur
+      m.dmg = (m.dmg || 20) * 2.0;
+      m.cd = (m.cd || 1) * 0.8;
+      if (m.count) m.count += 2;
+      if (m.radius) m.radius *= 1.35;
+      if (m.pierce) m.pierce += 2;
+      m.evoTier = 3;
+      m.name = evoName(m.baseName || m.def.name, 3);
+    }
     return true;
   }
 

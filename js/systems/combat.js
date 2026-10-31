@@ -803,6 +803,10 @@ G.Combat = (() => {
     if (m.burn && sk) e.applyBurn(m.burn * sk);
     if (m.poison && sk) e.applyPoison(m.poison * sk);
     if (m.slow && sk) e.applySlow(Math.min(0.8, m.slow * sk));
+    if (m.stun && sk) {
+      e.applyStun(m.stun * sk);
+      m.stunsDone = (m.stunsDone || 0) + 1;
+    }
     afterHit(pl, e, m);
 
     if (pl && pl.abil && pl.abil.parentalBond && !m._parentalEcho && !e.dead) {

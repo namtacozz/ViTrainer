@@ -447,6 +447,7 @@ G.HUD = (() => {
           ctx.fillStyle = d < m.lvl ? col : 'rgba(255,255,255,.18)';
           ctx.fillRect(x + (S - tw) / 2 + d * (dw + dgap), y + S - 9, dw, 3);
         }
+        drawMoveKindBadge(ctx, m.kind, x + S - 13, y + S - 13, 9);
       }
 
       // tecla
@@ -682,5 +683,84 @@ G.HUD = (() => {
     }
   }
 
-  return { draw, roundRect, bar };
+
+  /** Dibuja un microicono de 10x10 en la esquina inferior derecha para indicar el tipo de efecto del movimiento */
+  function drawMoveKindBadge(ctx, kind, bx, by, sz) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(bx + sz / 2, by + sz / 2, sz / 2 + 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(10, 16, 28, 0.9)';
+    ctx.fill();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.stroke();
+
+    const cx = bx + sz / 2, cy = by + sz / 2;
+    ctx.lineWidth = 1.2;
+
+    switch (kind) {
+      case 'buff':
+        // Flecha hacia arriba verde
+        ctx.strokeStyle = '#4ade80';
+        ctx.fillStyle = '#4ade80';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 3);
+        ctx.lineTo(cx - 3, cy + 2);
+        ctx.lineTo(cx + 3, cy + 2);
+        ctx.closePath();
+        ctx.fill();
+        break;
+      case 'beam':
+      case 'charge':
+        // Rayo recto azul cian
+        ctx.strokeStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(cx - 3.5, cy - 3.5);
+        ctx.lineTo(cx + 3.5, cy + 3.5);
+        ctx.stroke();
+        break;
+      case 'aura':
+      case 'nova':
+      case 'spin':
+      case 'shove':
+      case 'quake':
+        // Círculo concéntrico naranja/oro
+        ctx.strokeStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+        ctx.stroke();
+        break;
+      case 'melee':
+      case 'dash':
+        // Espada / corte diagonal rojo
+        ctx.strokeStyle = '#f87171';
+        ctx.beginPath();
+        ctx.moveTo(cx - 3, cy + 3);
+        ctx.lineTo(cx + 3, cy - 3);
+        ctx.stroke();
+        break;
+      case 'stun':
+      case 'vortex':
+        // Espiral / destello amarillo
+        ctx.strokeStyle = '#facc15';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 2.8, 0, Math.PI * 1.5);
+        ctx.stroke();
+        break;
+      case 'projectile':
+      case 'homing':
+      case 'bounce':
+      case 'cone':
+      default:
+        // Bala / punto blanco con estela
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 2, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+    }
+    ctx.restore();
+  }
+
+  return { draw, roundRect, drawMoveKindBadge, bar };
 })();

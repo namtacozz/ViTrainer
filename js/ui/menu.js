@@ -361,47 +361,47 @@ G.MenuUI = (() => {
     const effRarity = typeof G !== 'undefined' && G.Gacha && G.Gacha.getRarity ? G.Gacha.getRarity(p) : p.rarity;
     const usingThis = isPartner && (!hasSh || !!s.partnerShiny === viewShiny);
 
+    const isLockedPreview = !own;
     const box = $('dex-detail');
     box.innerHTML = `
       <canvas id="dex-big" class="stage" width="220" height="190"></canvas>
-      ${hasSh ? `<div class="seg">
+      ${hasSh || isLockedPreview ? `<div class="seg">
           <button class="${viewShiny ? '' : 'on'}" data-v="0">Normal</button>
           <button class="${viewShiny ? 'on' : ''}" data-v="1">${G.Icons.html('shiny', 12)} Shiny</button></div>` : ''}
       <div class="center">
         <div style="color:var(--muted);font-size:13px">Nº ${String(p.dex).padStart(3, '0')} · ${GEN_NAMES[p.gen - 1]}</div>
-        <h3>${own ? p.name : '???'}</h3>
+        <h3>${p.name}${isLockedPreview ? ` <span style="font-size:12px;color:var(--gold);font-weight:normal;">(${G.T('Vista previa')})</span>` : ''}</h3>
         ${own ? `<button id="dex-fav" class="chip${G.DB.isFav(dex) ? ' on' : ''}" type="button">${G.Icons.html(G.DB.isFav(dex) ? 'star' : 'starDim', 12)} ${G.DB.isFav(dex) ? 'Favorito' : 'Marcar como favorito'}</button>` : ''}
         <div style="color:${G.Gacha.RARITY_COLOR[p.rarity]}">${G.UI.stars(p.rarity, 24)} ${G.Gacha.RARITY_NAME[p.rarity]}</div>
-        <div style="margin:6px 0">${own ? G.UI.typeChips(p.types) : ''}</div>
+        <div style="margin:6px 0">${G.UI.typeChips(p.types)}</div>
       </div>
-      ${own ? `
-        ${bar('Vida', q.hp, max.hp, q.hp)}
-        ${bar('Ataque', q.pa, max.atk, '×' + q.pa.toFixed(2), 'pa')}
-        ${bar('At. Esp.', q.sa, max.atk, '×' + q.sa.toFixed(2), 'sa')}
-        ${bar('Defensa', q.df, max.def, Math.round(q.df), 'df')}
-        ${bar('Def. Esp.', q.sd, max.def, Math.round(q.sd), 'sd')}
-        ${bar('Velocidad', q.spd, max.spd, Math.round(q.spd), 'spd')}
-        <p class="sub center" style="margin:6px 0 0">Pega mejor con ataques <b class="gold">${G.Stats.sideOf(q) === 'special' ? 'especiales' : 'físicos'}</b></p>
-        ${monExtras(dex)}
-        ${renderEvoLine(dex)}
-        ${p.types.length === 1 ? `<p class="sub center" style="margin:2px 0 0">Monotipo: +20 % de daño con sus ataques de tipo ${G.U.TYPE_NAME[p.types[0]]}</p>` : ''}
-        <p style="font-size:14px;margin:10px 0 4px">Empieza con <b class="gold">${G.T(G.Moves.BY_ID[G.startMoveOf(dex)].name, 'move')}</b></p>
-        <p class="move-icons" id="dex-moves">
-          ${G.Moves.poolFor(p).map(id => `<span data-move="${id}">${G.Icons.html('move:' + id, 32)}</span>`).join('')}</p>
-        ${usingThis
-          ? '<button class="btn grow" disabled style="width:100%">Es tu compañero</button>'
-          : !isBase
-            ? `<button class="btn grow" disabled style="width:100%" title="${G.T('Solo la fase inicial puede ser compañero')}">${G.T('Evolución (no elegible como compañero)')}</button>
-               <button id="dex-pick-base" class="btn gold" data-sfx="confirm" style="width:100%;margin-top:6px">${G.T('Elegir fase inicial')} (${baseMon.name})</button>`
-            : `<button id="dex-pick" class="btn gold" data-sfx="confirm" style="width:100%">Elegir de compañero${viewShiny ? ' (shiny)' : ''}</button>`}
-      ` : `<p class="center" style="color:var(--muted)">Aún no lo tienes.<br>Consíguelo en el banner de <b class="gold">${GEN_NAMES[p.gen - 1]}</b>
-            o derrotándolo cuando salga shiny.</p>`}
+      ${bar('Vida', q.hp, max.hp, q.hp)}
+      ${bar('Ataque', q.pa, max.atk, '×' + q.pa.toFixed(2), 'pa')}
+      ${bar('At. Esp.', q.sa, max.atk, '×' + q.sa.toFixed(2), 'sa')}
+      ${bar('Defensa', q.df, max.def, Math.round(q.df), 'df')}
+      ${bar('Def. Esp.', q.sd, max.def, Math.round(q.sd), 'sd')}
+      ${bar('Velocidad', q.spd, max.spd, Math.round(q.spd), 'spd')}
+      <p class="sub center" style="margin:6px 0 0">Pega mejor con ataques <b class="gold">${G.Stats.sideOf(q) === 'special' ? 'especiales' : 'físicos'}</b></p>
+      ${own ? monExtras(dex) : ''}
+      ${renderEvoLine(dex)}
+      ${p.types.length === 1 ? `<p class="sub center" style="margin:2px 0 0">Monotipo: +20 % de daño con sus ataques de tipo ${G.U.TYPE_NAME[p.types[0]]}</p>` : ''}
+      <p style="font-size:14px;margin:10px 0 4px">Empieza con <b class="gold">${G.T(G.Moves.BY_ID[G.startMoveOf(dex)].name, 'move')}</b></p>
+      <p class="move-icons" id="dex-moves">
+        ${G.Moves.poolFor(p).map(id => `<span data-move="${id}">${G.Icons.html('move:' + id, 32)}</span>`).join('')}</p>
+      ${own ? (usingThis
+        ? '<button class="btn grow" disabled style="width:100%">Es tu compañero</button>'
+        : !isBase
+          ? `<button class="btn grow" disabled style="width:100%" title="${G.T('Solo la fase inicial puede ser compañero')}">${G.T('Evolución (no elegible como compañero)')}</button>
+             <button id="dex-pick-base" class="btn gold" data-sfx="confirm" style="width:100%;margin-top:6px">${G.T('Elegir fase inicial')} (${baseMon.name})</button>`
+          : `<button id="dex-pick" class="btn gold" data-sfx="confirm" style="width:100%">Elegir de compañero${viewShiny ? ' (shiny)' : ''}</button>`)
+        : `<button class="btn grow" disabled style="width:100%">${G.T('No desbloqueado')} · ${GEN_NAMES[p.gen - 1]}</button>
+           <p class="sub center" style="margin:4px 0 0;color:var(--muted)">${G.T('Consíguelo en el banner de')} <b class="gold">${GEN_NAMES[p.gen - 1]}</b> ${G.T('o capturando su versión shiny salvaje')}.</p>`}
     `;
     for (const [el, t] of scrolls) el.scrollTop = t;
     moveTips($('dex-moves'));
     $('dex-big').style.setProperty('--stage-c', !own ? '#5b83d6' : viewShiny ? '#9ae6ff' : G.U.TYPE_COLOR[p.types[0]]);
-    $('dex-big').classList.toggle('shiny', own && viewShiny);
-    G.UI.sprite($('dex-big'), dex, { lively: own, spin: own, silhouette: !own, scale: 3, hero: true, shiny: own && viewShiny,
+    $('dex-big').classList.toggle('shiny', viewShiny);
+    G.UI.sprite($('dex-big'), dex, { lively: true, spin: own, silhouette: false, scale: 3, hero: true, shiny: viewShiny,
                                      skin: own ? G.Skins.worn(s, dex) : '' });
     box.querySelectorAll('.seg button').forEach(b => {
       b.onclick = () => { viewShiny = b.dataset.v === '1'; showDetail(dex); };
@@ -424,11 +424,36 @@ G.MenuUI = (() => {
       G.UI.toast(baseMon.name + (s.partnerShiny ? ' shiny' : '') + ' es ahora tu compañero');
       renderGrid(true); showDetail(baseDex);
     };
-    if (own) {
-      wireExtras(dex, box);
-      wireEvoLine(dex, box);
-    }
+    if (own) wireExtras(dex, box);
+    wireEvoLine(dex, box);
   }
+  function cleanMonName(name) {
+    return (name || '').replace(/^(Alolan|Galarian|Hisuian|Paldean)\s+/, '')
+      .replace(/\s+\(Original\)$/, '')
+      .replace(/[\u2019']/g, '')
+      .trim().toLowerCase();
+  }
+
+  function getVariantChains(dex) {
+    if (typeof G === 'undefined' || !G.DEX || !G.DEX_BY) return [];
+    const cur = G.DEX_BY[dex];
+    if (!cur) return [];
+    const baseDex = G.getBaseDex(dex);
+    const curClean = cleanMonName(cur.name);
+    
+    const matchedMons = G.DEX.filter(p => cleanMonName(p.name) === curClean);
+    const relatedChains = new Map();
+    for (const m of matchedMons) {
+      const mBase = G.getBaseDex(m.dex);
+      if (mBase !== baseDex && !relatedChains.has(mBase)) {
+        const chain = G.getEvoChain ? G.getEvoChain(mBase) : null;
+        if (chain) relatedChains.set(mBase, chain);
+        else relatedChains.set(m.dex, { type: 'single', baseDex: m.dex, members: [m.dex] });
+      }
+    }
+    return Array.from(relatedChains.values());
+  }
+
   function renderEvoLine(dex) {
     if (typeof G === 'undefined' || !G.getBaseDex || !G.getEvoChain) return '';
     const baseDex = G.getBaseDex(dex);
@@ -436,7 +461,6 @@ G.MenuUI = (() => {
     if (!chain) return '';
     const s = G.DB.save;
     const tier = G.DB.getEvoTier ? G.DB.getEvoTier(baseDex) : 1;
-    const keepApp = !!(s.keepApp && s.keepApp[baseDex]);
 
     const isOwn = d => !!(s.owned && s.owned[d]);
     const isUnlocked = d => G.DB.isEvoUnlocked ? G.DB.isEvoUnlocked(d) : isOwn(d);
@@ -448,16 +472,17 @@ G.MenuUI = (() => {
       const preOwn = isOwn(targetDex);
       return megas.map(m => {
         const isCur = dex === m.id || dex === m.spriteDex;
-        const mName = preOwn ? (m.name.replace(/^Mega\s+/, 'M-').replace(/^Primal\s+/, 'P-')) : '???';
+        const mName = m.name.replace(/^Mega\s+/, 'M-').replace(/^Primal\s+/, 'P-');
         const mTypes = (m.types || []).join(' / ');
-        const desc = preOwn ? `${m.name} (${mTypes}) · Atk: x${(m.atk || 1).toFixed(2)}` : G.T('Desbloquea la forma anterior para ver esta Mega Evolución');
+        const badgeLabel = m.name.startsWith('Primal') ? 'Primal' : (m.name.startsWith('Mega') ? 'Mega' : 'Form');
+        const desc = `${m.name} (${mTypes}) · Atk: x${(m.atk || 1).toFixed(2)}${m.ability ? ' · ' + m.ability : ''}`;
         return `
           <span class="evo-arrow">→</span>
           <div class="evo-node ${preOwn ? 'unlocked' : 'locked'}${isCur ? ' current' : ''}" data-mega-id="${m.id}" data-mega-dex="${m.spriteDex || m.baseDex}" title="${desc}">
-            <div class="evo-cv-wrap" data-dex="${m.spriteDex || m.baseDex}" data-unlocked="${preOwn ? 1 : 0}"></div>
+            <div class="evo-cv-wrap" data-dex="${m.spriteDex || m.baseDex}" data-unlocked="1"></div>
             <div class="evo-name">${mName}</div>
-            <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Mega</div>
-            ${!preOwn ? '<div class="evo-lock-tag">🔒</div>' : ''}
+            <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">${badgeLabel}</div>
+            ${!preOwn ? '<div class="evo-lock-tag" style="opacity:0.8">✨</div>' : ''}
           </div>
         `;
       }).join('');
@@ -472,10 +497,11 @@ G.MenuUI = (() => {
       const un3 = tier >= 3;
       const megaHtml = renderMega(chain.baseDex);
       nodesHtml = `
-        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === chain.baseDex ? ' current' : ''}" data-dex="${chain.baseDex}">
-          <div class="evo-cv-wrap" data-dex="${chain.baseDex}" data-unlocked="${un1 ? 1 : 0}"></div>
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === chain.baseDex ? ' current' : ''}" data-dex="${chain.baseDex}" title="${p1 ? p1.name : ''}">
+          <div class="evo-cv-wrap" data-dex="${chain.baseDex}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
           <div class="evo-lvl">Nv. 1</div>
+          ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div class="evo-node ${un2 ? 'unlocked' : 'locked'}" title="${un2 ? G.T('Despertar I') : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
@@ -501,15 +527,16 @@ G.MenuUI = (() => {
       const un3 = tier >= 3;
       const megaHtml = renderMega(d2);
       nodesHtml = `
-        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
-          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}" title="${p1 ? p1.name : ''}">
+          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
           <div class="evo-lvl">Nv. 1</div>
+          ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
-        <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${un2 ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
-          <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="${un2 ? 1 : 0}"></div>
-          <div class="evo-name">${un2 && p2 ? p2.name : '???'}</div>
+        <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${p2 ? p2.name : ''}">
+          <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="1"></div>
+          <div class="evo-name">${p2 ? p2.name : '???'}</div>
           <div class="evo-lvl">Nv. 18</div>
           ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
@@ -530,22 +557,23 @@ G.MenuUI = (() => {
       const un3 = isUnlocked(d3);
       const megaHtml = renderMega(d3);
       nodesHtml = `
-        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
-          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}" title="${p1 ? p1.name : ''}">
+          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
           <div class="evo-lvl">Nv. 1</div>
+          ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
-        <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${un2 ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
-          <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="${un2 ? 1 : 0}"></div>
-          <div class="evo-name">${un2 && p2 ? p2.name : '???'}</div>
+        <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${p2 ? p2.name : ''}">
+          <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="1"></div>
+          <div class="evo-name">${p2 ? p2.name : '???'}</div>
           <div class="evo-lvl">Nv. 15</div>
           ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
-        <div class="evo-node ${un3 ? 'unlocked' : 'locked'}${dex === d3 ? ' current' : ''}" data-dex="${d3}" title="${un3 ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
-          <div class="evo-cv-wrap" data-dex="${d3}" data-unlocked="${un3 ? 1 : 0}"></div>
-          <div class="evo-name">${un3 && p3 ? p3.name : '???'}</div>
+        <div class="evo-node ${un3 ? 'unlocked' : 'locked'}${dex === d3 ? ' current' : ''}" data-dex="${d3}" title="${p3 ? p3.name : ''}">
+          <div class="evo-cv-wrap" data-dex="${d3}" data-unlocked="1"></div>
+          <div class="evo-name">${p3 ? p3.name : '???'}</div>
           <div class="evo-lvl">Nv. 30</div>
           ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
@@ -564,9 +592,9 @@ G.MenuUI = (() => {
         const megaSub = renderMega(d);
         return `
           <div style="display:flex;align-items:center;gap:4px;">
-            <div class="evo-node ${unb ? 'unlocked' : 'locked'}${dex === d ? ' current' : ''}" data-dex="${d}" title="${unb ? '' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
-              <div class="evo-cv-wrap" data-dex="${d}" data-unlocked="${unb ? 1 : 0}"></div>
-              <div class="evo-name">${unb && pb ? pb.name : '???'}</div>
+            <div class="evo-node ${unb ? 'unlocked' : 'locked'}${dex === d ? ' current' : ''}" data-dex="${d}" title="${pb ? pb.name : ''}">
+              <div class="evo-cv-wrap" data-dex="${d}" data-unlocked="1"></div>
+              <div class="evo-name">${pb ? pb.name : '???'}</div>
               <div class="evo-lvl">${lvl}</div>
               ${!unb ? '<div class="evo-lock-tag">🔒</div>' : ''}
             </div>
@@ -576,14 +604,61 @@ G.MenuUI = (() => {
       }).join('');
 
       nodesHtml = `
-        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}">
-          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="${un1 ? 1 : 0}"></div>
+        <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}" title="${p1 ? p1.name : ''}">
+          <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
           <div class="evo-lvl">Nv. 1</div>
+          ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:260px;">
           ${branchNodes}
+        </div>
+      `;
+    }
+
+    // Render regional variants and special alternate forms
+    const varChains = getVariantChains(dex);
+    let variantsHtml = '';
+    if (varChains && varChains.length) {
+      const chainRows = varChains.map(ch => {
+        let members = [];
+        if (ch.stages && ch.stages.length) {
+          members = ch.stages.map(stg => stg[0]);
+        } else if (ch.members && ch.members.length) {
+          members = ch.members;
+        } else if (ch.baseDex) {
+          members = [ch.baseDex];
+        }
+
+        const nodes = members.map((d, idx) => {
+          const p = G.DEX_BY[d];
+          if (!p) return '';
+          const ownP = isOwn(d);
+          const isCur = dex === d;
+          const regMatch = p.name.match(/^(Alolan|Galarian|Hisuian|Paldean)/);
+          const regionLabel = regMatch ? regMatch[1] : (p.name.includes('(Original)') ? 'Special' : 'Variant');
+          const arrow = idx > 0 ? '<span class="evo-arrow">→</span>' : '';
+          return `
+            ${arrow}
+            <div class="evo-node ${ownP ? 'unlocked' : 'locked'}${isCur ? ' current' : ''}" data-dex="${d}" title="${p.name} (${(p.types || []).join('/')})">
+              <div class="evo-cv-wrap" data-dex="${d}" data-unlocked="1"></div>
+              <div class="evo-name">${p.name}</div>
+              <div class="evo-lvl" style="color:#9ae6ff;font-weight:bold;">${regionLabel}</div>
+              ${!ownP ? '<div class="evo-lock-tag" style="opacity:0.7">👁</div>' : ''}
+            </div>
+          `;
+        }).join('');
+
+        return `<div class="evo-tree-row" style="margin-top:4px;">${nodes}</div>`;
+      }).join('');
+
+      variantsHtml = `
+        <div class="evo-variants-wrap" style="margin-top:8px;padding-top:6px;border-top:1px dashed rgba(140,170,210,0.25);">
+          <div style="display:flex;justify-content:center;align-items:center;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:bold;color:#9ae6ff;text-transform:uppercase;letter-spacing:0.5px;">${G.T('Formas regionales y variantes')}</span>
+          </div>
+          ${chainRows}
         </div>
       `;
     }
@@ -594,38 +669,33 @@ G.MenuUI = (() => {
           <span style="font-size:11px;font-weight:bold;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;">${G.T('Línea evolutiva')}</span>
         </div>
         <div class="evo-tree-row">${nodesHtml}</div>
+        ${variantsHtml}
       </div>
     `;
   }
 
   function wireEvoLine(dex, box) {
     const s = G.DB.save;
-    const baseDex = G.getBaseDex(dex);
     const hasSh = G.DB.ownsShiny(dex);
     box.querySelectorAll('.evo-cv-wrap').forEach(w => {
       const d = +w.dataset.dex;
-      const un = w.dataset.unlocked === '1';
-      w.appendChild(G.UI.spriteCanvas(d, 40, 36, { scale: 1.5, silhouette: !un, shiny: hasSh && viewShiny }));
+      w.appendChild(G.UI.spriteCanvas(d, 40, 36, { scale: 1.5, silhouette: false, shiny: hasSh && viewShiny }));
     });
     box.querySelectorAll('.evo-node[data-dex]').forEach(n => {
       n.onclick = () => {
         const d = +n.dataset.dex;
-        if (d && G.DB.save.owned[d]) {
-          showDetail(d);
-        } else if (d && !G.DB.save.owned[d]) {
-          G.UI.toast(G.T('Consigue duplicados en el Gacha para desbloquear esta forma'));
-        }
+        if (d) showDetail(d);
       };
     });
     box.querySelectorAll('.evo-node[data-mega-id]').forEach(n => {
       n.onclick = () => {
         const mid = +n.dataset.megaId;
-        const m = G.MEGAS && G.MEGAS[mid];
+        const m = (G.getMega && G.getMega(mid)) || (G.MEGAS && G.MEGAS[mid]);
         if (m) {
           const types = (m.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
           const title = `${m.name} [${types}]`;
-          const details = `ATK: x${(m.atk || 1).toFixed(2)} · DEF: ${m.df || 0} · SP.DEF: ${m.sd || 0} · SPD: ${m.spd || 0} · Ability: ${m.ability || 'None'}`;
-          G.UI.toast(`${title} — ${details}`, 4000);
+          const details = `ATK: x${(m.atk || 1).toFixed(2)} · DEF: ${m.df || 0} · SP.DEF: ${m.sd || 0} · SPD: ${m.spd || 0} · ${m.ability ? 'Habilidad: ' + m.ability : 'Poder Desatado'}`;
+          G.UI.toast(`${title} — ${details}`, 4500);
         }
       };
     });
