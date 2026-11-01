@@ -512,8 +512,8 @@ G.MenuUI = (() => {
               <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Nv. 50</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10120" title="Mega Zygarde (3500 quái): Nihil Light">
-              <div class="evo-cv-wrap" data-dex="10120" data-unlocked="1"></div>
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10121" title="Mega Zygarde (3500 quái): Nihil Light">
+              <div class="evo-cv-wrap" data-dex="10121" data-unlocked="1"></div>
               <div class="evo-name">M-Zygarde</div>
               <div class="evo-lvl" style="color:#f43f5e;font-weight:bold;">Mega</div>
             </div>

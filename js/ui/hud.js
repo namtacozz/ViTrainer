@@ -384,11 +384,11 @@ G.HUD = (() => {
       // 1. Zygarde đặc biệt
       if (bDex === 718) {
         if (pl.isMega || cDex === 10121) {
-          return { dex: 10120, label: 'Hoàn thiện', isFinal: true };
+          return { dex: 10121, label: 'Hoàn thiện', isFinal: true };
         }
         if (cDex === 10120 || curLv >= 50) {
           const kills = (pl && pl.kills) || 0;
-          return { dex: 10120, label: kills >= 3500 ? 'Sẵn sàng Mega!' : `Mega ${kills}/3500`, ready: kills >= 3500, icon: 'megaBadge' };
+          return { dex: 10121, label: kills >= 3500 ? 'Sẵn sàng Mega!' : `Mega ${kills}/3500`, ready: kills >= 3500, icon: 'megaBadge' };
         }
         if (pl.isApex || pl.awakeningTier >= 2 || curLv >= 30) {
           return { dex: 10120, label: `Nv. ${curLv}/50` };
