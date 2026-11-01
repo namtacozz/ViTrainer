@@ -482,40 +482,28 @@ G.MenuUI = (() => {
             <span style="font-size:11px;font-weight:bold;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;">Dòng tiến hóa Zygarde</span>
           </div>
           <div class="evo-tree-row" style="flex-wrap:wrap;gap:4px;">
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10118 ? ' current' : ''}" data-dex="10118" title="Zygarde (Dạng 10%)">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10118 ? ' current' : ''}" data-dex="10118" title="Zygarde (Dạng 10%): Khởi đầu hành trình">
               <div class="evo-cv-wrap" data-dex="10118" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 10%</div>
               <div class="evo-lvl">Nv. 1</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}" title="Thức Tỉnh I (Nv. 15): +25% HP & Phòng thủ">
-              <div class="evo-apex-badge awakening">${G.Icons.html('star', 16)}</div>
-              <div class="evo-name">Thức Tỉnh I</div>
-              <div class="evo-lvl">Nv. 15</div>
-            </div>
-            <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%)">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%): Biến đổi Mãng Xà">
               <div class="evo-cv-wrap" data-dex="718" data-exact-dex="1" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 50%</div>
-              <div class="evo-lvl">Nv. 25</div>
+              <div class="evo-lvl">Nv. 10</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}" title="Apex (+) (Nv. 30): Vương miện & +35% sát thương">
-              <div class="evo-apex-badge apex">${G.Icons.html('crown', 16)}</div>
-              <div class="evo-name">Apex (+)</div>
-              <div class="evo-lvl">Nv. 30</div>
-            </div>
-            <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10120 ? ' current' : ''}" data-mega-id="10120" data-mega-dex="10120" title="Zygarde Hoàn Thiện (100%): Tặng Core Enforcer">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10120 ? ' current' : ''}" data-dex="10120" title="Zygarde Hoàn Thiện (100%): Tặng Core Enforcer">
               <div class="evo-cv-wrap" data-dex="10120" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 100%</div>
-              <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Nv. 50</div>
+              <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Nv. 25</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10121" title="Mega Zygarde (3500 quái): Nihil Light">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10121" title="Mega Zygarde (Nv. 50 & 3500 quái): Thức tỉnh Nihil Light">
               <div class="evo-cv-wrap" data-dex="10121" data-unlocked="1"></div>
               <div class="evo-name">M-Zygarde</div>
-              <div class="evo-lvl" style="color:#f43f5e;font-weight:bold;">Mega</div>
+              <div class="evo-lvl" style="color:#f43f5e;font-weight:bold;">Mega (Nv. 50)</div>
             </div>
           </div>
         </div>

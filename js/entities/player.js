@@ -41,24 +41,26 @@ G.Player = class Player {
     this.baseSpd = mon.spd;
     this.baseAtk = mon.atk;
 
-    // Zygarde Lv 1-24 khởi đầu ở dạng 10% (dex 10118)
-    if (mon.dex === 718 || this.baseDex === 718 || mon.dex === 10118) {
+    // Zygarde: Dạng 10% (Lvl 1 - 9) -> Dạng 50% (Lvl 10 - 24) -> Dạng 100% (Lvl 25+)
+    if (mon.dex === 718 || this.baseDex === 718 || mon.dex === 10118 || mon.dex === 10120 || mon.dex === 10121) {
       this.baseDex = 718;
-      if ((this.level || 1) < 25) {
-        const form10 = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[10118] : null;
-        if (form10) {
-          mon = form10;
-          this.dex = 10118;
-          this.mon = form10;
-          this.scale = G.Sprites.playerScale(10118);
-          this.anim = new G.Sprites.Animator(10118, this.scale, this.shiny);
-          this.r = G.Sprites.playerRadius(10118);
-          this.bodyH = G.Sprites.bodyHeight(10118, this.scale);
-          this.baseSpd = form10.spd;
-          this.baseAtk = form10.atk;
-          this.maxHp = form10.hp + this.perksHp;
-          this.hp = this.maxHp;
-        }
+      const curL = this.level || 1;
+      let startDex = 10118;
+      if (curL >= 25) startDex = 10120;
+      else if (curL >= 10) startDex = 718;
+      const startMon = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[startDex] : null;
+      if (startMon) {
+        mon = startMon;
+        this.dex = startDex;
+        this.mon = startMon;
+        this.scale = G.Sprites.playerScale(startDex);
+        this.anim = new G.Sprites.Animator(startDex, this.scale, this.shiny);
+        this.r = G.Sprites.playerRadius(startDex);
+        this.bodyH = G.Sprites.bodyHeight(startDex, this.scale);
+        this.baseSpd = startMon.spd;
+        this.baseAtk = startMon.atk;
+        this.maxHp = startMon.hp + this.perksHp;
+        this.hp = this.maxHp;
       }
     }
 
@@ -68,6 +70,13 @@ G.Player = class Player {
     this.evoStage = (typeof G !== 'undefined' && G.getStage) ? G.getStage(mon.dex) : 1;
     this.evoChain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(this.baseDex) : null;
     this.evoTierUnlocked = (typeof G !== 'undefined' && G.DB && G.DB.getEvoTier) ? G.DB.getEvoTier(this.baseDex) : 1;
+
+    // Cân bằng giai đoạn tiến hóa (user rule): Pokémon 3 bậc ở dạng 1 đầu game được buff +25% baseAtk, +25% maxHp
+    if (this.evoChain && this.evoChain.type === '3stage' && this.evoStage === 1) {
+      this.baseAtk *= 1.25;
+      this.maxHp = Math.round(this.maxHp * 1.25);
+      this.hp = this.maxHp;
+    }
     this.isApex = false;
     this.awakeningTier = 0;
     this.pendingEvoBranches = null;
@@ -458,7 +467,13 @@ G.Player = class Player {
     this.dex = newDex;
     this.mon = nextMon;
     this.scale = G.Sprites.playerScale(newDex);
+    const oldAnim = this.anim;
     this.anim = new G.Sprites.Animator(newDex, this.scale, this.shiny);
+    if (oldAnim && oldAnim.lastReadySheet) {
+      this.anim.lastReadySheet = oldAnim.lastReadySheet;
+      this.anim.lastReadyMeta = oldAnim.lastReadyMeta;
+      this.anim.lastScale = oldAnim.lastScale;
+    }
     const s = typeof G !== 'undefined' && G.DB && G.DB.save;
     if (s && G.Skins) this.anim.skin = G.Skins.worn(s, newDex) || null;
     this.r = G.Sprites.playerRadius(newDex);
@@ -468,12 +483,19 @@ G.Player = class Player {
     this.baseAtk = nextMon.atk;
     this.maxHp = nextMon.hp + (this.perksHp || 0) + (this.bonusMaxHp || 0);
 
-    // Buff Thông Thạo Dạng Cuối cho Pokémon 3 bậc (+20% baseAtk, +20% maxHp, +15% baseSpd)
+    // Cân bằng giai đoạn tiến hóa:
+    // - Dạng 2: ngang bằng Pokémon không có dạng tiến hóa (single-stage ~500 BST baseline, +15% atk, +15% maxHp)
+    // - Dạng 3: nhỉnh hơn tầm 30% (+30% atk, +30% maxHp, +15% spd)
     const stageNow = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
-    if (this.evoChain && this.evoChain.type === '3stage' && stageNow >= 3) {
-      this.baseAtk *= 1.20;
-      this.maxHp = Math.round(this.maxHp * 1.20);
-      this.baseSpd = Math.round(this.baseSpd * 1.15);
+    if (this.evoChain && this.evoChain.type === '3stage') {
+      if (stageNow === 2) {
+        this.baseAtk *= 1.15;
+        this.maxHp = Math.round(this.maxHp * 1.15);
+      } else if (stageNow >= 3) {
+        this.baseAtk *= 1.30;
+        this.maxHp = Math.round(this.maxHp * 1.30);
+        this.baseSpd = Math.round(this.baseSpd * 1.15);
+      }
     }
 
     if (isApex) {
@@ -694,20 +716,9 @@ G.Player = class Player {
     }
 
 
-    // Tiến trình đặc biệt Zygarde: 10% (Lv 1) -> Thức Tỉnh I (Lv 15) -> 50% (Lv 25) -> Apex + (Lv 30) -> 100% (Lv 50) -> Mega
+    // Dòng tiến hóa Zygarde: Dạng 10% (Lvl 1 - 9) -> Dạng 50% (Lvl 10 - 24) -> Dạng 100% (Lvl 25+, tặng Core Enforcer) -> Dạng Mega (Lvl 50 + 3500 quái)
     if (this.baseDex === 718) {
-      if (this.level >= 15 && this.awakeningTier === 0) {
-        this.awakeningTier = 1;
-        this.promptEvo([{
-          dex: this.dex,
-          title: 'Zygarde · Thức Tỉnh I',
-          tag: 'THỨC TỈNH I',
-          color: '#ffd23f',
-          desc: 'Thức tỉnh năng lượng tế bào Zygarde: +25% HP tối đa, tăng phòng thủ và hồi phục sinh lực.',
-          apply: () => this.activateAwakening(1)
-        }]);
-      }
-      if (this.level >= 25 && this.dex === 10118) {
+      if (this.level >= 10 && this.dex === 10118) {
         this.promptEvo([{
           dex: 718,
           title: 'Zygarde (Dạng 50%)',
@@ -717,18 +728,7 @@ G.Player = class Player {
           apply: () => this.evolveTo(718)
         }]);
       }
-      if (this.level >= 30 && !this.isApex) {
-        this.isApex = true;
-        this.promptEvo([{
-          dex: this.dex,
-          title: 'Zygarde · Apex (+)',
-          tag: 'APEX (+)',
-          color: '#ffd23f',
-          desc: 'Khí chất Apex thức tỉnh: Vương miện hoàng gia, +35% sát thương toàn bộ chiêu thức và hồi phục sinh lực.',
-          apply: () => this.activateApex()
-        }]);
-      }
-      if (this.level >= 50 && this.dex !== 10120 && !this.isMega) {
+      if (this.level >= 25 && this.dex === 718 && !this.isMega) {
         this.promptEvo([{
           dex: 10120,
           title: 'Zygarde Hoàn Thiện (100%)',
@@ -736,10 +736,10 @@ G.Player = class Player {
           color: '#10b981',
           desc: 'Tập hợp 100% tế bào: Thức tỉnh hình hài Cự Thần Titan (Complete Forme). TẶNG KÈM CHIÊU ĐỘC QUYỀN CORE ENFORCER!',
           apply: () => {
-            this.megaEvolve(10120);
+            this.evolveTo(10120);
             this.maxMoves = Math.max(this.maxMoves, this.slots.length + 1);
             if (!this.hasMove('core-enforcer')) {
-              this.addMove('core-enforcer');
+              this.learnOrReplaceMove('core-enforcer');
             }
           }
         }]);
@@ -1077,9 +1077,22 @@ G.Player = class Player {
       ? mega.spriteDex
       : this.dex;
     this.dex = targetDex;
+
+    // Dạng đặc biệt (Mega / Primal / Ultra / Hợp thể): khác biệt rõ rệt so với trước khi tiến hóa (+35% atk, +30% maxHp, +15% spd)
+    this.baseAtk *= 1.35;
+    this.maxHp = Math.round(this.maxHp * 1.30);
+    this.baseSpd = Math.round(this.baseSpd * 1.15);
+    this.hp = this.maxHp;
+
     if (typeof G !== 'undefined' && G.Sprites) {
       this.scale = G.Sprites.playerScale(targetDex);
+      const oldMegaAnim = this.anim;
       this.anim = new G.Sprites.Animator(targetDex, this.scale, this.shiny);
+      if (oldMegaAnim && oldMegaAnim.lastReadySheet) {
+        this.anim.lastReadySheet = oldMegaAnim.lastReadySheet;
+        this.anim.lastReadyMeta = oldMegaAnim.lastReadyMeta;
+        this.anim.lastScale = oldMegaAnim.lastScale;
+      }
       this.r = G.Sprites.playerRadius(targetDex);
       this.bodyH = G.Sprites.bodyHeight(targetDex, this.scale);
       if (G.Sprites.preload) G.Sprites.preload([targetDex], 8000, this.shiny);

@@ -21923,6 +21923,10 @@ G.getStage = function(dex) {
 };
 
 G.isBaseStage = function(dex) {
+  if (dex === 10120 || dex === 10121) return false;
+  if (dex === 10118) return true;
+  const mega = (typeof G !== 'undefined' && G.MEGAS && G.MEGAS[dex]) || (typeof G !== 'undefined' && G.getMega && G.getMega(dex));
+  if (mega) return false;
   const info = G.getEvoInfo(dex);
   return !info || info.stage === 1;
 };

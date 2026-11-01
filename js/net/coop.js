@@ -89,7 +89,15 @@ G.Coop = (() => {
       p.remote = true; p.uid = m.uid; p.tag = m.name; p.tagColor = col; p.revLabel = 'Quédate a su lado';
       p.x = x; p.y = y;
       p.net = { x, y, ang: Math.PI / 2, walk: 0, hp: p.maxHp, maxHp: p.maxHp, dead: 0, mv: G.baseStartOf(mon.dex), ml: 1, mag: 78, aim: Math.PI / 2, rev: 0 };
-      G.Sprites.preload([mon.dex], 8000, p.shiny);
+      const preDexes = [mon.dex];
+      const bDex = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(mon.dex) : mon.dex;
+      if (bDex && bDex !== mon.dex) preDexes.push(bDex);
+      if (bDex === 718) preDexes.push(10118, 718, 10120, 10121);
+      const ch = (typeof G !== 'undefined' && G.getEvoChain && bDex) ? G.getEvoChain(bDex) : null;
+      if (ch && ch.members) preDexes.push(...ch.members);
+      const mList = (typeof G !== 'undefined' && G.getMegasFor && bDex) ? G.getMegasFor(bDex) : [];
+      if (mList) for (const mg of mList) preDexes.push(mg.spriteDex || mg.id);
+      G.Sprites.preload(preDexes, 8000, p.shiny);
       mates.set(m.uid, { uid: m.uid, name: m.name, color: col, pl: p, connected: true, q: [], flushT: 0, xpMul: 1, lastAt: performance.now() });
     });
   }
@@ -732,9 +740,15 @@ G.Coop = (() => {
     }
     const finalDex = spriteDex || (mega && mega.spriteDex) || m.pl.dex;
     if (finalDex) {
+      const oldAnim = m.pl.anim;
       m.pl.dex = finalDex;
       m.pl.scale = G.Sprites.playerScale(finalDex);
       m.pl.anim = new G.Sprites.Animator(finalDex, m.pl.scale, m.pl.shiny);
+      if (oldAnim && oldAnim.lastReadySheet) {
+        m.pl.anim.lastReadySheet = oldAnim.lastReadySheet;
+        m.pl.anim.lastReadyMeta = oldAnim.lastReadyMeta;
+        m.pl.anim.lastScale = oldAnim.lastScale;
+      }
       m.pl.r = G.Sprites.playerRadius(finalDex);
       m.pl.bodyH = G.Sprites.bodyHeight(finalDex, m.pl.scale);
       if (G.Sprites.preload) G.Sprites.preload([finalDex], 8000, m.pl.shiny);
@@ -752,10 +766,16 @@ G.Coop = (() => {
     if (!m || !m.pl) return;
     const mon = G.DEX_BY[newDex];
     if (!mon) return;
+    const oldAnim = m.pl.anim;
     m.pl.dex = newDex;
     m.pl.mon = mon;
     m.pl.scale = G.Sprites.playerScale(newDex);
     m.pl.anim = new G.Sprites.Animator(newDex, m.pl.scale, m.pl.shiny);
+    if (oldAnim && oldAnim.lastReadySheet) {
+      m.pl.anim.lastReadySheet = oldAnim.lastReadySheet;
+      m.pl.anim.lastReadyMeta = oldAnim.lastReadyMeta;
+      m.pl.anim.lastScale = oldAnim.lastScale;
+    }
     m.pl.r = G.Sprites.playerRadius(newDex);
     m.pl.bodyH = G.Sprites.bodyHeight(newDex, m.pl.scale);
     if (isApex) m.pl.isApex = true;

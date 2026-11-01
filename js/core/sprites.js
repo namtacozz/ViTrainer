@@ -278,11 +278,21 @@ G.Sprites = (() => {
       }
       const frame = own ? this.frame : 0;
       if (!m || !s || !s.ready) {
-        // Dự phòng khi đang tải sprite dạng mới: hiển thị tạm dạng gốc/dạng trước thay vì hiện cục tròn vàng
+        // Dự phòng khi đang tải sprite dạng mới:
+        // 1. Dùng sprite tốt gần nhất của animator này (giữ hình thái cũ cho đến khi hình thái mới tải xong)
+        if (this.lastReadySheet && this.lastReadySheet.ready && this.lastReadyMeta) {
+          const lk = (this.lastScale || this.scale) * PX;
+          const sx = 0, sy = 0;
+          const dx = Math.round(x - this.lastReadyMeta.ax * lk), dy = Math.round(y - this.lastReadyMeta.ay * lk);
+          ctx.drawImage(this.lastReadySheet.img, sx, sy, this.lastReadyMeta.w, this.lastReadyMeta.h, dx, dy, this.lastReadyMeta.w * lk, this.lastReadyMeta.h * lk);
+          return;
+        }
+        // 2. Dự phòng dạng gốc (baseDex) hoặc các dạng liên quan trong chuỗi tiến hóa
         const base = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(this.dex) : null;
-        if (base && base !== this.dex) {
-          const fbSheet = sheet(base, 'Idle', this.shiny);
-          const fbMeta = animMeta(base, 'Idle', this.shiny);
+        const candidates = [base, 10118, 718, 10120].filter(d => d && d !== this.dex);
+        for (const cand of candidates) {
+          const fbSheet = sheet(cand, 'Idle', this.shiny);
+          const fbMeta = animMeta(cand, 'Idle', this.shiny);
           if (fbSheet && fbSheet.ready && fbMeta) {
             const sx = 0, sy = 0;
             const dx = Math.round(x - fbMeta.ax * k), dy = Math.round(y - fbMeta.ay * k);
@@ -294,6 +304,10 @@ G.Sprites = (() => {
         ctx.beginPath(); ctx.arc(x, y - 12 * k, 8 * k, 0, 6.2832); ctx.fill();
         return;
       }
+      // Lưu lại sprite ready làm dự phòng mượt mà cho các lần đổi dạng tiếp theo
+      this.lastReadySheet = s;
+      this.lastReadyMeta = m;
+      this.lastScale = this.scale;
       const row = Math.min(this.dir, m.r - 1);
       const alpha = opts.alpha == null ? 1 : opts.alpha;
       if (alpha <= 0) return;
