@@ -718,7 +718,10 @@
       desc: 'Se oculta en la sombra del rival asestando un golpe crítico furtivo.',
       cd: 0.70, dmg: 19, radius: 110, width: 36, knock: 70, exclusive: true },
 
-        { id: 'glaciate', name: 'Glaciate', type: 'ice', kind: 'nova',
+            { id: 'prismatic-laser', name: 'Prismatic Laser', type: 'psychic', kind: 'beam',
+      desc: 'Giải phóng chùm tia lăng kính ánh sáng nguyên thủy cực mạnh thiêu rụi và xuyên thủng mọi kẻ thù.',
+      cd: 1.35, dmg: 26, radius: 290, width: 55, knock: 120, exclusive: true },
+    { id: 'glaciate', name: 'Glaciate', type: 'ice', kind: 'nova',
       desc: 'Desata una gélida ventisca que congela y ralentiza severamente a los rivales a su alrededor.',
       cd: 1.15, dmg: 16, radius: 210, count: 12, speed: 280, slow: 0.5, knock: 80, exclusive: true },
     { id: 'freeze-shock', name: 'Freeze Shock', type: 'ice', kind: 'chain',
@@ -774,6 +777,7 @@
     792: ['moongeist-beam'], 10156: ['moongeist-beam'],   // Lunala / Necrozma-Dawn
     807: ['plasma-fists'],                             // Zeraora
     802: ['spectral-thief'],                           // Marshadow
+    800: ['prismatic-laser'],
     801: ['fleur-cannon'],                             // Magearna
     601: ['gear-grind'],                               // Klinklang
     637: ['fiery-dance'],
@@ -967,6 +971,7 @@
     'core-enforcer': 'atk',   'lands-wrath': 'hp',
     'origin-pulse': 'cd',     'precipice-blades': 'atk',
     'dark-void': 'mag',       'geomancy': 'rgn',
+    'prismatic-laser': 'mag',
     'sunsteel-strike': 'atk', 'moongeist-beam': 'cd',
     'glaciate': 'def',       'freeze-shock': 'atk',
     'ice-burn': 'mag',        'fusion-flare': 'atk',

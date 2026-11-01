@@ -785,7 +785,7 @@ G.DEX = [
   {"dex":797,"name":"Celesteela","types":["steel","flying"],"hp":114,"spd":104,"atk":1.29,"pa":1.26,"sa":1.29,"df":103,"sd":101,"rarity":4,"bst":570,"starter":false,"gen":7},
   {"dex":798,"name":"Kartana","types":["grass","steel"],"hp":97,"spd":124,"atk":1.7,"pa":1.7,"sa":1.02,"df":131,"sd":31,"rarity":4,"bst":570,"starter":false,"gen":7},
   {"dex":799,"name":"Guzzlord","types":["dark","dragon"],"hp":170,"spd":96,"atk":1.26,"pa":1.26,"sa":1.23,"df":53,"sd":53,"rarity":4,"bst":570,"starter":false,"gen":7},
-  {"dex":800,"name":"Necrozma","types":["psychic"],"hp":114,"spd":111,"atk":1.4,"pa":1.29,"sa":1.4,"df":101,"sd":89,"rarity":5,"bst":600,"starter":false,"gen":7,"leg":true},
+  {"dex":800,"name":"Necrozma","start":"prismatic-laser","types":["psychic"],"hp":114,"spd":111,"atk":1.4,"pa":1.29,"sa":1.4,"df":101,"sd":89,"rarity":5,"bst":600,"starter":false,"gen":7,"leg":true},
   {"dex":801,"name":"Magearna","types":["steel","fairy"],"start":"fleur-cannon","hp":106,"spd":105,"atk":1.42,"pa":1.22,"sa":1.42,"df":115,"sd":115,"rarity":5,"bst":600,"starter":false,"gen":7,"leg":true},
   {"dex":802,"name":"Marshadow","types":["fighting","ghost"],"hp":110,"spd":130,"atk":1.39,"pa":1.39,"sa":1.2,"df":80,"sd":90,"rarity":5,"bst":600,"starter":false,"gen":7,"leg":true},
   {"dex":803,"name":"Poipole","types":["poison"],"hp":100,"spd":109,"atk":1.1,"pa":1.1,"sa":1.1,"df":67,"sd":67,"rarity":3,"bst":420,"starter":false,"gen":7},
