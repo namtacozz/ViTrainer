@@ -908,6 +908,7 @@ G.MenuUI = (() => {
   function openUpgrades() {
     G.UI.show('scr-upgrades', true);
     const s = G.DB.save;
+    const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
     // Se recuerda el último que miraste, salvo que hayas cambiado de compañero: entonces se abre en el nuevo.
     if (!upgDex || !s.owned[upgDex] || s.partner !== upgPartner) upgDex = s.partner;
     upgPartner = s.partner;
