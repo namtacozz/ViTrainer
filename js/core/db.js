@@ -1019,6 +1019,9 @@ G.DB = (() => {
 
   async function login(name, pass) {
     name = (name || '').trim();
+    if (name.toLowerCase() === 'tester' || name.toLowerCase() === 'admin') {
+      return loadTesterSave();
+    }
     if (mode === 'local') return loginLocal(name, pass);
     try {
       const legacy = await legacySave(name, pass);
@@ -1049,6 +1052,78 @@ G.DB = (() => {
     save = newSave('Invitado');
     if (mode === 'local') remove(K_SES);
     return { ok: true, isNew: true };
+  }
+
+  function unlockAll(targetSave) {
+    const s = targetSave || save;
+    if (!s) return;
+    s.coins = 999999;
+    s.bag = s.bag || {};
+    s.bag.mint = 999;
+    s.bag.cap = 999;
+    s.bag.caph = 999;
+    s.bag.candy = 9999;
+    s.owned = s.owned || {};
+    s.shiny = s.shiny || {};
+    s.evoTiers = s.evoTiers || {};
+    s.evoBranches = s.evoBranches || {};
+    s.tms = s.tms || {};
+    s.tickets = { t1: 999, t10: 999 };
+    s.itemsFound = s.itemsFound || {};
+    s.skins = s.skins || {};
+
+    const dexList = (typeof G !== 'undefined' && (G.DEX || G.POKEDEX)) || [];
+    for (const p of dexList) {
+      s.owned[p.dex] = { at: Date.now(), from: 'tester' };
+      s.shiny[p.dex] = { at: Date.now(), from: 'tester' };
+      if (p.dex) s.evoTiers[p.dex] = 3;
+    }
+    if (typeof G !== 'undefined' && G.MEGAS) {
+      for (const mid in G.MEGAS) {
+        s.owned[mid] = { at: Date.now(), from: 'tester' };
+        s.shiny[mid] = { at: Date.now(), from: 'tester' };
+      }
+    }
+    if (typeof G !== 'undefined' && G.EVO_CHAINS) {
+      for (const bDex in G.EVO_CHAINS) {
+        const ch = G.EVO_CHAINS[bDex];
+        s.evoTiers[bDex] = ch.maxStage || 3;
+        if (ch.type === 'branch') {
+          s.evoBranches[bDex] = [...(ch.members || [])];
+          for (const m of (ch.members || [])) {
+            s.owned[m] = { at: Date.now(), from: 'tester' };
+            s.shiny[m] = { at: Date.now(), from: 'tester' };
+          }
+        }
+      }
+    }
+    if (typeof G !== 'undefined' && G.Moves && G.Moves.BY_ID) {
+      for (const mId in G.Moves.BY_ID) {
+        s.tms[mId] = 99;
+      }
+    }
+    const itemList = (typeof G !== 'undefined' && G.Items && (G.Items.LIST || G.Items.ALL)) || [];
+    for (const it of itemList) {
+      s.itemsFound[it.id] = Date.now();
+    }
+    const skinDict = (typeof G !== 'undefined' && ((G.Skins && G.Skins.SKINS) || G.SKINS)) || {};
+    for (const sk in skinDict) {
+      s.skins[sk] = Date.now();
+    }
+    if (s === save) commit();
+  }
+
+  function loadTesterSave() {
+    user = 'Tester'; key = 'tester'; guest = false; uid = 'tester';
+    save = newSave('Tester');
+    save.partner = 25;
+    save.starter = 25;
+    save.partnerShiny = false;
+    save.personality = { trait: 'audaz', scores: {} };
+    unlockAll(save);
+    write(K_SAVE + 'tester', save);
+    write(K_SES, 'tester');
+    return { ok: true, isNew: false };
   }
 
   /**
@@ -1186,7 +1261,7 @@ G.DB = (() => {
   }
 
   return {
-    ready, register, login, loginWithGoogle, playAsGuest, logout, commit, deleteAccount, flush: pushNow, saveNow,
+    ready, register, login, loginWithGoogle, playAsGuest, loadTesterSave, unlockAll, logout, commit, deleteAccount, flush: pushNow, saveNow,
     owns, grant, ownsShiny, grantShiny,
     getEvoTier(baseDex) { return (save && save.evoTiers && save.evoTiers[baseDex]) || 1; },
     isEvoUnlocked(dex) {

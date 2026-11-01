@@ -4,6 +4,7 @@
  * son los oficiales en inglés.
  */
 G.I18n.add({
+  "✦ Modo Tester (Full Pokémon)": "✦ Tester Account (Full Pokémon)",
   'Flechas Mil': 'Thousand Arrows',
   'Olas Mil': 'Thousand Waves',
   'Núcleo Castigo': 'Core Enforcer',

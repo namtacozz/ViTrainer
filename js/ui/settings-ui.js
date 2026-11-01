@@ -154,9 +154,12 @@ G.SettingsUI = (() => {
     const st = G.DB.guest ? 'guest' : G.DB.syncState;
     const SYNC = { ok: 'Guardado en la nube', syncing: 'Guardando…', pending: 'Pendiente de subir (se sube al salir del juego)',
                    offline: 'Sin conexión: se subirá al volver', local: 'Guardado sólo en este navegador', guest: 'Invitado: no se guarda' };
+    const unlockBtn = `<button class="btn gold" id="set-unlock-tester" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-weight:700">✦ Mở khóa Full Pokémon (Tester)</button>`;
     if (G.DB.guest) {
       box.innerHTML = section('Cuenta', 'Estás jugando como <b>invitado</b>: tu progreso no se guarda al salir.')
-        + `<button class="btn gold" id="set-login">Crear cuenta o entrar</button>`;
+        + `<div class="row wrap" style="gap:8px;margin-top:12px"><button class="btn gold" id="set-login">Crear cuenta o entrar</button>`
+        + unlockBtn
+        + `</div>`;
       return;
     }
     const nick = G.Social.me ? G.Social.me.name : (G.DB.user || '');
@@ -168,6 +171,7 @@ G.SettingsUI = (() => {
       + `<div class="row wrap" style="gap:8px;margin-top:12px">
            <button class="btn" id="set-logout">Cerrar sesión</button>
            <button class="btn danger" id="set-delete">Borrar cuenta</button>
+           ${unlockBtn}
          </div><p class="note" id="set-msg"></p>`;
   }
 
@@ -179,6 +183,16 @@ G.SettingsUI = (() => {
     const full = $('set-full'); if (full) full.onclick = toggleFull;
     const lay = $('set-layout'); if (lay) lay.onclick = () => G.LayoutUI.open();
     box.querySelectorAll('[data-lang]').forEach(b => { b.onclick = () => { if (b.dataset.lang !== G.I18n.lang) G.I18n.set(b.dataset.lang); }; });
+    const unlockTester = $('set-unlock-tester');
+    if (unlockTester) {
+      unlockTester.onclick = () => {
+        if (G.DB && G.DB.unlockAll) {
+          G.DB.unlockAll();
+          if (G.UI && G.UI.toast) G.UI.toast('✦ Đã mở khóa 100% Pokémon, Chiêu, Skin & Vé!');
+          render();
+        }
+      };
+    }
     const lo = $('set-login'); if (lo) lo.onclick = () => { close(); leave(); };
     const out = $('set-logout'); if (out) out.onclick = () => { close(); leave(); };
     const del = $('set-delete');
