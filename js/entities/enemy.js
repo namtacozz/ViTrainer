@@ -69,7 +69,7 @@
       this.spd = def.spd * sc.spd;
       this.dmg = def.dmg * sc.dmg;
       if (boss) {
-        this.dmg = Math.round(this.dmg * 1.30); // Tăng 30% sát thương boss
+        this.dmg = Math.round(this.dmg * 1.15); // Cân bằng sát thương boss đầu game (+15%)
       }
       this.xp = def.xp;
       this.behavior = def.behavior;
@@ -243,10 +243,10 @@
     advanceBossPhase() {
       this.bossPhase++;
       const phase = this.bossPhase;
-      this.dmg = Math.round(this.dmg * 1.30); // Tăng 30% sát thương qua mỗi phase
-      this.spd = Math.round(this.spd * 1.15);
-      // Boss cường hóa mạnh mẽ qua từng phase (máu x1.5 / x1.75)
-      const hpMultiplier = phase === 2 ? 1.50 : 1.75;
+      this.dmg = Math.round(this.dmg * 1.20); // Tăng 20% sát thương qua mỗi phase
+      this.spd = Math.round(this.spd * 1.12);
+      // Boss cường hóa cân bằng qua từng phase (máu x1.40 / x1.60)
+      const hpMultiplier = phase === 2 ? 1.40 : 1.60;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
       this.hp = this.maxHp;
       this.invuln = 0.8;

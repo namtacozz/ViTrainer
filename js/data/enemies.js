@@ -42,15 +42,15 @@ G.Enemies = (() => {
 
   // Franjas de jefe: minuto en que salen, PV base y franja de BST (Nâng cấp sức mạnh chuẩn Raid Boss).
   const BOSS_SLOTS = [
-    { at: 180,  hp: 4200,    dmg: 24,  xp: 450,   bst: [490, 545] },
-    { at: 360,  hp: 16000,   dmg: 38,  xp: 900,   bst: [520, 580] },
-    { at: 540,  hp: 55000,   dmg: 56,  xp: 1600,  bst: [540, 600] },
-    { at: 720,  hp: 150000,  dmg: 80,  xp: 2600,  bst: [580, 700] },
-    { at: 900,  hp: 380000,  dmg: 110, xp: 4500,  bst: [600, 700] },
-    { at: 1080, hp: 850000,  dmg: 140, xp: 6000,  bst: [600, 720] },
-    { at: 1260, hp: 1800000, dmg: 180, xp: 8500,  bst: [620, 750] },
-    { at: 1440, hp: 3600000, dmg: 230, xp: 12000, bst: [650, 780] },
-    { at: 1620, hp: 7500000, dmg: 290, xp: 16000, bst: [680, 800] }
+    { at: 180,  hp: 2600,    dmg: 16,  xp: 450,   bst: [490, 545] },
+    { at: 360,  hp: 9500,    dmg: 26,  xp: 900,   bst: [520, 580] },
+    { at: 540,  hp: 36000,   dmg: 42,  xp: 1600,  bst: [540, 600] },
+    { at: 720,  hp: 120000,  dmg: 65,  xp: 2600,  bst: [580, 700] },
+    { at: 900,  hp: 320000,  dmg: 95,  xp: 4500,  bst: [600, 700] },
+    { at: 1080, hp: 750000,  dmg: 130, xp: 6000,  bst: [600, 720] },
+    { at: 1260, hp: 1600000, dmg: 165, xp: 8500,  bst: [620, 750] },
+    { at: 1440, hp: 3200000, dmg: 210, xp: 12000, bst: [650, 780] },
+    { at: 1620, hp: 6500000, dmg: 260, xp: 16000, bst: [680, 800] }
   ];
 
   // Stats base aproximados a partir de los de juego (inverso de fetch_pokedex).
@@ -183,26 +183,26 @@ G.Enemies = (() => {
 
   // (El "tiempo extra" del minuto 60 se quitó al llegar la Sentencia de Arceus,
   //  que acaba todas las partidas en el minuto 30: ver systems/judgment.js.)
-  // Tăng tốc độ nâng cấp sức mạnh, sức chịu đựng của quái & boss theo hàm số mũ tới phút 30 (1800s)
+  // Tăng tiến sức mạnh quái & boss theo hàm số mũ tới phút 30 (1800s) - đã giảm ~20% tốc độ tăng tiến & làm dịu đầu game
   function scale(t) {
     const p = t / 1800;
     return {
-      hp: 1 + (t / 80) * Math.exp(1.65 * p),
-      dmg: 1 + (t / 300) * Math.exp(1.45 * p),
-      spd: 1 + Math.min(0.65, (t / 1800) * 0.65)
+      hp: 1 + (t / 100) * Math.exp(1.35 * p),
+      dmg: 1 + (t / 380) * Math.exp(1.18 * p),
+      spd: 1 + Math.min(0.50, (t / 1800) * 0.50)
     };
   }
 
   /**
    * Thang điểm nâng cấp Boss theo hàm số mũ tới phút 30 (1800s):
-   * Tăng mạnh sức chống chịu và sát thương chuẩn Raid Boss (> 5x tới 10x ở cuối trận).
+   * Giảm ~20% tốc độ tăng tiến và nerf dịu đầu game.
    */
   function bossScale(t) {
     const p = t / 1800;
     return {
-      hp: 1 + (t / 320) * Math.exp(1.40 * p),
-      dmg: 1 + (t / 280) * Math.exp(1.35 * p),
-      spd: 1 + Math.min(0.40, (t / 1800) * 0.40)
+      hp: 1 + (t / 420) * Math.exp(1.15 * p),
+      dmg: 1 + (t / 360) * Math.exp(1.10 * p),
+      spd: 1 + Math.min(0.35, (t / 1800) * 0.35)
     };
   }
 

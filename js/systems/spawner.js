@@ -18,10 +18,11 @@ G.Spawner = (() => {
   const currentCap = () => (G.Coop && G.Coop.active && players.length > 1) ? Math.min(136, Math.round(BASE_CAP * (players.length <= 4 ? (1 + 0.16 * (players.length - 1)) : (1.48 * Math.pow(1.16, players.length - 4))))) : BASE_CAP;
   // Menos Pokémon pero más fuertes (la pantalla no se satura): salen ~24% de
   // los de antes, cada uno con más vida, daño y experiencia.
-  const DENSITY = 0.24, DMG_K = 2.2, XP_K = 5.6;
-  // La resistencia extra crece con la run: al principio ×3,3 y hasta ×5
-  // hacia el minuto 6, cuando ya tienes ataques para tumbarlos.
-  const hpK = t => 3.3 + Math.min(1.7, t / 210);
+  const DENSITY = 0.24, XP_K = 5.6;
+  // Làm dịu máu quái đầu game (bắt đầu từ x2.2 thay vì x3.3, tăng dần lên x5.0 ở phút 5)
+  const hpK = t => 2.2 + Math.min(2.8, (t / 300) * 2.8);
+  // Làm dịu sát thương quái đầu game (bắt đầu từ x1.5 thay vì x2.2, tăng dần lên x2.2 ở phút 5)
+  const dmgK = t => 1.5 + Math.min(0.7, (t / 300) * 0.7);
   const SHINY_RATE = 1 / 4096;
   let acc = 0, bossIdx = 0, surgeT = 32, announce = null, announceT = 0, preloadT = 0;
   let forceShiny = 0;           // para pruebas: los N próximos salen shiny
@@ -123,7 +124,7 @@ G.Spawner = (() => {
     if (!pt) return null;
     const shiny = rollShiny(def.dex);
     const e = new G.Enemy(def, pt[0], pt[1], scaled(G.Enemies.scale(t), G.Coop.scaleHp(players.length) * hpK(t)));
-    e.dmg *= DMG_K; e.xp = Math.round(e.xp * XP_K);
+    e.dmg *= dmgK(t); e.xp = Math.round(e.xp * XP_K);
     if (G.EnemyMgr.count >= currentCap() * ELITE_FROM) { e.maxHp = e.hp = Math.round(e.maxHp * 1.6); e.dmg *= 1.25; e.xp = Math.round(e.xp * 1.6); }
     if (shiny) e.makeShiny();
     if (G.Events.golden) e.makeGolden();
@@ -239,7 +240,7 @@ G.Spawner = (() => {
       const x = boss.x + Math.cos(angle) * dist;
       const y = boss.y + Math.sin(angle) * dist;
       const m = new G.Enemy(def, x, y, scaled(G.Enemies.scale(t), G.Coop.scaleHp(players.length) * hpK(t) * 1.8));
-      m.dmg *= DMG_K * 1.2;
+      m.dmg *= dmgK(t) * 1.2;
       m.xp = Math.round(m.xp * XP_K * 1.5);
       m.makeGolden();
       G.EnemyMgr.add(m);
