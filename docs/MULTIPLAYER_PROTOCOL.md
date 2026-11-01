@@ -88,6 +88,20 @@ for a particular match. Savings = `1 - deltaSentBytes / deltaJsonBytes` when the
 denominator is nonzero. The normal production build still hides `G`; no debug
 endpoint or additional telemetry is introduced.
 
+## 8-Player Scaling & Continuous Form/Phase Sync (Update 2026-10-31)
+
+1. **Max Room Capacity**:
+   - Expanded from 4 to 8 players (`G.Social.MAX_PLAYERS = 8`).
+2. **Adaptive Interest Management**:
+   - In large rooms (>4 players), enemy broadcast radius is tuned to 720 px, and synchronized mobs are capped at 50 entities per packet to prevent host WebRTC data channel saturation.
+3. **Continuous Form Sync**:
+   - `myState()` continuously includes `dex` and `isMega`, guaranteeing that teammate puppets instantly update visual sprites even if discrete evolution messages experienced network delay.
+4. **Boss Phase Synchronization**:
+   - Host broadcasts `'bp'` packets (`broadcastBossPhase`) so all peers update boss health bars, phases, and Mega/Primal ascensions synchronously.
+5. **Dynamic Revive Scaling & Co-op Combos**:
+   - Revive channel time scales down to 1.0s at 8 players.
+   - Elemental attacks landing within 1.2s on the same mob trigger a +35% cooperative burst.
+
 ## Validation
 
 `node --test tests/net.test.cjs` covers lossless frames and numeric extremes,

@@ -10,9 +10,9 @@ pokesurvivor/
 ├── assets/                  # Tài nguyên đồ họa, âm thanh, sprites
 │   ├── audio/               # Nhạc nền (BGM) & Hiệu ứng âm thanh (SFX)
 │   ├── icons/               # Biểu tượng UI, bóng quay Pokéball, glyphs
-│   └── pokemon/             # Thư mục sprite sheet của hơn 1021 Pokémon (Idle, Walk, Attack)
+│   └── pokemon/             # Thư mục sprite sheet của hơn 1.021 Pokémon (Idle, Walk, Attack)
 ├── css/                     # Toàn bộ stylesheet giao diện
-│   └── style.css            # CSS cốt lõi, responsive mobile & desktop
+│   └── style.css            # CSS cốt lõi, responsive mobile & desktop, khóa cứng overflow Pokédex
 ├── dev.html                 # FILE NGUỒN GIAO DIỆN CHÍNH (Chỉnh sửa ở đây, không sửa index.html)
 ├── index.html               # File phân phối chính (Tự động sinh ra bởi tools/build.js)
 ├── js/                      # Toàn bộ mã nguồn JavaScript ứng dụng
@@ -21,7 +21,7 @@ pokesurvivor/
 │   │   ├── camera.js        # Hệ thống Camera theo dõi nhân vật, deadzone, screen shake
 │   │   ├── db.js            # Lưu trữ LocalStorage, dữ liệu Save, đồng bộ đám mây
 │   │   ├── i18n.js          # Hệ thống đa ngôn ngữ (es, en, vi, fr, de, ja, zh...)
-│   │   ├── input.js         # Bàn phím, chuột & Gamepad API handler
+│   │   ├── input.js         # Bàn phím, chuột (hỗ trợ di chuột theo con trỏ) & Gamepad API
 │   │   ├── sprites.js       # Tải và render sprite sheet canvas hiệu năng cao
 │   │   ├── touch.js         # Bộ xử lý điều khiển cảm ứng Virtual Joystick
 │   │   └── updater.js       # Bộ tự động kiểm tra phiên bản mới version.json
@@ -33,39 +33,41 @@ pokesurvivor/
 │   │   ├── gacha.js         # Tỷ lệ gacha, danh sách banner theo gen, hệ thống pity
 │   │   ├── items.js         # Vật phẩm trang bị (Held Items), TMs, Berries, Orbs
 │   │   ├── megas.js         # 78 dạng Mega/Primal/Battle forms, buff stats & abilities
-│   │   ├── missions.js      # Danh sách nhiệm vụ ngày (Daily) & tuần (Weekly)
-│   │   ├── moves.js         # 116 chiêu thức, tiến hóa chiêu +/++/+++, kind badges
-│   │   ├── pokedex.js       # 1021 Pokémon, HP, PA, SA, DF, SD, SPD, Gen, Rarity
+│   │   ├── missions.js      # Danh sách nhiệm vụ ngày (8 Daily) & tuần (4 Weekly)
+│   │   ├── moves.js         # 126 chiêu thức chuẩn canon English, kind badges
+│   │   ├── pokedex.js       # 1.021 Pokémon, HP, PA, SA, DF, SD, SPD, Gen, Rarity
 │   │   └── upgrades.js      # Danh mục nâng cấp vĩnh viễn (Talents)
 │   ├── entities/            # Các thực thể game
-│   │   ├── enemy.js         # Lớp Enemy, logic di chuyển, AI, Multi-phase Boss
+│   │   ├── enemy.js         # Lớp Enemy, EnemyMgr (all, add, remove), Multi-phase Boss
 │   │   ├── pickup.js        # Hạt kinh nghiệm (EXP orbs), đồng xu (Coins), vật phẩm rơi
-│   │   └── player.js        # Lớp Player, trạng thái, chỉ số, tiến hóa thực thể
-│   ├── net/                 # Mạng & Chơi nhiều người (Multiplayer)
-│   │   ├── coop.js          # Logic hợp tác trong trận, đồng bộ vị trí, đòn đánh
+│   │   └── player.js        # Lớp Player, trạng thái, chỉ số, checkInRunEvo, evolveTo
+│   ├── net/                 # Mạng & Chơi nhiều người (Multiplayer Co-op lên tới 8 người)
+│   │   ├── coop.js          # Logic hợp tác 8 người, myState kèm dex & isMega, broadcastBossPhase
 │   │   ├── net.js           # Kết nối WebRTC P2P direct qua Google STUN
 │   │   ├── net-codec.js     # Bộ mã hóa/giải mã nhị phân nén băng thông (>30% savings)
-│   │   └── social.js        # Danh sách phòng, lobby, bạn bè, chat
+│   │   └── social.js        # Danh sách phòng, lobby, bạn bè, quản lý kết nối lại (Rejoin)
 │   ├── systems/             # Các hệ thống logic gameplay
-│   │   ├── combat.js        # Engine tính toán sát thương, va chạm hitboxes, loại đòn đánh
+│   │   ├── combat.js        # Engine tính toán sát thương, va chạm hitboxes, co-op combos
 │   │   ├── gacha.js         # Logic quay số, bảo hiểm, trừ vé/vàng
+│   │   ├── inrun-events.js  # 3 Sự kiện tuần tự (Zone Capture, Scavenger, Pursuit) & la bàn HUD
 │   │   ├── judgment.js      # Sự kiện Phán Quyết của Arceus ở phút 30
-│   │   ├── levelup.js       # Xử lý lên cấp, lựa chọn chiêu, điều kiện tiến hóa +/++/+++
+│   │   ├── levelup.js       # Xử lý lên cấp, lựa chọn chiêu, cảnh báo tương thích fitNote
 │   │   ├── mons.js          # Tính toán chỉ số thực tế sau khi cộng Buff/Natures
 │   │   ├── progress.js      # Đón nhận sự kiện Progress.event, tính tiến trình nhiệm vụ
 │   │   ├── rift.js          # Quản lý 18 Đấu trường Vết Nứt (Rifts) và Boss Huyền thoại
-│   │   ├── spawner.js       # Bộ sinh quái vật theo thời gian và làn sóng
+│   │   ├── spawner.js       # Spawn Director: nhịp thở 60s, hành lang thoát hiểm >= 60°
 │   │   └── weather.js       # Hệ thống thời tiết ngẫu nhiên (Mưa, Nắng gắt, Bão tuyết...)
 │   ├── ui/                  # Giao diện người dùng
 │   │   ├── gacha-ui.js      # Màn hình quay thưởng gacha, mở thẻ, hiệu ứng ngôi sao
-│   │   ├── hud.js           # Giao diện trong trận: Thanh máu, thanh exp, 6 slot chiêu thức
+│   │   ├── hud.js           # Giao diện HUD: Timeline vô hạn, phân tầng Y chuẩn, la bàn
 │   │   ├── icons.js         # Hệ thống vẽ biểu tượng vector / canvas, badges, Pokéball
-│   │   ├── lobby-ui.js      # Phòng chờ hợp tác co-op
+│   │   ├── lobby-ui.js      # Phòng chờ hợp tác co-op 8 người
 │   │   ├── menu.js          # Menu chính, Pokédex Grid, xem trước cây tiến hóa & biến thể
 │   │   └── shop-ui.js       # Cửa hàng Kecleon Shop & Upgrades
-│   └── game.js              # Vòng lặp chính Game Loop, Quản lý State (Menu/Run/Pause/Over)
+│   └── game.js              # Vòng lặp chính Game Loop, Quản lý State, offerEvo, syncTeam
 ├── tools/                   # Các script công cụ phục vụ tự động hóa và Build
 │   ├── build.js             # Biên dịch gộp mã nguồn, nén app.min.js & sinh version.json
+│   ├── build_langs.js       # Đóng gói từ điển đa ngôn ngữ sang js/lang/<lang>.js
 │   ├── export_data.js       # Xuất dữ liệu Pokédex và chỉ số ra JSON phục vụ SEO
 │   └── make_seo_pages.py    # Sinh trang tĩnh Pokédex, Moves, Types đa ngôn ngữ
 ├── tests/                   # Bộ kiểm thử tự động (Unit & Integration tests)
@@ -86,136 +88,149 @@ Trò chơi vận hành dựa trên kiến trúc **Fixed Timestep Update & Decoup
 2. **Trạng Thái Trò Chơi (Game States)**:
    - `ui`: Màn hình Menu chính, Pokédex, Gacha, Upgrades, Cài đặt.
    - `run`: Trong ván đấu sinh tồn thực tế.
+   - `choice`: Trạng thái tạm dừng chiến trường cục bộ hoặc tập thể để chọn Thẻ lên cấp, chọn Dạng Tiến hóa, hoặc chọn Nhặt Trang bị.
    - `pause`: Tạm dừng ván đấu (mở bảng trang bị, điều chỉnh âm lượng).
    - `gameover`: Kết thúc ván đấu (gục ngã hoặc hoàn thành Sentencia), tổng kết EXP, vàng và chiến tích.
 3. **Vòng Lặp Ván Đấu (`G.Game.step`)**:
    - Tần số cập nhật logic cố định (Fixed Update): 60 lần/giây (`dt = 1/60`).
-   - Xử lý đầu vào: Đọc tọa độ từ bàn phím, joystick hoặc gamepad $\rightarrow$ Cập nhật vector vận tốc của `Player`.
+   - Xử lý đầu vào: Đọc tọa độ từ bàn phím, di chuột theo con trỏ chuột, joystick hoặc gamepad $\rightarrow$ Cập nhật vector vận tốc của `Player`.
    - Cập nhật kẻ địch: `EnemyMgr.update(dt)` duyệt qua toàn bộ danh sách quái vật, tính toán steering behavior đuổi theo người chơi, phát hiện và cập nhật trạng thái Boss Đa Phase.
+   - Cập nhật sự kiện tuần tự: `InRunEvents.update(dt)` quản lý tiến độ vòng tròn chiếm cờ, đếm hạt pha lê và định vị quái truy sát.
    - Động cơ đòn đánh & va chạm: `Combat.update(dt)` thực hiện phát đòn từ 6 slot chiêu thức, kiểm tra va chạm hitboxes dạng hình tròn / tia / quét góc, áp dụng bảng tương khắc nguyên tố `G.U.typeMod()`.
    - Cập nhật nhặt đồ: `Pickups.update(dt)` hút các hạt EXP và vàng về phía người chơi dựa trên bán kính nhặt đồ (Pickup Radius).
    - Kiểm tra Vết Nứt & Phán Quyết: `Rift.update(dt)` và `Judgment.update(dt)`.
-   - Render: Vẽ nền bản đồ (World), vẽ kẻ địch, vẽ hạt hiệu ứng (FX), vẽ người chơi và cuối cùng là phủ giao diện HUD lên trên cùng.
+   - Render: Vẽ nền bản đồ (World), vẽ kẻ địch, vẽ hạt hiệu ứng (FX), vẽ các vùng sự kiện `InRunEvents.drawWorld()`, vẽ người chơi và cuối cùng là phủ giao diện HUD lên trên cùng.
 
 ---
 
-## 3. CÁC HỆ THỐNG DỮ LIỆU CỐT LÕI (STATIC DATA ARCHITECTURE)
+## 3. CƠ CHẾ TIẾN HÓA GIỮA TRẬN & ĐỒNG BỘ MẠNG (IN-RUN EVOLUTION & SYNC)
 
-### 3.1. Dữ liệu Pokémon (`js/data/pokedex.js`)
-Mỗi Pokémon được lưu trữ dưới dạng một bản ghi tinh gọn:
-```javascript
-{
-  "dex": 6,
-  "name": "Charizard",
-  "types": ["fire", "flying"],
-  "hp": 115, "spd": 110,
-  "atk": 1.25, "pa": 1.05, "sa": 1.35,
-  "df": 78, "sd": 85,
-  "rarity": 4, "bst": 534,
-  "starter": false, "gen": 1
-}
-```
-- `atk`: Hệ số tấn công tổng quát.
-- `pa` & `sa`: Trọng số tấn công Vật lý và Đặc biệt.
-- `rarity`: 1 đến 5 (tương ứng Común đến Legendaria).
+### 3.1. Kích Hoạt Mốc Cấp Độ (Level Milestones)
+* **Quy tắc mốc tiến hóa**:
+  - Loài 3 bậc (ví dụ Froakie $\rightarrow$ Frogadier $\rightarrow$ Greninja): Cấp 15 đạt Bậc 2; Cấp 30 đạt Bậc 3.
+  - Loài 2 bậc: Cấp 15 đạt Bậc 2; Cấp 30 kích hoạt Apex (+) hoặc Mega.
+  - Loài đơn bậc / Huyền thoại: Cấp 15 kích hoạt Thức Tỉnh I (Despertar I); Cấp 30 kích hoạt Thức Tỉnh II / Apex (+) hoặc Mega/Primal.
+  - Dạng Mega / Primal / Battle Forms: Kích hoạt tại cấp 30 cho toàn bộ các loài tương thích.
+* **Độc lập hoàn toàn với Gacha Meta Tier**: Tiến hóa giữa trận là cơ chế gameplay cốt lõi của roguelite run; không phụ thuộc vào cấp độ sở hữu trong gacha (`tierUnlocked`). Thanh tiến độ hiển thị `✦ ` thay vì ổ khóa `🔒`.
 
-### 3.2. Cây Tiến Hóa (`js/data/evolutions.js`)
-Hệ thống sử dụng bảng tra cứu 2 chiều:
-- `G.EVO_CHAINS[baseDex]`: Lưu cấu trúc chuỗi hoàn chỉnh (`type`: `'single'`, `'2stage'`, `'3stage'`, `'branch'`).
-- `G.EVO_BY_DEX[dex]`: Ánh xạ tức thì bất kỳ Pokémon nào về `baseDex`, cấp độ `stage` (1, 2, 3), và các nhánh tiếp theo (`next`, `prev`).
+### 3.2. Cơ Chế Gọi & Hàng Đợi Modal (`pendingEvoModal`)
+* Khi nhân vật đạt đủ cấp độ, hàm `promptEvo(options)` gửi các lựa chọn qua `G.Game.offerEvo()`.
+* Nếu người chơi đang trong trạng thái gục ngã (`pl.dead`), hoặc đang mở các modal khác (`scr-levelup`, `scr-item`, `scr-bond`, `scr-pause`), modal tiến hóa sẽ được lưu vào hàng đợi an toàn:
+  ```javascript
+  pl.pendingEvoModal = { options, onPick };
+  ```
+* Ngay khi đóng modal hiện tại hoặc được đồng đội hồi sinh, `js/game.js` tự động kích hoạt lại modal tiến hóa đang chờ.
 
-### 3.3. Dạng Tối Thượng (`js/data/megas.js`)
-78 dạng Mega/Primal/Battle forms được lập chỉ mục qua `G.MEGAS` và `G.MEGAS_BY_BASE`:
-- Cho phép một Pokémon cơ sở có thể có nhiều nhánh Mega (ví dụ Charizard có cả Mega X và Mega Y; Mewtwo có cả Mega X và Mega Y).
-- Lưu trữ chỉ số đột phá, hệ nguyên tố mới và kỹ năng đặc tính (Ability).
+### 3.3. Đồng Bộ Khách Co-op (Co-op Client Hook)
+* Trong phòng co-op, host nhận EXP và đồng bộ sang máy client qua `syncTeam(t)`.
+* Để đảm bảo máy client không bị kẹt ở dạng ban đầu:
+  ```javascript
+  function syncTeam(t) {
+    if (!t || !pl) return;
+    const oldLevel = pl.level;
+    pl.level = t.level;
+    pl.xp = t.xp;
+    pl.xpNext = t.xpNext;
+    if (t.level > oldLevel && pl.checkInRunEvo) pl.checkInRunEvo();
+  }
+  ```
 
----
-
-## 4. HỆ THỐNG CHIẾN ĐẤU & ĐÒN ĐÁNH (COMBAT ENGINE)
-
-### 4.1. Công thức Tính Sát Thương
-```
-Sát thương Thực tế = Sát thương Chiêu thức × Hệ số Tấn công (PA hoặc SA) × Tương khắc Hệ (Type Mod) × (1 + Thưởng Đơn hệ) × Buff Kỹ năng
-```
-- **Type Mod (`G.U.typeMod(moveType, targetTypes)`)**:
-  + Siêu hiệu quả (Super Effective): `x1.40` (được cân bằng mềm hơn so với game gốc x2.0 để tránh one-shot).
-  + Không hiệu quả (Not Very Effective): `x0.75`.
-  + Miễn nhiễm (Immune): `x0.50` (thay vì x0 để mọi chiêu thức đều có giá trị đóng góp).
-- **Thưởng Đơn hệ (Monotype Bonus)**: Nếu Pokémon chỉ có 1 hệ và dùng chiêu cùng hệ $\rightarrow$ Thưởng thêm `+20%` sát thương.
-
-### 4.2. Quản lý Đòn đánh & Bậc Tiến hóa (+ / ++ / +++)
-- `js/data/moves.js` khai báo cấu trúc mỗi chiêu:
-  + `pool`: Danh sách các Pokémon có thể học chiêu đó theo lore chuẩn Pokédex.
-  + `kind`: `'beam'`, `'melee'`, `'buff'`, `'projectile'`, `'circle'`, `'stun'`.
-  + `itemReq`: Vật phẩm trang bị cần thiết để tiến hóa lên bậc +.
-  + `questReq`: Nhiệm vụ trong trận để đột phá lên bậc ++ (ví dụ gây 50.000 sát thương bằng chiêu đó).
-- Khi thăng cấp, `js/systems/levelup.js` quét toàn bộ kho đồ của người chơi, lọc ra các lựa chọn hợp lệ:
-  + Nâng cấp cấp độ thông thường (Lv 1 $\rightarrow$ 8).
-  + Tiến hóa lên bậc + nếu có Held Item tương thích.
-  + Mở khóa bậc ++ nếu nhiệm vụ đã hoàn thành.
-  + Mở khóa bậc +++ nếu bản thân đã là ++ và có ít nhất 3 chiêu thức khác đã đạt bậc +.
+### 3.4. Đồng Bộ Ngoại Hình Đồng Đội (Puppet Form Sync)
+* Trạng thái định kỳ `myState()` trong `js/net/coop.js` liên tục gửi kèm `dex` và `isMega`:
+  ```javascript
+  myState() {
+    return { ..., dex: pl.dex, isMega: pl.isMega ? 1 : 0 };
+  }
+  ```
+* Khi nhận packet của đồng đội, nếu `puppet.dex !== st.dex` hoặc trạng thái Mega thay đổi, hàm `applyMateEvo(puppet, st.dex, st.isMega)` lập tức cập nhật lại sprite sheet, animation và bán kính va chạm của puppet.
 
 ---
 
-## 5. HỆ THỐNG KẺ ĐỊCH & BOSS ĐA PHASE (BOSS ENGINE)
+## 4. HỆ THỐNG KẺ ĐỊCH, BOSS ĐA PHASE & SPAWNER DIRECTOR
 
-1. **Scale Máu Boss (`js/data/enemies.js` & `js/systems/rift.js`)**:
-   - Thang máu cơ bản của Boss được tính theo thời gian ván đấu:
-     `HP = Base_HP × (1 + minute × 1.25) × Boss_Scale_Multiplier`.
-   - Tránh hiện tượng người chơi ở cấp độ cao bắn hạ Boss trong nháy mắt.
-2. **Chuyển Phase Đa Tầng (`js/entities/enemy.js: advanceBossPhase`)**:
-   - Khi máu của Boss chạm ngưỡng 0:
-     + Nếu `currentPhase < maxPhase`:
-       * Kích hoạt `advanceBossPhase()`.
-       * Xóa sạch trạng thái khống chế (Stun/Freeze).
-       * Hồi phục 100% thanh máu.
-       * Tăng `atkMult += 0.35` và `spdMult += 0.15`.
-       * Nếu bước vào Phase 3: Biến đổi hình thể sang dạng Mega/Primal tương ứng (thay đổi sprite, kích thước và âm thanh gầm thét).
-     + Nếu `currentPhase === maxPhase`:
-       * Boss chính thức bị tiêu diệt.
-       * Rơi rương báu, kích hoạt sự kiện `Progress.event('kill', { boss: true, bossPhase: 3 })`.
+### 4.1. Quản Lý Kẻ Địch An Toàn (`EnemyMgr`)
+* Để ngăn chặn hoàn toàn lỗi sập game (`TypeError: EnemyMgr.remove is not a function`), `EnemyMgr` tại `js/entities/enemy.js` cung cấp API chuẩn:
+  - `EnemyMgr.all()`: Trả về bản sao mảng danh sách quái vật hiện hữu.
+  - `EnemyMgr.enemies`: Getter truy cập trực tiếp mảng quái.
+  - `EnemyMgr.add(enemy)`: Thêm quái vật mới vào danh sách.
+  - `EnemyMgr.remove(enemy, died = false)`: Loại bỏ quái vật an toàn khỏi danh sách quản lý.
 
----
+### 4.2. Vòng Đời Bất Tử & Tenacity của Boss
+* **Trừ dần thời gian bất tử**: Trong `Enemy.update(dt)`, luôn có:
+  ```javascript
+  if (this.invuln > 0) this.invuln -= dt;
+  ```
+* **Chuyển Phase Đa Tầng (`advanceBossPhase`)**:
+  - Hồi sinh 100% HP, tăng công (`+35%`), tăng tốc (`+15%`), Phase 3 thức tỉnh Mega/Primal.
+  - Thời gian bất tử khi chuyển phase được giới hạn ở **0.8 giây** để tránh trạng thái bất tử kéo dài gây ức chế.
+  - Thời gian kháng hiệu ứng khống chế (CC Immune Tenacity) tối đa **2.0 giây**.
+  - Host lập tức phát sóng `broadcastBossPhase(bossId, phase, maxHp, dex, name)` qua mạng để toàn bộ máy khách đồng bộ thanh máu và danh xưng `[FASE X]`.
 
-## 6. LƯU TRỮ DỮ LIỆU & BẢO TOÀN TRẠNG THÁI (STORAGE ARCHITECTURE)
-
-- Quản lý tập trung tại `js/core/db.js`.
-- Cấu trúc đối tượng lưu trữ `G.DB.save`:
-  + `owned`: Danh sách các Pokémon đã sở hữu và số lượng bản sao.
-  + `partner`: Dex của Pokémon đang được chọn làm bạn đồng hành chính.
-  + `partnerShiny`: Trạng thái hiển thị Shiny của bạn đồng hành.
-  + `upgrades`: Cấp độ nâng cấp vĩnh viễn (Talents) của từng Pokémon.
-  + `missions`: Trạng thái nhiệm vụ ngày và tuần, tiến trình, đã nhận thưởng hay chưa.
-  + `ach`: Các thành tựu đã mở khóa.
-  + `stats`: Thống kê tài khoản trọn đời (tổng số quái diệt, số boss hạ, thời gian trụ lâu nhất...).
-- **Cơ chế Chống Xung Đột & Mất Dữ liệu**:
-  + Lưu trữ cục bộ thông qua `localStorage` với khóa dự phòng.
-  + Tự động kiểm tra phiên bản lưu (Schema Migration) khi nâng cấp game mà không làm hỏng dữ liệu người chơi cũ.
+### 4.3. Spawner Director Thông Minh
+* `js/systems/spawner.js` quản lý sinh quái theo ngân sách tín dụng (Credits per second).
+* Chu kỳ nhịp thở 60 giây: 30 giây tăng dần $\rightarrow$ 15 giây cao trào đỉnh điểm $\rightarrow$ 15 giây nghỉ ngơi thở dốc.
+* Luôn đảm bảo góc hành lang thoát hiểm $\ge 60^\circ$ không bị quái bủa vây kín, có gói quái truy sát chống người chơi chạy vòng tròn kite vô tận.
 
 ---
 
-## 7. GIAO THỨC MẠNG & CHƠI HỢP TÁC (MULTIPLAYER NETWORKING)
+## 5. HỆ THỐNG SỰ KIỆN TUẦN TỰ TRONG TRẬN (`js/systems/inrun-events.js`)
 
-- **Giao thức**: WebRTC DataChannels truyền dữ liệu trực tiếp P2P giữa các trình duyệt.
-- **Không Cần Máy Chủ Trung Gian Đắt Đỏ**: Chỉ sử dụng STUN server miễn phí của Google (`stun:stun.l.google.com:19302`) để trao đổi địa chỉ IP/Port ban đầu.
-- **Bộ Nén Nhị Phân (`js/net/net-codec.js`)**:
-  + Thay vì truyền JSON nguyên bản tốn băng thông, hệ thống mã hóa các gói tin tọa độ, đòn đánh thành chuỗi nhị phân tối giản, giúp giảm hơn 30% dung lượng gói tin và giữ kết nối luôn mượt mà ở tốc độ 60fps.
+Quản lý 3 sự kiện luân phiên ngẫu nhiên trong trận đấu:
+1. **Chiếm Cờ (Zone Capture)**:
+   - Vòng tròn chiến thuật xuất hiện tại vùng đất trống.
+   - Vạch quét bán kính chạy theo chiều kim đồng hồ 360°. Càng nhiều người chơi đứng trong vòng, tiến độ quét càng nhanh.
+   - Quái vật spawn dồn dập xung quanh và có xu hướng lao vào người chiếm cờ.
+2. **Thu Thập Đá Pha Lê (Scavenger Hunt)**:
+   - Các viên pha lê giá trị cao rơi rải rác xung quanh người chơi.
+   - Mũi tên la bàn ở mép màn hình HUD hiển thị khoảng cách theo mét hướng thẳng tới từng viên pha lê, kèm cột sáng thẳng đứng lên trời dễ nhận diện từ xa.
+3. **Chạy Trốn Tử Thần (Boss Pursuit)**:
+   - Boss Pokémon Alpha bất tử cực mạnh spawn ở cự ly an toàn.
+   - Người chơi phải né tránh các đòn đánh telegraphed hazards đỏ rực trong thời gian quy định cho đến khi boss rút lui.
+4. **Quy Tắc Cách Ly Sự Kiện**:
+   - Khi đang giao chiến trong Đấu trường Vết Nứt (`G.Rift.inArena`) hoặc Trận chiến Phán Quyết (`G.Judgment.active`), toàn bộ sự kiện tuần tự bị tạm hoãn, ngăn chặn việc spawn đè lên nhau gây hỗn loạn.
 
 ---
 
-## 8. QUY TRÌNH PHÁT TRIỂN & BUILD (RELEASE PIPELINE)
+## 6. GIAO DIỆN HUD & BỘ SƯU TẬP POKÉDEX
 
-Tuân thủ nghiêm ngặt theo chỉ thị `AGENTS.md`:
-1. **Quy tắc Vàng**: Tuyệt đối **không chỉnh sửa trực tiếp `index.html`** (file này được tự động sinh). Mọi chỉnh sửa giao diện và cấu trúc thẻ script phải thực hiện trên **`dev.html`**.
-2. **Lệnh Biên Dịch & Triển Khai**:
+### 6.1. Phân Tầng Tọa Độ Y Trên Đỉnh Màn Hình (HUD Top Hierarchy)
+Để ngăn chặn hoàn toàn tình trạng đè chữ giữa đồng hồ, thanh khu vực, thanh timeline vô hạn và thanh máu boss:
+- **Y = 26**: Đồng hồ thời gian trận đấu (`font: 20px Pixelify`).
+- **Y = 40**: Tên khu vực, quái đã diệt, tiền xu (`font: 11px`).
+- **Y = 48**: Thanh tiến trình Timeline vô hạn (`barH = 14`, vẽ biểu tượng vector cho Boss, Rift, Event).
+- **Y = 68**: Thanh máu Boss đa phase (`bW = 300, bH = 14`).
+- **Y = 71** (khi không có boss) / **Y = 88** (khi có boss): Dòng trạng thái nhiệm vụ sự kiện.
+
+### 6.2. Bộ Sưu Tập Pokédex Chống Lỗi Cuộn
+* Container modal `#scr-dex .box` được cố định `overflow: hidden !important;` trong `css/style.css`.
+* Cơ chế cuộn được tách rời hoàn toàn: Danh sách lưới bên trái (`#dex-grid`) có thanh cuộn riêng, bảng chi tiết bên phải (`#dex-detail`) có thanh cuộn riêng.
+* Khi mở `openDex()` hoặc chọn Pokémon mới trong `showDetail()`, `box.scrollTop` được reset về 0, loại bỏ hoàn toàn lỗi khoảng trắng xanh rỗng.
+
+---
+
+## 7. MẠNG CO-OP 8 NGƯỜI & BỘ NÉN NHỊ PHÂN
+
+* **Hỗ trợ tối đa 8 người chơi** (`MAX_PLAYERS = 8`).
+* **Quản lý Tầm nhìn Thích ứng (Adaptive Interest Management)**:
+  - Khi phòng có nhiều người chơi, bán kính truyền gói tin quái giới hạn ở 720px, số lượng quái đồng bộ tối đa 50 con/packet, triệt tiêu nghẽn băng thông WebRTC của host.
+* **Hồi sinh siêu tốc**: Thời gian hồi sinh đồng đội gục ngã giảm dần theo số lượng người chơi (xuống còn 1.0 giây khi đủ 8 người). Nhiều đồng đội cùng đứng cạnh sẽ tăng tốc độ cứu.
+* **Co-op Combos**: Khi 2 người chơi cùng đánh trúng một mục tiêu trong vòng 1.2 giây, kích hoạt vụ nổ sát thương hợp tác `+35%` sát thương kèm hiệu ứng ánh sáng rực rỡ.
+
+---
+
+## 8. QUY TRÌNH BUILD & DEPLOY BẮT BUỘC (BUILD PIPELINE)
+
+Tuân thủ nghiêm ngặt theo `AGENTS.md`:
+1. Chỉnh sửa trên `dev.html`, **tuyệt đối không sửa `index.html`**.
+2. Quy chuẩn tên chiêu thức: **Luôn giữ nguyên tiếng Anh chuẩn** (không dịch).
+3. Biên dịch đầy đủ bằng chuỗi lệnh:
    ```powershell
+   node tools/build_langs.js
    node tools/build.js && node tools/export_data.js && python tools/make_seo_pages.py
    ```
-   - `tools/build.js`: Gộp các file JavaScript, tối ưu hóa thành `js/app.min.js`, sinh `index.html` mới và tạo vân tay phiên bản trong `version.json`.
-   - `tools/export_data.js`: Trích xuất dữ liệu Pokémon và Moves phục vụ cho công cụ tạo trang SEO.
-   - `python tools/make_seo_pages.py`: Tạo các trang tĩnh hỗ trợ tìm kiếm Google bằng nhiều thứ tiếng.
-3. **Cơ chế Cập nhật Tự động (`js/core/updater.js`)**:
-   - Trình duyệt người chơi sẽ thăm dò `version.json` mỗi 5 phút một lần.
-   - Khi có phiên bản mới phát hành:
-     + Nếu người chơi đang ở ngoài trận (Menu, Gacha, Upgrades): Thông báo 5 giây và tự động tải lại phiên bản mới nhất.
-     + Nếu người chơi đang trong trận chiến: Không làm gián đoạn; chờ ván đấu kết thúc mới thực hiện cập nhật.
+4. Chạy kiểm thử:
+   ```powershell
+   node --test tests/i18n.test.cjs
+   ```
+5. Cập nhật `js/data/changelog.js` (cả `es` và `en`).
+6. Commit sạch (không Co-Authored-By hay chữ ký AI) và push lên `origin main`.
