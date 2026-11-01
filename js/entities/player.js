@@ -287,28 +287,19 @@ G.Player = class Player {
 
   /** Lo que se puede hacer ahora con un vínculo: añadir a un grupo o unir dos sueltos. */
   bondOptions() {
-    const isEx = m => !!(m && (m.exclusive || m.maxFusions === 1));
-    const groupMax = g => g.some(isEx) ? 2 : Player.BOND_MAX;
     const loose = this.slots.filter(s => s.length === 1).map(s => s[0]);
-    // Nhóm chứa chiêu độc quyền chỉ được mở rộng tối đa 2 chiêu
-    const grow = this.slots.find(s => s.length > 1 && s.length < groupMax(s));
-    if (grow) {
-      const validLoose = loose.filter(m => !isEx(m) || !grow.some(isEx));
-      return validLoose.length ? { mode: 'add', group: grow, loose: validLoose } : null;
-    }
+    const grow = this.slots.find(s => s.length > 1 && s.length < Player.BOND_MAX);
+    if (grow) return { mode: 'add', group: grow, loose };
     return loose.length >= 2 ? { mode: 'pair', group: null, loose } : null;
   }
 
   /** Junta `moves` (sueltos) en el grupo `group` (o en uno nuevo) y gasta un vínculo. */
   fuse(moves, group = null) {
-    const isEx = m => !!(m && (m.exclusive || m.maxFusions === 1));
     const target = group || this.slots.find(s => s[0] === moves[0]);
     const cur = this.slots[this.active];
     for (const m of moves) {
       if (target.includes(m)) continue;
-      // Giới hạn nhóm có chiêu độc quyền chỉ tối đa 2 chiêu và không được ghép 2 chiêu độc quyền với nhau
-      if ((target.some(isEx) || isEx(m)) && target.length >= 2) continue;
-      if (isEx(m) && target.some(isEx)) continue;
+      if (target.length >= Player.BOND_MAX) continue;
       const i = this.slots.findIndex(s => s.length === 1 && s[0] === m);
       if (i < 0) continue;
       this.slots.splice(i, 1);

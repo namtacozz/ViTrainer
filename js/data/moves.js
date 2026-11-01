@@ -599,55 +599,72 @@
     // ================= NUEVOS MOVIMIENTOS CANÓNICOS COMPETITIVOS =================
     { id: 'thousand-arrows', name: 'Thousand Arrows', type: 'ground', kind: 'cone',
       desc: 'Dispara una densa andanada de flechas de energía esmeralda que perfora y derriba a todos los enemigos.',
-      speed: 480, life: 0.75, dmg: 32, count: 8, spread: 0.65, size: 8, pierce: 3, cd: 0.85, exclusive: true, maxFusions: 1 },
+      speed: 450, life: 0.75, dmg: 9, count: 8, spread: 0.65, size: 8, pierce: 3, cd: 0.70, exclusive: true },
+
     { id: 'thousand-waves', name: 'Thousand Waves', type: 'ground', kind: 'quake',
       desc: 'Ondas sísmicas concéntricas que barren a los rivales, dañándolos y ralentizándolos gravemente.',
-      dmg: 42, radius: 130, count: 3, slow: 0.5, cd: 1.25, knock: 140, exclusive: true, maxFusions: 1 },
+      dmg: 20, radius: 110, count: 3, slow: 0.35, cd: 1.15, knock: 120, exclusive: true },
+
     { id: 'core-enforcer', name: 'Core Enforcer', type: 'dragon', kind: 'beam',
       desc: 'Rayo colosal de dragón en forma de Z que calcina a las hordas enemigas anulando sus defensas.',
-      cd: 1.8, dmg: 58, radius: 360, width: 62, knock: 120, exclusive: true, maxFusions: 1 },
+      cd: 1.35, dmg: 28, radius: 280, width: 50, knock: 100, exclusive: true },
+
     { id: 'nihil-light', name: 'Nihil Light', type: 'dragon', kind: 'charge',
       desc: 'Mega Zygarde canaliza el poder del vacío en un colosal rayo cósmico que incinera todo a su paso.',
-      cd: 2.4, charge: 0.90, dmg: 195, radius: 540, width: 100, knock: 240, stun: 1.0, exclusive: true, maxFusions: 1 },
+      cd: 2.2, charge: 0.80, dmg: 64, radius: 360, width: 70, knock: 180, stun: 0.6, exclusive: true },
+
     { id: 'roar-of-time', name: 'Roar of Time', type: 'dragon', kind: 'nova',
       desc: 'Onda temporal distorsionada que desgarra el tejido del tiempo y ralentiza masivamente a los enemigos.',
-      cd: 2.2, dmg: 85, radius: 280, count: 16, speed: 280, slow: 0.8, knock: 180, exclusive: true, maxFusions: 1 },
+      cd: 1.30, dmg: 15, radius: 220, count: 16, speed: 280, slow: 0.4, knock: 120, exclusive: true },
+
     { id: 'spacial-rend', name: 'Spacial Rend', type: 'dragon', kind: 'melee',
       desc: 'Tajo desgarrador que corta el espacio mismo, ignorando defensas y asestando golpes críticos absolutos.',
-      cd: 1.4, dmg: 68, radius: 240, arc: 2.5, knock: 100, pierce: 99, exclusive: true, maxFusions: 1 },
+      cd: 0.52, dmg: 26, radius: 85, arc: 2.2, knock: 90, pierce: 99, exclusive: true },
+
     { id: 'shadow-force', name: 'Shadow Force', type: 'ghost', kind: 'dash',
       desc: 'Se desvanece en el Mundo Distorsión haciéndose invulnerable y reaparece desatando una violenta explosión sombría.',
-      cd: 1.6, dmg: 78, radius: 220, width: 80, knock: 170, invuln: 0.55, exclusive: true, maxFusions: 1 },
+      cd: 0.80, dmg: 23, radius: 130, width: 60, knock: 110, invuln: 0.40, exclusive: true },
+
     { id: 'judgment', name: 'Judgment', type: 'normal', kind: 'meteor',
       desc: 'Lluvia celestial de meteoros divinos que castigan a los rivales adaptándose al elemento más efectivo.',
-      cd: 2.0, dmg: 65, count: 7, radius: 75, knock: 130, exclusive: true, maxFusions: 1 },
+      cd: 1.30, dmg: 22, count: 4, radius: 60, knock: 100, exclusive: true },
+
     { id: 'behemoth-blade', name: 'Behemoth Blade', type: 'steel', kind: 'melee',
       desc: 'Tajo colosal de espada que inflige el doble de daño a jefes y enemigos de gran envergadura.',
-      cd: 0.85, dmg: 72, radius: 170, arc: 2.2, knock: 150, exclusive: true, maxFusions: 1 },
+      cd: 0.48, dmg: 28, radius: 80, arc: 2.0, knock: 100, exclusive: true },
+
     { id: 'behemoth-bash', name: 'Behemoth Bash', type: 'steel', kind: 'dash',
       desc: 'Carga demoledora con escudo que refuerza la armadura y libera una onda de choque aturdidora.',
-      cd: 0.90, dmg: 62, radius: 150, width: 80, knock: 240, stun: 0.8, exclusive: true, maxFusions: 1 },
+      cd: 0.78, dmg: 22, radius: 120, width: 60, knock: 120, stun: 0.4, exclusive: true },
+
     { id: 'lands-wrath', name: "Land's Wrath", type: 'ground', kind: 'meteor',
       desc: 'El poder telúrico de Zygarde desata estallidos de tierra bajo las formaciones enemigas.',
-      cd: 1.1, dmg: 38, count: 4, radius: 65, knock: 100, exclusive: true, maxFusions: 1 },
+      cd: 1.25, dmg: 19, count: 4, radius: 55, knock: 80, exclusive: true },
+
     { id: 'origin-pulse', name: 'Origin Pulse', type: 'water', kind: 'beam',
       desc: 'Pilares de agua zafiro que emergen y perforan todo a su paso con fuerza primordial.',
-      cd: 1.6, dmg: 54, radius: 340, width: 55, count: 2, slow: 0.45, exclusive: true, maxFusions: 1 },
+      cd: 1.35, dmg: 22, radius: 260, width: 45, count: 2, slow: 0.30, exclusive: true },
+
     { id: 'precipice-blades', name: 'Precipice Blades', type: 'ground', kind: 'meteor',
       desc: 'Monolitos de piedra afilada brotan del suelo empalando y arrojando a los rivales.',
-      cd: 1.5, dmg: 56, count: 5, radius: 70, knock: 160, exclusive: true, maxFusions: 1 },
+      cd: 1.35, dmg: 23, count: 4, radius: 60, knock: 110, exclusive: true },
+
     { id: 'dark-void', name: 'Dark Void', type: 'dark', kind: 'vortex',
       desc: 'Vórtice de gravedad oscura que succiona a los enemigos hacia el centro y los sume en el sueño.',
-      cd: 2.2, dmg: 28, radius: 140, dur: 3.0, stun: 1.5, exclusive: true, maxFusions: 1 },
+      cd: 2.8, dmg: 11, radius: 95, dur: 3.0, stun: 0.8, exclusive: true },
+
     { id: 'geomancy', name: 'Geomancy', type: 'fairy', kind: 'buff', stat: 'atk',
       desc: 'Canaliza la energía del Árbol de la Vida otorgando un aumento masivo de poder, velocidad y armadura.',
-      cd: 6.0, dur: 8.0, amount: 0.20, stacks: 3, exclusive: true, maxFusions: 1 },
+      cd: 2.2, dur: 6.5, amount: 0.16, stacks: 3, exclusive: true },
+
     { id: 'sunsteel-strike', name: 'Sunsteel Strike', type: 'steel', kind: 'dash',
       desc: 'Carga como un meteoro solar que arrasa las líneas enemigas ignorando sus barreras.',
-      cd: 0.75, dmg: 48, radius: 160, width: 54, knock: 180, exclusive: true, maxFusions: 1 },
+      cd: 0.75, dmg: 21, radius: 120, width: 48, knock: 100, exclusive: true },
+
     { id: 'moongeist-beam', name: 'Moongeist Beam', type: 'ghost', kind: 'beam',
       desc: 'Haz de luz lunar espectral que desintegra a los enemigos sin que puedan defenderse.',
-      cd: 1.5, dmg: 52, radius: 350, width: 48, exclusive: true, maxFusions: 1 },
+      cd: 1.25, dmg: 24, radius: 260, width: 44, knock: 90, exclusive: true },
+
     { id: 'close-combat', name: 'Close Combat', type: 'fighting', kind: 'melee',
       desc: 'Una ráfaga de golpes demoledores a corta distancia.',
       cd: 0.45, dmg: 32, radius: 68, arc: 2.2, knock: 90 },
@@ -665,13 +682,16 @@
       cd: 0.35, dmg: 18, radius: 54, arc: 1.6, knock: 60 },
     { id: 'plasma-fists', name: 'Plasma Fists', type: 'electric', kind: 'melee',
       desc: 'Impactos de plasma puro de Zeraora que electrifican el entorno.',
-      cd: 0.48, dmg: 34, radius: 72, arc: 2.4, knock: 120, exclusive: true, maxFusions: 1 },
+      cd: 0.48, dmg: 24, radius: 68, arc: 2.0, knock: 85, exclusive: true },
+
     { id: 'dragon-ascent', name: 'Dragon Ascent', type: 'flying', kind: 'dash',
       desc: 'Vuelo en picado a velocidad celestial que arrolla todo a su paso otorgando velocidad.',
-      cd: 1.5, dmg: 88, radius: 260, width: 70, knock: 200, exclusive: true, maxFusions: 1 },
+      cd: 0.80, dmg: 24, radius: 130, width: 55, knock: 120, exclusive: true },
+
     { id: 'oblivion-wing', name: 'Oblivion Wing', type: 'flying', kind: 'beam',
       desc: 'Haz carmesí destructor que drena vida de todos los enemigos cruzados.',
-      cd: 1.4, dmg: 30, radius: 320, width: 36, drain: 1, exclusive: true, maxFusions: 1 },
+      cd: 1.20, dmg: 21, radius: 240, width: 34, drain: 1, exclusive: true },
+
     { id: 'roost', name: 'Roost', type: 'flying', kind: 'buff', healPct: 0.01,
       desc: 'Aterriza un instante para recuperar 1% de PS máximos sin excesos.',
       cd: 4.5,
@@ -684,28 +704,35 @@
     },
     { id: 'fiery-dance', name: 'Fiery Dance', type: 'fire', kind: 'spin',
       desc: 'Danza flamígera envolvente que gira incinerando el entorno.',
-      cd: 0.85, dmg: 18, count: 4, radius: 75, burn: 1, exclusive: true, maxFusions: 1 },
+      cd: 0.95, dmg: 12, count: 3, radius: 65, burn: 1, exclusive: true },
+
     { id: 'fleur-cannon', name: 'Fleur Cannon', type: 'fairy', kind: 'charge',
       desc: 'Magearna canaliza la energía del Núcleo Casto y desata un torrente floral.',
-      cd: 2.1, charge: 0.70, dmg: 68, radius: 310, width: 50, exclusive: true, maxFusions: 1 },
+      cd: 2.1, charge: 0.70, dmg: 58, radius: 280, width: 48, knock: 130, exclusive: true },
+
     { id: 'gear-grind', name: 'Gear Grind', type: 'steel', kind: 'spin',
       desc: 'Engranajes afilados giran a toda velocidad golpeando a los rivales.',
-      cd: 0.90, dmg: 16, count: 3, radius: 66, exclusive: true, maxFusions: 1 },
+      cd: 0.90, dmg: 12, count: 3, radius: 62, knock: 70, exclusive: true },
+
         { id: 'spectral-thief', name: 'Spectral Thief', type: 'ghost', kind: 'dash',
       desc: 'Se oculta en la sombra del rival asestando un golpe crítico furtivo.',
-      cd: 0.65, dmg: 28, radius: 125, width: 38, knock: 80, exclusive: true, maxFusions: 1 },
+      cd: 0.70, dmg: 19, radius: 110, width: 36, knock: 70, exclusive: true },
+
     { id: 'freeze-shock', name: 'Freeze Shock', type: 'ice', kind: 'chain',
       desc: 'Bão lôi băng giật liên hoàn làm tê liệt và đóng băng kẻ địch, phóng điện trường cực độ.',
-      cd: 1.8, dmg: 72, count: 5, radius: 140, stun: 1.2, exclusive: true, maxFusions: 1 },
+      cd: 0.95, dmg: 22, count: 3, radius: 130, stun: 0.4, exclusive: true },
+
     { id: 'ice-burn', name: 'Ice Burn', type: 'ice', kind: 'vortex',
       desc: 'Cơn bão xoáy hỏa băng cuồng nộ thiêu đốt và phong ấn đóng băng mọi đối thủ bị cuốn vào.',
-      cd: 2.2, dmg: 78, radius: 100, dur: 3.5, burn: 1.5, exclusive: true, maxFusions: 1 },
+      cd: 2.8, dmg: 12, radius: 85, dur: 3.2, burn: 1.0, exclusive: true },
+
     { id: 'fusion-flare', name: 'Fusion Flare', type: 'fire', kind: 'projectile',
       desc: 'Cầu lửa rồng khổng lồ xoay tít xuyên thấu rồi kích nổ thành quầng nhật hoa rực cháy.',
-      cd: 1.6, dmg: 75, speed: 380, count: 1, size: 18, pierce: 4, exclusive: true, maxFusions: 1 },
+      cd: 0.65, dmg: 22, speed: 380, count: 1, size: 14, pierce: 3, exclusive: true },
+
     { id: 'fusion-bolt', name: 'Fusion Bolt', type: 'electric', kind: 'dash',
       desc: 'Lao vụt đi như thiên thạch lôi long giáng thế, phóng điện năng đẩy lùi và quét sạch kẻ thù.',
-      cd: 2.0, dmg: 80, len: 260, width: 70, knock: 220, exclusive: true, maxFusions: 1 }
+      cd: 0.80, dmg: 24, len: 160, width: 55, knock: 120, exclusive: true }
   ];
 
   // Cuerpo a cuerpo (12-10-2026): +20 % de daño y +25 % de alcance y de arco

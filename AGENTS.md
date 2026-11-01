@@ -53,7 +53,8 @@ Mỗi khi thay đổi code hoặc tài nguyên cần triển khai, PHẢI tuân 
 
 ## 4. Quy chuẩn Chiêu thức Độc quyền & Tiến hóa
 - **Chiêu thức độc quyền (Signature Moves)**:
-  - Phải có thuộc tính `exclusive: true, maxFusions: 1`.
+  - Phải có thuộc tính `exclusive: true`.
+  - Cho phép dung hợp / kết hợp (bond) cùng tối đa 3 chiêu khác như các chiêu thông thường (`BOND_MAX = 4`).
   - Phải được gán chính xác theo loài trong `EXCLUSIVE_BY_DEX` tại `js/data/moves.js`.
   - Tuyệt đối **KHÔNG** để lọt vào bể chiêu ngẫu nhiên theo hệ (`POOL[type]`) hoặc bể Normal (`POOL.normal`).
   - Không cho phép chọn sẵn trong danh sách chiêu khởi đầu (`startChoices`).
