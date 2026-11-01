@@ -1771,6 +1771,7 @@ G.MEGAS_BY_BASE = {
     10691
   ],
   "718": [
+    10121,
     10120,
     10118
   ],
@@ -1807,7 +1808,8 @@ G.MEGAS_BY_BASE = {
 };
 
 G.getMegasFor = dex => {
-  const ids = G.MEGAS_BY_BASE[dex];
+  const base = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(dex) : dex;
+  const ids = G.MEGAS_BY_BASE[dex] || G.MEGAS_BY_BASE[base];
   if (!ids) return [];
   return ids.map(id => G.MEGAS[id]).filter(Boolean);
 };

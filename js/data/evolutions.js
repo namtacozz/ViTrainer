@@ -21910,6 +21910,7 @@ G.getEvoInfo = function(dex) {
 };
 
 G.getBaseDex = function(dex) {
+  if (dex === 10118 || dex === 10120 || dex === 10121) return 718;
   const info = G.getEvoInfo(dex);
   return info ? info.baseDex : dex;
 };

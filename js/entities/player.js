@@ -41,27 +41,30 @@ G.Player = class Player {
     this.baseSpd = mon.spd;
     this.baseAtk = mon.atk;
 
-    // Zygarde Lv 1-9 khởi đầu ở dạng 10% (dex 10118)
-    if ((mon.dex === 718 || this.baseDex === 718) && mon.dex !== 10118 && (this.level || 1) < 10) {
-      const form10 = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[10118] : null;
-      if (form10) {
-        mon = form10;
-        this.dex = 10118;
-        this.mon = form10;
-        this.scale = G.Sprites.playerScale(10118);
-        this.anim = new G.Sprites.Animator(10118, this.scale, this.shiny);
-        this.r = G.Sprites.playerRadius(10118);
-        this.bodyH = G.Sprites.bodyHeight(10118, this.scale);
-        this.baseSpd = form10.spd;
-        this.baseAtk = form10.atk;
-        this.maxHp = form10.hp + this.perksHp;
-        this.hp = this.maxHp;
+    // Zygarde Lv 1-24 khởi đầu ở dạng 10% (dex 10118)
+    if (mon.dex === 718 || this.baseDex === 718 || mon.dex === 10118) {
+      this.baseDex = 718;
+      if ((this.level || 1) < 25) {
+        const form10 = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[10118] : null;
+        if (form10) {
+          mon = form10;
+          this.dex = 10118;
+          this.mon = form10;
+          this.scale = G.Sprites.playerScale(10118);
+          this.anim = new G.Sprites.Animator(10118, this.scale, this.shiny);
+          this.r = G.Sprites.playerRadius(10118);
+          this.bodyH = G.Sprites.bodyHeight(10118, this.scale);
+          this.baseSpd = form10.spd;
+          this.baseAtk = form10.atk;
+          this.maxHp = form10.hp + this.perksHp;
+          this.hp = this.maxHp;
+        }
       }
     }
 
     // Estado de evolución en partida
     this.chosenDex = mon.dex;
-    this.baseDex = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(mon.dex) : mon.dex;
+    this.baseDex = (this.dex === 10118 || this.dex === 10120 || this.dex === 10121) ? 718 : ((typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(mon.dex) : mon.dex);
     this.evoStage = (typeof G !== 'undefined' && G.getStage) ? G.getStage(mon.dex) : 1;
     this.evoChain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(this.baseDex) : null;
     this.evoTierUnlocked = (typeof G !== 'undefined' && G.DB && G.DB.getEvoTier) ? G.DB.getEvoTier(this.baseDex) : 1;
@@ -617,6 +620,59 @@ G.Player = class Player {
       });
     };
 
+    // Tiến trình đặc biệt Zygarde: 10% (Lv 1) -> Thức Tỉnh I (Lv 15) -> 50% (Lv 25) -> Apex + (Lv 30) -> 100% (Lv 50) -> Mega
+    if (this.baseDex === 718) {
+      if (this.level >= 15 && this.awakeningTier === 0) {
+        this.awakeningTier = 1;
+        this.promptEvo([{
+          dex: this.dex,
+          title: 'Zygarde · Thức Tỉnh I',
+          tag: 'THỨC TỈNH I',
+          color: '#ffd23f',
+          desc: 'Thức tỉnh năng lượng tế bào Zygarde: +25% HP tối đa, tăng phòng thủ và hồi phục sinh lực.',
+          apply: () => this.activateAwakening(1)
+        }]);
+      }
+      if (this.level >= 25 && this.dex === 10118) {
+        this.promptEvo([{
+          dex: 718,
+          title: 'Zygarde (Dạng 50%)',
+          tag: 'TIẾN HÓA DẠNG 50%',
+          color: '#22c55e',
+          desc: 'Tập hợp 50% tế bào Zygarde: Biến đổi thành dạng Mãng Xà (Serpent Forme). Tăng mạnh tấn công và phòng thủ.',
+          apply: () => this.evolveTo(718)
+        }]);
+      }
+      if (this.level >= 30 && !this.isApex) {
+        this.isApex = true;
+        this.promptEvo([{
+          dex: this.dex,
+          title: 'Zygarde · Apex (+)',
+          tag: 'APEX (+)',
+          color: '#ffd23f',
+          desc: 'Khí chất Apex thức tỉnh: Vương miện hoàng gia, +35% sát thương toàn bộ chiêu thức và hồi phục sinh lực.',
+          apply: () => this.activateApex()
+        }]);
+      }
+      if (this.level >= 50 && this.dex !== 10120 && !this.isMega) {
+        this.promptEvo([{
+          dex: 10120,
+          title: 'Zygarde Hoàn Thiện (100%)',
+          tag: 'TIẾN HÓA DẠNG 100%',
+          color: '#10b981',
+          desc: 'Tập hợp 100% tế bào: Thức tỉnh hình hài Cự Thần Titan (Complete Forme). TẶNG KÈM CHIÊU ĐỘC QUYỀN CORE ENFORCER!',
+          apply: () => {
+            this.megaEvolve(10120);
+            this.maxMoves = Math.max(this.maxMoves, this.slots.length + 1);
+            if (!this.hasMove('core-enforcer')) {
+              this.addMove('core-enforcer');
+            }
+          }
+        }]);
+      }
+      return;
+    }
+
     // Especie de fase única (Legendarios / Singulares / Sin evolución)
     if (chain.type === 'single') {
       if (this.level >= 15 && this.awakeningTier === 0) {
@@ -870,6 +926,24 @@ G.Player = class Player {
         if (typeof G !== 'undefined' && G.LevelUp && G.LevelUp.open) G.LevelUp.open();
       }
       return;
+    }
+  }
+
+    upgradeToNihilLight() {
+    for (let i = 0; i < this.slots.length; i++) {
+      const group = this.slots[i];
+      if (Array.isArray(group)) {
+        for (let j = 0; j < group.length; j++) {
+          if (group[j].id === 'core-enforcer') {
+            const lvl = group[j].lvl || 1;
+            const fused = group[j].fused || [];
+            group[j] = G.Moves.instance('nihil-light', lvl);
+            group[j].fused = fused;
+            if (G.UI && G.UI.toast) G.UI.toast('Core Enforcer đã thăng hoa thành NIHIL LIGHT!');
+            break;
+          }
+        }
+      }
     }
   }
 

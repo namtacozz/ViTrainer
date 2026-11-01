@@ -81,7 +81,7 @@ G.MenuUI = (() => {
     G.UI.show('scr-menu');
     bagLine();
     hwLine();
-    G.UI.sprite($('menu-partner'), mon.dex, { lively: true, scale: 4, hero: true, shiny, skin: G.Skins.worn(s, mon.dex) });
+    G.UI.sprite($('menu-partner'), mon.dex === 718 ? 10118 : mon.dex, { lively: true, scale: 4, hero: true, shiny, skin: G.Skins.worn(s, mon.dex) });
     $('menu-partner').style.setProperty('--stage-c', shiny ? '#9ae6ff' : G.U.TYPE_COLOR[mon.types[0]]);
     $('menu-partner').classList.toggle('shiny', shiny);
     $('menu-partner-name').innerHTML = mon.name + (shiny ? ' ' + G.Icons.html('shiny', 24) : '');
@@ -406,7 +406,8 @@ G.MenuUI = (() => {
     moveTips($('dex-moves'));
     $('dex-big').style.setProperty('--stage-c', !own ? '#5b83d6' : viewShiny ? '#9ae6ff' : G.U.TYPE_COLOR[p.types[0]]);
     $('dex-big').classList.toggle('shiny', viewShiny);
-    G.UI.sprite($('dex-big'), dex, { lively: true, spin: own, silhouette: false, scale: 3, hero: true, shiny: viewShiny,
+    const displaySpriteDex = (dex === 718) ? 10118 : dex;
+    G.UI.sprite($('dex-big'), displaySpriteDex, { lively: true, spin: own, silhouette: false, scale: 3, hero: true, shiny: viewShiny,
                                      skin: own ? G.Skins.worn(s, dex) : '' });
     box.querySelectorAll('.seg button').forEach(b => {
       b.onclick = () => { viewShiny = b.dataset.v === '1'; showDetail(dex); };
@@ -445,6 +446,7 @@ G.MenuUI = (() => {
     if (!cur) return [];
     const baseDex = G.getBaseDex(dex);
     const curClean = cleanMonName(cur.name);
+    if (curClean === 'zygarde' || baseDex === 718 || dex === 718) return [];
     
     const matchedMons = G.DEX.filter(p => cleanMonName(p.name) === curClean);
     const relatedChains = new Map();
@@ -469,6 +471,54 @@ G.MenuUI = (() => {
 
     const isOwn = d => !!(s.owned && s.owned[d]);
     const isUnlocked = d => G.DB.isEvoUnlocked ? G.DB.isEvoUnlocked(d) : isOwn(d);
+
+    if (baseDex === 718 || dex === 718 || dex === 10118 || dex === 10120 || dex === 10121) {
+      const un1 = isOwn(718);
+      return `
+        <div class="evo-section">
+          <div style="display:flex;justify-content:center;align-items:center;margin-bottom:8px;">
+            <span style="font-size:11px;font-weight:bold;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;">Dòng tiến hóa Zygarde</span>
+          </div>
+          <div class="evo-tree-row" style="flex-wrap:wrap;gap:4px;">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10118 ? ' current' : ''}" data-dex="10118" title="Zygarde (Dạng 10%)">
+              <div class="evo-cv-wrap" data-dex="10118" data-unlocked="1"></div>
+              <div class="evo-name">Zygarde 10%</div>
+              <div class="evo-lvl">Nv. 1</div>
+            </div>
+            <span class="evo-arrow">→</span>
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}" title="Thức Tỉnh I (Nv. 15): +25% HP & Phòng thủ">
+              <div class="evo-apex-badge awakening">${G.Icons.html('star', 16)}</div>
+              <div class="evo-name">Thức Tỉnh I</div>
+              <div class="evo-lvl">Nv. 15</div>
+            </div>
+            <span class="evo-arrow">→</span>
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%)">
+              <div class="evo-cv-wrap" data-dex="718" data-unlocked="1"></div>
+              <div class="evo-name">Zygarde 50%</div>
+              <div class="evo-lvl">Nv. 25</div>
+            </div>
+            <span class="evo-arrow">→</span>
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}" title="Apex (+) (Nv. 30): Vương miện & +35% sát thương">
+              <div class="evo-apex-badge apex">${G.Icons.html('crown', 16)}</div>
+              <div class="evo-name">Apex (+)</div>
+              <div class="evo-lvl">Nv. 30</div>
+            </div>
+            <span class="evo-arrow">→</span>
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10120 ? ' current' : ''}" data-mega-id="10120" data-mega-dex="10120" title="Zygarde Hoàn Thiện (100%): Tặng Core Enforcer">
+              <div class="evo-cv-wrap" data-dex="10120" data-unlocked="1"></div>
+              <div class="evo-name">Zygarde 100%</div>
+              <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Nv. 50</div>
+            </div>
+            <span class="evo-arrow">→</span>
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10120" title="Mega Zygarde (3500 quái): Nihil Light">
+              <div class="evo-cv-wrap" data-dex="10120" data-unlocked="1"></div>
+              <div class="evo-name">M-Zygarde</div>
+              <div class="evo-lvl" style="color:#f43f5e;font-weight:bold;">Mega</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
     const renderMega = targetDex => {
       if (typeof G === 'undefined' || !G.getMegasFor) return '';
