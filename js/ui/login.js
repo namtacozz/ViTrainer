@@ -58,6 +58,11 @@ G.LoginUI = (() => {
       };
     }
     $('btn-google').onclick = async () => {
+      const isDiscord = typeof location !== 'undefined' && /discordsays\.com|discord\.com|discordapp\.com/.test(location.hostname);
+      if (isDiscord) {
+        $('login-err').textContent = G.T('Discord không hỗ trợ đăng nhập Google qua popup. Vui lòng dùng Tên tài khoản & Mật khẩu đã liên kết.');
+        return;
+      }
       $('login-err').textContent = '';
       $('btn-google').disabled = true;
       const r = await G.DB.loginWithGoogle();
