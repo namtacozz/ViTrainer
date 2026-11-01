@@ -1,5 +1,12 @@
 /* ============ lang-en.js — traducción al inglés ============
- * Clave: el texto en español tal como sale en pantalla. {x} = hueco (nombre,
+ * Clave: el texto en español tal como sale en pantalla. {
+    "Jefe": "Boss",
+    "Jefes": "Bosses",
+    "Duende": "Goblin",
+    "¡Un %s shiny anda cerca!": "A shiny %s is nearby!",
+    "¡%s salvaje apareció!": "Wild %s appeared!",
+    "¡FASE %s: %s SE REGENERA!": "PHASE %s: %s REGENERATES!",
+    "¡Marea de Pokémon!": "Pokémon Surge!",x} = hueco (nombre,
  * número...). Ver js/core/i18n.js. Los nombres de movimientos, objetos y tipos
  * son los oficiales en inglés.
  */

@@ -278,26 +278,81 @@ G.Combat = (() => {
 
   function beam(pl, m) {
     const col = G.U.TYPE_COLOR[m.type] || '#ffd23f';
+    const vis = G.VFX.forMove(m);
+    const maxReach = reach(m);
 
-    // Tia beam chuẩn survivor: thời lượng 0.50s dứt khoát, không spam kéo dài vô hạn
-    let existing = fields.find(f => f.kind === 'continuous_beam' && f.owner === pl && f.m.id === m.id);
-    if (existing) {
+    // 1. Chiêu beam độc quyền (Exclusive Beam): chiếu nối thẳng tới Pokémon mục tiêu, đốt máu từ từ
+    if (m.exclusive) {
+      let existing = fields.find(f => f.kind === 'continuous_beam' && f.owner === pl && f.m.id === m.id);
+      if (existing) return;
+
+      fields.push({
+        kind: 'continuous_beam',
+        owner: pl,
+        ghost,
+        m,
+        col,
+        vis,
+        t: 0,
+        life: 0.40, // Thời lượng đốt nhanh dứt khoát
+        tick: 0,
+        target: null,
+        aim: pl.aim
+      });
       return;
     }
 
-    fields.push({
-      kind: 'continuous_beam',
-      owner: pl,
-      ghost,
-      m,
-      col,
-      vis: G.VFX.forMove(m),
-      t: 0,
-      life: 0.50,
-      tick: 0,
-      target: null,
-      aim: pl.aim
-    });
+    // 2. Chiêu beam thường (không độc quyền): Chớp từng nhịp theo lần cast chiêu như ban đầu!
+    let aim = pl.aim;
+    const target = G.Projectiles.nearest(G.EnemyMgr.all(), pl.x, pl.y, maxReach);
+    if (target && !target.dead) {
+      aim = Math.atan2(target.y - pl.y, target.x - pl.x);
+      pl.aim = aim;
+    }
+
+    const ca = Math.cos(aim), sa = Math.sin(aim);
+    let len = maxReach;
+    const piercesWall = m.evoTier >= 3;
+    if (!piercesWall) {
+      for (let d = 12; d < maxReach; d += 12) {
+        if (G.World.isWall(pl.x + ca * d, pl.y + sa * d)) { len = d; break; }
+      }
+    }
+
+    const w = m.width || 26;
+    // Chớp sáng tia beam trong nháy mắt
+    G.FX.beam(pl.x, pl.y - G.LIFT, aim, len, w, col, vis);
+    if (G.Camera && G.Camera.kick) G.Camera.kick(0.10);
+    G.Audio.sfx('beam');
+
+    // Gây sát thương tức thì 1 nhịp duy nhất cho tất cả mục tiêu trên đường chớp
+    if (!ghost) {
+      const dmg = m.dmg * pl.atkFor(m);
+      const mx = pl.x + ca * len / 2, my = pl.y + sa * len / 2;
+      const onBeam = (x, y, r) => {
+        const px = x - pl.x, py = y - pl.y;
+        const along = px * ca + py * sa;
+        if (along < -r || along > len + r) return false;
+        return Math.abs(-px * sa + py * ca) <= w / 2 + r;
+      };
+
+      for (const e of G.EnemyMgr.queryCircle(mx, my, len / 2 + w)) {
+        if (e.dead) continue;
+        if (onBeam(e.x, e.y, e.r)) {
+          hit(pl, e, dmg, col, ca * 40, sa * 40, 0, m);
+          if (m.id === 'ice-beam') e.applySlow(0.35, 1.2);
+          if (m.id === 'psybeam') e.applyStun(0.35);
+          if (m.id === 'hydro-pump') {
+            e.kx += ca * 180;
+            e.ky += sa * 180;
+          }
+        }
+      }
+
+      for (const p of G.World.props) {
+        if (p.r && onBeam(p.x, p.y, p.r)) G.World.damageProp(p, dmg, col);
+      }
+    }
   }
 
   function aura(pl, m) {
@@ -760,13 +815,11 @@ G.Combat = (() => {
       if (pl.dead || f.t >= f.life) return true;
       const col = f.col;
       const maxReach = reach(m);
-      let w = (m.width || 24);
-      if (m.id === 'hyper-beam' || m.id === 'solar-beam') w = 55;
+      const w = (m.width || 24);
 
-      // 1. Tự động tìm & khóa mục tiêu liên tục (Continuous lock-on tracking with instant retargeting on kill)
+      // 1. Tự động tìm & khóa mục tiêu: nếu mục tiêu cũ chết thì chuyển sang con khác ngay lập tức
       if (!f.target || f.target.dead || G.U.dist2(pl.x, pl.y, f.target.x, f.target.y) > (maxReach + 80) * (maxReach + 80)) {
         f.target = G.Projectiles.nearest(G.EnemyMgr.all(), pl.x, pl.y, maxReach);
-        f.ramping = 1.0;
       }
 
       if (f.target && !f.target.dead) {
@@ -776,237 +829,56 @@ G.Combat = (() => {
         f.aim = pl.aim;
       }
 
-      // Psybeam: sóng tâm linh uốn lượn hình sin ma mị
-      let renderAim = f.aim;
-      if (m.id === 'psybeam') {
-        renderAim += Math.sin(f.t * 22) * 0.12;
-      }
+      const ca = Math.cos(f.aim), sa = Math.sin(f.aim);
 
-      const ca = Math.cos(renderAim), sa = Math.sin(renderAim);
-
-      // 2. Chiều dài tia laser: dừng ở tường trừ Moongeist Beam hoặc Tier 3 xuyên thấu
+      // Chiều dài tia beam: nối thẳng từ player tới đúng vị trí của mục tiêu đích
       let len = maxReach;
-      const piercesWall = m.id === 'moongeist-beam' || (m.evoTier >= 3);
-      if (!piercesWall) {
-        for (let d = 12; d < maxReach; d += 12) {
-          if (G.World.isWall(pl.x + ca * d, pl.y + sa * d)) { len = d; break; }
-        }
+      if (f.target && !f.target.dead) {
+        const targetDist = Math.hypot(f.target.x - pl.x, f.target.y - pl.y);
+        len = Math.min(maxReach, targetDist);
+      } else {
+        len = maxReach * 0.7;
       }
 
-      // 3. Render tia laser liên tục mỗi khung hình với hoạt ảnh đa sắc độc quyền
       const beamColor = (m.id === 'prismatic-laser')
         ? ['#ff0055', '#ff9900', '#ffee00', '#00ff66', '#00ccff', '#aa00ff'][Math.floor((performance.now() * 0.008) % 6)]
         : col;
 
-      G.FX.beam(pl.x, pl.y - G.LIFT, renderAim, len, w, beamColor, f.vis);
+      // Vẽ tia nối thẳng từ player tới mục tiêu đích
+      G.FX.beam(pl.x, pl.y - G.LIFT, f.aim, len, w, beamColor, f.vis);
 
-      // Hiệu ứng tia phụ cho các chiêu thức độc quyền
-      if (m.id === 'core-enforcer' || m.id === 'nihil-light') {
-        const sweepAim = renderAim + Math.sin(f.t * 14) * 0.25;
-        G.FX.beam(pl.x, pl.y - G.LIFT, sweepAim, len * 0.9, w * 0.5, '#10b981', f.vis);
-      } else if (m.id === 'origin-pulse') {
-        const perpX = -sa * 14, perpY = ca * 14;
-        G.FX.beam(pl.x + perpX, pl.y + perpY - G.LIFT, renderAim, len, w * 0.7, '#38bdf8', f.vis);
-        G.FX.beam(pl.x - perpX, pl.y - perpY - G.LIFT, renderAim, len, w * 0.7, '#38bdf8', f.vis);
-      } else if (m.id === 'fleur-cannon') {
-        const pAng = f.t * 10;
-        const perpX = -sa * Math.sin(pAng) * 20, perpY = ca * Math.sin(pAng) * 20;
-        G.FX.beam(pl.x + perpX, pl.y + perpY - G.LIFT, renderAim, len * 0.95, w * 0.45, '#f472b6', f.vis);
-      }
-
-      // Hạt tia năng lượng tại điểm tiếp xúc
+      // Hiệu ứng hạt đốt sáng tại điểm tiếp xúc trên người mục tiêu
       const tipX = pl.x + ca * len, tipY = pl.y + sa * len - G.LIFT;
-      if (Math.random() < dt * 30 && G.Camera.sees(tipX, tipY, 40)) {
-        G.FX.spark(tipX, tipY, beamColor, -ca * 60 + G.U.rand(-25, 25), -sa * 60 + G.U.rand(-25, 25), 4);
+      if (Math.random() < dt * 40 && G.Camera.sees(tipX, tipY, 40)) {
+        G.FX.spark(tipX, tipY, beamColor, G.U.rand(-40, 40), G.U.rand(-40, 40), 3);
       }
 
-      // 4. Chu kỳ tick chuẩn cân bằng: 5 tick trong 0.50s thời lượng, không rung màn hình liên tục
-      const tickInterval = 0.10;
-
+      // Đốt sát thương từ từ qua các tick nhanh
+      const tickInterval = 0.08;
       f.tick -= dt;
       if (f.tick <= 0) {
         f.tick = tickInterval;
         if (!f.ghost) {
-          if (f.t <= dt && G.Camera && G.Camera.kick) G.Camera.kick(0.12);
+          // Tổng 5 tick = 100% sát thương của chiêu
+          const tickDmg = Math.max(1, (m.dmg * pl.atkFor(m)) / 5);
 
-          // Dragon Rage: Ramping Damage
-          if (m.id === 'dragon-rage') {
-            f.ramping = Math.min(1.5, (f.ramping || 1.0) + 0.05);
-          }
-          // Chuẩn hóa sát thương: 5 tick tổng cộng bằng đúng 100% sát thương của chiêu
-          let tickDmg = (m.dmg * pl.atkFor(m) / 5) * (f.ramping || 1.0);
+          if (f.target && !f.target.dead) {
+            hit(pl, f.target, tickDmg, beamColor, ca * 15, sa * 15, 0, m);
+            G.FX.burst(f.target.x, f.target.y - f.target.bodyH * 0.5, beamColor, 4, 70);
 
-          const mx = pl.x + ca * len / 2, my = pl.y + sa * len / 2;
-          const onBeam = (x, y, r) => {
-            const px = x - pl.x, py = y - pl.y;
-            const along = px * ca + py * sa;
-            if (along < -r || along > len + r) return false;
-            return Math.abs(-px * sa + py * ca) <= w / 2 + r;
-          };
-
-          for (const e of G.EnemyMgr.queryCircle(mx, my, len / 2 + w)) {
-            if (e.dead) continue;
-            if (onBeam(e.x, e.y, e.r)) {
-              hit(pl, e, tickDmg, beamColor, ca * 25, sa * 25, 0, m);
-
-              // Ice Beam: tích tầng frostbite, 4 tick đóng băng & nổ Frost Shatter
-              if (m.id === 'ice-beam') {
-                e._frostTicks = (e._frostTicks || 0) + 1;
-                if (e._frostTicks >= 4) {
-                  e._frostTicks = 0;
-                  e.applyStun(1.4);
-                  G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#38bdf8', 14, 200);
-                  G.FX.ring(e.x, e.y, 4, 85, '#bae6fd', 0.4, 4);
-                  for (const se of G.EnemyMgr.queryCircle(e.x, e.y, 85)) {
-                    if (!se.dead && se !== e) {
-                      hit(pl, se, tickDmg * 2.2, '#38bdf8', 0, 0, 0, m);
-                      se.applySlow ? se.applySlow(0.4, 2.0) : (se.slowT = 2.0);
-                    }
-                  }
-                }
-              }
-
-              // Hydro Pump: lực đẩy thủy lực cực mạnh + bắn bọt sóng nước hai bên
-              if (m.id === 'hydro-pump') {
-                e.x += ca * 220 * dt;
-                e.y += sa * 220 * dt;
-                if (Math.random() < 0.35) {
-                  const perpX = -sa * 28, perpY = ca * 28;
-                  G.FX.burst(e.x + perpX, e.y + perpY, '#38bdf8', 4, 90);
-                  G.FX.burst(e.x - perpX, e.y - perpY, '#38bdf8', 4, 90);
-                  for (const se of G.EnemyMgr.queryCircle(e.x + perpX, e.y + perpY, 40)) if (!se.dead && se !== e) hit(pl, se, tickDmg * 0.5, '#38bdf8', ca * 20, sa * 20, 0, m);
-                  for (const se of G.EnemyMgr.queryCircle(e.x - perpX, e.y - perpY, 40)) if (!se.dead && se !== e) hit(pl, se, tickDmg * 0.5, '#38bdf8', ca * 20, sa * 20, 0, m);
-                }
-              }
-
-              // Psybeam: gây lú lẫn hoảng loạn giật ngược hướng
-              if (m.id === 'psybeam') {
-                e.x -= ca * 90 * dt;
-                e.y -= sa * 90 * dt;
-                if (Math.random() < 0.25) G.FX.spark(e.x, e.y - e.bodyH * 0.5, '#c084fc', G.U.rand(-40, 40), G.U.rand(-40, 40), 3);
-              }
-
-              // Oblivion Wing: hút 6% sinh lực gây ra hồi máu cho người chơi
-              if (m.id === 'oblivion-wing' && pl.heal) {
-                pl.heal(Math.max(1, tickDmg * 0.06));
-              }
-
-              // Origin Pulse: tạo dòng xoáy kéo mạnh quái vào trục tia nước
-              if (m.id === 'origin-pulse') {
-                const px = e.x - pl.x, py = e.y - pl.y;
-                const along = px * ca + py * sa;
-                const centerX = pl.x + ca * along, centerY = pl.y + sa * along;
-                e.x += (centerX - e.x) * 0.22;
-                e.y += (centerY - e.y) * 0.22;
-              }
-
-              // KHI QUÁI CHẾT TRONG LÚC ĐANG BỊ ĐỐT -> LẬP TỨC ĐỔI MỤC TIÊU SANG CON KẾ TIẾP!
-              if (e.dead) {
-                // Hiệu ứng nổ khi chết theo từng loại chiêu
-                if (m.id === 'psybeam') {
-                  G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a855f7', 16, 220);
-                  G.FX.ring(e.x, e.y, 6, 95, '#d8b4fe', 0.4, 4);
-                  for (const pe of G.EnemyMgr.queryCircle(e.x, e.y, 95)) if (!pe.dead) hit(pl, pe, tickDmg * 2.2, '#a855f7', 0, 0, 0, m);
-                } else if (m.id === 'dragon-rage') {
-                  G.FX.burst(e.x, e.y - 10, '#f97316', 20, 240);
-                  for (const fe of G.EnemyMgr.queryCircle(e.x, e.y, 80)) if (!fe.dead) hit(pl, fe, tickDmg * 2.5, '#f97316', 0, 0, 0, m);
-                } else if (m.id === 'oblivion-wing') {
-                  G.FX.burst(e.x, e.y, '#e11d48', 16, 200);
-                  const nextEnemy = G.Projectiles.nearest(G.EnemyMgr.all(), e.x, e.y, 180);
-                  if (nextEnemy && !nextEnemy.dead) hit(pl, nextEnemy, tickDmg * 3.5, '#e11d48', 0, 0, 0, m);
-                }
-
-                if (f.target === e) {
-                  f.target = G.Projectiles.nearest(G.EnemyMgr.all(), pl.x, pl.y, maxReach);
-                  if (f.target) {
-                    f.aim = Math.atan2(f.target.y - pl.y, f.target.x - pl.x);
-                    pl.aim = f.aim;
-                    f.life = Math.max(f.life, f.t + 1.2);
-                    f.ramping = 1.0;
-                  }
-                }
-              }
+            // Gây hiệu ứng riêng nếu có
+            if (m.id === 'ice-beam') f.target.applySlow(0.25, 0.8);
+            if (m.id === 'core-enforcer') f.target.applySlow(0.20, 0.6);
+            if (m.id === 'oblivion-wing') {
+              // Hút máu từ từ
+              const heal = Math.max(1, Math.round(tickDmg * 0.35));
+              pl.hp = Math.min(pl.maxHp, pl.hp + heal);
             }
-          }
 
-          for (const p of G.World.propsInCircle(mx, my, len / 2 + w)) {
-            if (onBeam(p.x, p.y, p.r)) G.World.damageProp(p, tickDmg, beamColor);
-          }
-
-          // Flash Cannon: Mỗi 0.35s phóng xung kích từ trường xuyên thấu làm choáng và trừ giáp
-          if (m.id === 'flash-cannon') {
-            if (!f._fluxT || f.t - f._fluxT >= 0.35) {
-              f._fluxT = f.t;
-              G.FX.ring(tipX, tipY, 4, 60, '#94a3b8', 0.3, 3);
-              for (const fe of G.EnemyMgr.queryCircle(mx, my, len / 2 + w)) {
-                if (!fe.dead && onBeam(fe.x, fe.y, fe.r)) {
-                  fe.applyStun(0.35);
-                  hit(pl, fe, tickDmg * 1.8, '#94a3b8', ca * 50, sa * 50, 0, m);
-                }
-              }
+            // Nếu mục tiêu chết sau cú hit, ngay lập tức tìm con mới kế tiếp
+            if (f.target.dead) {
+              f.target = G.Projectiles.nearest(G.EnemyMgr.all(), pl.x, pl.y, maxReach);
             }
-          }
-
-          // Hyper Beam & Solar Beam: Để lại thảm bức xạ mặt đất thiêu đốt kẻ địch
-          if (m.id === 'hyper-beam' || m.id === 'solar-beam') {
-            if (Math.random() < 0.3) {
-              const rx = pl.x + ca * G.U.rand(30, len), ry = pl.y + sa * G.U.rand(30, len);
-              fields.push({
-                kind: 'patch', owner: pl, ghost: f.ghost, m, col: beamColor, vis: f.vis,
-                x: rx, y: ry, t: 0, life: 3.0, r: 42, tick: 0.3, dmg: tickDmg * 0.9, burn: 1.2
-              });
-            }
-          }
-
-          // Moongeist Beam: Triệu hồi lưỡi liềm nguyệt thực ma ảo chém quái xung quanh mục tiêu
-          if (m.id === 'moongeist-beam' && f.target && !f.target.dead) {
-            const mAng = f.t * 8;
-            const mx1 = f.target.x + Math.cos(mAng) * 45, my1 = f.target.y + Math.sin(mAng) * 45;
-            const mx2 = f.target.x - Math.cos(mAng) * 45, my2 = f.target.y - Math.sin(mAng) * 45;
-            G.FX.slash(mx1, my1, mAng + 1.57, 40, 2.0, '#c084fc', f.vis);
-            G.FX.slash(mx2, my2, mAng - 1.57, 40, 2.0, '#c084fc', f.vis);
-            for (const me of G.EnemyMgr.queryCircle(f.target.x, f.target.y, 80)) {
-              if (!me.dead && me !== f.target) hit(pl, me, tickDmg * 0.85, '#c084fc', 0, 0, 0, m);
-            }
-          }
-
-          // Prismatic Laser: Khúc xạ quang phổ thành 4 tia tán xạ cầu vồng khi bắn trúng quái
-          if (m.id === 'prismatic-laser' && f.target && !f.target.dead) {
-            [-0.78, 0, 0.78, Math.PI].forEach(refrAng => {
-              const rAim = f.aim + refrAng;
-              const rca = Math.cos(rAim), rsa = Math.sin(rAim);
-              const rLen = 150;
-              const rCol = ['#38bdf8', '#ec4899', '#a855f7', '#22c55e'][Math.floor(Math.random() * 4)];
-              G.FX.beam(f.target.x, f.target.y - G.LIFT, rAim, rLen, w * 0.6, rCol, f.vis);
-              for (const re of G.EnemyMgr.queryCircle(f.target.x + rca * 75, f.target.y + rsa * 75, 75)) {
-                if (!re.dead && re !== f.target) {
-                  hit(pl, re, tickDmg * 0.8, rCol, rca * 40, rsa * 40, 0, m);
-                }
-              }
-            });
-          }
-
-          // Core Enforcer: Quét hình chữ Z song song xé toạc phòng thủ
-          if (m.id === 'core-enforcer' && (m.evoTier >= 1 || (m.name && m.name.includes('+')))) {
-            const zAngle = f.aim + Math.sin(f.t * 12) * 0.35;
-            const zca = Math.cos(zAngle), zsa = Math.sin(zAngle);
-            G.FX.beam(pl.x, pl.y - G.LIFT, zAngle, len * 0.9, w * 0.6, '#10b981', f.vis);
-            for (const ze of G.EnemyMgr.queryCircle(pl.x + zca * (len * 0.45), pl.y + zsa * (len * 0.45), len * 0.5)) {
-              if (!ze.dead) hit(pl, ze, tickDmg * 0.65, '#10b981', zca * 25, zsa * 25, 0, m);
-            }
-          }
-
-          // Nihil Light: Hố đen hư vô nuốt chửng quái vật và phát nổ cực đại
-          if (m.id === 'nihil-light') {
-            const destX = pl.x + ca * Math.min(len, 240);
-            const destY = pl.y + sa * Math.min(len, 240);
-            for (const ve of G.EnemyMgr.queryCircle(destX, destY, 130)) {
-              if (!ve.dead && !ve.remote) {
-                const vdx = destX - ve.x, vdy = destY - ve.y, vd = Math.hypot(vdx, vdy);
-                if (vd > 4) { ve.x += (vdx / vd) * 180 * dt; ve.y += (vdy / vd) * 180 * dt; }
-              }
-            }
-            if (Math.random() < 0.4) G.FX.burst(destX, destY, '#f43f5e', 10, 160);
           }
         }
       }
@@ -1039,17 +911,82 @@ G.Combat = (() => {
     }
     if (f.kind === 'charge') {
       f.x = pl.x; f.y = pl.y;
-      // La energía se junta en ti mientras carga.
-      if (Math.random() < dt * 30 && G.Camera.sees(f.x, f.y, 40)) {
-        const a = Math.random() * 6.2832, r = G.U.rand(30, 60);
-        G.FX.sp(f.vis.proj, f.vis.pal, f.x + Math.cos(a) * r, f.y + Math.sin(a) * r * 0.8 - G.LIFT,
-                { vx: -Math.cos(a) * r * 3, vy: -Math.sin(a) * r * 2.4, life: 0.3 });
+      const isNihil = (m.id === 'nihil-light');
+
+      // 1. Trong lúc vận sức: Hiện vòng tròn năng lượng lớn trước mặt player hướng về đích
+      if (isNihil) {
+        const ringDist = 52;
+        const ringX = pl.x + Math.cos(pl.aim) * ringDist;
+        const ringY = pl.y + Math.sin(pl.aim) * ringDist - G.LIFT;
+        const ringR = 48; // Vòng tròn lớn đường kính ~96px
+
+        // Vòng tròn năng lượng hư vô phát sáng
+        G.FX.ring(ringX, ringY, ringR * 0.92, ringR, '#10b981', 0.10, 4);
+        G.FX.ring(ringX, ringY, 4, ringR * 0.8, '#34d399', 0.12, 2);
+
+        // Hạt ánh sáng hội tụ từ ngoài vào tâm vòng tròn
+        if (Math.random() < dt * 45 && G.Camera.sees(ringX, ringY, 60)) {
+          const a = Math.random() * 6.2832, r = G.U.rand(ringR * 0.5, ringR * 1.4);
+          G.FX.spark(ringX + Math.cos(a) * r, ringY + Math.sin(a) * r, '#6ee7b7',
+                     -Math.cos(a) * 90, -Math.sin(a) * 90, 3);
+        }
+      } else {
+        if (Math.random() < dt * 30 && G.Camera.sees(f.x, f.y, 40)) {
+          const a = Math.random() * 6.2832, r = G.U.rand(30, 60);
+          G.FX.sp(f.vis.proj, f.vis.pal, f.x + Math.cos(a) * r, f.y + Math.sin(a) * r * 0.8 - G.LIFT,
+                  { vx: -Math.cos(a) * r * 3, vy: -Math.sin(a) * r * 2.4, life: 0.3 });
+        }
       }
+
       if (f.t < f.at) return false;
       if (pl.dead) return true;
-      const g = ghost; ghost = f.ghost;
-      try { beam(pl, m); } finally { ghost = g; }
-      if (!f.ghost) G.Camera.kick(0.25);
+
+      // 2. Vận sức hoàn tất: Chưởng luồng ánh sáng cực đại bằng kích thước vòng tròn
+      if (isNihil) {
+        const beamW = 96;
+        const beamLen = 460;
+        const aim = pl.aim;
+        const ca = Math.cos(aim), sa = Math.sin(aim);
+
+        // Luồng ánh sáng ngọc bích hư vô khổng lồ
+        G.FX.beam(pl.x, pl.y - G.LIFT, aim, beamLen, beamW, '#10b981', f.vis);
+        G.FX.beam(pl.x, pl.y - G.LIFT, aim, beamLen, beamW * 0.65, '#a7f3d0', f.vis);
+
+        const ringX = pl.x + ca * 52, ringY = pl.y + sa * 52 - G.LIFT;
+        G.FX.burst(ringX, ringY, '#34d399', 35, 300);
+        G.FX.ring(ringX, ringY, 10, beamW * 1.5, '#10b981', 0.5, 6);
+        if (G.Camera && G.Camera.kick) G.Camera.kick(0.70);
+        G.Audio.sfx('legend');
+
+        // Gây sát thương cực lớn cho toàn bộ kẻ địch trong luồng ánh sáng
+        if (!ghost) {
+          const fullDmg = m.dmg * pl.atkFor(m);
+          const mx = pl.x + ca * beamLen / 2, my = pl.y + sa * beamLen / 2;
+          const onBeam = (x, y, r) => {
+            const px = x - pl.x, py = y - pl.y;
+            const along = px * ca + py * sa;
+            if (along < -r || along > beamLen + r) return false;
+            return Math.abs(-px * sa + py * ca) <= beamW / 2 + r;
+          };
+
+          for (const e of G.EnemyMgr.queryCircle(mx, my, beamLen / 2 + beamW)) {
+            if (e.dead) continue;
+            if (onBeam(e.x, e.y, e.r)) {
+              hit(pl, e, fullDmg, '#10b981', ca * 90, sa * 90, 0, m);
+              e.applyStun(0.8);
+            }
+          }
+
+          for (const p of G.World.props) {
+            if (p.r && onBeam(p.x, p.y, p.r)) G.World.damageProp(p, fullDmg, '#10b981');
+          }
+        }
+      } else {
+        const g = ghost; ghost = f.ghost;
+        try { beam(pl, m); } finally { ghost = g; }
+        if (!f.ghost) G.Camera.kick(0.25);
+      }
+
       return true;
     }
     if (f.kind === 'spin') {

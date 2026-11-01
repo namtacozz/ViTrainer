@@ -44,7 +44,7 @@ G.RunQuests = (() => {
       487: { move: 'shadow-force', targetDex: 10007, name: 'Origin Giratina', moveName: 'Shadow Force' },
       888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian Crowned', moveName: 'Behemoth Blade' },
       889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta Crowned', moveName: 'Behemoth Bash' },
-      646: { move: 'glaciate', targetDex: 10022, name: 'Black Kyurem', moveName: 'Băng Thần' },
+      646: { move: 'glaciate', targetDex: 10022, name: 'Hợp Thể DNA (Kyurem)', moveName: 'Băng Thần' },
       800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', moveName: 'Quang Phổ' },
       643: { move: 'fusion-flare', targetDex: 643, name: 'Reshiram', moveName: 'Fusion Flare' },
       644: { move: 'fusion-bolt', targetDex: 644, name: 'Zekrom', moveName: 'Fusion Bolt' },
@@ -163,7 +163,7 @@ G.RunQuests = (() => {
         type: 'archetype',
         archetype: 'speedster',
         title: 'THỬ THÁCH TỐC ĐỘ',
-        desc: 'Bắt Duende HOẶC Nv. 25 trước p.12',
+        desc: 'Bắt Yêu Tinh HOẶC Nv. 25 trước p.12',
         targetLv: 25,
         targetTime: 720,
         caughtRunner: false,
@@ -494,7 +494,7 @@ G.RunQuests = (() => {
         return { current: ch, max: 2, pct, label: `Rương:${ch}/2 · ${G.U.mmss(curTime)}/15:00` };
       }
       if (q.archetype === 'speedster') {
-        if (q.caughtRunner) return { current: 1, max: 1, pct: 1.0, label: 'Đã bắt Duende!' };
+        if (q.caughtRunner) return { current: 1, max: 1, pct: 1.0, label: 'Đã bắt Yêu Tinh!' };
         const lv = (pl && pl.level) || 1;
         const lvF = Math.min(1, lv / q.targetLv);
         return { current: lv, max: q.targetLv, pct: lvF, label: `Nv.${lv}/${q.targetLv} (<12:00)` };

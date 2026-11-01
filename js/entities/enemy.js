@@ -1,3 +1,33 @@
+
+  function getBossStages(dex) {
+    if (typeof G === 'undefined') return [dex, dex, dex];
+    const base = G.getBaseDex ? G.getBaseDex(dex) : dex;
+    const stages = [base];
+
+    // Stage 2
+    let s2 = (G.EVO_INTO && G.EVO_INTO[base]) ? G.EVO_INTO[base] : null;
+    if (s2) {
+      stages.push(s2);
+      // Stage 3
+      let s3 = (G.EVO_INTO && G.EVO_INTO[s2]) ? G.EVO_INTO[s2] : null;
+      if (!s3) {
+        const megas = G.getMegasFor ? G.getMegasFor(s2) : [];
+        if (megas.length) s3 = megas[0].spriteDex || megas[0].id;
+      }
+      stages.push(s3 || s2);
+    } else {
+      // Loài không có chuỗi 3 cấp, kiểm tra Mega
+      const megas = G.getMegasFor ? G.getMegasFor(base) : [];
+      if (megas.length) {
+        stages.push(base);
+        stages.push(megas[0].spriteDex || megas[0].id);
+      } else {
+        stages.push(base);
+        stages.push(base);
+      }
+    }
+    return stages;
+  }
 /* ============ enemy.js — Pokémon salvajes y su gestor ============
  * (x, y) son los PIES. Animaciones de Mundo Misterioso:
  *   Walk al moverse · Idle parado · Charge apuntando una embestida ·
@@ -59,11 +89,16 @@
       this.legend = !!(def.legend || this.legend);
       if (boss) {
         this.bossPhase = 1;
-        this.maxBossPhase = this.legend ? 3 : ((typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(def.dex).length > 0) ? 3 : 2);
+        this.maxBossPhase = 3;
+        this.stages = getBossStages(def.dex);
+        this.dex = this.stages[0] || def.dex;
+        this.name = (G.DEX_BY && G.DEX_BY[this.dex] && G.DEX_BY[this.dex].name) || def.name;
+        this.scale = bossScale(this.dex);
+        if (typeof G !== 'undefined' && G.Sprites && G.Sprites.preload) G.Sprites.preload(this.stages, 10000);
       }
-      this.anim = new G.Sprites.Animator(def.dex, this.scale);
-      this.r = G.Sprites.bodyRadius(def.dex, this.scale);
-      this.bodyH = G.Sprites.bodyHeight(def.dex, this.scale);
+      this.anim = new G.Sprites.Animator(this.dex, this.scale);
+      this.r = G.Sprites.bodyRadius(this.dex, this.scale);
+      this.bodyH = G.Sprites.bodyHeight(this.dex, this.scale);
 
       this.maxHp = Math.round(def.hp * sc.hp);
       this.hp = this.maxHp;
@@ -267,43 +302,45 @@
     advanceBossPhase() {
       this.bossPhase++;
       const phase = this.bossPhase;
-      this.dmg = Math.round(this.dmg * 1.20); // Tăng 20% sát thương qua mỗi phase
-      this.spd = Math.round(this.spd * 1.12);
-      // Boss cường hóa cân bằng qua từng phase (máu x1.40 / x1.60)
-      const hpMultiplier = phase === 2 ? 1.40 : 1.60;
-      this.maxHp = Math.round(this.maxHp * hpMultiplier);
-      // Master Plan 2.0: Thay cơ chế hồi 100% máu bằng Khiên Tinh Thể Tera Shield (30% Max HP)
-      const barrierHp = Math.round(this.maxHp * 0.30);
-      this.shield = barrierHp;
-      this.phaseShield = barrierHp;
-      this.shieldT = 999;
-      if (typeof G !== 'undefined' && G.WorldEvents && G.WorldEvents.applyTeraShield) {
-        G.WorldEvents.applyTeraShield(this);
-      }
-      this.invuln = 0.8;
-      this.ccImmuneT = 2.0; // 2s Kháng hiệu ứng khi chuyển phase
 
-      if (phase === 3) {
-        const megas = (typeof G !== 'undefined' && G.getMegasFor && G.getMegasFor(this.dex)) || [];
-        if (megas.length > 0) {
-          const mega = megas[0];
-          this.name = mega.name;
-          this.dex = mega.spriteDex || mega.id || this.dex;
-          this.scale = bossScale(this.dex);
-          this.anim = new G.Sprites.Animator(this.dex, this.scale);
-          this.r = G.Sprites.bodyRadius(this.dex, this.scale);
-          this.bodyH = G.Sprites.bodyHeight(this.dex, this.scale);
-          if (typeof G !== 'undefined' && G.Sprites && G.Sprites.preload) G.Sprites.preload([this.dex], 8000);
-          if (mega.types) this.types = mega.types;
-          if (mega.types && mega.types[0]) this.atkType = mega.types[0];
-        }
+      this.dmg = Math.round(this.dmg * 1.20);
+      this.spd = Math.round(this.spd * 1.10);
+      // Máu gia tăng qua từng phase
+      const hpMultiplier = phase === 2 ? 1.35 : 1.50;
+      this.maxHp = Math.round(this.maxHp * hpMultiplier);
+
+      // KHÔI PHỤC ĐẦY 100% MÁU - SỬA LỖI CẠN MÁU KHÔNG CHẾT
+      this.hp = this.maxHp;
+      this.shield = 0;
+      this.phaseShield = 0;
+      this.teraShield = false;
+      this.invuln = 0.5; // 0.5s bất tử nháy hình chuyển phase tránh nhận dồn damage cùng 1 frame
+      this.ccImmuneT = 2.0;
+
+      // Tiến hóa hình thái theo chuỗi
+      const targetDex = (this.stages && this.stages[phase - 1]) || this.dex;
+      this.dex = targetDex;
+      const monData = (typeof G !== 'undefined' && G.DEX_BY && G.DEX_BY[this.dex]) || null;
+      if (monData) {
+        this.name = monData.name;
+        if (monData.types) this.types = monData.types;
+        if (monData.types && monData.types[0]) this.atkType = monData.types[0];
       }
+
+      this.scale = bossScale(this.dex);
+      this.anim = new G.Sprites.Animator(this.dex, this.scale);
+      this.r = G.Sprites.bodyRadius(this.dex, this.scale);
+      this.bodyH = G.Sprites.bodyHeight(this.dex, this.scale);
 
       if (typeof G !== 'undefined' && G.Coop && G.Coop.isHost && G.Coop.broadcastBossPhase) {
         G.Coop.broadcastBossPhase(this.id, this.bossPhase, this.maxHp, this.dex, this.name);
       }
 
-      const title = '¡FASE ' + phase + ': ' + this.name.toUpperCase() + ' SE REGENERA!';
+      const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
+      const title = isVi
+        ? ('GIAI ĐOẠN ' + phase + ': ' + this.name.toUpperCase() + ' TIẾN HÓA & HỒI PHỤC!')
+        : ('PHASE ' + phase + ': ' + this.name.toUpperCase() + ' REGENERATES!');
+
       if (typeof G !== 'undefined' && G.Spawner && G.Spawner.say) G.Spawner.say(title, 3.5, true);
       if (typeof G !== 'undefined' && G.Camera && G.Camera.kick) G.Camera.kick(1.4);
       if (typeof G !== 'undefined' && G.Audio && G.Audio.sfx) { G.Audio.sfx('boss'); G.Audio.sfx('legend'); }
@@ -650,12 +687,25 @@
       }
       if (ai.cd <= 0) {
         let id = null;
-        if (ai.mode === 'close') {
-          const ok = ai.melee.filter(m => m === 'slam' ? dist < 125 : dist < 320);
-          // De vez en cuando, aunque esté cerca, también dispara.
-          id = ok.length && Math.random() < 0.8 ? G.U.pick(ok) : dist < 480 ? G.U.pick(ai.ranged) : null;
+        const phase = this.bossPhase || 1;
+
+        if (phase === 1) {
+          // Phase 1: Chiêu tầm ngắn (slam)
+          id = dist < 140 ? 'slam' : null;
+          if (!id && dist < 260 && Math.random() < 0.3) id = 'slam';
+        } else if (phase === 2) {
+          // Phase 2: Mở thêm chiêu lao bay đến mục tiêu (dash, leap, dragon_rush)
+          const rushMoves = ['dash', 'leap'];
+          if (ai.melee && ai.melee.includes('dragon_rush')) rushMoves.push('dragon_rush');
+          id = dist < 120 ? 'slam' : dist < 380 ? G.U.pick(rushMoves) : null;
         } else {
-          id = dist < 115 ? 'slam' : dist < 430 ? G.U.pick(ai.ranged) : null;
+          // Phase 3: Toàn bộ chiêu thức như hiện tại
+          if (ai.mode === 'close') {
+            const ok = ai.melee.filter(m => m === 'slam' ? dist < 125 : dist < 320);
+            id = ok.length && Math.random() < 0.8 ? G.U.pick(ok) : dist < 480 ? G.U.pick(ai.ranged) : null;
+          } else {
+            id = dist < 115 ? 'slam' : dist < 430 ? G.U.pick(ai.ranged) : null;
+          }
         }
         if (id) this.bossStart(id, pl);
       }

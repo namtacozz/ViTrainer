@@ -1029,7 +1029,8 @@ G.DEX = [
   {"dex": 11713, "name": "Hisuian Avalugg", "types": ["ice", "rock"], "hp": 112, "spd": 75, "atk": 1.35, "pa": 1.35, "sa": 0.7, "df": 184, "sd": 36, "rarity": 4, "bst": 514, "starter": false, "gen": 4},
   {"dex": 11724, "name": "Hisuian Decidueye", "types": ["grass", "fighting"], "hp": 108, "spd": 90, "atk": 1.35, "pa": 1.35, "sa": 1.2, "df": 80, "sd": 95, "rarity": 4, "bst": 530, "starter": false, "gen": 4},
   {"dex": 11128, "name": "Paldean Tauros", "types": ["fighting"], "hp": 105, "spd": 118, "atk": 1.35, "pa": 1.35, "sa": 0.8, "df": 105, "sd": 70, "rarity": 4, "bst": 490, "starter": false, "gen": 9},
-];
+  {"dex":10022,"name":"Black Kyurem","types":["dragon","ice"],"hp":125,"spd":95,"atk":1.70,"pa":1.70,"sa":1.20,"df":100,"sd":90,"rarity":5,"bst":700,"starter":false,"gen":5,"leg":true},
+  {"dex":10023,"name":"White Kyurem","types":["dragon","ice"],"hp":125,"spd":95,"atk":1.70,"pa":1.20,"sa":1.70,"df":90,"sd":100,"rarity":5,"bst":700,"starter":false,"gen":5,"leg":true}];
 
 G.DEX_BY = {};
 for (const p of G.DEX) G.DEX_BY[p.dex] = p;

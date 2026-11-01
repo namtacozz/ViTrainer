@@ -2,6 +2,10 @@
  * Tự động tạo và đồng bộ từ TRANSLATIONS.md
  */
 G.I18n.add({
+    "Duende": "Yêu Tinh",
+    "¡Un %s shiny anda cerca!": "Một %s Shiny đang ở gần!",
+    "¡%s salvaje apareció!": "%s hoang dã xuất hiện!",
+    "¡FASE %s: %s SE REGENERA!": "GIAI ĐOẠN %s: %s TIẾN HÓA & HỒI PHỤC!",
   "MAESTRÍA ++": "TINH THÔNG ++",
   "DOMINIO +++": "TỐI THƯỢNG +++",
   "Maestría": "Tinh thông",

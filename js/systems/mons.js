@@ -22,7 +22,15 @@ G.Mons = (() => {
   const save = () => G.DB && G.DB.save;
 
   /** Nombre en el idioma del juego: [es, en, fr, it, zh-Hans, zh-Hant] (pt-BR, el inglés). */
-  const LANG_I = { es: 0, en: 1, fr: 2, it: 3, 'pt-BR': 1, 'zh-Hans': 4, 'zh-Hant': 5 };
+  const LANG_I = { es: 0, en: 1, fr: 2, it: 3, 'pt-BR': 1, 'zh-Hans': 4, 'zh-Hant': 5, vi: 1 };
+  const NATURE_NAMES_VI = {
+    hardy: 'Cần Cù', lonely: 'Cô Độc', brave: 'Dũng Cảm', adamant: 'Kiên Quyết', naughty: 'Nghịch Ngợm',
+    bold: 'Táo Bạo', docile: 'Ngoan Ngoãn', relaxed: 'Thư Thái', impish: 'Tinh Quái', lax: 'Phóng Túng',
+    timid: 'Nhút Nhát', hasty: 'Hấp Tấp', serious: 'Nghiêm Túc', jolly: 'Vui Vẻ', naive: 'Ngây Thơ',
+    modest: 'Khiêm Tốn', mild: 'Ôn Hòa', quiet: 'Trầm Lặng', bashful: 'Rụt Rè', rash: 'Bốc Đồng',
+    calm: 'Điềm Tĩnh', gentle: 'Dịu Dàng', sassy: 'Ngổ Ngáo', careful: 'Cẩn Thận', quirky: 'Kỳ Quặc'
+  };
+
   function name(n) {
     if (!Array.isArray(n)) return String(n || '');
     return n[LANG_I[G.I18n ? G.I18n.lang : 'es'] || 0] || n[1] || n[0];
@@ -42,6 +50,9 @@ G.Mons = (() => {
   /** La que le tocó (sin Menta). */
   function rolledNature(dex) { return G.NATURES[Math.floor(roll(dex, 'nat') * G.NATURES.length)]; }
   /** La que tiene ahora: la de la Menta o la que le tocó (heredada de la línea evolutiva). */
+  function natureName(n) {
+    return n ? name(n.n, n.id) : '';
+  }
   function natureOf(dex) {
     const base = typeof G !== 'undefined' && G.getBaseDex ? G.getBaseDex(dex) : dex;
     const s = save(), p = s && s.pnat && (s.pnat[dex] || s.pnat[base]);

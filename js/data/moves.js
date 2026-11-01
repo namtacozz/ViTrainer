@@ -610,8 +610,8 @@
       cd: 2.60, dmg: 28, radius: 280, width: 50, knock: 100, exclusive: true },
 
     { id: 'nihil-light', name: 'Nihil Light', type: 'dragon', kind: 'charge',
-      desc: 'Mega Zygarde canaliza el poder del vacío en un colosal rayo cósmico que incinera todo a su paso.',
-      cd: 2.2, charge: 0.80, dmg: 64, radius: 360, width: 70, knock: 180, stun: 0.6, exclusive: true },
+      desc: 'Mega Zygarde vận sức tạo vòng tròn năng lượng hư vô khổng lồ trước mặt rồi chưởng luồng ánh sáng hủy diệt.',
+      cd: 4.5, charge: 1.2, dmg: 220, radius: 440, width: 96, knock: 220, stun: 0.8, exclusive: true },
 
     { id: 'roar-of-time', name: 'Roar of Time', type: 'dragon', kind: 'nova',
       desc: 'Onda temporal distorsionada que desgarra el tejido del tiempo y ralentiza masivamente a los enemigos.',

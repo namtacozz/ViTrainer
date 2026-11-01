@@ -834,15 +834,15 @@ G.MenuUI = (() => {
     const capN = G.Mons.abilityChoices(dex, false).length ? G.Shop.count('cap') : 0;
     const caphN = G.Mons.abilityChoices(dex, true).length ? G.Shop.count('caph') : 0;
     return `<div class="mon-extra">
-      <div class="mx-row"><span>Naturaleza</span><b translate="no">${G.Mons.name(n.n)}</b><small>${natLine(n)}</small>
-        ${btn('nat', 'mint', 'Menta', G.Shop.count('mint'))}</div>
-      <div class="mx-row"><span>Habilidad</span><b translate="no">${G.Mons.abilityName(ab.id)}</b>${ab.slot === 2 ? `<small class="gold">${G.T('oculta')}</small>` : ''}
-        ${btn('cap', 'capsule', 'Cápsula', capN)}${btn('caph', 'capsuleh', 'Cápsula Oculta', caphN)}</div>
-      <p class="sub mx-desc"><span>${fx.d}</span>${fx.d2 ? ` <span>${fx.d2}</span>` : ''}</p>
-      <div class="mx-row"><span>MT</span>${taught.length
+      <div class="mx-row"><span>${G.T('Naturaleza')}</span><b translate="no">${G.Mons.name(n.n, n.id)}</b><small>${natLine(n)}</small>
+        ${btn('nat', 'mint', G.T('Menta'), G.Shop.count('mint'))}</div>
+      <div class="mx-row"><span>${G.T('Habilidad')}</span><b translate="no">${G.Mons.abilityName(ab.id)}</b>${ab.slot === 2 ? `<small class="gold">${G.T('oculta')}</small>` : ''}
+        ${btn('cap', 'capsule', G.T('Cápsula'), capN)}${btn('caph', 'capsuleh', G.T('Cápsula Oculta'), caphN)}</div>
+      <p class="sub mx-desc"><span>${G.T(fx.d)}</span>${fx.d2 ? ` <span>${G.T(fx.d2)}</span>` : ''}</p>
+      <div class="mx-row"><span>${G.T('MT')}</span>${taught.length
         ? `<span class="move-icons">${taught.map(id => `<span title="${G.T(G.Moves.BY_ID[id].name, 'move')}">${G.Icons.html('move:' + id, 16)}</span>`).join('')}</span>`
         : `<small>${G.T('Aún no ha aprendido ninguna')}</small>`}
-        ${btn('tm', 'tm', 'Enseñar MT', tmsHere.length)}</div>
+        ${btn('tm', 'tm', G.T('Enseñar MT'), tmsHere.length)}</div>
       ${skinRow(dex)}
       <div id="mx-picker"></div>
     </div>`;
