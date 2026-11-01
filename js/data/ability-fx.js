@@ -270,7 +270,10 @@ G.AbilityFX = (() => {
    * aparte, para que cada frase se traduzca entera).
    */
   function of(id, mon) {
-    const fx = id && FX[id];
+    let fx = id && FX[id];
+    if (!fx && typeof G !== 'undefined' && G.AbilitiesExt && G.AbilitiesExt.get) {
+      fx = G.AbilitiesExt.get(id);
+    }
     if (!fx) return generic(mon);
     if (!fx.plus) return fx;
     const g = generic(mon);

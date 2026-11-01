@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ViTrainer – Free online Pokémon survival game (Survivor.io style)</title>
 <meta name="description" content="ViTrainer: survive hordes of Pokémon with your partner in this free fan game for browser and mobile: 1021 Pokémon, shinies, mega forms and online co-op with up to 8 friends. No downloads, no ads.">
-<link rel="canonical" href="https://pokesurvivor.com/en/">
+<link rel="canonical" href="https://namtaccozz.github.io/ViTrainer/en/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0a1430">
 <meta name="color-scheme" content="dark">
@@ -18,7 +18,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ViTrainer">
 <meta property="og:locale" content="en_US">
-<meta property="og:url" content="https://pokesurvivor.com/en/">
+<meta property="og:url" content="https://namtaccozz.github.io/ViTrainer/en/">
 <meta property="og:title" content="ViTrainer – Survive the Pokémon hordes">
 <meta property="og:description" content="A free fan game for browser and mobile: 1021 Pokémon, shinies, mega forms and co-op with up to 8 friends. No downloads, no ads.">
 <meta property="og:image" content="assets/icons/ViTrainer.png">
@@ -31,7 +31,7 @@
 <meta name="twitter:image" content="assets/icons/ViTrainer.png">
 <meta name="ps-pages" content="1">
 <link rel="manifest" href="manifest.webmanifest">
-<!-- Google sólo enseña en los resultados iconos de 48 px o múltiplos -->
+<!-- Google chỉ hiển thị icon kích thước 48px hoặc bội số trong kết quả tìm kiếm -->
 <link rel="icon" href="assets/icons/ViTrainer.ico" sizes="any">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/icons/icon-48.png">
@@ -45,36 +45,36 @@
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preload" href="assets/fonts/PixelifyPS-400.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="assets/fonts/PixelifyPS-700.ttf" as="font" type="font/ttf" crossorigin>
-<!-- Datos estructurados para Google (tipo de página: videojuego gratuito) -->
+<!-- Dữ liệu có cấu trúc Schema.org cho Google (thể loại: VideoGame miễn phí) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://pokesurvivor.com/#web",
-      "url": "https://pokesurvivor.com/",
+      "@id": "https://namtaccozz.github.io/ViTrainer/#web",
+      "url": "https://namtaccozz.github.io/ViTrainer/",
       "name": "ViTrainer",
-      "inLanguage": ["es", "en"],
-      "publisher": { "@id": "https://pokesurvivor.com/#autor" }
+      "inLanguage": "en",
+      "publisher": { "@id": "https://namtaccozz.github.io/ViTrainer/#autor" }
     },
     {
       "@type": "Person",
-      "@id": "https://pokesurvivor.com/#autor",
+      "@id": "https://namtaccozz.github.io/ViTrainer/#autor",
       "name": "ViTeam",
       "alternateName": "ViTeam",
-      "url": "https://pokesurvivor.com/",
+      "url": "https://namtaccozz.github.io/ViTrainer/",
       "sameAs": ["https://www.youtube.com/@jpter78", "https://www.tiktok.com/@jpter78", "https://www.twitch.tv/jpter78",
         "https://x.com/JPTER78", "https://github.com/JPTER78"]
     },
     {
       "@type": ["VideoGame", "WebApplication"],
-      "@id": "https://pokesurvivor.com/#juego",
+      "@id": "https://namtaccozz.github.io/ViTrainer/#juego",
       "name": "ViTrainer",
-      "url": "https://pokesurvivor.com/",
-      "description": "A free Pokémon survival fan game (bullet heaven, Survivor.io style): pick a partner, survive the hordes, level up, evolve your moves, fight legendaries in rifts and play co-op with up to 8 friends.",
-      "image": "https://pokesurvivor.com/assets/og-image.jpg",
-      "inLanguage": ["es", "en"],
+      "url": "https://namtaccozz.github.io/ViTrainer/",
+      "description": "Trò chơi sinh tồn roguelite Pokémon phong cách Mystery Dungeon hoàn toàn miễn phí: chọn bạn đồng hành, sinh tồn trước bầy quái, tiến hóa chiêu thức, đối đầu boss huyền thoại và chơi tổ đội co-op tới 8 người.",
+      "image": "https://namtaccozz.github.io/ViTrainer/assets/og-image.jpg",
+      "inLanguage": "es",
       "genre": ["Roguelike", "Bullet heaven", "Acción", "Supervivencia"],
       "gamePlatform": ["Navegador web", "PC", "Android", "iOS"],
       "applicationCategory": "GameApplication",
@@ -83,9 +83,9 @@
       "numberOfPlayers": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 4 },
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" },
-      "author": { "@id": "https://pokesurvivor.com/#autor" },
-      "publisher": { "@id": "https://pokesurvivor.com/#autor" },
-      "isPartOf": { "@id": "https://pokesurvivor.com/#web" }
+      "author": { "@id": "https://namtaccozz.github.io/ViTrainer/#autor" },
+      "publisher": { "@id": "https://namtaccozz.github.io/ViTrainer/#autor" },
+      "isPartOf": { "@id": "https://namtaccozz.github.io/ViTrainer/#web" }
     }
   ]
 }
@@ -96,7 +96,7 @@
 <body>
 
 <canvas id="game"></canvas>
-<!-- En móvil se juega en horizontal -->
+<!-- Trên thiết bị di động chơi ở chế độ màn hình ngang -->
 <div id="rotate" class="hidden"><div class="box center"><div id="rotate-ico"></div><h2>Gira el móvil</h2><p class="sub">ViTrainer se juega en horizontal.</p></div></div>
 
 <!-- ====== Inicio: login / registro / invitado ====== -->
@@ -132,7 +132,7 @@
       <button id="btn-guest" class="btn ghost grow" type="button">Jugar como invitado</button>
     </div>
     <p class="note center" id="login-mode"></p>
-    <p class="note center"><a href="en/guide/">Guía</a> · <a href="en/pokedex/">Pokédex</a> · <a href="#" class="legal-link" data-legal>Aviso legal y privacidad</a> · <a href="privacidad/" target="_blank" rel="noopener">Política de privacidad</a></p>
+    <p class="note center"><a href="en/guide/">Cẩm nang</a> · <a href="en/pokedex/">Pokédex</a> · <a href="#" class="legal-link" data-legal>Điều khoản & Bảo mật</a> · <a href="quyen-rieng-tu/" target="_blank" rel="noopener">Chính sách bảo mật</a></p>
   </div>
 </section>
 
@@ -364,8 +364,8 @@
 <div id="boot" class="boot">
   <div class="boot-in">
     <h1>ViTrainer</h1>
-    <p>A Pokémon survival game, free in your browser and on mobile.</p>
-    <p class="boot-ld">Loading…</p>
+    <p>Juego de supervivencia con Pokémon, gratis en el navegador y en el móvil.</p>
+    <p class="boot-ld">Cargando…</p>
   </div>
 </div>
 <script src="js/boot.js"></script>
@@ -382,7 +382,7 @@
       <h1>ViTrainer</h1>
       <p>ViTrainer cần JavaScript để hoạt động. Actívalo para jugar.</p>
       <p>Fan game gratuito de supervivencia con 966 Pokémon de las 9 regiones: elige tu compañero, sobrevive a las hordas, evoluciona tus ataques, enfréntate a legendarios y juega en cooperativo con hasta 8 amigos.</p>
-      <p><a href="en/guide/">Guía del juego</a> · <a href="en/pokedex/">Pokédex: todos los Pokémon jugables</a></p>    </div>
+      <p><a href="guia/">Guía del juego</a> · <a href="en/pokedex/">Pokédex: todos los Pokémon jugables</a></p>    </div>
   </div>
 </noscript>
 
@@ -660,6 +660,6 @@
 </section>
 
 <!-- datos generados -->
-<script defer src="js/app.min.js?v=882179b2a9"></script>
+<script defer src="js/app.min.js?v=b9096fd858"></script>
 </body>
 </html>

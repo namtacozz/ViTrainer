@@ -6,14 +6,12 @@ Tài liệu chi tiết về hệ thống dịch thuật đa ngôn ngữ (**Local
 
 ## 1. Các Ngôn Ngữ Được Hỗ Trợ & Nguyên Tắc Vận Hành
 
-ViTrainer hỗ trợ chuyển đổi ngôn ngữ tức thì trong phần Cài Đặt (Ajustes / Settings) mà không cần tải lại trang:
+ViTrainer hỗ trợ chuyển đổi ngôn ngữ tức thì trong phần Cài Đặt (Settings) mà không cần tải lại trang:
 - **Tiếng Việt (`vi`)**: Bản ngữ tiếng Việt hoàn chỉnh dành cho cộng đồng người chơi Việt Nam.
 - **Tiếng Anh (`en`)**: Ngôn ngữ quốc tế chuẩn hóa toàn cầu.
-- **Tiếng Tây Ban Nha (`es`)**: Ngôn ngữ gốc của giao diện mã nguồn.
-
 ### Nguyên Tắc Bất Di Bất Dịch:
 - **Nguyên tác tên Pokémon & Chiêu thức**: Tên Pokémon (Pikachu, Bulbasaur, Rayquaza...) và tên chiêu thức chuẩn canon (Hyper Beam, Behemoth Blade, Roar of Time...) luôn được giữ nguyên theo danh pháp quốc tế nhằm bảo đảm tính đồng bộ với hệ thống dữ liệu PokeAPI và văn hóa cộng đồng người chơi.
-- **Dịch thuật giao diện người dùng (UI Strings)**: Toàn bộ thông báo hệ thống, mô tả nâng cấp, thẻ kỹ năng, cạm bẫy, hướng dẫn tân thủ và cốt truyện đều phải được chuyển ngữ 100%, tuyệt đối không để sót chuỗi tiếng Tây Ban Nha hay tiếng Anh không mong muốn.
+- **Dịch thuật giao diện người dùng (UI Strings)**: Toàn bộ thông báo hệ thống, mô tả nâng cấp, thẻ kỹ năng, cạm bẫy, hướng dẫn tân thủ và cốt truyện đều phải được chuyển ngữ 100%, tuyệt đối không để sót chuỗi mã nguồn nội bộ hay tiếng Anh không mong muốn.
 
 ---
 
@@ -31,8 +29,8 @@ flowchart TD
 ```
 
 ### Chi tiết các file:
-1. **`js/data/lang-en.js`**: File từ điển Tiếng Anh ánh xạ từ khóa gốc tiếng Tây Ban Nha sang tiếng Anh (`"Clave en español": "English translation"`).
-2. **`js/data/lang-vi.js`**: File từ điển Tiếng Việt ánh xạ từ khóa gốc tiếng Tây Ban Nha sang tiếng Việt (`"Clave en español": "Bản dịch Tiếng Việt"`).
+1. **`js/data/lang-en.js`**: File từ điển Tiếng Anh ánh xạ từ khóa gốc mã nguồn nội bộ sang tiếng Anh (`"Key nội bộ": "English translation"`).
+2. **`js/data/lang-vi.js`**: File từ điển Tiếng Việt ánh xạ từ khóa gốc mã nguồn nội bộ sang tiếng Việt (`"Key nội bộ": "Bản dịch Tiếng Việt"`).
 3. **`tools/build_langs.js`**: Script tự động quét các file nguồn, đối chiếu từ điển thô, nén và sinh ra `js/lang/vi.js` và `js/lang/en.js`.
 4. **`js/core/i18n.js`**: Động cơ dịch thuật thời gian thực trong game (`G.I18n`), quản lý biến `G.I18n.lang`, xử lý chuyển ngữ Canvas và DOM dynamically.
 

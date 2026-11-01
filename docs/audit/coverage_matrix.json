@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-01T11:50:27.219Z",
+  "totalPokemon": 1021,
+  "singleStageSpecies": 199,
+  "multiStageSpecies": 822,
+  "totalAbilities": 276,
+  "abilityCoverage": {
+    "fxBuiltin": 163,
+    "extShaping": 15,
+    "generic": 98
+  },
+  "totalMoves": 139,
+  "typeDistribution": {
+    "normal": 12,
+    "fire": 10,
+    "water": 7,
+    "grass": 7,
+    "electric": 8,
+    "psychic": 7,
+    "poison": 5,
+    "ground": 10,
+    "flying": 8,
+    "bug": 5,
+    "rock": 5,
+    "ice": 9,
+    "fighting": 6,
+    "ghost": 8,
+    "dragon": 9,
+    "fairy": 7,
+    "steel": 10,
+    "dark": 6
+  },
+  "totalItems": 30
+}

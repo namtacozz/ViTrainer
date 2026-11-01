@@ -1,183 +1,104 @@
-# PokéSurvivor · Mundo Misterioso
+# ViTrainer · Sinh Tồn Pokémon & Thám Hiểm Hầm Ngục
 
-Bullet-heaven con Pokémon al estilo de Survivor.io y Megabonk, con sprites de
-*Pokémon Mundo Misterioso*, capa roguelike, **966 Pokémon de las 9 generaciones**,
-shinies y gacha por región. Música y efectos compuestos para el juego.
+Trò chơi hành động sinh tồn roguelite (bullet-heaven / horde survival) phong cách **Pokémon Mystery Dungeon**, tích hợp đầy đủ **1021 Pokémon từ cả 9 thế hệ** (từ Kanto đến Paldea), hình thái Mega Evolution, Pokémon Shiny lấp lánh và hệ thống gacha vé chiêu mộ theo từng vùng. Âm nhạc và hiệu ứng âm thanh retro 16-bit sống động được sáng tác riêng cho game.
 
-HTML + CSS + JavaScript vanilla sobre Canvas 2D. Sin build, sin dependencias y
-**todo local**: no necesita internet para jugar.
+Xây dựng trên nền tảng HTML5 + Canvas 2D + JavaScript thuần (Vanilla JS), hoàn toàn không cần server dựng sẵn, tải cực nhanh, tương thích mọi trình duyệt hiện đại trên PC, máy tính bảng và điện thoại di động.
 
-> **Autoría / Authorship**
->
-> PokéSurvivor (su código y su música original) lo ha escrito y es de
-> **Jonathan Piera Torregrosa**, dueño de esta cuenta (JPTER78) y de pokesurvivor.com.
-> The source code and original music of PokéSurvivor are written and owned by
-> **Jonathan Piera Torregrosa**, owner of this GitHub account (JPTER78) and of
-> pokesurvivor.com. Google copyright removal request **4-2352000042234**
-> (against pokesurvivor.co) was submitted by me.
+> [!IMPORTANT]
+> **Thông tin Dự án & Bản quyền (Authorship & Official Info)**
+> - **Tên trò chơi chính thức**: ViTrainer
+> - **Đội ngũ phát triển chính thức**: ViTeam
+> - **Mã nguồn GitHub**: [https://github.com/namtacozz/ViTrainer](https://github.com/namtacozz/ViTrainer)
+> - **Trang web chính thức (GitHub Pages)**: [https://namtaccozz.github.io/ViTrainer/](https://namtaccozz.github.io/ViTrainer/)
+> - **Tuyên bố phi lợi nhuận & Token**: ViTrainer là fan-game hoàn toàn **MIỄN PHÍ và PHI LỢI NHUẬN**, không có quảng cáo, không nạp tiền, không phát hành bất kỳ đồng tiền ảo (crypto), token hay NFT nào. Mọi hoạt động yêu cầu trả phí nhân danh trò chơi đều là giả mạo.
 
-> **Aviso sobre criptomonedas / Crypto disclaimer**
->
-> PokéSurvivor **no tiene ninguna criptomoneda, token ni NFT oficial**, y yo no
-> he creado ninguno. Cualquier token que use el nombre del juego lo han creado
-> terceros. **No me hago cargo de ninguna compra, venta o inversión** que hagas
-> con ellos y nada de lo que hay aquí es una recomendación de inversión. El
-> juego es gratis y lo seguirá siendo.
->
-> PokéSurvivor has **no official cryptocurrency, token or NFT**, and I have not
-> created any. Any token using the game's name was created by third parties.
-> **I take no responsibility for any purchase, sale or investment** you make
-> with them, and nothing here is investment advice. The game is free and will
-> stay free.
+---
 
-## Jugar
+## 🎮 Cách Chơi
 
-Doble clic en `index.html`. Crea una cuenta o entra como invitado, haz el test
-de personalidad y a la mazmorra.
+Mở trực tiếp liên kết web trên trình duyệt hoặc chạy `index.html`. Tạo tài khoản hoặc chơi ngay dưới chế độ Khách, hoàn thành bài kiểm tra tính cách để nhận bạn đồng hành khởi đầu và bước vào hầm ngục sinh tồn.
 
-| Tecla | Acción |
+### Phím Điều Khiển Trên Máy Tính (PC):
+
+| Phím | Thao tác |
 |---|---|
-| `W` `A` `S` `D` / flechas | Moverse |
-| `1` `2` `3` `4` | Elegir el movimiento activo |
-| `Q` / `E` | Ciclar movimientos |
-| `Esc` / `P` | Pausa |
+| `W` `A` `S` `D` / Các phím mũi tên | Di chuyển nhân vật |
+| `1` `2` `3` `4` | Chọn chiêu thức chiến đấu chủ động |
+| `Q` / `E` | Chuyển đổi nhanh giữa các chiêu thức |
+| `5` `6` `7` `8` | Kích hoạt Ngọc Thần Bí (Orbs) |
+| `Esc` / `P` | Tạm dừng trận đấu (Pause) |
 
-**En móvil o tablet** (en horizontal): pon el dedo en cualquier sitio y arrastra
-para moverte (el joystick aparece donde tocas), toca un ataque de abajo para
-cambiarlo y el botón de arriba a la derecha para pausar. Se puede instalar como
-app ("Añadir a pantalla de inicio"). En **Ajustes** hay sonido, calidad gráfica
-(con modo automático), números de daño, menos sacudidas, FPS y la cuenta.
+### Trên Thiết Bị Di Động & Máy Tính Bảng (Màn Hình Ngang):
+- Chạm và kéo ngón tay bất kỳ đâu trên màn hình để di chuyển (cần điều khiển ảo Joystick xuất hiện tại điểm chạm).
+- Nhấp trực tiếp vào biểu tượng chiêu thức bên dưới để kích hoạt, nhấp vào ngọc để sử dụng và nút góc trên cùng bên phải để tạm dừng.
+- Có thể cài đặt thành ứng dụng độc lập trên màn hình chính qua tính năng "Thêm vào màn hình chính" (PWA).
+- Trong menu **Cài Đặt (Settings)**: Có thể tùy chỉnh âm lượng, chất lượng đồ họa tự động, hiển thị số sát thương, chế độ chống rung màn hình và quản lý tài khoản.
 
-El Pokémon ataca solo con el movimiento activo (o con todos los de un
-**vínculo**: cada legendario vencido deja fusionar movimientos para lanzarlos a
-la vez desde un solo hueco, hasta 4). Las rocas, cofres y la hierba
-alta se rompen; las paredes y los árboles bloquean los disparos enemigos; el
-agua frena y la lava quema (también a los enemigos).
+### Kết Hợp Chiêu Thức & Tay Cầm (Gamepad):
+- Hỗ trợ đầy đủ tay cầm Xbox, PlayStation và Nintendo Switch: Cần analog hoặc D-pad để di chuyển, `LB`/`RB` đổi chiêu, `X` dùng ngọc, `Y` đổi ngọc, `Start` tạm dừng.
+- **Cơ chế Dung Hợp Chiêu Thức (Bond System)**: Mỗi lần đánh bại một Boss Huyền Thoại trong Vết Nứt (Rift), bạn có thể dung hợp tối đa 4 chiêu thức vào cùng 1 ô kỹ năng để cùng kích hoạt một lúc.
 
-En el mapa hay **altares de poder**, **manantiales** que curan, **cofres con
-candado** (quédate a su lado unos segundos) y **trampas** que también dañan a
-los enemigos. A veces se abre una **grieta**: entra y lucharás contra un
-**legendario** en una arena aparte.
+---
 
-Hay **tabla de tipos** (un Rayo Burbuja le quita más a un Charmander) y,
-de vez en cuando, **climas** (sol, lluvia, arena, nieve, niebla) que potencian
-unos tipos y debilitan otros.
+## 🌟 Tính Năng Nổi Bật
 
-Cada día hay **misiones** (y semanales) que dan tickets y monedas; los
-**logros** dan medallas y títulos, y tu **perfil** enseña tus 3 Pokémon
-favoritos, tus marcas y tus medallas. En las runs encuentras **objetos** (Restos,
-Cinta Elección...) y tus movimientos **evolucionan** al máximo nivel. Los
-enemigos tienen personalidad: curan, ponen escudos, llaman a su manada o atacan
-con aviso en el suelo.
+1. **Hệ Thống 1021 Pokémon & Shinies**:
+   - Tất cả Pokémon từ Gen 1 đến Gen 9 đều có thể làm bạn đồng hành.
+   - Tỷ lệ xuất hiện Shiny 1/4096 ngoài hoang dã và 1/100 trong vòng quay Gacha. Mũi tên định vị sẽ chỉ đường khi có Shiny xuất hiện trên bản đồ.
+2. **Cơ Chế Tiến Hóa Cân Bằng**:
+   - Tiến hóa trong trận tại Level 15 và Level 30, hồi phục 50% HP.
+   - Chuỗi thức tỉnh hình thái Mega, Primal Reversion, Ultra Burst và các chiêu thức độc quyền (Signature Moves).
+3. **18 Đấu Trường Vết Nứt Thứ Nguyên (Rifts)**:
+   - Các cánh cổng không gian mở ra ngẫu nhiên đưa người chơi vào đấu trường nguyên tố đối đầu các vị thần bảo hộ (Mewtwo, Rayquaza, Dialga, Palkia, Giratina, v.v.).
+   - Trận chiến định mệnh Thẩm Phán Arceus xuất hiện tại phút thứ 30.
+4. **Hệ Thống Chơi Hợp Tác Online (Co-op Tối Đa 8 Người)**:
+   - Kết nối mạng ngang hàng WebRTC qua máy chủ STUN miễn phí của Google.
+   - Chia sẻ kinh nghiệm, đồng bộ trận đấu theo thời gian thực và có thể hồi sinh đồng đội khi đứng cạnh trong 3 giây.
+5. **Lưu Trữ Đám Mây & Bảng Xếp Hạng (Cloud Save & Rankings)**:
+   - Tích hợp Firebase Authentication và Realtime Database hoàn toàn miễn phí.
+   - Đồng bộ tiến trình chơi xuyên suốt giữa máy tính và điện thoại.
 
-Las **mejoras** son de cada Pokémon. El **gacha** va con **tickets** que se
-ganan jugando (×1 de algunos Pokémon, ×10 de jefes y legendarios), y se tira
-en una tragaperras pixel art.
+---
 
-Cada enemigo tiene 1/4096 de salir **shiny**: brilla, una flecha en el borde de
-la pantalla te dice dónde está, y si lo derrotas te lo quedas. En el gacha sale
-shiny 1 de cada 100 tiradas. En la colección eliges tu compañero en versión
-normal o shiny.
+## 🛠️ Quy Chuẩn Phát Triển & Kiến Trúc Dự Án
 
-La música suena tras el primer clic (los navegadores no dejan reproducir sonido
-antes). Volumen y silencio: botón del altavoz arriba a la derecha, o en la pausa.
+ViTrainer tuân thủ quy chuẩn phát triển nghiêm ngặt theo **[`AGENTS.md`](AGENTS.md)**:
 
-El guardado vive en el `localStorage` del navegador: si borras los datos del
-sitio, se pierde.
+1. **Chỉ chỉnh sửa `dev.html`**:
+   - Tuyệt đối không chỉnh sửa trực tiếp `index.html` (file này được sinh tự động qua quá trình nén Terser và bảo vệ mã).
+2. **Chuỗi Pipeline Biên Dịch (Build Pipeline)**:
+   ```bash
+   node tools/build.js && node tools/export_data.js && python tools/make_seo_pages.py
+   ```
+3. **Kiểm Thử Trước Khi Commit (Pre-Commit Testing)**:
+   ```bash
+   node --test tests/i18n.test.cjs tests/buffs.test.cjs tests/net.test.cjs tests/balance.test.cjs tests/abilities.test.cjs tests/moves.test.cjs
+   ```
+4. **Hạ Tầng Không Chi Phí (Zero Cost Policy)**:
+   - GitHub Pages làm hosting tĩnh.
+   - Cloudflare CDN & DNS miễn phí.
+   - Firebase gói miễn phí Spark.
+   - Google STUN server miễn phí cho Co-op WebRTC.
 
-En `videos/` hay grabaciones del juego (con su música): un combate contra un
-jefe, la captura de un shiny salvaje y un shiny en el gacha.
+---
 
-## Guardado en la nube y publicación
+## 📚 Trung Tâm Tài Liệu Chi Tiết (Documentation Hub)
 
-- **Base de datos (Firebase):** cuentas con nombre + contraseña o Google, y la
-  partida se sigue en cualquier ordenador.
-  Sin configurar, el juego guarda sólo en el navegador, como antes.
-- **Jugar con amigos (hasta 4) y ranking:** con cuenta en la nube, menú
-  **Amigos** (añadir por apodo, invitar a tu sala) y **Ranking** (tiempo
-  aguantado: solo o grupo, de hoy a histórico, amigos, por Pokémon).
-- **Publicar gratis en GitHub Pages:** [docs/PUBLICAR.md](docs/PUBLICAR.md).
-- Si se juega en dos ordenadores a la vez o sin conexión, las partidas se
-  **fusionan**: las colecciones se unen (nunca se pierde un Pokémon ni un
-  shiny), mejoras y estadísticas se quedan con el máximo, y monedas y
-  compañero con la versión más reciente. Los cambios de otro ordenador llegan
-  en directo.
+Xem chi tiết trong thư mục [`docs/`](docs/):
+- **[`docs/QUICK_REFERENCE.md`](docs/QUICK_REFERENCE.md)**: Bảng tra cứu nhanh tính năng và cách sửa lỗi tốc hành.
+- **[`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md)**: Kế hoạch tổng thể và ma trận phát triển toàn diện.
+- **[`docs/GAMEPLAY_MANUAL.md`](docs/GAMEPLAY_MANUAL.md)**: Cẩm nang hướng dẫn luật chơi và cơ chế chuyên sâu.
+- **[`docs/ARCHITECTURE_AND_SYSTEMS.md`](docs/ARCHITECTURE_AND_SYSTEMS.md)**: Thiết kế kiến trúc mã nguồn và luồng thực thi hệ thống.
+- **[`docs/moves.md`](docs/moves.md)**, **[`docs/abilities.md`](docs/abilities.md)**, **[`docs/items.md`](docs/items.md)**, **[`docs/pokemons.md`](docs/pokemons.md)**, **[`docs/bosses.md`](docs/bosses.md)**: Dữ liệu chi tiết từng hệ thống.
+- **[`docs/LOCALIZATION.md`](docs/LOCALIZATION.md)**: Hệ thống dịch thuật i18n (Tiếng Việt & Tiếng Anh).
+- **[`docs/XUAT_BAN.md`](docs/XUAT_BAN.md)**: Quy trình biên dịch, kiểm thử và xuất bản game.
+- **[`docs/TEN_MIEN.md`](docs/TEN_MIEN.md)**: Hướng dẫn cấu hình tên miền và bảo mật HTTPS.
 
-## Licencia
+---
 
-Código bajo [PolyForm Noncommercial 1.0.0](LICENSE-NONCOMMERCIAL.md) desde el
-14-10-2026: se puede usar, estudiar y modificar, pero **no con fines
-comerciales** (ni vender el juego ni cobrar nada dentro de él). Las versiones
-hasta el commit `b297089` se publicaron bajo MIT. Los sprites (CC BY-NC 4.0),
-la fuente (OFL) y las marcas de Pokémon tienen sus propias condiciones: ver
-[LICENSE](LICENSE) y [CREDITS.md](CREDITS.md). Proyecto de fan sin ánimo de
-lucro.
+## ⚖️ Giấy Phép & Ghi Nhận Công Trạng (License & Credits)
 
-**La única web oficial es [pokesurvivor.com](https://pokesurvivor.com).** El
-juego es y será gratis: si alguien te pide pagar, no somos nosotros.
-
-## Estructura
-
-```
-index.html              pantallas + orden de carga
-css/style.css           interfaz estilo Mundo Misterioso
-assets/pokemon/{dex}/   hojas de sprites PMD (Idle, Walk, Attack, Shoot, Charge, Hurt, Faint)
-assets/pokemon/{dex}/s/ las mismas en versión shiny
-assets/fonts/           Pixelify Sans (OFL) y su versión con números redibujados (tools/make_font.py)
-js/
-  net/      social (apodo, amigos, salas), net (WebRTC + relé),
-            coop (partida en grupo), ranking
-  core/     util, db (guardado), audio (sintetizador + efectos), input,
-            sprites (animador PMD), camera
-  data/     pokedex*, sprites-meta*, moves, starters (+ test), enemies,
-            upgrades, music (partituras)
-  world/    tiles (pixel art en código), world (terreno, objetos, colisiones)
-  entities/ player, enemy, projectile, pickup, fx
-  systems/  combat, spawner, levelup, gacha
-  ui/       icons (pixel art), ui, hud, login, test, menu, gacha-ui, run-ui,
-            social-ui, ranking-ui
-  game.js   flujo y bucle principal
-tools/      scripts que regeneran los ficheros marcados con *
-```
-
-`*` = generado. Para rehacerlos (necesita Python 3 + Pillow e internet, sólo esa vez):
-
-```
-python tools/fetch_sprites.py    # sprites normal y shiny + js/data/sprites-meta.js
-                                 # (~20 min; se puede cortar y relanzar: usa tools/cache/)
-python tools/fetch_pokedex.py    # js/data/pokedex.js
-python tools/fetch_credits.py    # CREDITS.md
-```
-
-## Notas de implementación
-
-- **Sprites PMD.** Columnas = fotogramas, filas = 8 direcciones (Down, DownRight,
-  Right, UpRight, Up, UpLeft, Left, DownLeft — verificado con los `-Offsets.png`).
-  Cada animación tiene su propio tamaño de fotograma, así que se alinean por el
-  **ancla al suelo** sacada del `-Shadow.png`; sin eso el sprite saltaría al atacar.
-- **Coordenadas.** `(x, y)` de una entidad son sus **pies**. Las colisiones
-  ocurren en el plano del suelo; los proyectiles vuelan en ese plano y se dibujan
-  elevados con su sombra debajo.
-- **Mundo.** Chunks de 16×16 tiles: los *datos* (terreno, objetos) son baratos y
-  se generan siempre; la *imagen* se hornea a resolución de arte escribiendo en un
-  `ImageData` (~4 ms por chunk en Chrome) y sólo para los visibles.
-- **Rendimiento.** Rejilla espacial de enemigos reconstruida cada frame. Con 420
-  enemigos, simulación + render completo ≈ 3 ms por frame en Chrome.
-- **Metadatos en `.js`, no `.json`**, porque `fetch()` está bloqueado en `file://`.
-- **Shiny.** Los shiny de SpriteCollab son el mismo dibujo con otra paleta; están
-  en `s/` y sólo 30 tienen geometría distinta (campo `sa` en los metadatos).
-  Las hojas se guardan como PNG con paleta exacta: misma imagen, la mitad de peso.
-- **Audio.** Sintetizador Web Audio con planificador anticipado (programa las
-  notas 150 ms por delante) y reverb por convolución con un impulso generado.
-  Las partituras están en `js/data/music.js` en un formato de texto propio.
-  Los efectos tienen separación mínima entre repeticiones y un tope de voces,
-  para que 400 enemigos golpeados a la vez no saturen.
-- **Iconos.** Mapas de caracteres convertidos a canvas y data URLs; siempre a
-  múltiplos enteros de su tamaño para que el píxel quede limpio.
-
-## Créditos y licencia
-
-Sprites de [SpriteCollab](https://github.com/PMDCollab/SpriteCollab) bajo
-**CC BY-NC 4.0** — uso **no comercial** y con atribución; la lista de artistas
-está en [`CREDITS.md`](CREDITS.md). Pokémon es propiedad de Nintendo, Creatures
-Inc. y GAME FREAK. Proyecto de fan sin ánimo de lucro.
+- Sprites nhân vật lấy từ [SpriteCollab](https://github.com/PMDCollab/SpriteCollab) theo giấy phép **CC BY-NC 4.0** (phi thương mại, ghi nhận công trạng đầy đủ trong [`CREDITS.md`](CREDITS.md)).
+- Phông chữ Pixelify Sans phát hành theo giấy phép SIL Open Font License (OFL).
+- Pokémon và thương hiệu liên quan thuộc quyền sở hữu của **Nintendo**, **Creatures Inc.** và **GAME FREAK**.
+- ViTrainer là một dự án fan phi lợi nhuận phục vụ cộng đồng yêu thích thể loại roguelite sinh tồn Pokémon.

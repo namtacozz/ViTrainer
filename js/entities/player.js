@@ -96,6 +96,14 @@ G.Player = class Player {
         this.baseSpd = Math.round(this.baseSpd * 1.20);
       }
     }
+    // BST Compression cho loài single (Plan.md Section 7.2)
+    const isSingleSpecies = !this.evoChain || this.evoChain.type === 'single' || this.evoChain.maxStage === 1;
+    if (isSingleSpecies && mon && mon.bst) {
+      const compMult = Math.pow(520 / Math.max(200, mon.bst), 0.30);
+      this.baseAtk *= compMult;
+      this.maxHp = Math.round(this.maxHp * compMult);
+      this.hp = this.maxHp;
+    }
     this.isApex = false;
     this.awakeningTier = 0;
     this.pendingEvoBranches = null;
@@ -589,13 +597,25 @@ G.Player = class Player {
   }
 
   /** Activa Despertar I (Nv.15) o II (Nv.30) para Pokémon de fase única o legendarios. */
-  activateAwakening(tier, healPct = 0.4) {
+  activateAwakening(tier, branch = 'berserker', healPct = 0.5) {
     if (this.awakeningTier >= tier) return;
     this.awakeningTier = tier;
     if (tier === 1) {
-      this.maxHp = Math.round(this.maxHp * 1.15);
+      this.maxHp = Math.round(this.maxHp * 1.25);
       this.baseAtk *= 1.15;
       this.baseSpd *= 1.08;
+      if (branch === 'berserker') {
+        this.critChance = (this.critChance || 0) + 0.15;
+        this.berserkerCrest = true;
+      } else if (branch === 'bastion') {
+        this.pdefReduce = (this.pdefReduce || 0) + 0.20;
+        this.sdefReduce = (this.sdefReduce || 0) + 0.20;
+        this.bastionCrest = true;
+      } else if (branch === 'tempest') {
+        this.baseSpd *= 1.20;
+        this.cdMul = (this.cdMul || 1) * 0.85;
+        this.tempestCrest = true;
+      }
       if (healPct) this.heal(this.maxHp * healPct);
       if (typeof G !== 'undefined') {
         if (G.FX) {
@@ -603,24 +623,25 @@ G.Player = class Player {
           G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ce93d8', 45, 260);
         }
         if (G.Audio) G.Audio.sfx('legend');
-        if (G.UI && G.UI.toast) G.UI.toast(this.mon.name + ' AWAKENING I!', 2000);
+        if (G.UI && G.UI.toast) G.UI.toast(this.mon.name + ' DESPERTAR I (' + branch.toUpperCase() + ')!', 2000);
         if (G.Coop && G.Coop.active && G.Coop.broadcastEvo) {
           G.Coop.broadcastEvo(this.dex, 2);
         }
       }
     } else if (tier === 2) {
       this.isApex = true;
-      this.maxHp = Math.round(this.maxHp * 1.20);
-      this.baseAtk *= 1.20;
+      this.dmgMul = (this.dmgMul || 1) * 1.35;
+      this.maxHp = Math.round(this.maxHp * 1.30);
       this.baseSpd *= 1.12;
-      if (healPct) this.heal(this.maxHp * healPct);
+      this.cdMul = (this.cdMul || 1) * 0.90;
+      if (healPct) this.heal(this.maxHp * 1.0);
       if (typeof G !== 'undefined') {
         if (G.FX) {
           G.FX.ring(this.x, this.y, 12, 180, '#ff4081', 1.2, 8);
           G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ff80ab', 60, 320);
         }
         if (G.Audio) G.Audio.sfx('legend');
-        if (G.UI && G.UI.toast) G.UI.toast(this.mon.name + ' AWAKENING II (APEX+)!', 2500);
+        if (G.UI && G.UI.toast) G.UI.toast(this.mon.name + ' APEX (+) DESATADO!', 2500);
         if (G.Coop && G.Coop.active && G.Coop.broadcastEvo) {
           G.Coop.broadcastEvo(this.dex, 1);
         }
@@ -786,14 +807,32 @@ G.Player = class Player {
     if (chain.type === 'single') {
       if (this.level >= 15 && this.awakeningTier === 0) {
         this.awakeningTier = 1;
-        this.promptEvo([{
-          dex: this.dex,
-          title: (this.mon ? this.mon.name : 'Pokémon') + ' · Despertar I',
-          tag: 'DESPERTAR I',
-          color: '#ffd23f',
-          desc: 'Despierta el poder primordial: +25% de vida y estadísticas combativas aumentadas.',
-          apply: () => this.activateAwakening(1)
-        }]);
+        this.promptEvo([
+          {
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Berserker Crest',
+            tag: 'CUỒNG CHIẾN',
+            color: '#ef4444',
+            desc: '+25% Máu, +15% Công, +15% Chí mạng và kiếm khí rực lửa.',
+            apply: () => this.activateAwakening(1, 'berserker')
+          },
+          {
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Bastion Crest',
+            tag: 'PHÁO ĐÀI',
+            color: '#3b82f6',
+            desc: '+25% Máu, +20% Giáp PDEF/SDEF và khiên hộ thể đẩy lùi.',
+            apply: () => this.activateAwakening(1, 'bastion')
+          },
+          {
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Tempest Crest',
+            tag: 'THẦN TỐC',
+            color: '#10b981',
+            desc: '+25% Máu, +20% Tốc chạy, -15% Hồi chiêu và tàn ảnh ánh sáng.',
+            apply: () => this.activateAwakening(1, 'tempest')
+          }
+        ]);
       }
       if (this.level >= 30) {
         if (!this.isMega && this.hasMegaForm()) {

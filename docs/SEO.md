@@ -13,14 +13,14 @@ python tools/make_seo_pages.py
 ```
 
 ### Các trang được sinh tự động:
-1. **Trang chủ chính**: `index.html` (tiếng Việt/Tây Ban Nha).
+1. **Trang chủ chính**: `index.html` (tiếng Việt).
 2. **Trang quốc tế**: `en/index.html` (giao diện và nội dung hoàn toàn bằng tiếng Anh).
 3. **Các chuyên mục con SEO**:
    - `pokedex/index.html` & `en/pokedex/index.html`: Danh mục 1021 loài Pokémon kèm hình ảnh và chỉ số chi tiết.
-   - `movimientos/index.html` & `en/moves/index.html`: Bảng tra cứu 139 chiêu thức chiến đấu.
-   - `guia/index.html` & `en/guide/index.html`: Cẩm nang hướng dẫn tân thủ và các mẹo sinh tồn.
-   - `novedades/index.html` & `en/news/index.html`: Nhật ký cập nhật phiên bản (Changelog).
-   - `privacidad/index.html`: Chính sách quyền riêng tư và điều khoản sử dụng.
+   - `chieu-thuc/index.html` & `en/moves/index.html`: Bảng tra cứu 139 chiêu thức chiến đấu.
+   - `cam-nang/index.html` & `en/guide/index.html`: Cẩm nang hướng dẫn tân thủ và các mẹo sinh tồn.
+   - `tin-tuc/index.html` & `en/news/index.html`: Nhật ký cập nhật phiên bản (Changelog).
+   - `quyen-rieng-tu/index.html`: Chính sách quyền riêng tư và điều khoản sử dụng.
    - `404.html`: Trang xử lý lỗi điều hướng thông minh.
    - `sitemap.xml`: Sơ đồ trang web chứa toàn bộ liên kết nội bộ kèm thời gian cập nhật `lastmod`.
    - `robots.txt`: Khai báo quyền lập chỉ mục cho các công cụ tìm kiếm hợp pháp.

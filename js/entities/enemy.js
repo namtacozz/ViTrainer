@@ -638,37 +638,38 @@
     }
 
     bossStart(id, pl) {
+      const teleFloor = (typeof G !== 'undefined' && G.BalanceCaps) ? G.BalanceCaps.TELEGRAPH_MIN : 0.6;
       const ai = this.ai, f = ai.fury ? 0.8 : 1, type = this.atkType;
       const col = G.U.TYPE_COLOR[type] || '#ff7a9e';
       const ang = Math.atan2(pl.y - this.y, pl.x - this.x);
-      const c = ai.cast = { id, t: 0, wind: 0.6 * f, after: 0.35, ang };
+      const c = ai.cast = { id, t: 0, wind: Math.max(teleFloor, 0.6 * f), after: 0.35, ang };
       switch (id) {
         case 'slam':
-          c.wind = 0.75 * f;
+          c.wind = Math.max(teleFloor, 0.75 * f);
           this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 110 + this.r, delay: c.wind, dmg: this.dmg * 1.35, type, color: col, cat: 'physical' });
           this.anim.play('Charge', { speed: 1.3 });
           break;
         case 'dash':
-          c.wind = 0.65 * f; c.len = 360; c.dur = 0.30;
+          c.wind = Math.max(teleFloor, 0.65 * f); c.len = 360; c.dur = 0.30;
           this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang, len: c.len + this.r, w: this.r * 2 + 24,
                           delay: c.wind + c.dur, dmg: this.dmg * 1.3, type, color: col, cat: 'physical' });
           this.anim.play('Charge', { speed: 1.4 });
           break;
         case 'leap':
-          this.jump = { sx: this.x, sy: this.y, tx: pl.x, ty: pl.y, t: -0.45 * f, dur: 0.60 };
-          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 96, delay: 0.45 * f + 0.60, dmg: this.dmg * 1.35, type, color: col, cat: 'physical' });
+          this.jump = { sx: this.x, sy: this.y, tx: pl.x, ty: pl.y, t: -Math.max(teleFloor, 0.45 * f), dur: 0.60 };
+          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 96, delay: Math.max(teleFloor, 0.45 * f) + 0.60, dmg: this.dmg * 1.35, type, color: col, cat: 'physical' });
           this.anim.play('Charge', { speed: 1.5 });
           ai.cast = null; ai.cd = G.U.rand(2.2, 3.2);
           break;
         case 'dragon_rush':
-          c.wind = 0.7 * f; c.len = 420; c.dur = 0.35;
+          c.wind = Math.max(teleFloor, 0.7 * f); c.len = 420; c.dur = 0.35;
           this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang, len: c.len + this.r, w: this.r * 2 + 36,
                           delay: c.wind + c.dur, dmg: this.dmg * 1.5, type, color: '#f59e0b', cat: 'physical' });
           this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 120, delay: c.wind + c.dur + 0.1, dmg: this.dmg * 1.4, type, color: '#f59e0b', cat: 'physical' });
           this.anim.play('Charge', { speed: 1.3 });
           break;
         case 'inferno':
-          c.wind = 0.75 * f;
+          c.wind = Math.max(teleFloor, 0.75 * f);
           this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 115, delay: c.wind, dmg: this.shotDmg() * 1.4, type: 'fire', color: '#ef4444', cat: 'special' });
           for (let i = 0; i < 4; i++) {
             this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang + i * (Math.PI / 2), len: 380, w: 28, delay: c.wind + 0.15, dmg: this.shotDmg() * 1.25, type: 'fire', color: '#f97316', cat: 'special' });
@@ -676,12 +677,12 @@
           this.anim.play('Shoot');
           break;
         case 'blizzard':
-          c.wind = 0.7 * f;
+          c.wind = Math.max(teleFloor, 0.7 * f);
           this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 160, delay: c.wind, dmg: this.shotDmg() * 1.2, type: 'ice', color: '#38bdf8', cat: 'special' });
           this.anim.play('Charge', { speed: 1.4 });
           break;
         case 'thunderstorm':
-          c.wind = 0.65 * f;
+          c.wind = Math.max(teleFloor, 0.65 * f);
           for (let i = 0; i < 4; i++) {
             const rx = pl.x + (i ? G.U.rand(-90, 90) : 0), ry = pl.y + (i ? G.U.rand(-90, 90) : 0);
             this.hazard({ kind: 'zone', x: rx, y: ry, r: 64, delay: c.wind + i * 0.18, dmg: this.shotDmg() * 1.3, type: 'electric', color: '#facc15', cat: 'special' });
@@ -689,7 +690,7 @@
           this.anim.play('Shoot');
           break;
         case 'toxic_bloom':
-          c.wind = 0.65 * f;
+          c.wind = Math.max(teleFloor, 0.65 * f);
           for (let i = 0; i < 5; i++) {
             const a = i * 1.256, d = i ? G.U.rand(50, 110) : 0;
             this.hazard({ kind: 'zone', x: pl.x + Math.cos(a) * d, y: pl.y + Math.sin(a) * d, r: 58, delay: c.wind + i * 0.12, dmg: this.shotDmg() * 1.15, type: 'poison', color: '#a855f7', cat: 'special' });
@@ -697,7 +698,7 @@
           this.anim.play('Shoot');
           break;
         case 'shadow_void':
-          c.wind = 0.8 * f;
+          c.wind = Math.max(teleFloor, 0.8 * f);
           this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 140, delay: c.wind, dmg: this.shotDmg() * 1.3, type: 'ghost', color: '#7c3aed', cat: 'special' });
           this.anim.play('Charge', { speed: 1.2 });
           break;
@@ -708,7 +709,7 @@
             this.hazard({ kind: 'zone', x: pl.x + Math.cos(a) * d, y: pl.y + Math.sin(a) * d * 0.8, r: 56,
                             delay: 0.95 + i * 0.10, dmg: this.shotDmg() * 1.2, type, color: col, cat: 'special' });
           }
-          c.wind = 0.45; this.anim.play('Shoot');
+          c.wind = Math.max(teleFloor, 0.45); this.anim.play('Shoot');
           break;
         }
         case 'beam': {
@@ -717,12 +718,12 @@
             this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang + (i - (n - 1) / 2) * sp, len: 440, w: 30,
                             delay: 0.9, dmg: this.shotDmg() * 1.25, type, color: col, cat: 'special' });
           }
-          c.wind = 0.85; c.after = 0.2; this.anim.play('Charge', { speed: 1.2 });
+          c.wind = Math.max(teleFloor, 0.85); c.after = 0.2; this.anim.play('Charge', { speed: 1.2 });
           break;
         }
         case 'volley':
         case 'nova':
-          c.wind = (id === 'nova' ? 0.6 : 0.45) * f;
+          c.wind = Math.max(teleFloor, (id === 'nova' ? 0.6 : 0.45) * f);
           this.anim.play('Charge', { speed: 1.5 });
           G.FX.ring(this.x, this.y, this.r, this.r * 2.8, col, c.wind, 3);
           break;

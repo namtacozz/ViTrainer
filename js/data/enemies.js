@@ -43,14 +43,14 @@ G.Enemies = (() => {
   // Franjas de jefe: minuto en que salen, PV base y franja de BST (Nâng cấp sức mạnh chuẩn Raid Boss).
   const BOSS_SLOTS = [
     { at: 180,  hp: 2600,    dmg: 16,  xp: 450,   bst: [490, 545] },
-    { at: 360,  hp: 9500,    dmg: 26,  xp: 900,   bst: [520, 580] },
-    { at: 540,  hp: 36000,   dmg: 42,  xp: 1600,  bst: [540, 600] },
-    { at: 720,  hp: 120000,  dmg: 65,  xp: 2600,  bst: [580, 700] },
-    { at: 900,  hp: 320000,  dmg: 95,  xp: 4500,  bst: [600, 700] },
-    { at: 1080, hp: 450000,  dmg: 95,  xp: 6000,  bst: [600, 720] },
-    { at: 1260, hp: 850000,  dmg: 110, xp: 8500,  bst: [620, 750] },
-    { at: 1440, hp: 1500000, dmg: 130, xp: 12000, bst: [650, 780] },
-    { at: 1620, hp: 2400000, dmg: 155, xp: 16000, bst: [680, 800] }
+    { at: 360,  hp: 7200,    dmg: 25,  xp: 900,   bst: [520, 580] },
+    { at: 540,  hp: 20000,   dmg: 38,  xp: 1600,  bst: [540, 600] },
+    { at: 720,  hp: 55000,   dmg: 56,  xp: 2600,  bst: [580, 700] },
+    { at: 900,  hp: 145000,  dmg: 80,  xp: 4500,  bst: [600, 700] },
+    { at: 1080, hp: 360000,  dmg: 112, xp: 6000,  bst: [600, 720] },
+    { at: 1260, hp: 850000,  dmg: 150, xp: 8500,  bst: [620, 750] },
+    { at: 1440, hp: 1900000, dmg: 195, xp: 12000, bst: [650, 780] },
+    { at: 1620, hp: 4200000, dmg: 250, xp: 16000, bst: [680, 800] }
   ];
 
   // Stats base aproximados a partir de los de juego (inverso de fetch_pokedex).

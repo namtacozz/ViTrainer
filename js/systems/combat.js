@@ -1385,6 +1385,31 @@ G.Combat = (() => {
     if (m && m.cat === 'physical' && pl && (pl.berserkerActive || (pl.hasTrialBonus && pl.hasTrialBonus('berserker')))) {
       dmg *= 1.15;
     }
+
+    // Zacian Behemoth Blade giantSlayer tuning
+    if (pl && pl.dex === 888 && m && m.id === 'behemoth-blade' && e.boss) {
+      k *= (e.vulnerable || e.phaseShield) ? 2.0 : 1.45;
+    }
+
+    // Elemental Reactions trigger
+    if (typeof G !== 'undefined' && G.Reactions && G.Reactions.checkAndTrigger && m && e) {
+      const rx = G.Reactions.checkAndTrigger(m.type, e, dmg, pl);
+      if (rx && rx.bonusMult) k *= rx.bonusMult;
+    }
+
+    // Boss Stagger Gauge accumulation
+    if (e.boss && !e.dead) {
+      const staggerAdd = (m && (m.kind === 'melee' || m.kind === 'dash')) ? 2.5 : 1.0;
+      e.stagger = (e.stagger || 0) + staggerAdd;
+      if (e.stagger >= 100 && !e.vulnerable) {
+        e.stagger = 0;
+        e.vulnerable = true;
+        e.vulnerableTimer = 3.0;
+        if (G.FX && G.FX.dmgText) G.FX.dmgText(e.x, e.y - 25, '¡ATURDIDO!', '#ffd23f', true);
+        if (G.FX && G.FX.ring) G.FX.ring(e.x, e.y, 10, e.r * 2.5, '#ffd23f', 0.5, 5);
+      }
+    }
+
     e.lastHitMove = m;
     const crit = isCrit(pl), sk = statusK(pl);
     dmg *= k * (crit ? critMul(pl) : 1);

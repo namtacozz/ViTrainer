@@ -62,6 +62,6 @@ Chào mừng bạn và các Agent đến với trung tâm tài liệu kỹ thu�
 4. **Các Tài Liệu Kỹ Thuật Khác**:
    - `MULTIPLAYER_PROTOCOL.md`: Đặc tả chi tiết giao thức nhị phân WebRTC Co-op (tối đa 8 người).
    - `LOCALIZATION.md`: Quy chuẩn và công cụ dịch thuật đa ngôn ngữ (i18n).
-   - `PUBLICAR.md`: Hướng dẫn vận hành và quy chuẩn phát hành phiên bản mới.
+   - `XUAT_BAN.md`: Hướng dẫn vận hành và quy chuẩn phát hành phiên bản mới.
    - `SEO.md`: Cấu hình SEO và sinh trang tĩnh tự động cho bộ máy tìm kiếm.
-   - `DOMINIO.md`: Cấu hình tên miền và DNS miễn phí trên Cloudflare.
+   - `TEN_MIEN.md`: Cấu hình tên miền và DNS miễn phí trên Cloudflare.
