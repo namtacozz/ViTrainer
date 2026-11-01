@@ -177,7 +177,10 @@ G.SettingsUI = (() => {
         : `<button class="btn small google" id="set-link-google" type="button">Vincular con Google</button>`;
       const linkedUser = G.DB.linkedUsername || nick;
       const pHtml = hasP
-        ? `<span class="badge on" style="color:#22c55e;font-weight:bold">✓ Usuario vinculado: <b translate="no">${esc(linkedUser)}</b></span>`
+        ? `<div class="row wrap" style="gap:8px;align-items:center;justify-content:flex-end">
+             <span class="badge on" style="color:#22c55e;font-weight:bold">✓ Usuario vinculado: <b translate="no">${esc(linkedUser)}</b></span>
+             <button class="btn small" id="set-btn-toggle-chpass" type="button">Cambiar contraseña</button>
+           </div>`
         : `<div class="link-pass-card" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;width:100%">
              <div style="font-weight:bold;margin-bottom:4px;">Vincular usuario y contraseña</div>
              <p class="sub" style="margin:0 0 10px 0;font-size:12px;color:var(--muted)">Podrás entrar indistintamente con tu Google o con este usuario y contraseña a la misma cuenta.</p>
@@ -189,8 +192,20 @@ G.SettingsUI = (() => {
              <p id="set-link-err" class="err" style="margin-top:6px;font-size:12px"></p>
            </div>`;
 
+      const chPassCardHtml = hasP
+        ? `<div id="set-chpass-card" class="link-pass-card hidden" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;width:100%">
+             <div style="font-weight:bold;margin-bottom:4px;">Cambiar contraseña</div>
+             <div class="row wrap" style="gap:8px">
+               <input id="set-new-pass" class="field small" type="password" maxlength="64" placeholder="Nueva contraseña (mín. 6)" autocomplete="new-password" style="flex:1;min-width:140px">
+               <button id="set-btn-submit-chpass" class="btn small gold" type="button">Actualizar contraseña</button>
+               <button id="set-btn-cancel-chpass" class="btn small ghost" type="button">Cancelar</button>
+             </div>
+             <p id="set-chpass-err" class="err" style="margin-top:6px;font-size:12px"></p>
+           </div>`
+        : '';
+
       linkMethodsHtml = `<div class="set-row"><div class="grow"><b>Google</b><small>Acceso rápido con tu Gmail</small></div>${gHtml}</div>`
-        + (!hasP ? pHtml : `<div class="set-row"><div class="grow"><b>Usuario y contraseña</b><small>Acceso con credenciales</small></div>${pHtml}</div>`);
+        + (!hasP ? pHtml : `<div class="set-row"><div class="grow"><b>Usuario y contraseña</b><small>Acceso con credenciales</small></div>${pHtml}</div>${chPassCardHtml}`);
     }
 
     box.innerHTML = section('Cuenta')
@@ -220,6 +235,38 @@ G.SettingsUI = (() => {
       const r = await G.DB.linkGoogle();
       linkG.disabled = false;
       if (!r.ok) { G.UI.toast(r.error || 'Error al vincular Google', 4000); return; }
+    const btnToggleChPass = $('set-btn-toggle-chpass');
+    if (btnToggleChPass) btnToggleChPass.onclick = () => {
+      const card = $('set-chpass-card');
+      if (card) {
+        card.classList.toggle('hidden');
+        if (!card.classList.contains('hidden')) {
+          const inp = $('set-new-pass');
+          if (inp) { inp.value = ''; inp.focus(); }
+        }
+      }
+    };
+    const btnCancelChPass = $('set-btn-cancel-chpass');
+    if (btnCancelChPass) btnCancelChPass.onclick = () => {
+      const card = $('set-chpass-card');
+      if (card) card.classList.add('hidden');
+    };
+    const btnSubmitChPass = $('set-btn-submit-chpass');
+    if (btnSubmitChPass) btnSubmitChPass.onclick = async () => {
+      const inp = $('set-new-pass'), errEl = $('set-chpass-err');
+      if (errEl) errEl.textContent = '';
+      const pVal = inp ? inp.value : '';
+      btnSubmitChPass.disabled = true;
+      const r = await G.DB.changePassword(pVal);
+      btnSubmitChPass.disabled = false;
+      if (!r.ok) {
+        if (errEl) errEl.textContent = r.error;
+        return;
+      }
+      G.UI.toast('¡Contraseña cambiada con éxito!', 4000);
+      const card = $('set-chpass-card');
+      if (card) card.classList.add('hidden');
+    };
       G.UI.toast('¡Google vinculado!', 3500);
       render();
     };

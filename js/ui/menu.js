@@ -10,12 +10,13 @@ G.MenuUI = (() => {
   const SORTS = [['num', 'Nº'], ['name', 'Nombre'], ['rar', 'Rareza'], ['new', 'Recién conseguidos'], ['used', 'Más usados']];
 
   function init() {
-    const ICON = { play: 'ball', dex: 'book', upgrades: 'up', shop: 'shop', bag: 'bag', gacha: 'ball4', goals: 'medal3', friends: 'friends', rank: 'trophy', settings: 'gear' };
+    const ICON = { reconnect: 'friends', play: 'ball', dex: 'book', upgrades: 'up', shop: 'shop', bag: 'bag', gacha: 'ball4', goals: 'medal3', friends: 'friends', rank: 'trophy', settings: 'gear' };
     document.querySelectorAll('#scr-menu [data-go]').forEach(b => {
       b.insertAdjacentHTML('afterbegin', `<span class="mi-ico">${G.Icons.html(ICON[b.dataset.go], 26)}</span>`);
       b.dataset.sfx = b.dataset.go === 'play' ? 'confirm' : 'click';
       b.onclick = () => {
         const go = b.dataset.go;
+        if (go === 'reconnect') return;
         if (go === 'play') { if (G.Social.room) G.LobbyUI.open(); else G.Flow.play(); }
         else if (go === 'dex') openDex();
         else if (go === 'upgrades') openUpgrades();
@@ -45,22 +46,24 @@ G.MenuUI = (() => {
           return;
         }
         reconBtn.disabled = true;
-        reconBtn.textContent = 'Reconectando…';
+        reconBtn.innerHTML = `<span class="mi-ico">${G.Icons.html('friends', 26)}</span><span>${G.T('Reconectando…')}</span><small>${G.T('Partida en grupo en curso')}</small>`;
         G.Social.joinRoom(saved.id, true).then(res => {
           reconBtn.disabled = false;
-          reconBtn.textContent = 'Reconectarse a la partida';
+          reconBtn.innerHTML = `<span class="mi-ico">${G.Icons.html('friends', 26)}</span><span>${G.T('Reconectarse')}</span><small>${G.T('Partida en grupo en curso')}</small>`;
           if (!res || !res.ok) {
-            G.UI.toast(res && res.error ? res.error : 'No se pudo reconectar a la sala', 3500);
+            G.UI.toast(res && res.error ? res.error : G.T('No se pudo reconectar a la sala'), 3500);
             if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
             reconBtn.classList.add('hidden');
             return;
           }
           G.Net.toHost({ k: 'rejoin', uid: G.Net.uid, name: G.Social.me ? G.Social.me.name : '' });
-          G.UI.toast('Conectado. Sincronizando con la partida…', 3000);
+          G.UI.toast(G.T('Conectado. Sincronizando con la partida…'), 3000);
         }).catch(err => {
           reconBtn.disabled = false;
-          reconBtn.textContent = 'Reconectarse a la partida';
-          G.UI.toast('Error al reconectar', 3000);
+          reconBtn.innerHTML = `<span class="mi-ico">${G.Icons.html('friends', 26)}</span><span>${G.T('Reconectarse')}</span><small>${G.T('Partida en grupo en curso')}</small>`;
+          if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
+          reconBtn.classList.add('hidden');
+          G.UI.toast(G.T('Error al reconectar'), 3000);
         });
       };
     }
@@ -72,7 +75,13 @@ G.MenuUI = (() => {
     const saved = G.Social && G.Social.getActiveRoom ? G.Social.getActiveRoom() : null;
     const reconBtn = $('menu-reconnect');
     if (reconBtn) {
-      reconBtn.classList.toggle('hidden', !saved || !saved.id);
+      // Nếu phòng lưu quá 40 phút thì xóa bỏ để tránh nút kẹt vô nghĩa
+      if (saved && saved.at && (Date.now() - saved.at > 40 * 60 * 1000)) {
+        if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
+        reconBtn.classList.add('hidden');
+      } else {
+        reconBtn.classList.toggle('hidden', !saved || !saved.id);
+      }
     }
     const s = G.DB.save;
     const mon = G.DEX_BY[s.partner];

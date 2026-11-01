@@ -1120,6 +1120,29 @@ G.DB = (() => {
     return '';
   }
 
+  /**
+   * Đổi mật khẩu cho tài khoản đã liên kết hoặc tài khoản thuần.
+   */
+  async function changePassword(newPass) {
+    if (mode !== 'cloud' || !auth || !auth.currentUser) {
+      return { ok: false, error: 'Inicia sesión en la nube primero.' };
+    }
+    const min = 6;
+    if ((newPass || '').length < min) {
+      return { ok: false, error: 'La contraseña debe tener al menos ' + min + ' caracteres.' };
+    }
+    try {
+      await auth.currentUser.updatePassword(newPass);
+      return { ok: true };
+    } catch (e) {
+      const c = (e && e.code) || '';
+      if (c === 'auth/requires-recent-login') {
+        return { ok: false, error: 'Por seguridad, vuelve a iniciar sesión antes de cambiar la contraseña.' };
+      }
+      return { ok: false, error: authError(e) };
+    }
+  }
+
   /** Liên kết Tên người dùng và Mật khẩu thuần vào tài khoản Google hiện tại. */
   async function linkPassword(name, pass) {
     if (mode !== 'cloud' || !auth || !auth.currentUser) {
@@ -1279,7 +1302,7 @@ G.DB = (() => {
     get hasGoogle() { return hasGoogle(); }, linkGoogle,
     get hasPassword() { return hasPassword(); },
     get linkedUsername() { return linkedUsername(); },
-    linkPassword,
+    linkPassword, changePassword,
     get mode() { return mode; },
     get localReason() { return localReason; },
     get syncState() { return syncState; },
