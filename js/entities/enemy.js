@@ -164,9 +164,29 @@
       }
       // Escudo: absorbe primero.
       if (this.shield > 0) {
-        const a = Math.min(this.shield, d);
+        let shieldDmg = d;
+        if (this.teraShield && this.teraType) {
+          const moveType = this.lastHitMove ? this.lastHitMove.type : 'normal';
+          const effMult = (typeof G !== 'undefined' && G.Types && G.Types.mult) ? G.Types.mult(moveType, [this.teraType]) : 1.0;
+          if (effMult > 1.2) {
+            shieldDmg = d * 3.0; // Đòn khắc hệ gây gấp 3 lần sát thương lên Khiên Tera
+          } else {
+            shieldDmg = d * 0.20; // Giảm 80% sát thương từ các hệ thông thường
+          }
+        }
+        const a = Math.min(this.shield, shieldDmg);
         this.shield -= a;
-        if (a >= d) { G.FX.dmgText(this.x, this.y - this.bodyH - 4, d, '#9fd8ff'); this.flash = 0.05; return; }
+        if (this.shield <= 0) {
+          this.shield = 0;
+          if (this.teraShield) {
+            this.teraShield = false;
+            this.vulnerable = true;
+            this.vulnerableTimer = 3.0;
+            if (G.FX && G.FX.dmgText) G.FX.dmgText(this.x, this.y - 25, '¡KHIÊN TERA VỠ! CHOÁNG 3S', '#38bdf8', true);
+            if (G.FX && G.FX.ring) G.FX.ring(this.x, this.y, 10, this.r * 3, '#38bdf8', 0.6, 6);
+          }
+        }
+        if (a >= d) { G.FX.dmgText(this.x, this.y - this.bodyH - 4, Math.round(d), '#9fd8ff'); this.flash = 0.05; return; }
         d = d - a;
       }
       this.hp -= d;
@@ -252,7 +272,14 @@
       // Boss cường hóa cân bằng qua từng phase (máu x1.40 / x1.60)
       const hpMultiplier = phase === 2 ? 1.40 : 1.60;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
-      this.hp = this.maxHp;
+      // Master Plan 2.0: Thay cơ chế hồi 100% máu bằng Khiên Tinh Thể Tera Shield (30% Max HP)
+      const barrierHp = Math.round(this.maxHp * 0.30);
+      this.shield = barrierHp;
+      this.phaseShield = barrierHp;
+      this.shieldT = 999;
+      if (typeof G !== 'undefined' && G.WorldEvents && G.WorldEvents.applyTeraShield) {
+        G.WorldEvents.applyTeraShield(this);
+      }
       this.invuln = 0.8;
       this.ccImmuneT = 2.0; // 2s Kháng hiệu ứng khi chuyển phase
 
@@ -308,9 +335,21 @@
       // (Los legendarios de la Sentencia de Arceus sólo dan experiencia.)
       if (this.boss && !this.judge) {
         G.Camera.kick(0.9);
+        if (typeof G !== 'undefined' && G.Director && G.Director.onBossKill) {
+          G.Director.onBossKill();
+        }
+        // Thưởng Hắc Mã (Dark Horse): tặng thêm reroll miễn phí khi diệt Đại Boss
+        if (typeof G !== 'undefined' && G.PlayerMgr && G.PlayerMgr.local && G.PlayerMgr.local.darkHorse) {
+          G.PlayerMgr.local.freeRerolls = (G.PlayerMgr.local.freeRerolls || 0) + 1;
+          if (G.FX && G.FX.dmgText) G.FX.dmgText(this.x, this.y - 30, '+1 REROLL HẮC MÃ!', '#38bdf8', true);
+        }
         for (let i = 0; i < 10; i++) G.Pickups.drop('coin', this.x + G.U.rand(-40, 40), this.y + G.U.rand(-30, 30), 5);
         // Los jefes siempre sueltan un objeto equipable.
         G.Pickups.drop('item', this.x - 26, this.y - 10, G.Items.roll());
+      }
+      if (this.isFleeingShiny) {
+        if (G.Pickups && G.Pickups.spawnChest) G.Pickups.spawnChest(this.x, this.y, true);
+        if (G.FX && G.FX.burst) G.FX.burst(this.x, this.y, '#ffd23f', 40, 300);
       }
       G.Pickups.dropXp(this.x, this.y, this.xp, this.boss, !!this.legend, !!this.judge);
       // Halloween: caramelos, con el ritmo que deja systems/halloween.js (los Fantasma

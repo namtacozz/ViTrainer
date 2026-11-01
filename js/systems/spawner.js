@@ -138,7 +138,9 @@ G.Spawner = (() => {
 
   function spawnBoss(pl, t, b) {
     const [x, y] = ringPoint(pl, Math.random() * 6.2832);
-    const e = new G.Enemy(b, x, y, scaled(G.Enemies.bossScale(t), G.Coop.scaleHp(players.length) * (players.length > 1 ? 1.15 : 1)), true);
+    let hpMul = G.Coop.scaleHp(players.length) * (players.length > 1 ? 1.15 : 1);
+    if (players.some(p => p && p.isLegendaryTax)) hpMul *= 1.08; // Thuế Huyền Thoại: +8% Máu Boss
+    const e = new G.Enemy(b, x, y, scaled(G.Enemies.bossScale(t), hpMul), true);
     if (rollShiny(b.dex)) e.makeShiny();
     G.EnemyMgr.add(e);
     say('¡' + e.name + (e.shiny ? ' shiny' : '') + ' salvaje apareció!', 3.2);

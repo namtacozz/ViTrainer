@@ -10,15 +10,15 @@
  */
 G.Items = (() => {
   const LIST = [
-    { id: 'leftovers', name: 'Restos', desc: 'Recuperas 1,0% de vida/s (+1,6% si llevas 3 s sin recibir golpes).',
-      on: p => { p.leftoversActive = true; p.regenFlat += p.maxHp * 0.010; p._itemRegen = p.maxHp * 0.010; },
-      off: p => { p.leftoversActive = false; p.regenFlat -= p._itemRegen || 0; } },
-    { id: 'choiceband', name: 'Cinta Elección', desc: '+40% de daño, pero no puedes cambiar de movimiento en ranura 1.',
-      on: p => { p.atkMul *= 1.4; p.choiceBandLocked = true; },
-      off: p => { p.atkMul /= 1.4; p.choiceBandLocked = false; } },
+    { id: 'leftovers', name: 'Restos', desc: 'Recuperas 1,0% de vida/s (2,0% si llevas 3 s sin recibir daño).',
+      on: p => { p.leftoversActive = true; },
+      off: p => { p.leftoversActive = false; } },
+    { id: 'choiceband', name: 'Cinta Elección', desc: '+30% de daño, pero bloquea aprender y cambiar movimientos.',
+      on: p => { p.atkMul *= 1.30; p.choiceBandLocked = true; },
+      off: p => { p.atkMul /= 1.30; p.choiceBandLocked = false; } },
     { id: 'quickclaw', name: 'Garra Rápida', desc: '-20% de recarga en todos tus movimientos.',
       on: p => { p.cdMul *= 0.8; }, off: p => { p.cdMul /= 0.8; } },
-    { id: 'focussash', name: 'Banda Focus', desc: 'Un golpe que te dejaría KO te deja con 1 de vida (cada 60 s).',
+    { id: 'focussash', name: 'Banda Focus', desc: 'Un golpe mortal te deja con 1 de vida, 1,2s invulnerable y limpia trampas de suelo (cada 60s).',
       on: () => {}, off: () => {} },
     { id: 'shellbell', name: 'Cascabel Concha', desc: 'Recuperas vida con el daño que haces (hasta 4% máx/s, exceso a escudo).',
       on: () => {}, off: () => {} },
@@ -26,8 +26,9 @@ G.Items = (() => {
       on: p => { p.coinMul *= 1.5; }, off: p => { p.coinMul /= 1.5; } },
     { id: 'luckyegg', name: 'Huevo Suerte', desc: '+30% de experiencia.',
       on: p => { p.xpMul *= 1.3; }, off: p => { p.xpMul /= 1.3; } },
-    { id: 'lifeorb', name: 'Vidasfera', desc: '+30% de daño, pero cada ataque te quita un poco de vida.',
-      on: p => { p.atkMul *= 1.3; }, off: p => { p.atkMul /= 1.3; } },
+    { id: 'lifeorb', name: 'Vidasfera', desc: '+30% de daño y +10% crítico, pero consume 1,5% de vida actual por ataque.',
+      on: p => { p.atkMul *= 1.30; p.lifeorb = true; p.critChance = (p.critChance || 0) + 0.10; },
+      off: p => { p.atkMul /= 1.30; p.lifeorb = false; p.critChance = Math.max(0, (p.critChance || 0) - 0.10); } },
     { id: 'choicescarf', name: 'Pañuelo Elección', desc: '+35% de velocidad.',
       on: p => { p.spdMul *= 1.35; }, off: p => { p.spdMul /= 1.35; } },
     { id: 'rockyhelmet', name: 'Casco Dentado', desc: 'Los que te golpean cuerpo a cuerpo reciben daño.',
@@ -45,9 +46,9 @@ G.Items = (() => {
       on: p => { p.loadeddice = true; }, off: p => { p.loadeddice = false; } },
     { id: 'heavydutyboots', name: 'Botas Gruesas', desc: 'Inmune a lava, charcos ralentizantes y trampas de suelo.',
       on: p => { p.heavydutyboots = true; }, off: p => { p.heavydutyboots = false; } },
-    { id: 'keystone', name: 'Mega Aro', desc: '+10% estadísticas, activa la Megaevolución al instante y +15% de bonus STAB.',
-      on: p => { p.keystone = true; p.atkMul *= 1.10; p.spdMul *= 1.10; if (p.triggerMegaIfAvailable) p.triggerMegaIfAvailable(); },
-      off: p => { p.keystone = false; p.atkMul /= 1.10; p.spdMul /= 1.10; } },
+    { id: 'keystone', name: 'Mega Aro', desc: '+10% estadísticas (50% antes de Lv30) y activa la Megaevolución.',
+      on: p => { p.keystone = true; const mul = p.level >= 30 ? 1.10 : 1.05; p.atkMul *= mul; p.spdMul *= mul; if (p.triggerMegaIfAvailable) p.triggerMegaIfAvailable(); },
+      off: p => { p.keystone = false; const mul = p.level >= 30 ? 1.10 : 1.05; p.atkMul /= mul; p.spdMul /= mul; } },
     { id: 'dnasplicers', name: 'Punta ADN', desc: '+20% Daño Dragón y Hielo. Permite fusionar a Kyurem en Kyurem Negro o Kyurem Blanco.',
       on: p => { p.dnasplicers = true; if (p.triggerFormIfAvailable) p.triggerFormIfAvailable(); },
       off: p => { p.dnasplicers = false; } },
@@ -76,6 +77,9 @@ G.Items = (() => {
     { id: 'deepseatooth', name: 'Diente Marino', desc: '+55% de daño especial y vórtice de agua para Clamperl y evoluciones.',
       on: p => { p.deepseatooth = true; p.spAtkMul = (p.spAtkMul || 1) * 1.55; },
       off: p => { p.deepseatooth = false; p.spAtkMul = (p.spAtkMul || 1) / 1.55; } },
+    { id: 'deepseascale', name: 'Escama Marina', desc: '+55% Def. Especial y manto acuático protector para Clamperl y evoluciones.',
+      on: p => { p.deepseascale = true; p.sdefReduce = Math.min(0.70, (p.sdefReduce || 0) + 0.40); },
+      off: p => { p.deepseascale = false; p.sdefReduce = Math.max(0, (p.sdefReduce || 0) - 0.40); } },
     { id: 'luckypunch', name: 'Puño Suerte', desc: 'Convierte un 8% de vida máxima en daño directo y +20% crítico.',
       on: p => { p.luckypunch = true; p.critChance = (p.critChance || 0) + 0.20; },
       off: p => { p.luckypunch = false; p.critChance = Math.max(0, (p.critChance || 0) - 0.20); } },
@@ -95,7 +99,7 @@ G.Items = (() => {
   /** Uno al azar, distinto del que ya llevas. */
   function roll(except, pl) {
     const specialIds = ['keystone', 'dnasplicers', 'ultranecroziumz', 'griseousorb', 'meteorite',
-      'lightball', 'thickclub', 'leek', 'metalpowder', 'deepseatooth', 'luckypunch', 'twistedspoon_alakazam', 'charcoal_torkoal', 'blacksludge'];
+      'lightball', 'thickclub', 'leek', 'metalpowder', 'deepseatooth', 'deepseascale', 'luckypunch', 'twistedspoon_alakazam', 'charcoal_torkoal', 'blacksludge'];
     const pool = LIST.filter(i => {
       if (i.id === except) return false;
       if (specialIds.includes(i.id)) {
@@ -110,7 +114,7 @@ G.Items = (() => {
         if (i.id === 'thickclub' && ![104, 105].includes(pl.dex)) return false;
         if (i.id === 'leek' && ![83, 865].includes(pl.dex)) return false;
         if (i.id === 'metalpowder' && pl.dex !== 132) return false;
-        if (i.id === 'deepseatooth' && ![366, 367, 368].includes(pl.dex)) return false;
+        if ((i.id === 'deepseatooth' || i.id === 'deepseascale') && ![366, 367, 368].includes(pl.dex)) return false;
         if (i.id === 'luckypunch' && ![113, 242, 440].includes(pl.dex)) return false;
         if (i.id === 'twistedspoon_alakazam' && ![63, 64, 65].includes(pl.dex)) return false;
         if (i.id === 'charcoal_torkoal' && ![219, 323, 324].includes(pl.dex)) return false;

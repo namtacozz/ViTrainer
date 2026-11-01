@@ -133,5 +133,142 @@ G.NetCodec = (() => {
     if (at !== bytes.length) throw Error('trailing bytes');
     return value;
   }
-  return { version: 1, encode, decode, size, MAX_BYTES };
+  function encodeWorldEvent(eventId, op, payload) {
+    try {
+      let bytes = new Uint8Array(1024), at = 0, nodes = 0;
+      function reserve(n) {
+        if (at + n > MAX_BYTES) throw Error('packet size');
+        if (at + n > bytes.length) {
+          const next = new Uint8Array(Math.min(MAX_BYTES, Math.max(at + n, bytes.length * 2)));
+          next.set(bytes); bytes = next;
+        }
+      }
+      function byte(n) { reserve(1); bytes[at++] = n; }
+      function uint(n) {
+        do { const part = n % 128; n = Math.floor(n / 128); byte(part + (n ? 128 : 0)); } while (n);
+      }
+      function string(s) {
+        if (s.length > MAX_BYTES) throw Error('string size');
+        const b = utf8.encode(s); uint(b.length); reserve(b.length); bytes.set(b, at); at += b.length;
+      }
+      const skip = v => v === undefined || typeof v === 'function' || typeof v === 'symbol';
+      function write(v, depth) {
+        if (++nodes > MAX_NODES || depth > MAX_DEPTH) throw Error('complexity');
+        if (v === null || skip(v) || (typeof v === 'number' && !Number.isFinite(v))) { byte(0); return; }
+        if (v === false) { byte(1); return; }
+        if (v === true) { byte(2); return; }
+        if (typeof v === 'number') {
+          if (v === 0) { byte(32); return; }
+          if (Number.isSafeInteger(v)) {
+            if (v >= 0 && v <= 95) { byte(32 + v); return; }
+            if (v < 0 && v >= -96) { byte(127 - v); return; }
+            byte(v < 0 ? 4 : 3); uint(Math.abs(v)); return;
+          }
+          const cents = Math.round(v * 100);
+          if (Number.isSafeInteger(cents) && cents / 100 === v) {
+            byte(v < 0 ? 7 : 6); uint(Math.abs(cents)); return;
+          }
+          byte(5); reserve(8); new DataView(bytes.buffer).setFloat64(at, v, true); at += 8; return;
+        }
+        if (typeof v === 'string') { byte(8); string(v); return; }
+        if (Array.isArray(v)) {
+          if (v.length > MAX_NODES) throw Error('array size');
+          byte(9); uint(v.length); for (const item of v) write(item, depth + 1); return;
+        }
+        if (v && typeof v === 'object' &&
+            (Object.getPrototypeOf(v) === Object.prototype || Object.getPrototypeOf(v) === null)) {
+          const keys = Object.keys(v).filter(k => !skip(v[k])); byte(10); uint(keys.length);
+          for (const key of keys) { string(key); write(v[key], depth + 1); } return;
+        }
+        throw Error('unsupported value');
+      }
+      if (skip(payload) && payload !== undefined) throw Error('unsupported value');
+      byte(80); byte(83); byte(1); // Protocol 'PS' version 1
+      byte(0x07);                   // TAG_EVENT_WORLD
+      byte(eventId & 0xff);
+      byte(op & 0xff);
+      if (payload !== undefined) write(payload, 0);
+      return bytes.buffer.slice(0, at);
+    } catch (e) { return null; }
+  }
+
+  function decodeWorldEvent(buffer) {
+    if (!(buffer instanceof ArrayBuffer) || buffer.byteLength > MAX_BYTES) throw Error('packet size/type');
+    const bytes = new Uint8Array(buffer), view = new DataView(buffer);
+    let at = 0, nodes = 0;
+    function need(n) { if (n > bytes.length - at) throw Error('truncated packet'); }
+    function byte() { need(1); return bytes[at++]; }
+    function uint() {
+      let value = 0, scale = 1;
+      for (let i = 0; i < 8; i++) {
+        const b = byte(); value += (b & 127) * scale;
+        if (!Number.isSafeInteger(value)) throw Error('integer overflow');
+        if (!(b & 128)) { if (i && b === 0) throw Error('noncanonical integer'); return value; }
+        scale *= 128;
+      }
+      throw Error('integer overflow');
+    }
+    function string() { const n = uint(); need(n); const s = text.decode(bytes.subarray(at, at + n)); at += n; return s; }
+    function read(depth) {
+      if (++nodes > MAX_NODES || depth > MAX_DEPTH) throw Error('complexity');
+      const tag = byte();
+      if (tag >= 32 && tag <= 127) return tag - 32;
+      if (tag >= 128 && tag <= 223) return 127 - tag;
+      switch (tag) {
+        case 0: return null;
+        case 1: return false;
+        case 2: return true;
+        case 3: return uint();
+        case 4: return -uint();
+        case 5: {
+          need(8); const n = view.getFloat64(at, true); at += 8;
+          if (!Number.isFinite(n)) throw Error('number'); return n;
+        }
+        case 6: return uint() / 100;
+        case 7: return -uint() / 100;
+        case 8: return string();
+        case 9: {
+          const n = uint();
+          if (n > MAX_NODES - nodes || n > bytes.length - at) throw Error('array size');
+          const a = []; for (let i = 0; i < n; i++) a.push(read(depth + 1)); return a;
+        }
+        case 10: {
+          const n = uint();
+          if (n > MAX_NODES - nodes || n > (bytes.length - at) / 2) throw Error('object size');
+          const o = {};
+          for (let i = 0; i < n; i++) {
+            const key = string();
+            if (Object.prototype.hasOwnProperty.call(o, key)) throw Error('duplicate key');
+            Object.defineProperty(o, key, { value: read(depth + 1), enumerable: true, writable: true, configurable: true });
+          }
+          return o;
+        }
+        default: throw Error('unknown tag');
+      }
+    }
+    if (byte() !== 80 || byte() !== 83 || byte() !== 1) throw Error('protocol version');
+    const tag = byte();
+    if (tag !== 0x07) throw Error('not an event_world packet');
+    need(2);
+    const eventId = byte();
+    const op = byte();
+    let payload = null;
+    if (at < bytes.length) {
+      payload = read(0);
+      if (at !== bytes.length) throw Error('trailing bytes');
+    }
+    return { tag: 'EVENT_WORLD', type: 0x07, eventId, op, payload };
+  }
+
+  return {
+    version: 1,
+    encode,
+    decode,
+    encodeWorldEvent,
+    decodeWorldEvent,
+    TAG_EVENT_WORLD: 0x07,
+    OP: { START: 1, UPDATE: 2, END: 3, SPAWN: 4, DESPAWN: 5 },
+    size,
+    MAX_BYTES
+  };
 })();

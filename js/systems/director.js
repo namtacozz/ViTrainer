@@ -20,6 +20,9 @@ G.Director = (() => {
   let pressureIndex = 0.5;
   let recentKills = 0;
   let killSampleTimer = 0;
+  let breathingTimer = 0;
+  let activeMajorEvent = null;
+  let distortionScale = 1.0;
 
   function reset() {
     credits = 0;
@@ -28,6 +31,9 @@ G.Director = (() => {
     pressureIndex = 0.5;
     recentKills = 0;
     killSampleTimer = 0;
+    breathingTimer = 0;
+    activeMajorEvent = null;
+    distortionScale = 1.0;
   }
 
   /**
@@ -90,7 +96,14 @@ G.Director = (() => {
     const coopScale = pCount <= 4 ? (1 + 0.55 * (pCount - 1)) : (2.65 * Math.pow(1.22, pCount - 4));
     const baseCreditRate = (2.0 + t * 0.035 + Math.pow(t / 60, 1.5) * 0.45);
 
-    credits += baseCreditRate * waveMul * pressureMul * coopScale * dt;
+    // Cửa Sổ Thở (Breathing Window): giảm 60% tốc độ sinh quái trong 20s sau khi hạ Boss
+    let breathingMul = 1.0;
+    if (breathingTimer > 0) {
+      breathingTimer -= dt;
+      breathingMul = 0.40;
+    }
+
+    credits += baseCreditRate * waveMul * pressureMul * coopScale * breathingMul * distortionScale * dt;
 
     // 4. Cơ chế chống kite vô tận: Nếu 12s không có quái nào bị hạ
     if (lastKillTimer >= 12.0 && G.EnemyMgr && G.EnemyMgr.count < (G.Spawner ? G.Spawner.CAP : 64)) {
@@ -122,6 +135,31 @@ G.Director = (() => {
     recentKills++;
   }
 
+  function onBossKill() {
+    lastKillTimer = 0;
+    breathingTimer = 20.0; // 20s Cửa Sổ Thở sau khi diệt Boss
+    activeMajorEvent = null;
+    if (G.WorldEvents && G.WorldEvents.recordProgress) {
+      G.WorldEvents.recordProgress('boss', 1);
+    }
+  }
+
+  function canStartMajorEvent() {
+    return !activeMajorEvent && breathingTimer <= 0 && (!G.Spawner || !G.Spawner.bossAlive);
+  }
+
+  function startMajorEvent(eventId) {
+    if (!canStartMajorEvent()) return false;
+    activeMajorEvent = eventId;
+    return true;
+  }
+
+  function endMajorEvent(eventId) {
+    if (activeMajorEvent === eventId) {
+      activeMajorEvent = null;
+    }
+  }
+
   function spend(cost) {
     if (credits >= cost) {
       credits -= cost;
@@ -134,13 +172,23 @@ G.Director = (() => {
     reset,
     update,
     onKill,
+    onBossKill,
+    canStartMajorEvent,
+    startMajorEvent,
+    endMajorEvent,
+    isBreathingWindow: () => breathingTimer > 0,
     spend,
     get credits() { return credits; },
     get pressure() { return pressureIndex; },
+    get tension() { return pressureIndex; },
+    get activeMajorEvent() { return activeMajorEvent; },
+    get breathingTimer() { return breathingTimer; },
     get wavePhase() {
       if (waveTimer < 30) return 'ramp';
       if (waveTimer < 45) return 'peak';
       return 'reprieve';
-    }
+    },
+    get distortionScale() { return distortionScale; },
+    set distortionScale(v) { distortionScale = v; }
   };
 })();

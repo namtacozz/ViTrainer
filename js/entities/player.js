@@ -130,7 +130,14 @@ G.Player = class Player {
 
     this.level = 1;
     this.xp = 0;
-    this.xpNext = Player.xpFor(1);
+    const rarity = (this.mon && this.mon.rarity) || 1;
+    this.isLegendaryTax = (rarity === 5 || (this.mon && this.mon.legend));
+    this.darkHorse = (rarity <= 3 && !this.isLegendaryTax);
+    if (this.darkHorse) {
+      this.coinMul = (this.coinMul || 1) * 1.25; // Đặc Quyền Hắc Mã: +25% Tiền Vàng
+    }
+    const baseReq1 = Player.xpFor(1);
+    this.xpNext = this.isLegendaryTax ? Math.round(baseReq1 * 1.20) : baseReq1; // Thuế Huyền Thoại: +20% EXP
     this.kills = 0;
     this.bosses = 0;
     this.rerolls = 0;          // veces que ha cambiado las cartas de nivel en esta run
@@ -362,9 +369,9 @@ G.Player = class Player {
    * acelera si la recarga es más corta que la animación, para que encadene.
    */
   cast(m) {
-    // Vidasfera: cada ataque cuesta un poco de vida (nunca te deja KO).
+    // Vidasfera: tiêu hao cố định 1.5% Máu hiện tại mỗi chiêu tung ra (không bao giờ KO).
     if (this.hasItem('lifeorb') && m.kind !== 'orbit' && m.kind !== 'trail' && !this.remote) {
-      this.hp = Math.max(1, this.hp - Math.max(1, this.maxHp * 0.01));
+      this.hp = Math.max(1, this.hp - Math.max(1, Math.floor(this.hp * 0.015)));
     }
     const anim = { melee: 'Attack', beam: 'Shoot', projectile: 'Shoot', nova: 'Attack',
                    aura: 'Charge', buff: 'Charge', orbit: 'Charge', boomerang: 'Shoot', chain: 'Shoot',
@@ -466,6 +473,7 @@ G.Player = class Player {
       d = maxAllowedDmg;
     }
     this.hp -= d;
+    this.lastHitTakenT = performance.now();
     this.invuln = 0.52;
     this.flash = 0.14;
     G.Audio.sfx('hurt');
@@ -478,12 +486,15 @@ G.Player = class Player {
       : (eff === 'super' ? '#ff3048' : eff === 'weak' ? '#c9a0a8' : '#ff6b7a');
     G.FX.dmgText(this.x, this.y - this.bodyH - 4, tag + Math.round(d), numColor, eff === 'super');
     G.FX.burst(this.x, this.y - this.bodyH * 0.5, isSpecial ? '#c084fc' : '#ff5f6d', 6, 90);
-    // Banda Focus: aguanta el golpe con 1 de vida (una vez cada 60 s).
+    // Banda Focus: aguanta el golpe con 1 de vida, 1.2s invulnerable y limpia trampas de suelo (cada 60 s).
     if (this.hp <= 0 && this.hasItem('focussash') && performance.now() - this.sashT > 60000) {
       this.sashT = performance.now();
       this.hp = 1; this.invuln = 1.2;
       G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Banda Focus!', '#ff9a3d', true);
       G.FX.ring(this.x, this.y, 6, 70, '#ff9a3d', 0.5, 4);
+      if (typeof G !== 'undefined' && G.Hazards && G.Hazards.list) {
+        G.Hazards.list = G.Hazards.list.filter(h => Math.hypot(h.x - this.x, h.y - this.y) > 300);
+      }
     }
     // Robustez / Titán Inamovible (habilidad): lo mismo, una vez cada 45 s.
     if (this.hp <= 0 && ab && ab.sturdy && performance.now() - this.sturdyAt > 45000) {
@@ -599,7 +610,8 @@ G.Player = class Player {
     while (this.xp >= this.xpNext && leveled < 50) {
       this.xp -= this.xpNext;
       this.level++;
-      this.xpNext = Player.xpFor(this.level);
+      const baseReq = Player.xpFor(this.level);
+      this.xpNext = this.isLegendaryTax ? Math.round(baseReq * 1.20) : baseReq;
       leveled++;
     }
     if (leveled > 0) {
@@ -1361,6 +1373,12 @@ G.Player = class Player {
     if (this.bellHeal > 0) { const h = Math.min(this.bellHeal, 4 * dt); this.hp = Math.min(this.maxHp, this.hp + h); this.bellHeal -= h; }
     if (this.power && (this.power.t -= dt) <= 0) { this.power.def.off(this); this.power = null; }
     if (this.regen > 0) this.hp = Math.min(this.maxHp, this.hp + this.regen * dt);
+    // Restos (Leftovers): 1.0% HP/s en combate, 2.0% HP/s tras 3s sin recibir daño
+    if (this.hasItem && this.hasItem('leftovers')) {
+      const ooc = (performance.now() - (this.lastHitTakenT || 0)) >= 3000;
+      const leftoversRate = ooc ? 0.020 : 0.010;
+      this.hp = Math.min(this.maxHp, this.hp + this.maxHp * leftoversRate * dt);
+    }
     if (this.abil && this.abil.tick) this.abil.tick(this, dt);
     if (this.seedSowerT > 0) {
       this.seedSowerT -= dt;

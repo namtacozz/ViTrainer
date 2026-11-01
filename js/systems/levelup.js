@@ -44,8 +44,8 @@ G.LevelUp = (() => {
   function candidates(pl) {
     const out = [];
 
-    // --- movimientos nuevos ---
-    if (pl.slots.length < pl.maxMoves) {
+    // --- movimientos nuevos (Khóa hoàn toàn nếu mang Choice Band) ---
+    if (pl.slots.length < pl.maxMoves && !(pl.hasItem && pl.hasItem('choiceband'))) {
       // Con 2 potenciadores ya no se ofrecen más: los buff no hacen daño y
       // llenar los 4 huecos con ellos deja la run sin salida.
       const buffs = pl.moves.filter(m => m.kind === 'buff').length;

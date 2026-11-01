@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-11-01T11:50:27.219Z",
+  "timestamp": "2026-11-01T13:04:22.449Z",
   "totalPokemon": 1021,
   "singleStageSpecies": 199,
   "multiStageSpecies": 822,
-  "totalAbilities": 276,
+  "totalAbilities": 282,
   "abilityCoverage": {
-    "fxBuiltin": 163,
+    "fxBuiltin": 267,
     "extShaping": 15,
-    "generic": 98
+    "generic": 0
   },
   "totalMoves": 139,
   "typeDistribution": {
@@ -30,5 +30,5 @@
     "steel": 10,
     "dark": 6
   },
-  "totalItems": 30
+  "totalItems": 31
 }
