@@ -303,7 +303,7 @@ G.I18n.add({
     "The only official PokéSurvivor website is pokesurvivor.com. The game is and always will be free: if anyone asks you to pay, it isn't us.",
   'Licencia del código: PolyForm Noncommercial 1.0.0 (se puede usar, estudiar y modificar, pero no para ganar dinero). Las versiones hasta el 14-10-2026 siguen bajo MIT.':
     'Code license: PolyForm Noncommercial 1.0.0 (you may use, study and modify it, but not to make money). Versions up to 14-10-2026 remain under MIT.',
-  'Web oficial: namtaccozz.github.io/ViTrainer · Team oficial: ViTeam': 'Official website: pokesurvivor.com · if anyone asks you to pay, it isn\'t us',
+  'Web oficial: namtaccozz.github.io/ViTrainer · Team oficial: ViTeam': 'Official website: namtaccozz.github.io/ViTrainer · Official Team: ViTeam',
   'PokéSurvivor no tiene ninguna criptomoneda, token ni NFT oficial, y su autor no ha creado ninguno. Cualquier token que use el nombre del juego lo han creado terceros: no nos hacemos cargo de ninguna compra, venta o inversión que hagas con ellos, y nada de lo que hay aquí es una recomendación de inversión.':
     "PokéSurvivor has no official cryptocurrency, token or NFT, and its author has not created any. Any token using the game's name was created by third parties: we take no responsibility for any purchase, sale or investment you make with them, and nothing here is investment advice.",
   '¡Vínculo!': 'Bond!', 'Vínculo': 'Bond', 'Atrás': 'Back',

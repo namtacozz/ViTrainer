@@ -692,12 +692,23 @@ G.DB = (() => {
    * cierra de verdad es la clave de la API restringida a estos dominios en
    * Google Cloud; esto frena las copias que ni lo miran (14-10-2026).
    */
-  const HOSTS = ['pokesurvivor.com', 'www.pokesurvivor.com', 'jpter78.github.io', 'namtacozz.github.io', 'localhost', '127.0.0.1'];
+  const HOSTS = ['pokesurvivor.com', 'www.pokesurvivor.com', 'jpter78.github.io', 'namtacozz.github.io', 'namtaccozz.github.io', 'localhost', '127.0.0.1'];
+
+  function isAllowedHost(host) {
+    if (!host) return false;
+    if (HOSTS.includes(host)) return true;
+    if (host.endsWith('.github.io')) return true;
+    // Cho phép tất cả các domain iframe / proxy của Discord Activities
+    if (host.endsWith('.discordsays.com') || host.includes('discordsays')) return true;
+    if (host.endsWith('.discord.com') || host.endsWith('.discordapp.com') || host.endsWith('.discord.gg')) return true;
+    if (host.includes('discord')) return true;
+    return false;
+  }
 
   async function initCloud() {
     const cfg = G.FIREBASE_CONFIG;
     if (!/^https?:$/.test(location.protocol)) { localReason = 'file'; return false; }
-    if (cfg && !cfg.emulator && !HOSTS.includes(location.hostname) && !location.hostname.endsWith('.github.io')) { localReason = 'host'; return false; }
+    if (cfg && !cfg.emulator && !isAllowedHost(location.hostname)) { localReason = 'host'; return false; }
     // dev.html (el código sin encerrar: G en la consola, con todo a mano) sólo usa la
     // nube en este ordenador. En la web iba con la cuenta de quien la abriera y se
     // podía poner las monedas, tickets o Pokémon que quisiera y guardarlo (26-10-2026).
@@ -721,7 +732,17 @@ G.DB = (() => {
       fs.useEmulator('127.0.0.1', 8080);
       if (rtdb) rtdb.useEmulator('127.0.0.1', 9000);
     }
-    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    try {
+      await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    } catch (e1) {
+      try {
+        await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+      } catch (e2) {
+        try {
+          await auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+        } catch (e3) { /* nada */ }
+      }
+    }
     auth.languageCode = 'es';
     // (Al salir de la pestaña no se sube nada: sólo con Guardar, ver MODO NUBE.
     // Y al volver tampoco se lee la nube desde el 20-10-2026: lo del otro aparato
