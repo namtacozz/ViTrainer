@@ -65,9 +65,6 @@
       this.bodyH = G.Sprites.bodyHeight(def.dex, this.scale);
 
       this.maxHp = Math.round(def.hp * sc.hp);
-      if (boss) {
-        this.maxHp = Math.round(this.maxHp * 0.60); // Giảm 40% máu boss để tránh quá trâu
-      }
       this.hp = this.maxHp;
       this.spd = def.spd * sc.spd;
       this.dmg = def.dmg * sc.dmg;
@@ -248,8 +245,8 @@
       const phase = this.bossPhase;
       this.dmg = Math.round(this.dmg * 1.30); // Tăng 30% sát thương qua mỗi phase
       this.spd = Math.round(this.spd * 1.15);
-      // Giảm 40% máu tích lũy qua phase 2 & 3 (hệ số điều chỉnh từ 1.5/2.0 xuống 1.25/1.40)
-      const hpMultiplier = phase === 2 ? 1.25 : 1.40;
+      // Boss cường hóa mạnh mẽ qua từng phase (máu x1.5 / x1.75)
+      const hpMultiplier = phase === 2 ? 1.50 : 1.75;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
       this.hp = this.maxHp;
       this.invuln = 0.8;
