@@ -6,25 +6,59 @@
  * Va en un archivo aparte (y no dentro del HTML) por la CSP; lo usan el juego
  * (dev.html, index.html, en/) y las páginas de la guía (make_seo_pages.py).
  * Si algún día el juego se publica en un portal que lo mete en un marco
- * (itch.io, CrazyGames...), su dominio va en ALLOW.
+ * (itch.io, CrazyGames, Discord Activities...), su dominio va en ALLOW.
  */
 (function () {
-  var ALLOW = [];
+  var ALLOW = [
+    'discord.com',
+    'discordapp.com',
+    'discord.gg',
+    'discordsays.com'
+  ];
+
   if (window.top === window.self) return;
+
+  function isAllowed(h) {
+    if (!h) return false;
+    for (var i = 0; i < ALLOW.length; i++) {
+      if (h === ALLOW[i] || h.endsWith('.' + ALLOW[i])) return true;
+    }
+    return false;
+  }
+
+  // Si se está ejecutando en el proxy de Discord Activity (p. ej. *.discordsays.com)
+  if (isAllowed(location.hostname)) return;
+
+  // Parámetros típicos de Discord Activity SDK / Embedded App
+  if (location.search && (location.search.indexOf('frame_id=') >= 0 || location.search.indexOf('platform=discord') >= 0)) return;
+
   var parent = '';
   try { parent = window.top.location.hostname; } catch (e) { /* de otra web: no se puede leer */ }
   if (parent === location.hostname) return;
+  if (isAllowed(parent)) return;
+
+  if (location.ancestorOrigins) {
+    for (var j = 0; j < location.ancestorOrigins.length; j++) {
+      try {
+        var aHost = new URL(location.ancestorOrigins[j]).hostname;
+        if (isAllowed(aHost)) return;
+      } catch (e) {}
+    }
+  }
+
   var anc = location.ancestorOrigins && location.ancestorOrigins[0];
   if (!parent && anc) { try { parent = new URL(anc).hostname; } catch (e) { /* sin origen */ } }
-  if (parent && ALLOW.indexOf(parent) >= 0) return;
+  if (isAllowed(parent)) return;
+
   window.PS_FRAMED = true;
 
   var lang = (window.PS_LOCALES && window.PS_LOCALES.lang) || document.documentElement.lang || 'en';
   var texts = {
     es: ['Esta no es la web oficial', 'PokéSurvivor sólo se juega en su web oficial, gratis y sin anuncios.', 'Jugar en pokesurvivor.com'],
     en: ['This is not the official website', 'PokéSurvivor can only be played on its official website, free and without ads.', 'Play on pokesurvivor.com'],
+    vi: ['Đây không phải trang web chính thức', 'PokéSurvivor chỉ có thể chơi miễn phí và không quảng cáo trên trang chính thức.', 'Chơi trên pokesurvivor.com'],
     fr: ['Ce n’est pas le site officiel', 'PokéSurvivor se joue uniquement sur son site officiel, gratuitement et sans publicité.', 'Jouer sur pokesurvivor.com'],
-    it: ['Questo non è il sito ufficiale', 'PokéSurvivor si gioca solo sul suo sito ufficiale, gratis e senza pubblicità.', 'Gioca su pokesurvivor.com'],
+    it: ['Questo non è il sito ufficiale', 'PokéSurvivor si gioca solo sul suo sitio ufficiale, gratis e senza pubblicità.', 'Gioca su pokesurvivor.com'],
     'pt-BR': ['Este não é o site oficial', 'PokéSurvivor só pode ser jogado no site oficial, de graça e sem anúncios.', 'Jogar em pokesurvivor.com'],
     'zh-Hans': ['这不是官方网站', 'PokéSurvivor 只能在官方网站免费游玩，没有广告。', '前往 pokesurvivor.com 游玩'],
     'zh-Hant': ['這不是官方網站', 'PokéSurvivor 只能在官方網站免費遊玩，沒有廣告。', '前往 pokesurvivor.com 遊玩']
@@ -45,7 +79,6 @@
     var p = document.createElement('p');
     p.style.cssText = 'margin:0 0 20px';
     p.textContent = copy[1];
-    // _top saca al jugador del marco; si la web lo impide, se abre aparte.
     var a = document.createElement('a');
     a.href = url; a.target = '_top'; a.rel = 'noopener';
     a.style.cssText = 'display:inline-block;padding:12px 20px;border-radius:10px;background:#ffd84a;color:#0a1430;' +
