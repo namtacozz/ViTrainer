@@ -718,6 +718,9 @@
       desc: 'Se oculta en la sombra del rival asestando un golpe crítico furtivo.',
       cd: 0.70, dmg: 19, radius: 110, width: 36, knock: 70, exclusive: true },
 
+        { id: 'glaciate', name: 'Glaciate', type: 'ice', kind: 'nova',
+      desc: 'Desata una gélida ventisca que congela y ralentiza severamente a los rivales a su alrededor.',
+      cd: 1.15, dmg: 16, radius: 210, count: 12, speed: 280, slow: 0.5, knock: 80, exclusive: true },
     { id: 'freeze-shock', name: 'Freeze Shock', type: 'ice', kind: 'chain',
       desc: 'Bão lôi băng giật liên hoàn làm tê liệt và đóng băng kẻ địch, phóng điện trường cực độ.',
       cd: 0.95, dmg: 22, count: 3, radius: 130, stun: 0.4, exclusive: true },
@@ -776,6 +779,7 @@
     637: ['fiery-dance'],
     643: ['fusion-flare'],
     644: ['fusion-bolt'],
+    646: ['glaciate'],
     10022: ['freeze-shock'],
     10023: ['ice-burn'],                              // Volcarona
     718: ['thousand-arrows', 'thousand-waves', 'lands-wrath'],
@@ -963,7 +967,10 @@
     'core-enforcer': 'atk',   'lands-wrath': 'hp',
     'origin-pulse': 'cd',     'precipice-blades': 'atk',
     'dark-void': 'mag',       'geomancy': 'rgn',
-    'sunsteel-strike': 'atk', 'moongeist-beam': 'cd'
+    'sunsteel-strike': 'atk', 'moongeist-beam': 'cd',
+    'glaciate': 'def',       'freeze-shock': 'atk',
+    'ice-burn': 'mag',        'fusion-flare': 'atk',
+    'fusion-bolt': 'spd',
   };
   // Lo que gana al evolucionar, según cómo funcione.
   const EVO_MODS = {
