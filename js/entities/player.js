@@ -1636,4 +1636,106 @@ G.Player = class Player {
       ctx.restore();
     }
   }
+
+  getSnapshot(roomId = null, time = 0) {
+    return {
+      roomId: roomId || (typeof G !== 'undefined' && G.Social && G.Social.getActiveRoom ? ((G.Social.getActiveRoom() || {}).id) : null) || 'local',
+      dex: this.dex,
+      chosenDex: this.chosenDex,
+      baseDex: this.baseDex,
+      level: this.level,
+      xp: this.xp,
+      xpNext: this.xpNext,
+      isApex: !!this.isApex,
+      awakeningTier: this.awakeningTier || 0,
+      awakeningCrest: this.awakeningCrest || null,
+      isMega: !!this.isMega,
+      megaId: this.megaId || null,
+      maxMoves: this.maxMoves || 4,
+      bonds: this.bonds || 0,
+      item: this.item || null,
+      moves: (this.moves || []).map(m => ({ id: m.id, lvl: m.lvl || 1, dealt: m.dealt || 0, since: m.since || 0 })),
+      slots: (this.slots || []).map(s => s.map(m => m.id)),
+      active: this.active || 0,
+      time: time,
+      hp: this.hp,
+      maxHp: this.maxHp,
+      kills: this.kills,
+      bosses: this.bosses,
+      coins: this.coins,
+      at: Date.now()
+    };
+  }
+
+  restoreSnapshot(snap) {
+    if (!snap) return;
+    // 1. Khôi phục hình dạng Pokémon (Tiến hóa)
+    if (snap.dex && snap.dex !== this.dex) {
+      if (this.evolveTo) {
+        this.evolveTo(snap.dex, !!snap.isApex, 0);
+      } else {
+        this.dex = snap.dex;
+      }
+    }
+    // 2. Khôi phục Mega Evolution
+    if (snap.isMega && snap.megaId) {
+      if (this.megaEvolve) this.megaEvolve(snap.megaId);
+      else { this.isMega = true; this.megaId = snap.megaId; }
+    }
+    // 3. Khôi phục Thức tỉnh & Apex
+    if (snap.awakeningTier) {
+      this.awakeningTier = snap.awakeningTier;
+      if (snap.isApex) this.isApex = true;
+      if (snap.awakeningCrest) this.awakeningCrest = snap.awakeningCrest;
+    }
+    // 4. Khôi phục Trang bị (Held Item)
+    if (snap.item) {
+      if (this.equip) this.equip(snap.item);
+      else this.item = snap.item;
+    }
+    // 5. Khôi phục Chiêu thức & Dung hợp Ô chiêu (Moves & Fused Slots)
+    if (snap.moves && Array.isArray(snap.moves) && snap.moves.length > 0) {
+      this.moves = [];
+      this.slots = [];
+      const moveMap = new Map();
+      for (const m of snap.moves) {
+        const mId = typeof m === 'string' ? m : (Array.isArray(m) ? m[0] : (m && m.id));
+        const mLvl = typeof m === 'object' && !Array.isArray(m) ? (m.lvl || 1) : (Array.isArray(m) ? (m[1] || 1) : 1);
+        if (mId && typeof G !== 'undefined' && G.Moves && G.Moves.BY_ID && G.Moves.BY_ID[mId]) {
+          const inst = (G.Moves.instance) ? G.Moves.instance(mId, mLvl) : { id: mId, lvl: mLvl, cd: 1, dmg: 10, t: 0 };
+          if (typeof m === 'object' && !Array.isArray(m)) {
+            if (m.dealt) inst.dealt = m.dealt;
+            if (m.since) inst.since = m.since;
+          }
+          this.moves.push(inst);
+          moveMap.set(mId, inst);
+        }
+      }
+      if (snap.slots && Array.isArray(snap.slots) && snap.slots.length > 0) {
+        for (const s of snap.slots) {
+          const group = [];
+          for (const mId of s) {
+            const inst = moveMap.get(mId);
+            if (inst) group.push(inst);
+          }
+          if (group.length > 0) this.slots.push(group);
+        }
+      } else {
+        for (const inst of this.moves) {
+          this.slots.push([inst]);
+        }
+      }
+      this.active = (typeof snap.active === 'number' && snap.active < this.slots.length) ? snap.active : 0;
+      this.maxMoves = Math.max(4, this.slots.length, snap.maxMoves || 4);
+    }
+    // 6. Khôi phục Chỉ số tiến trình
+    if (typeof snap.bonds === 'number') this.bonds = snap.bonds;
+    if (typeof snap.level === 'number') this.level = snap.level;
+    if (typeof snap.xp === 'number') this.xp = snap.xp;
+    if (typeof snap.xpNext === 'number') this.xpNext = snap.xpNext;
+    if (typeof snap.kills === 'number') this.kills = snap.kills;
+    if (typeof snap.bosses === 'number') this.bosses = snap.bosses;
+    if (typeof snap.coins === 'number') this.coins = snap.coins;
+    if (typeof snap.hp === 'number' && snap.hp > 0) this.hp = Math.min(this.maxHp, snap.hp);
+  }
 };

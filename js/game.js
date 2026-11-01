@@ -167,6 +167,24 @@ G.Game = (() => {
     else if (state === 'paused') { state = 'playing'; G.UI.hideAll(); }
   }
 
+  let snapTimer = 0;
+  function saveRunSnapshot() {
+    if (!pl || state !== 'playing') return;
+    try {
+      const activeRoom = (typeof G !== 'undefined' && G.Social && G.Social.getActiveRoom) ? G.Social.getActiveRoom() : null;
+      const roomId = activeRoom ? activeRoom.id : 'local';
+      if (pl.getSnapshot) {
+        localStorage.setItem('ps.run_snapshot', JSON.stringify(pl.getSnapshot(roomId, time)));
+      }
+    } catch (e) {}
+  }
+  function clearRunSnapshot() {
+    try { localStorage.removeItem('ps.run_snapshot'); } catch (e) {}
+  }
+  if (typeof window !== 'undefined') {
+    window.addEventListener('beforeunload', () => saveRunSnapshot());
+  }
+
   // ---------------- run ----------------
 
   /** @param coop  { seed, host, members } para una partida en grupo */
@@ -240,6 +258,26 @@ G.Game = (() => {
         if (coop.kills) pl.kills = coop.kills;
         if (coop.bosses) pl.bosses = coop.bosses;
         if (coop.coins) pl.coins = coop.coins;
+
+        // Khôi phục trạng thái toàn vẹn của người chơi khi reconnect (Snapshot Restore)
+        let snap = null;
+        try {
+          const raw = localStorage.getItem('ps.run_snapshot');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && (Date.now() - (parsed.at || 0) < 45 * 60 * 1000)) {
+              snap = parsed;
+            }
+          }
+        } catch (e) {}
+
+        if (!snap && coop.mateSnapshot) {
+          snap = coop.mateSnapshot;
+        }
+
+        if (snap && pl.restoreSnapshot) {
+          pl.restoreSnapshot(snap);
+        }
       }
       G.Coop.begin(coop, pl, coopApi);
       G.Social.setPlaying(true);
@@ -283,8 +321,24 @@ G.Game = (() => {
   /** Tu resumen para el final de la partida (y para los compañeros, ver coop.js): ataques con su daño, objeto... */
   function mySum() {
     if (!pl) return null;
-    return { dex: pl.dex, sh: !!pl.shiny, lv: pl.level, t: Math.floor(time), it: pl.item || null, sk: pl.anim.skin || '',
-             mv: pl.moves.slice(0, 8).map(m => [m.id, m.lvl, Math.round(m.dealt || 0), Math.round(m.since || 0), m.evolved ? 1 : 0]) };
+    return {
+      dex: pl.dex,
+      sh: !!pl.shiny,
+      lv: pl.level,
+      t: Math.floor(time),
+      it: pl.item || null,
+      sk: pl.anim.skin || '',
+      mv: pl.moves.slice(0, 8).map(m => [m.id, m.lvl, Math.round(m.dealt || 0), Math.round(m.since || 0), m.evolved ? 1 : 0]),
+      slots: (pl.slots || []).map(s => s.map(m => m.id)),
+      isApex: !!pl.isApex,
+      awakeningTier: pl.awakeningTier || 0,
+      awakeningCrest: pl.awakeningCrest || null,
+      isMega: !!pl.isMega,
+      megaId: pl.megaId || null,
+      bonds: pl.bonds || 0,
+      hp: Math.round(pl.hp || 100),
+      maxHp: Math.round(pl.maxHp || 100)
+    };
   }
 
   /**
@@ -430,6 +484,7 @@ G.Game = (() => {
 
   function endRun(dead = true) {
     if (state === 'over' || !pl) return;
+    clearRunSnapshot();
     const coop = !!pl.uid;                    // sólo las partidas en grupo le ponen uid
     const wasHost = !!pl.coopHost;
     // (Con el sello del ranking que mandó cada invitado, antes de cerrar la partida en grupo.)
@@ -852,6 +907,11 @@ G.Game = (() => {
 
   function update(dt) {
     const coop = G.Coop.active;
+    snapTimer = (snapTimer || 0) - dt;
+    if (snapTimer <= 0) {
+      snapTimer = 3.0;
+      saveRunSnapshot();
+    }
     if (flashT > 0) flashT -= dt;
     // La Sentencia de Arceus: mientras dura la animación, todo lo demás se para.
     if (G.Judgment.cinematic) {

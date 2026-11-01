@@ -363,6 +363,32 @@ G.Coop = (() => {
     G.Spawner.say(m.name + ' ha vuelto a la partida', 3);
     emit(['mate-rejoined', uid, m.name]);
     const st = api.team ? api.team() : {};
+    const lastSum = sums[uid];
+    const mateSnapshot = lastSum ? {
+      dex: lastSum.dex || (m.pl ? m.pl.dex : null),
+      level: lastSum.lv || (m.pl ? m.pl.level : null),
+      moves: lastSum.mv,
+      slots: lastSum.slots,
+      item: lastSum.it,
+      isApex: lastSum.isApex || (m.pl ? m.pl.isApex : false),
+      awakeningTier: lastSum.awakeningTier || (m.pl ? m.pl.awakeningTier : 0),
+      awakeningCrest: lastSum.awakeningCrest,
+      isMega: lastSum.isMega || (m.pl ? m.pl.isMega : false),
+      megaId: lastSum.megaId || (m.pl ? m.pl.megaId : null),
+      bonds: lastSum.bonds || 0,
+      hp: lastSum.hp,
+      maxHp: lastSum.maxHp
+    } : (m.pl ? {
+      dex: m.pl.dex,
+      level: m.pl.level,
+      isApex: m.pl.isApex,
+      awakeningTier: m.pl.awakeningTier,
+      isMega: m.pl.isMega,
+      megaId: m.pl.megaId,
+      hp: m.pl.hp,
+      maxHp: m.pl.maxHp
+    } : null);
+
     G.Net.send(uid, {
       k: 'rejoin-sync',
       seed: 0,
@@ -374,7 +400,8 @@ G.Coop = (() => {
       xpNext: st.xpNext || 100,
       kills: st.kills || 0,
       bosses: st.bosses || 0,
-      coins: st.coins || 0
+      coins: st.coins || 0,
+      mateSnapshot
     });
     flushAll();
   }
@@ -531,7 +558,7 @@ G.Coop = (() => {
         case 'he': holdOff(from); break;
         case 're': G.Rift.enterRequest(); break;
         case 'bye': mateGone(from); break;
-        case 'sm': { const c = cleanSum(ev[1]); if (c) { sums[from] = c; dressMate(from, c); } break; }
+        case 'sm': { m.rawSnapshot = ev[1]; const c = cleanSum(ev[1]); if (c) { sums[from] = c; dressMate(from, c); } break; }
         case 'seal': if (Number.isSafeInteger(ev[1]) && typeof ev[2] === 'string' && /^[0-9a-f]{64}$/.test(ev[2])) m.seal = { s: ev[1], g: ev[2] }; break;
         // Un invitado con Sequía, Llovizna...: su clima, si no hay otro (como mucho uno por minuto).
         case 'wxq':

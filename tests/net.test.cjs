@@ -507,3 +507,52 @@ test('net busy: only an open channel with a big backlog counts as busy', async (
   assert.equal(N.busy('a'), true);
   assert.equal(N.busy('nadie'), false);
 });
+
+test("co-op reconnect: restores evolved stage, moves, slots, item, and apex from snapshot", () => {
+  const G = { U: { dist2: () => 0, rand: () => 0, TYPE_COLOR: {} } };
+  G.Sprites = {
+    playerScale: () => 1,
+    playerRadius: () => 10,
+    bodyHeight: () => 20,
+    Animator: class { constructor() {} play() {} loop() {} }
+  };
+  G.Mons = { abilityOf: () => ({ id: "overgrow" }) };
+  G.Moves = {
+    BY_ID: {
+      "tackle": { id: "tackle", name: "Tackle", dmg: 10, cd: 1 },
+      "flamethrower": { id: "flamethrower", name: "Flamethrower", dmg: 25, cd: 1.5 }
+    },
+    instance: (id, lvl) => ({ id, lvl, cd: 1, dmg: 10, t: 0 })
+  };
+  G.Items = { BY: { "leftovers": { on: () => {}, off: () => {} } } };
+  G.DEX_BY = {
+    4: { dex: 4, name: "Charmander", hp: 100, spd: 100, atk: 1 },
+    6: { dex: 6, name: "Charizard", hp: 180, spd: 120, atk: 1.4 }
+  };
+  G.getBaseDex = d => 4;
+  G.getStage = d => (d === 4 ? 1 : 3);
+  G.getEvoChain = d => ({ type: "3stage", maxStage: 3, members: [4, 5, 6] });
+  G.DB = { upgradesOf: () => [], getEvoTier: () => 3, isEvoUnlocked: () => true };
+
+  new Function("G", source("js/entities/player.js"))(G);
+  const pl = new G.Player(G.DEX_BY[4], {});
+
+  const snap = {
+    dex: 6,
+    level: 35,
+    isApex: true,
+    awakeningTier: 2,
+    item: "leftovers",
+    moves: [{ id: "tackle", lvl: 5 }, { id: "flamethrower", lvl: 3 }],
+    slots: [["tackle", "flamethrower"]],
+    hp: 150
+  };
+
+  pl.restoreSnapshot(snap);
+  assert.equal(pl.dex, 6, "Evolved form restored");
+  assert.equal(pl.level, 35, "Level restored");
+  assert.equal(pl.isApex, true, "Apex status restored");
+  assert.equal(pl.item, "leftovers", "Item restored");
+  assert.equal(pl.moves.length, 2, "Moves restored");
+  assert.deepEqual(pl.slots.map(s => s.map(m => m.id)), [["tackle", "flamethrower"]], "Fused slots restored");
+});
