@@ -51,13 +51,17 @@ G.Rift = (() => {
       rift.ttl -= dt;
       if (rift.ttl <= 0) { rift = null; return; }
       if (!arena && !pl.dead && G.U.dist2(pl.x, pl.y, rift.x, rift.y - 10) < 30 * 30) enter();
-    } else if (!arena && authority() && time > FROM && time < G.Judgment.AT - 120) {
-      checkT -= dt;
-      if (checkT <= 0) {
-        checkT = CHECK;
-        if (G.EnemyMgr.bossAlive()) return;           // con un jefe vivo no cuenta como intento
-        if (Math.random() < CHANCE * (1 + misses)) { misses = 0; open(); }
-        else misses++;
+    } else if (!arena && authority() && time >= (G.Timeline ? G.Timeline.RIFT_START : FROM) && time < G.Judgment.AT - 120) {
+      // Mở Rift chính xác theo lịch trình của Timeline
+      const rTimes = G.Timeline ? G.Timeline.getRiftTimes(time - 1.5, time + 2) : [];
+      if (rTimes.length > 0) {
+        const rt = rTimes[0];
+        if (!openedRifts.has(rt)) {
+          if (!G.EnemyMgr.bossAlive()) {
+            openedRifts.add(rt);
+            open();
+          }
+        }
       }
     }
     if (arena) arenaTick(dt, pl);
@@ -284,6 +288,7 @@ G.Rift = (() => {
     reset, update, drawable, onEvent, leftBehind, enterRequest() { if (!arena) start(); },
     get rift() { return rift; }, get arena() { return arena; },
     get inArena() { return !!arena; },
+    get active() { return !!rift; },
     get timeLeft() { return arena ? Math.max(0, ARENA_TIME - arena.t) : 0; },
     debugOpen() { open(); },
     /** Para pruebas: arena de un tipo ya. */

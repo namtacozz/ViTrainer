@@ -88,6 +88,12 @@ G.HUD = (() => {
       ctx.beginPath();
       ctx.arc(x, y, 3, 0, Math.PI * 1.5);
       ctx.stroke();
+
+      // Hiển thị rõ mốc thời gian xuất hiện của cổng Rift
+      ctx.font = F(700, 7.5);
+      ctx.fillStyle = "#d8b4fe";
+      ctx.textAlign = "center";
+      ctx.fillText(G.U.mmss(ev.time), x, y - 8);
     } else if (ev.type === "event_zone") {
       ctx.fillStyle = "#ffd23f";
       ctx.beginPath();
@@ -136,15 +142,118 @@ G.HUD = (() => {
     ctx.restore();
   }
 
+  
+  // ---------- Bảng chỉ số thực tế & Delta Tracking (Góc dưới trái) ----------
+  let lastStatValues = null;
+  const statDeltas = {};
+  let lastStatTime = 0;
+
+  function drawLiveStatsPanel(ctx, w, h, pl, F, roundRect, sa, touch) {
+    if (!pl || !pl.mon) return;
+    const now = performance.now() / 1000;
+    const dt = lastStatTime ? Math.min(0.1, now - lastStatTime) : 0.016;
+    lastStatTime = now;
+
+    const curStats = {
+      atk: Math.round(pl.atk * 100),
+      def: Math.round((pl.mon && pl.mon.df) || 50),
+      satk: Math.round(((pl.mon && pl.mon.sa) || 1) * pl.atkMul * 100),
+      sdef: Math.round((pl.mon && pl.mon.sd) || 50),
+      spd: Math.round(pl.spd),
+      hp: Math.round(pl.maxHp)
+    };
+
+    if (lastStatValues) {
+      for (const k in curStats) {
+        const diff = curStats[k] - lastStatValues[k];
+        if (diff !== 0) {
+          statDeltas[k] = { val: diff, timer: 2.5 };
+        }
+      }
+    }
+    lastStatValues = Object.assign({}, curStats);
+
+    // Cập nhật timer delta
+    for (const k in statDeltas) {
+      if (statDeltas[k].timer > 0) {
+        statDeltas[k].timer -= dt;
+        if (statDeltas[k].timer <= 0) delete statDeltas[k];
+      }
+    }
+
+    const panelW = 168, panelH = 58;
+    const px = 14 + sa.left;
+    const py = h - panelH - 12 - sa.bottom - (touch ? 46 : 0);
+
+    ctx.save();
+    roundRect(ctx, px, py, panelW, panelH, 8);
+    ctx.fillStyle = 'rgba(8, 14, 28, 0.85)';
+    ctx.fill();
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = 'rgba(79, 209, 255, 0.4)';
+    ctx.stroke();
+
+    const renderStat = (label, val, deltaKey, x, y, col) => {
+      ctx.textAlign = 'left';
+      ctx.font = F(700, 8.5);
+      ctx.fillStyle = '#8fa3c4';
+      ctx.fillText(label, x, y);
+
+      ctx.font = F(800, 9.5);
+      ctx.fillStyle = col || '#eaf2ff';
+      const valStr = String(val);
+      ctx.fillText(valStr, x + 34, y);
+
+      const d = statDeltas[deltaKey];
+      if (d && d.timer > 0) {
+        const alpha = Math.min(1, d.timer);
+        ctx.font = F(800, 8.5);
+        if (d.val > 0) {
+          ctx.fillStyle = `rgba(74, 222, 128, ${alpha})`;
+          ctx.fillText(`+${d.val}▲`, x + 58, y);
+        } else {
+          ctx.fillStyle = `rgba(248, 113, 113, ${alpha})`;
+          ctx.fillText(`${d.val}▼`, x + 58, y);
+        }
+      }
+    };
+
+    const isVi = (window.PS_LOCALES && window.PS_LOCALES.lang === 'vi') || document.documentElement.lang === 'vi';
+    const L_ATK = isVi ? 'CÔNG' : 'ATK';
+    const L_SATK = isVi ? 'C.PHÉP' : 'SP.A';
+    const L_DEF = isVi ? 'GIÁP' : 'DEF';
+    const L_SDEF = isVi ? 'G.PHÉP' : 'SP.D';
+    const L_SPD = isVi ? 'TỐC' : 'SPD';
+    const L_HP = isVi ? 'MÁU' : 'HP';
+
+    // Hàng 1
+    renderStat(L_ATK, curStats.atk + '%', 'atk', px + 6, py + 16, '#ff6b4d');
+    renderStat(L_SATK, curStats.satk + '%', 'satk', px + 88, py + 16, '#c47bff');
+
+    // Hàng 2
+    renderStat(L_DEF, curStats.def, 'def', px + 6, py + 34, '#94a3b8');
+    renderStat(L_SDEF, curStats.sdef, 'sdef', px + 88, py + 34, '#38bdf8');
+
+    // Hàng 3
+    renderStat(L_SPD, curStats.spd, 'spd', px + 6, py + 51, '#7fe0ff');
+    renderStat(L_HP, curStats.hp, 'hp', px + 88, py + 51, '#5fe08a');
+
+    ctx.restore();
+  }
+
   function drawTimelineBar(ctx, w, h, time) {
     if (!G.Timeline) return;
-    const barW = Math.min(320, w - 220);
-    if (barW < 140) return;
-    const barH = 18;
-    const barX = (w - barW) / 2;
-    const barY = 66;
+    const sa = (typeof G !== 'undefined' && G.Touch && G.Touch.safeArea) ? G.Touch.safeArea() : { top: 0, left: 0, bottom: 0, right: 0 };
+    const touch = G.Touch && G.Touch.active;
+    const barW = Math.min(240, Math.max(160, Math.floor(w * 0.28)));
+    if (barW < 120) return;
+    const barH = 16;
+    const rightMargin = 16 + sa.right + (touch ? 52 : 0);
+    const barX = w - barW - rightMargin;
+    const wx = G.Weather && G.Weather.current;
+    const barY = 16 + sa.top + (wx ? 34 : 0);
     const windowSecs = 135;
-    const nowX = barX + 28;
+    const nowX = barX + 22;
 
     ctx.save();
     roundRect(ctx, barX, barY, barW, barH, 9);
@@ -181,6 +290,25 @@ G.HUD = (() => {
       }
     }
     ctx.restore();
+
+    // Văn bản sự kiện sắp tới trong bao lâu
+    const upcomingList = G.Timeline.getUpcoming(time, windowSecs);
+    const futureEvents = upcomingList.filter(ev => ev.time > time).sort((a, b) => a.time - b.time);
+    const nextEv = futureEvents[0];
+    if (nextEv) {
+      const dt = Math.ceil(nextEv.time - time);
+      const isVi = (window.PS_LOCALES && window.PS_LOCALES.lang === 'vi') || document.documentElement.lang === 'vi';
+      let eventTitle = nextEv.title;
+      if (nextEv.type === 'rift') {
+        const timeStr = G.U.mmss(nextEv.time);
+        eventTitle = isVi ? ('Cổng Rift [' + timeStr + ']') : ('Rift [' + timeStr + ']');
+      }
+      const label = isVi ? ('Sắp tới: ' + eventTitle + ' (' + dt + 's)') : ('Next: ' + eventTitle + ' (' + dt + 's)');
+      ctx.font = F(700, 9);
+      ctx.fillStyle = '#ffd23f';
+      ctx.textAlign = 'right';
+      ctx.fillText(label, barX + barW, barY + barH + 11);
+    }
 
     if (G.InRunEvents && G.InRunEvents.current) {
       const cur = G.InRunEvents.current;
@@ -224,27 +352,27 @@ G.HUD = (() => {
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w * G.U.clamp(xpF, 0, 1), 7);
 
-    // ---------- vida + nivel ----------
+    // ---------- vida + nivel (Scale +30%) ----------
     const sa = G.Touch.safeArea();
-    const px = 16 + sa.left, py = 20 + sa.top;     // lejos de la muesca del iPhone
-    ctx.font = F(800, 13);
+    const px = 16 + sa.left, py = 18 + sa.top;
+    ctx.font = F(800, 17);
     ctx.fillStyle = '#eaf2ff';
     ctx.textAlign = 'left';
-    ctx.fillText(pl.mon.name, px, py + 10);
+    ctx.fillText(pl.mon.name, px, py + 12);
     if (pl.isMega && G.Icons) {
       const nw = ctx.measureText(pl.mon.name).width;
-      G.Icons.draw(ctx, 'megaBadge', px + nw + 6, py - 3, 16);
+      G.Icons.draw(ctx, 'megaBadge', px + nw + 6, py - 3, 20);
     }
 
-    ctx.font = F(700, 11);
+    ctx.font = F(700, 14.5);
     ctx.fillStyle = '#ffcb3d';
-    ctx.fillText('Nv. ' + pl.level, px, py + 26);
+    ctx.fillText('Nv. ' + pl.level, px, py + 33);
 
-    bar(ctx, px + 48, py + 17, 168, 11, pl.hp / pl.maxHp, '#ff5f6d');
-    ctx.font = F(700, 10);
+    bar(ctx, px + 62, py + 20, 218, 15, pl.hp / pl.maxHp, '#ff5f6d');
+    ctx.font = F(700, 11);
     ctx.fillStyle = 'rgba(255,255,255,.95)';
     ctx.textAlign = 'center';
-    ctx.fillText(Math.ceil(pl.hp) + ' / ' + Math.round(pl.maxHp), px + 48 + 84, py + 26);
+    ctx.fillText(Math.ceil(pl.hp) + ' / ' + Math.round(pl.maxHp), px + 62 + 109, py + 32);
 
     // ---------- Thanh tiến trình Thông thạo / Tiến hóa (Evo / Mastery Milestone Bar) ----------
     const chain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(pl.baseDex || pl.dex) : null;
@@ -308,12 +436,12 @@ G.HUD = (() => {
       }
     }
 
-    const evoY = py + 31;
-    bar(ctx, px + 48, evoY, 168, 8, evoFrac, '#ffd23f', 'rgba(0,0,0,.6)');
-    ctx.font = F(700, 8.5);
+    const evoY = py + 41;
+    bar(ctx, px + 62, evoY, 218, 11, evoFrac, '#ffd23f', 'rgba(0,0,0,.6)');
+    ctx.font = F(700, 10.5);
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
-    ctx.fillText(targetLabel, px + 48 + 84, evoY + 7);
+    ctx.fillText(targetLabel, px + 62 + 109, evoY + 9);
 
     // buffs activos
     const COL = { atk: '#ff6b4d', patk: '#ff6b4d', satk: '#c47bff', spd: '#7fe0ff', def: '#b0b8c8', regen: '#5fe08a' };
@@ -326,10 +454,10 @@ G.HUD = (() => {
       ctx.font = F(800, 9);
       const txt = LBL[k] + ' ×' + b.n;
       const tw = ctx.measureText(txt).width + 12;
-      roundRect(ctx, bx, py + 43, tw, 15, 7);
+      roundRect(ctx, bx, py + 58, tw, 15, 7);
       ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fill();
       ctx.fillStyle = COL[k];
-      ctx.fillText(txt, bx + 6, py + 54);
+      ctx.fillText(txt, bx + 6, py + 69);
       bx += tw + 5;
     }
 
@@ -342,8 +470,9 @@ G.HUD = (() => {
     ctx.fillStyle = '#8fa3c4';
     // Halloween: también los caramelos que llevas en esta partida.
     const cn = G.Halloween.inRun ? '  ·  ' + (pl.candy || 0) + ' CARAMELOS' : '';
-    ctx.fillText(G.World.biomeName().toUpperCase() + '  ·  ' + pl.kills + ' DERROTADOS  ·  ' + pl.coins + ' MONEDAS' + cn, w / 2, 58);
+    ctx.fillText(G.World.biomeName().toUpperCase() + ' · ' + pl.kills + ' DERROTADOS · ' + pl.coins + ' MONEDAS' + cn, w / 2, 58);
     drawTimelineBar(ctx, w, h, st.time);
+    drawLiveStatsPanel(ctx, w, h, pl, F, roundRect, sa, touch);
 
     // ---------- clima (arriba a la derecha) ----------
     const wx = G.Weather.current;
@@ -740,22 +869,25 @@ G.HUD = (() => {
   function drawCoop(ctx, w, h, pl, px, top) {
     const cam = G.Camera;
     const t = performance.now() / 1000;
-    let y = top;
+    const sa = (typeof G !== 'undefined' && G.Touch && G.Touch.safeArea) ? G.Touch.safeArea() : { top: 0, left: 0, bottom: 0, right: 0 };
+    // Dời thanh máu đồng đội xuống vị trí giữa mép trái màn hình
+    const coopX = 14 + sa.left;
+    let y = Math.floor(h * 0.38);
     ctx.textAlign = 'left';
     for (const m of G.Coop.mates) {
       if (!m.connected) continue;
       const o = m.pl;
       ctx.font = F(800, 10);
       ctx.fillStyle = m.color;
-      G.I18n.rawCanvas(ctx, 'fillText', m.name, px, y + 9);
-      const lx = px + 78;
-      bar(ctx, lx, y + 1, 110, 8, o.dead ? 0 : o.hp / o.maxHp, o.dead ? '#ff5f6d' : '#5fe08a');
+      G.I18n.rawCanvas(ctx, 'fillText', m.name, coopX, y + 9);
+      const lx = coopX + 78;
+      bar(ctx, lx, y + 1, 100, 8, o.dead ? 0 : o.hp / o.maxHp, o.dead ? '#ff5f6d' : '#5fe08a');
       if (o.dead) {
         ctx.font = F(800, 9);
         ctx.fillStyle = Math.sin(t * 8) > 0 ? '#ff8a96' : '#ffd0d5';
-        ctx.fillText('CAÍDO', lx + 116, y + 9);
+        ctx.fillText(G.T ? G.T('NGÃ') : 'NGÃ', lx + 106, y + 9);
       }
-      y += 15;
+      y += 18;
     }
 
     // Flechas hacia los compañeros fuera de la vista.

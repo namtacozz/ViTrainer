@@ -10,7 +10,7 @@ pokesurvivor/
 ├── assets/                  # Tài nguyên đồ họa, âm thanh, sprites
 │   ├── audio/               # Nhạc nền (BGM) & Hiệu ứng âm thanh (SFX)
 │   ├── icons/               # Biểu tượng UI, bóng quay Pokéball, glyphs
-│   └── pokemon/             # Thư mục sprite sheet của hơn 1.021 Pokémon (Idle, Walk, Attack)
+│   └── pokemon/             # Thư mục sprite sheet của hơn 1.022 Pokémon (Idle, Walk, Attack)
 ├── css/                     # Toàn bộ stylesheet giao diện
 │   └── style.css            # CSS cốt lõi, responsive mobile & desktop, khóa cứng overflow Pokédex
 ├── dev.html                 # FILE NGUỒN GIAO DIỆN CHÍNH (Chỉnh sửa ở đây, không sửa index.html)
@@ -34,8 +34,8 @@ pokesurvivor/
 │   │   ├── items.js         # Vật phẩm trang bị (Held Items), TMs, Berries, Orbs
 │   │   ├── megas.js         # 78 dạng Mega/Primal/Battle forms, buff stats & abilities
 │   │   ├── missions.js      # Danh sách nhiệm vụ ngày (8 Daily) & tuần (4 Weekly)
-│   │   ├── moves.js         # 126 chiêu thức chuẩn canon English, kind badges
-│   │   ├── pokedex.js       # 1.021 Pokémon, HP, PA, SA, DF, SD, SPD, Gen, Rarity
+│   │   ├── moves.js         # 133 thức chuẩn canon English, kind badges
+│   │   ├── pokedex.js       # 1.022 Pokémon, HP, PA, SA, DF, SD, SPD, Gen, Rarity
 │   │   └── upgrades.js      # Danh mục nâng cấp vĩnh viễn (Talents)
 │   ├── entities/            # Các thực thể game
 │   │   ├── enemy.js         # Lớp Enemy, EnemyMgr (all, add, remove), Multi-phase Boss

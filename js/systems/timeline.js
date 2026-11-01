@@ -5,14 +5,35 @@
 G.Timeline = (() => {
   // Intervalos base en segundos
   const BOSS_INTERVAL = 180;       // Cada 3 min un jefe
-  const RIFT_START = 75;           // Primera grieta
-  const RIFT_INTERVAL = 150;       // Grieta aprox cada 2.5 min
-  const EVENT_START = 120;         // Primer evento secuencial a los 2 min
-  const EVENT_INTERVAL = 180;      // Eventos secuenciales cada 3 min (desfasados de los jefes)
+  const RIFT_START = 90;           // Primera grieta a los 1:30
+  const RIFT_INTERVAL = 240;       // Grieta cada 4 min
+  const RIFT_TTL = 45;             // Cổng Rift tồn tại 45s
+  const EVENT_START = 190;         // Primer evento secuencial a los 3:10 (sau khi Rift 1 đóng)
+  const EVENT_INTERVAL = 180;      // Eventos secuenciales cada 3 min
 
   const EVENT_TYPES = ['zone', 'scavenger', 'pursuit'];
 
   function reset() {}
+
+  /** Kiểm tra xem thời điểm t có rơi vào vùng chặn của Rift không: 60s trước khi mở và 30s sau khi đóng */
+  function isRiftBlocked(t) {
+    let riftT = RIFT_START;
+    while (riftT <= t + 120) {
+      if (t >= riftT - 60 && t <= riftT + RIFT_TTL + 30) return true;
+      riftT += RIFT_INTERVAL;
+    }
+    return false;
+  }
+
+  function getRiftTimes(fromT = 0, toT = 3600) {
+    const list = [];
+    let rt = RIFT_START;
+    while (rt <= toT) {
+      if (rt >= fromT) list.push(rt);
+      rt += RIFT_INTERVAL;
+    }
+    return list;
+  }
 
   /**
    * Devuelve los eventos dentro de la ventana de tiempo [time - 10, time + windowSecs].
@@ -57,10 +78,11 @@ G.Timeline = (() => {
     }
 
     // 3. Eventos secuenciales (Toma de zona, búsqueda, supervivencia)
+    // CHẶN mọi sự kiện xuất hiện 60s trước khi cổng Rift mở và 30s sau khi Rift đóng
     let evT = EVENT_START;
     let evIdx = 0;
     while (evT <= toT + EVENT_INTERVAL) {
-      if (evT >= fromT && evT <= toT) {
+      if (evT >= fromT && evT <= toT && !isRiftBlocked(evT)) {
         const evType = EVENT_TYPES[evIdx % EVENT_TYPES.length];
         const titles = {
           zone: G.T('Toma de Zona'),
@@ -105,6 +127,10 @@ G.Timeline = (() => {
   return {
     reset,
     getUpcoming,
+    isRiftBlocked,
+    getRiftTimes,
+    RIFT_START,
+    RIFT_INTERVAL,
     EVENT_TYPES
   };
 })();

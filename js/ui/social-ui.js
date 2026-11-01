@@ -113,8 +113,9 @@
         const el = document.createElement('div');
         el.className = 'fr-row';
         const inRoom = room && room.members.some(m => m.uid === f.uid);
-        const dot = f.status !== 'ok' ? 'pend' : (inRoom ? 'on' : '');
-        const stText = inRoom ? G.T('En tu sala') : (f.status === 'ok' ? G.T('Desconectado') : stateText(f));
+        const isVi = (window.PS_LOCALES && window.PS_LOCALES.lang === 'vi') || document.documentElement.lang === 'vi';
+        const dot = f.status !== 'ok' ? 'pend' : 'on';
+        const stText = inRoom ? (isVi ? 'Trong phòng' : 'In your room') : (f.status === 'ok' ? (isVi ? 'Trực tuyến' : 'Online') : stateText(f));
         el.innerHTML = `<i class="dot ${dot}"></i><b translate="no"><a href="#" class="plink" title="Ver su perfil">${esc(f.name)}</a></b><span class="st">${stText}</span><span class="grow"></span>`;
         if (f.status === 'ok') el.querySelector('.plink').onclick = e => { e.preventDefault(); G.ProfileUI.show(f.uid); };
         else el.querySelector('.plink').onclick = e => e.preventDefault();
@@ -220,7 +221,8 @@
               const kbtn = document.createElement('button');
               kbtn.className = 'btn small ghost';
               kbtn.style.cssText = 'padding:2px 8px;margin-top:6px;font-size:11px;color:#ff5a79;border-color:rgba(255,90,121,.4);';
-              kbtn.textContent = '✕ Expulsar';
+              const isVi = (window.PS_LOCALES && window.PS_LOCALES.lang === 'vi') || document.documentElement.lang === 'vi';
+              kbtn.textContent = isVi ? '✕ Đuổi' : '✕ Kick';
               kbtn.onclick = async (e) => {
                 e.stopPropagation();
                 await G.Social.kickMember(m.uid);
@@ -228,7 +230,10 @@
               };
               c.appendChild(kbtn);
             }
-          } else c.innerHTML = '<span>Libre</span>';
+          } else {
+            const isVi = (window.PS_LOCALES && window.PS_LOCALES.lang === 'vi') || document.documentElement.lang === 'vi';
+            c.innerHTML = '<span>' + (isVi ? 'Trống' : 'Open') + '</span>';
+          }
           box.appendChild(c);
         }
       }

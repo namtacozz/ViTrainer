@@ -1,110 +1,64 @@
-# Poner pokesurvivor.com en marcha
+# Poner pokesurvivor.com en marcha y estado del dominio
 
-El dominio está comprado en **Cloudflare** y todavía no apunta a ningún sitio.
-Todo lo del código ya está preparado: sólo faltan los pasos marcados como **TÚ**
-(los que necesitan tu cuenta) y el paso final, que hago yo cuando me digas.
-
-Estado a 10-10-2026:
-
-- [x] Dominio comprado en Cloudflare (servidores DNS de Cloudflare activos).
-- [x] `pokesurvivor.com` y `www.pokesurvivor.com` añadidos a Firebase → dominios
-      autorizados (el inicio de sesión con Google funcionará desde el primer día).
-- [x] Páginas en español e inglés, sitemap, robots, 404 e imagen para compartir,
-      generadas y probadas (Lighthouse: SEO 100, accesibilidad 100).
-- [x] Script del paso final ensayado: `tools/activar_dominio.sh`.
-- [x] Paso 1 · DNS en Cloudflare (**TÚ**)
-- [x] Paso 2 · Verificar el dominio en GitHub (**TÚ**, recomendado)
-- [x] Paso 3 · Paso final (**YO**): hecho el 10-10-2026, con HTTPS
-- [ ] Paso 4 · Google Search Console y Bing (**TÚ**)
+Información técnica y estado del dominio oficial **`pokesurvivor.com`**.
 
 ---
 
-## Paso 1 · DNS en Cloudflare (TÚ, 5 minutos)
+## 1. Estado Actual del Proyecto (Actualizado 2026)
 
-1. Entra en <https://dash.cloudflare.com> → elige **pokesurvivor.com** →
-   menú de la izquierda **DNS → Records**.
-2. Pulsa **Add record** y crea estos 9 registros. En todos, el interruptor
-   **Proxy status** tiene que quedar en **DNS only** (nube **gris**, no naranja).
+- [x] **Dominio**: `pokesurvivor.com` comprado y gestionado en **Cloudflare** (DNS gratis, sin costes adicionales).
+- [x] **Servidor Web**: Alojado de forma 100% gratuita en **GitHub Pages** (`https://namtacozz.github.io/ViTrainer/` $\rightarrow$ `https://pokesurvivor.com/`).
+- [x] **Certificado HTTPS**: Activo con renovación automática mediante Let's Encrypt / GitHub Pages (**Enforce HTTPS** activo).
+- [x] **Firebase**: Migrado definitivamente al proyecto **`pokesurvivor-free`** (el proyecto antiguo `pokesurvivor-jpter` con facturación se eliminó el 13-10-2026).
+  - Autenticación normal ilimitada y gratuita.
+  - Dominios autorizados en Firebase Auth: `pokesurvivor.com`, `www.pokesurvivor.com`, `localhost`, `namtacozz.github.io`.
+- [x] **Cooperativo WebRTC Directo**: Sin costes de TURN ni Workers de pago (eliminados el 15-10-2026). Todo el tráfico P2P utiliza servidores STUN gratuitos de Google (`stun:stun.l.google.com:19302`).
+- [x] **SEO y Páginas Estáticas**: 1.022 Pokémon, 133, 140 logros, 18 arenas generadas mediante `python tools/make_seo_pages.py`.
 
-   | Type | Name | IPv4 / IPv6 / Target |
-   |---|---|---|
-   | A | `@` | `185.199.108.153` |
-   | A | `@` | `185.199.109.153` |
-   | A | `@` | `185.199.110.153` |
-   | A | `@` | `185.199.111.153` |
-   | AAAA | `@` | `2606:50c0:8000::153` |
-   | AAAA | `@` | `2606:50c0:8001::153` |
-   | AAAA | `@` | `2606:50c0:8002::153` |
-   | AAAA | `@` | `2606:50c0:8003::153` |
-   | CNAME | `www` | `jpter78.github.io` |
+---
 
-   Son las direcciones de GitHub Pages, que es donde está el juego.
+## 2. Configuración de DNS en Cloudflare
 
-> **Por qué la nube gris:** con la nube naranja, Cloudflare se pone en medio y
-> GitHub no puede crear el certificado HTTPS (el candado). Además, con el modo SSL
-> "Flexible" de Cloudflare la web entra en un bucle de redirecciones. En gris todo
-> funciona a la primera; más adelante se puede activar la naranja con SSL
-> **Full (strict)** si algún día interesa, pero no hace falta.
+En <https://dash.cloudflare.com> $\rightarrow$ dominio **pokesurvivor.com** $\rightarrow$ **DNS → Records**:
 
-Opcional y gratis en el mismo panel:
-- **DNSSEC** (menú DNS → Settings → Enable DNSSEC): protege el dominio contra
-  suplantaciones.
-- **Email Routing**: un correo `contacto@pokesurvivor.com` que te llegue a tu Gmail,
-  si quieres un correo con el nombre del juego.
+Todos los registros deben mantener el estado **DNS only** (nube **gris**, no naranja) para evitar bucles de redirección SSL y permitir la emisión directa del certificado HTTPS por parte de GitHub Pages.
 
-Cuando lo tengas, dime **"ya está el DNS"** y compruebo que se ve bien desde fuera
-(suele tardar de 5 minutos a 1 hora).
+| Tipo | Nombre | Destino / IPv4 / IPv6 | Estado Proxy |
+|---|---|---|---|
+| A | `@` | `185.199.108.153` | DNS only (gris) |
+| A | `@` | `185.199.109.153` | DNS only (gris) |
+| A | `@` | `185.199.110.153` | DNS only (gris) |
+| A | `@` | `185.199.111.153` | DNS only (gris) |
+| AAAA | `@` | `2606:50c0:8000::153` | DNS only (gris) |
+| AAAA | `@` | `2606:50c0:8001::153` | DNS only (gris) |
+| AAAA | `@` | `2606:50c0:8002::153` | DNS only (gris) |
+| AAAA | `@` | `2606:50c0:8003::153` | DNS only (gris) |
+| CNAME | `www` | `namtacozz.github.io` | DNS only (gris) |
 
-## Paso 2 · Verificar el dominio en GitHub (TÚ, recomendado, 3 minutos)
+> **Nota sobre seguridad y correo (gratis en Cloudflare):**
+> - **DNSSEC**: Activado en DNS → Settings para prevenir suplantación de identidad DNS.
+> - **Email Routing**: Redirección gratuita de `contacto@pokesurvivor.com` hacia la cuenta personal del administrador.
 
-Protege el dominio: impide que otra cuenta de GitHub pueda usar pokesurvivor.com.
+---
 
-1. Entra en <https://github.com/settings/pages> (con la cuenta JPTER78).
-2. **Add a domain** → escribe `pokesurvivor.com` → **Add domain**.
-3. GitHub te enseña un registro **TXT**: un nombre del estilo
-   `_github-pages-challenge-JPTER78` y un valor largo.
-4. En Cloudflare → DNS → Records → **Add record**: Type **TXT**, Name el que te dio
-   GitHub (sin `.pokesurvivor.com` al final), Content el valor largo.
-5. Vuelve a GitHub y pulsa **Verify**. Si dice que no, espera unos minutos y repite.
+## 3. Verificación de Dominio en GitHub
 
-## Paso 3 · Paso final (YO)
+1. Entrar en la configuración de la cuenta u organización: <https://github.com/settings/pages>.
+2. En **Custom domain**, verificar `pokesurvivor.com` con el registro TXT provisto por GitHub en Cloudflare DNS (`_github-pages-challenge-namtacozz`).
+3. El archivo raíz `CNAME` contiene:
+   ```text
+   pokesurvivor.com
+   ```
 
-Cuando el DNS funcione, lo hago todo yo:
+---
 
-1. `bash tools/activar_dominio.sh`: compila el juego con el SEO, regenera las
-   páginas, crea el archivo `CNAME` y prepara el commit (comprueba que no se cuela
-   ningún dato privado).
-2. Lo subo a GitHub y en GitHub Pages pongo el dominio `pokesurvivor.com`.
-3. Espero a que GitHub cree el certificado y activo **Enforce HTTPS**.
-4. Compruebo en un navegador real: la web, `www.` → sin `www`, la dirección vieja
-   de github.io → la nueva, el inglés en `/en/`, entrar con cuenta y con Google,
-   el ranking y el cooperativo.
-5. Pongo `https://pokesurvivor.com` como web del repositorio de GitHub.
+## 4. Google Search Console y Bing Webmaster Tools
 
-**Ojo con las partidas de invitado:** se guardan en el navegador y van ligadas a la
-dirección. Quien juegue como invitado en `jpter78.github.io` no verá esa partida en
-`pokesurvivor.com` (las cuentas registradas sí, porque están en la nube). Si alguien
-te lo pregunta: que cree una cuenta antes del cambio.
-
-## Paso 4 · Google Search Console y Bing (TÚ, después del paso 3)
-
-1. <https://search.google.com/search-console> → **Añadir propiedad** →
-   **Dominio** → `pokesurvivor.com`.
-2. Como el dominio está en Cloudflare, Google ofrece **verificar con Cloudflare**
-   automáticamente: acepta y listo (si no, te da un TXT para ponerlo como en el
-   paso 2).
-3. Menú **Sitemaps** → escribe `sitemap.xml` → **Enviar**.
-4. Menú **Inspección de URL** → `https://pokesurvivor.com/` → **Solicitar
-   indexación**. Repite con `https://pokesurvivor.com/en/`,
-   `https://pokesurvivor.com/guia/` y `https://pokesurvivor.com/pokedex/`.
-5. Bing (y con él DuckDuckGo y Ecosia): <https://www.bing.com/webmasters> →
-   **Importar desde Google Search Console**.
-
-Google tarda de unos días a un par de semanas en empezar a enseñar la web.
-
-## Después
-
-- Cambia el enlace en la descripción del tráiler de YouTube, en Ko-fi y donde lo
-  hayas compartido.
-- Lo que más ayuda a posicionar a partir de aquí está en [SEO.md](SEO.md),
-  apartado 3 (enlaces desde YouTube, itch.io, Reddit, Discord...).
+1. Propiedad de Dominio en Google Search Console: `pokesurvivor.com` verificada por registro TXT en Cloudflare DNS.
+2. Mapa del sitio enviado: `https://pokesurvivor.com/sitemap.xml`.
+3. URL canónicas principales inspeccionadas e indexadas:
+   - Portada principal: `https://pokesurvivor.com/`
+   - Portada en inglés: `https://pokesurvivor.com/en/`
+   - Guía completa: `https://pokesurvivor.com/guia/`
+   - Pokédex global: `https://pokesurvivor.com/pokedex/`
+   - Novedades y changelog: `https://pokesurvivor.com/novedades/`

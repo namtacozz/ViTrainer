@@ -70,7 +70,7 @@ Game hỗ trợ mượt mà mọi loại thiết bị đầu vào:
 ## 4. HỆ THỐNG POKÉDEX, ĐỘ HIẾM & CHỈ SỐ
 
 ### 4.1. Quy mô Pokédex
-- Game sở hữu kho dữ liệu đồ sộ với **hơn 1.021 Pokémon** trải dài từ Thế hệ 1 (Kanto) đến Thế hệ 9 (Paldea).
+- Game sở hữu kho dữ liệu đồ sộ với **hơn 1.022 Pokémon** trải dài từ Thế hệ 1 (Kanto) đến Thế hệ 9 (Paldea).
 - Bao gồm đầy đủ các Pokémon Khởi đầu (Starters), Pokémon thường, Bán huyền thoại (Pseudo-legendaries), Pokémon Huyền thoại (Legendaries), Thần thoại (Mythicals), và các dạng Biến thể Khu vực (Alolan, Galarian, Hisuian, Paldean).
 
 ### 4.2. Hệ thống Độ hiếm (Rarity Tiers)
@@ -140,7 +140,7 @@ Trong suốt ván đấu, hệ thống sẽ kích hoạt ngẫu nhiên các Sự
 
 ## 7. HỆ THỐNG ĐÒN ĐÁNH & TIẾN HÓA CHIÊU THỨC (+ / ++ / +++)
 
-- **Tên Chiêu Thức Chuẩn Canon**: Toàn bộ 126 chiêu thức giữ nguyên tên tiếng Anh chuẩn (như *Thousand Arrows*, *Plasma Fists*, *Core Enforcer*, *Dragon Ascent*, *Earthquake*...) giúp nhận diện đồng nhất trên toàn cầu; phần mô tả được dịch chuẩn theo cài đặt ngôn ngữ.
+- **Tên Chiêu Thức Chuẩn Canon**: Toàn bộ 133 thức giữ nguyên tên tiếng Anh chuẩn (như *Thousand Arrows*, *Plasma Fists*, *Core Enforcer*, *Dragon Ascent*, *Earthquake*...) giúp nhận diện đồng nhất trên toàn cầu; phần mô tả được dịch chuẩn theo cài đặt ngôn ngữ.
 - **Biểu tượng kiểu đòn trên HUD (Kind Badges 10x10)**:
   + Nắm đấm: Cận chiến (Melee).
   + Mũi tên: Bắn đạn (Projectile).
@@ -183,4 +183,4 @@ Trong suốt ván đấu, hệ thống sẽ kích hoạt ngẫu nhiên các Sự
 ## 10. NHIỆM VỤ NGÀY / TUẦN & KINH TẾ
 
 - **8 Nhiệm Vụ Hàng Ngày & 4 Nhiệm Vụ Hàng Tuần**: Bổ sung các thử thách phong phú (hoàn thành sự kiện trong trận, tiến hóa trong trận, nhặt kẹo Halloween, gây sát thương lớn).
-- **Kinh Tế Lành Mạnh**: Tiền vàng Pokémonedas, Shop Kecleon mỗi ngày, Vé quay Gacha theo từng banner thế hệ và hơn 150 huy hiệu Thành Tựu.
+- **Kinh Tế Lành Mạnh**: Tiền vàng Pokémonedas, Shop Kecleon mỗi ngày, Vé quay Gacha theo từng banner thế hệ và hơn 140 huy hiệu Thành Tựu.

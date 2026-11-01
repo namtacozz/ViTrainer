@@ -1369,4 +1369,22 @@ G.I18n.add({
   "Pausa por desconexión y reconexión fluida: si un jugador pierde la conexión, la partida se pausa automáticamente esperando que regrese. Si recargas el juego, un nuevo botón dorado te permite reconectarte al instante a la partida en curso.": "Disconnect Pause & Seamless Rejoin: if a player disconnects, the match automatically pauses while awaiting reconnection. Reloading the game offers a golden menu button to jump straight back into the ongoing run.",
   "Nuevas Formas Regionales: incorporadas 14 variantes de Alola, Galar, Hisui y Paldea con sprites completos, evoluciones y tipos únicos: Vulpix y Ninetales de Alola, Sandshrew y Sandslash de Alola, Raichu de Alola, Ponyta y Rapidash de Galar, Zigzagoon y Linoone de Galar, Obstagoon, Zorua y Zoroark de Hisui, Growlithe y Arcanine de Hisui, y Wooper de Paldea y Clodsire.": "New Regional Forms: integrated 14 regional variants across Alola, Galar, Hisui, and Paldea with full sprites, evolutions, and unique typings: Alolan Vulpix & Ninetales, Alolan Sandshrew & Sandslash, Alolan Raichu, Galarian Ponyta & Rapidash, Galarian Zigzagoon & Linoone, Obstagoon, Hisuian Zorua & Zoroark, Hisuian Growlithe & Arcanine, and Paldean Wooper & Clodsire.",
   "Gestión de anfitrión: el anfitrión de la sala ahora puede expulsar jugadores desconectados o inactivos desde la sala o desde el menú de pausa para reanudar el juego.": "Host Controls: the room host can now kick disconnected or inactive players from both the lobby and the in-game pause menu to resume play.",
+
+  // Chiêu thức độc quyền huyền thoại (Signature Moves)
+  "Mega Zygarde canaliza el poder del vacío en un colosal rayo cósmico que incinera todo a su paso.": "Mega Zygarde channels void power into a colossal cosmic beam that incinerates everything in its path.",
+  "Onda temporal distorsionada que desgarra el tejido del tiempo y ralentiza masivamente a los enemigos.": "Distorted temporal wave that tears the fabric of time and heavily slows enemies.",
+  "Tajo desgarrador que corta el espacio mismo, ignorando defensas y asestando golpes críticos absolutos.": "Rending slash that cuts space itself, tearing through defenses with absolute critical strikes.",
+  "Se desvanece en el Mundo Distorsión haciéndose invulnerable y reaparece desatando una violenta explosión sombría.": "Vanishes into the Distortion World becoming invulnerable, then reappears with a violent shadow explosion.",
+  "Lluvia celestial de meteoros divinos que castigan a los rivales adaptándose al elemento más efectivo.": "Celestial barrage of divine meteors punishing foes, adapting to the most effective element.",
+  "Vuelo en picado a velocidad celestial que arrolla todo a su paso otorgando velocidad.": "A celestial nosedive sweeping everything in its path and granting bonus speed.",
+  "Tajo colosal de espada que inflige el doble de daño a jefes y enemigos de gran envergadura.": "Colossal sword slash that deals double damage to bosses and massive foes.",
+  "Carga demoledora con escudo que refuerza la armadura y libera una onda de choque aturdidora.": "Devastating shield charge that bolsters armor and releases a stunning shockwave.",
+  "Nihil Light": "Nihil Light",
+  "Roar of Time": "Roar of Time",
+  "Spacial Rend": "Spacial Rend",
+  "Shadow Force": "Shadow Force",
+  "Judgment": "Judgment",
+  "Dragon Ascent": "Dragon Ascent",
+  "Behemoth Blade": "Behemoth Blade",
+  "Behemoth Bash": "Behemoth Bash",
 });

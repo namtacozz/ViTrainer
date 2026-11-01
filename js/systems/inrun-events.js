@@ -175,9 +175,11 @@ G.InRunEvents = (() => {
       if (banner.timer <= 0) banner = null;
     }
 
-    // Comprobar inicio de evento desde Timeline (chặn kích hoạt khi đang ở trong đấu trường Rift hoặc trận Arceus)
+    // Comprobar inicio de evento desde Timeline (chặn kích hoạt khi đang ở trong đấu trường Rift, có cổng Rift, hoặc trong trận Arceus)
     if (authority() && !current && G.Timeline) {
-      if ((G.Rift && G.Rift.inArena) || (G.Judgment && G.Judgment.active)) return;
+      if ((G.Rift && (G.Rift.inArena || G.Rift.active)) || (G.Judgment && G.Judgment.active)) return;
+      // Chặn mọi sự kiện trước khi cổng rift hiện 60 giây và sau khi rift 30 giây mới được hiện
+      if (G.Timeline.isRiftBlocked && G.Timeline.isRiftBlocked(time)) return;
       const upcoming = G.Timeline.getUpcoming(time, 4);
       for (const ev of upcoming) {
         if (ev.type.startsWith('event_') && Math.abs(time - ev.time) < 1.5 && lastStartedId !== ev.id) {

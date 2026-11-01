@@ -20,10 +20,10 @@ Chào mừng bạn và các Agent đến với trung tâm tài liệu kỹ thu�
    - Tổng quan trò chơi & Phong cách Mystery Dungeon Rogue-lite.
    - Vòng lặp Core Loop chi tiết từ lúc chọn Pokémon đến khi đối mặt Arceus.
    - Hệ thống điều khiển (Bàn phím, Chuột, Di chuột theo con trỏ, Touch Virtual Joystick, Gamepad).
-   - Pokédex 1.021 loài, Hệ thống Độ hiếm (1 sao đến 5 sao), Chỉ số (HP, PA, SA, DF, SD, SPD), Thiên hướng Vật lý/Đặc biệt, Thưởng Đơn hệ (+20%).
+   - Pokédex 1.022 loài, Hệ thống Độ hiếm (1 sao đến 5 sao), Chỉ số (HP, PA, SA, DF, SD, SPD), Thiên hướng Vật lý/Đặc biệt, Thưởng Đơn hệ (+20%).
    - Cơ chế Tiến hóa Giai đoạn (Lv 15, Lv 30), Thức tỉnh Ngôi sao (Despertar I), Vương miện Apex (+).
    - Toàn bộ 78 dạng Mega Evolution, Primal Reversion, Battle forms và Biến thể Vùng miền (Alolan, Galarian, Hisuian, Paldean).
-   - Hệ thống 126 đòn đánh chuẩn canon, phân loại đòn (Melee, Beam, Projectile, Aura, Buff, Stun) và Biểu tượng Kiểu đòn (Kind Badges) trên HUD.
+   - Hệ thống 133 đòn đánh chuẩn canon, phân loại đòn (Melee, Beam, Projectile, Aura, Buff, Stun) và Biểu tượng Kiểu đòn (Kind Badges) trên HUD.
    - 3 Sự kiện Tuần tự Trong Trận (`inrun-events.js`): Chiếm Cờ (Zone Capture), Thu Thập Đá Pha Lê (Scavenger Hunt), Chạy Trốn Tử Thần (Boss Pursuit) kèm la bàn HUD và cột sáng thiên không.
    - Kẻ địch, Boss Slots (scale máu x25+), Cơ chế Đại Boss Đa Phase (Phase 1 $\rightarrow$ Phase 2 Cuồng nộ $\rightarrow$ Phase 3 Thức tỉnh Mega/Primal).
    - 18 Đấu trường Vết Nứt (Rifts) và Trận chiến Thẩm Phán Arceus (Sentencia phút 30+).

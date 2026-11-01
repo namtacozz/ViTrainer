@@ -385,7 +385,7 @@ G.Net = (() => {
     }
     // Sin relé, los datos de la partida no van por la base de datos (se pierden: esa
     // pareja no está conectada). Sólo pasa el aviso de empezar.
-    if ((!ALLOW_RELAY || !p || (p.mode !== 'relay' && p.mode !== 'connecting')) && !(msg && msg.k === 'start')) return;
+    if ((!ALLOW_RELAY || !p || (p.mode !== 'relay' && p.mode !== 'connecting')) && !(msg && (msg.k === 'start' || msg.k === 'rejoin' || msg.k === 'rejoin-sync'))) return;
     stats.relaySent++;
     relayPush(to, { f: uid, d: msg });
   }

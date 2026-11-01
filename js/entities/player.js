@@ -41,6 +41,24 @@ G.Player = class Player {
     this.baseSpd = mon.spd;
     this.baseAtk = mon.atk;
 
+    // Zygarde Lv 1-9 khởi đầu ở dạng 10% (dex 10118)
+    if ((mon.dex === 718 || this.baseDex === 718) && mon.dex !== 10118 && (this.level || 1) < 10) {
+      const form10 = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[10118] : null;
+      if (form10) {
+        mon = form10;
+        this.dex = 10118;
+        this.mon = form10;
+        this.scale = G.Sprites.playerScale(10118);
+        this.anim = new G.Sprites.Animator(10118, this.scale, this.shiny);
+        this.r = G.Sprites.playerRadius(10118);
+        this.bodyH = G.Sprites.bodyHeight(10118, this.scale);
+        this.baseSpd = form10.spd;
+        this.baseAtk = form10.atk;
+        this.maxHp = form10.hp + this.perksHp;
+        this.hp = this.maxHp;
+      }
+    }
+
     // Estado de evolución en partida
     this.chosenDex = mon.dex;
     this.baseDex = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(mon.dex) : mon.dex;
@@ -242,18 +260,28 @@ G.Player = class Player {
 
   /** Lo que se puede hacer ahora con un vínculo: añadir a un grupo o unir dos sueltos. */
   bondOptions() {
+    const isEx = m => !!(m && (m.exclusive || m.maxFusions === 1));
+    const groupMax = g => g.some(isEx) ? 2 : Player.BOND_MAX;
     const loose = this.slots.filter(s => s.length === 1).map(s => s[0]);
-    const grow = this.slots.find(s => s.length > 1 && s.length < Player.BOND_MAX);
-    if (grow) return loose.length ? { mode: 'add', group: grow, loose } : null;
+    // Nhóm chứa chiêu độc quyền chỉ được mở rộng tối đa 2 chiêu
+    const grow = this.slots.find(s => s.length > 1 && s.length < groupMax(s));
+    if (grow) {
+      const validLoose = loose.filter(m => !isEx(m) || !grow.some(isEx));
+      return validLoose.length ? { mode: 'add', group: grow, loose: validLoose } : null;
+    }
     return loose.length >= 2 ? { mode: 'pair', group: null, loose } : null;
   }
 
   /** Junta `moves` (sueltos) en el grupo `group` (o en uno nuevo) y gasta un vínculo. */
   fuse(moves, group = null) {
+    const isEx = m => !!(m && (m.exclusive || m.maxFusions === 1));
     const target = group || this.slots.find(s => s[0] === moves[0]);
     const cur = this.slots[this.active];
     for (const m of moves) {
       if (target.includes(m)) continue;
+      // Giới hạn nhóm có chiêu độc quyền chỉ tối đa 2 chiêu và không được ghép 2 chiêu độc quyền với nhau
+      if ((target.some(isEx) || isEx(m)) && target.length >= 2) continue;
+      if (isEx(m) && target.some(isEx)) continue;
       const i = this.slots.findIndex(s => s.length === 1 && s[0] === m);
       if (i < 0) continue;
       this.slots.splice(i, 1);
@@ -424,6 +452,14 @@ G.Player = class Player {
     this.baseAtk = nextMon.atk;
     this.maxHp = nextMon.hp + (this.perksHp || 0) + (this.bonusMaxHp || 0);
 
+    // Buff Thông Thạo Dạng Cuối cho Pokémon 3 bậc (+20% baseAtk, +20% maxHp, +15% baseSpd)
+    const stageNow = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
+    if (this.evoChain && this.evoChain.type === '3stage' && stageNow >= 3) {
+      this.baseAtk *= 1.20;
+      this.maxHp = Math.round(this.maxHp * 1.20);
+      this.baseSpd = Math.round(this.baseSpd * 1.15);
+    }
+
     if (isApex) {
       this.isApex = true;
       this.maxHp = Math.round(this.maxHp * 1.15);
@@ -529,6 +565,35 @@ G.Player = class Player {
       });
     } else if (options[0] && options[0].apply) {
       options[0].apply();
+    }
+  }
+
+  upgradeMoveToNihilLight() {
+    const oldMove = (this.moves || []).find(m => m.id === 'core-enforcer');
+    const newDef = (typeof G !== 'undefined' && G.Moves && G.Moves.BY_ID) ? G.Moves.BY_ID['nihil-light'] : null;
+    if (newDef) {
+      const curLvl = oldMove ? oldMove.lvl : 1;
+      const newInst = G.Moves.instance('nihil-light', curLvl);
+      if (oldMove && oldMove.evoTier) newInst.evoTier = oldMove.evoTier;
+      if (oldMove && oldMove.name && oldMove.name.includes('+')) {
+        newInst.name = 'Nihil Light' + oldMove.name.slice(oldMove.name.indexOf('+') - 1);
+      }
+      if (oldMove) {
+        const mi = this.moves.indexOf(oldMove);
+        if (mi >= 0) this.moves[mi] = newInst;
+      } else {
+        this.moves.push(newInst);
+      }
+      for (const group of this.slots) {
+        const si = group.findIndex(m => m.id === 'core-enforcer');
+        if (si >= 0) group[si] = newInst;
+      }
+      if (G.UI && G.UI.toast) G.UI.toast('Core Enforcer ĐÃ THĂNG HOA THÀNH Nihil Light!', 3000);
+      if (G.FX) {
+        G.FX.ring(this.x, this.y, 10, 220, '#10b981', 1.5, 10);
+        G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#34d399', 60, 320);
+      }
+      if (G.Audio) G.Audio.sfx('legend');
     }
   }
 
@@ -1084,6 +1149,7 @@ G.Player = class Player {
     G.FX.ring(this.x, this.y, 6, 70, '#5fe08a', 0.5, 4);
     G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#9dffb8', 18, 150);
     G.Audio.sfx('heal');
+    if (!this.remote && this.checkInRunEvo) this.checkInRunEvo();
   }
 
   // ---------------- compañero (cooperativo) ----------------

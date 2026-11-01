@@ -208,7 +208,8 @@ G.RunUI = (() => {
       for (const c of r.caught) {
         const w = document.createElement('div');
         w.appendChild(G.UI.spriteCanvas(c.dex, 90, 72, { shiny: true, lively: true, scale: 2 }));
-        w.insertAdjacentHTML('beforeend', `<small>${G.DEX_BY[c.dex].name}${c.isNew ? ' · ¡nuevo!' : ''}</small>`);
+        const cName = (G.DEX_BY && G.DEX_BY[c.dex] ? G.DEX_BY[c.dex].name : (G.MEGAS && G.MEGAS[c.dex] ? G.MEGAS[c.dex].name : 'Pokémon'));
+        w.insertAdjacentHTML('beforeend', `<small>${cName}${c.isNew ? ' · ¡nuevo!' : ''}</small>`);
         row.appendChild(w);
       }
     }
@@ -331,6 +332,13 @@ G.RunUI = (() => {
       }
       el.dataset.sfx = 'none';
       onTap(el, () => pickEvo(i));
+      const btn = el.querySelector('button');
+      if (btn) {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          pickEvo(i);
+        };
+      }
       box.appendChild(el);
     });
 
@@ -339,7 +347,7 @@ G.RunUI = (() => {
   }
 
   function pickEvo(i) {
-    if (!evoSession || !evoSession.options[i] || guarded()) return;
+    if (!evoSession || !evoSession.options[i]) return;
     const choice = evoSession.options[i];
     const cb = evoSession.cb;
     evoSession = null;
@@ -370,9 +378,10 @@ G.RunUI = (() => {
       return `<tr><td>${G.Icons.html('move:' + id, 18)} ${G.T(m.name, 'move')} <small>Nv.${lvl}</small></td>
         <td class="num">${m.cat ? n(dealt) : '—'}</td><td class="num">${m.cat ? n(dealt / secs) + '/s' : '—'}</td></tr>`;
     }).join('');
-    const mon = G.DEX_BY[s.dex], it = s.it && G.Items.BY[s.it];
+    const mon = (G.DEX_BY && G.DEX_BY[s.dex]) || (G.MEGAS && G.MEGAS[s.dex]) || { name: 'Pokémon' };
+    const it = s.it && G.Items && G.Items.BY && G.Items.BY[s.it];
     // (La frase entera en cada idioma: traducida por trozos sale rara.)
-    return `<p class="sub" style="margin:6px 0" translate="no">${s.sh ? G.Icons.html('shiny', 12) + ' ' : ''}${G.I18n.f('{x} · Nv. {x} · {x} de daño en total', G.T(mon.name), s.lv, n(total))}</p>
+    return `<p class="sub" style="margin:6px 0" translate="no">${s.sh ? G.Icons.html('shiny', 12) + ' ' : ''}${G.I18n.f('{x} · Nv. {x} · {x} de daño en total', G.T(mon.name || 'Pokémon'), s.lv, n(total))}</p>
       <table class="sum-moves"><tr><th></th><th class="num">Daño</th><th class="num">Por segundo</th></tr>${rows}</table>
       <p class="sub" style="margin:6px 0 0">${it ? G.Icons.html(s.it, 16) + ' ' + it.name : 'Sin objeto.'}</p>`;
   }

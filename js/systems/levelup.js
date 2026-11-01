@@ -51,7 +51,8 @@ G.LevelUp = (() => {
       const fitNote = (mon, cat) => {
         const f = G.Stats.fit(mon, cat);
         if (f >= 0.95) return '';
-        const side = G.Stats.sideOf(mon) === 'special' ? 'especiales' : 'físicos';
+        const sideKey = G.Stats.sideOf(mon) === 'special' ? 'especiales' : 'físicos';
+        const side = G.T ? G.T(sideKey) : sideKey;
         const pct = Math.round(f * 100);
         return ` <span class="fit-low">⚠ ${G.I18n ? G.I18n.f('(Eficacia reducida al {x} %: este Pokémon rinde mejor con ataques {x})', pct, side) : `(Eficacia reducida al ${pct} %)`}</span>`;
       };

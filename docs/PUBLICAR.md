@@ -1,74 +1,72 @@
-# Publicar el juego gratis en GitHub Pages
+# Guía de Publicación y Despliegue de PokéSurvivor
 
-El juego es una web estática: GitHub Pages la sirve gratis en
-`https://jpter78.github.io/pokesurvivor/`.
+Normas fijas y flujo oficial de publicación del proyecto **PokéSurvivor**.
 
-## 1. Crear el repositorio (una vez)
+---
 
-1. Entra en <https://github.com/new> con la cuenta **JPTER78**.
-2. Nombre: `pokesurvivor` · **Public** · **sin** README, .gitignore ni licencia
-   (ya vienen en el proyecto).
-3. Crear repositorio.
+## 1. Reglas Estrictas de Edición y Despliegue
 
-## 2. Subir el proyecto
+1. **Nunca editar `index.html`**:
+   - `index.html` es un archivo generado automáticamente por `tools/build.js`.
+   - Todas las modificaciones de estructura HTML, meta-etiquetas o llamadas a scripts se realizan exclusivamente en **`dev.html`**.
+2. **Ciclo de Compilación y Publicación**:
+   Antes de subir cualquier cambio o versión nueva, ejecutar obligatoriamente:
+   ```bash
+   node tools/build_langs.js
+   node tools/build.js && node tools/export_data.js && python tools/make_seo_pages.py
+   ```
+   - `build_langs.js`: Empaqueta los diccionarios de idiomas en `js/lang/*.js`.
+   - `build.js`: Procesa `dev.html`, ofusca y minifica los scripts en `js/app.min.js`, genera `index.html` y actualiza la huella de versión en **`version.json`**.
+   - `export_data.js`: Exporta los datos consolidados de Pokémon, movimientos y objetos para SEO.
+   - `make_seo_pages.py`: Genera las páginas estáticas en español e inglés, `sitemap.xml` y páginas de error.
+3. **Verificación de Pruebas**:
+   ```bash
+   node --test tests/i18n.test.cjs
+   ```
+   Asegura que no falte ninguna clave de traducción ni se rompan contratos de marcadores de posición (`{x}`).
+4. **Commits y Control de Versiones**:
+   - **Prohibido**: Incluir `"Co-Authored-By"` o cualquier firma o atribución de IA en los mensajes de commit.
+   - Realizar `git push origin main` únicamente cuando el propietario del proyecto lo solicite o tras la validación final.
 
-Desde la carpeta del proyecto (el repositorio local ya está creado y con el
-primer commit hecho):
+---
 
-```
-git remote add origin https://github.com/JPTER78/pokesurvivor.git
-git push -u origin main
-```
+## 2. Actualización Automática de Jugadores (`version.json` & `updater.js`)
 
-La primera vez se abre una ventana para iniciar sesión en GitHub.
-Son unos 75 MB, puede tardar unos minutos.
+Todos los jugadores activos deben recibir la versión nueva automáticamente sin perder su progreso:
+- `js/core/updater.js` consulta `version.json` cada **5 minutos**:
+  - **Fuera de partida** (menú principal, lobby de cooperativo, tienda Kecleon, ajustes): Muestra un aviso de 5 segundos y recarga la página. Si el jugador está escribiendo o en el gacha, espera a que termine.
+  - **En partida**: No interrumpe la run en curso. Al terminar la partida y registrarse los progresos, la página se recarga al volver al menú.
+  - Antes de recargar, sube a la nube cualquier dato pendiente de sincronización.
+- **Importante**: No eliminar `updater.js` ni deshabilitar la escritura de `version.json` en `tools/build.js`.
 
-## 3. Activar GitHub Pages
+---
 
-En el repositorio: **Settings → Pages** →
-*Source*: **Deploy from a branch** → *Branch*: **main**, carpeta **/ (root)** → **Save**.
+## 3. Novedades y Registro de Cambios (`changelog.js`)
 
-En uno o dos minutos estará en <https://jpter78.github.io/pokesurvivor/>.
+Cada adición de contenido o corrección de fallos debe registrarse obligatoriamente en `js/data/changelog.js`:
+- En español e inglés, bajo la fecha de hoy (`new`, `chg`, `fix`).
+- **Exclusión**: Los cambios internos de infraestructura, servidores, base de datos o costes **NO** van en el changelog visible para los jugadores.
 
-## 4. Conectar con Firebase
+---
 
-Si ya configuraste Firebase, añade `jpter78.github.io` a los
-**dominios autorizados** de Authentication (paso 5) y sube el
-`firebase-config.js` rellenado:
+## 4. Infraestructura y Servidores Gratuitos (Zero Cost)
 
-```
-git add js/core/firebase-config.js
-git commit -m "Conectar con Firebase"
-git push
-```
+- **Firebase**:
+  - Proyecto oficial: **`pokesurvivor-free`** (autenticación estándar con cuentas gratuitas ilimitadas).
+  - **Nunca activar "Identity Platform"** ni funciones de bloqueo, MFA o "Actualizar para habilitar" (suponen costes por usuario activo).
+  - El proyecto antiguo `pokesurvivor-jpter` con facturación fue eliminado el 13-10-2026.
+- **Cloudflare**:
+  - Exclusivamente para el DNS gratuito del dominio `pokesurvivor.com`.
+  - Sin Cloudflare Workers de pago ni Cloudflare Realtime/TURN (eliminados el 15-10-2026).
+  - El modo cooperativo opera 100% mediante conexión directa P2P (WebRTC DataChannels) utilizando los servidores STUN gratuitos de Google (`stun:stun.l.google.com:19302`).
+- **Modo Mantenimiento**:
+  - Se activa mediante la constante `MAINTENANCE` en `js/main.js`.
+  - Añadiendo `?dev` a la URL se puede acceder para pruebas internas durante periodos de mantenimiento.
 
-## 5. Que salga en Google
+---
 
-1. <https://search.google.com/search-console> → **Añadir propiedad** →
-   *Prefijo de la URL* → `https://jpter78.github.io/pokesurvivor/`.
-2. Verificación: el método **Etiqueta HTML** te da una línea `<meta ...>`;
-   pégala dentro de `<head>` en `index.html`, haz `git push`, y pulsa Verificar.
-3. **Inspección de URLs** → pega la dirección → **Solicitar indexación**.
+## 5. Licencias y Normativa de Sprites
 
-Google tarda de días a semanas en mostrarlo, y al principio sólo aparece si se
-busca el nombre exacto.
-
-## Actualizar el juego más adelante
-
-Cada vez que cambies algo:
-
-```
-git add -A
-git commit -m "Qué has cambiado"
-git push
-```
-
-GitHub Pages se actualiza solo en uno o dos minutos.
-
-## Recordatorios
-
-- **Nada de dinero**: ni anuncios, ni donaciones a cambio de nada, ni pagos.
-  Lo exige la licencia de los sprites (CC BY-NC) y es lo que más reduce el
-  riesgo de que Nintendo pida retirarlo.
-- Si llega una reclamación de derechos al correo del aviso legal, atiéndela
-  rápido: retirar lo que pidan suele cerrar el asunto.
+- Los sprites proceden de la comunidad *SpriteCollab* bajo licencia **CC BY-NC 4.0** (Uso No Comercial).
+- **Prohibido**: Añadir anuncios publicitarios, suscripciones de pago, microtransacciones, venta de monedas o paquetes de pago.
+- No alterar los archivos de licencia del repositorio.

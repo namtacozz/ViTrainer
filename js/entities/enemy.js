@@ -65,9 +65,15 @@
       this.bodyH = G.Sprites.bodyHeight(def.dex, this.scale);
 
       this.maxHp = Math.round(def.hp * sc.hp);
+      if (boss) {
+        this.maxHp = Math.round(this.maxHp * 0.60); // Giảm 40% máu boss để tránh quá trâu
+      }
       this.hp = this.maxHp;
       this.spd = def.spd * sc.spd;
       this.dmg = def.dmg * sc.dmg;
+      if (boss) {
+        this.dmg = Math.round(this.dmg * 1.30); // Tăng 30% sát thương boss
+      }
       this.xp = def.xp;
       this.behavior = def.behavior;
 
@@ -240,10 +246,10 @@
     advanceBossPhase() {
       this.bossPhase++;
       const phase = this.bossPhase;
-      this.dmg = Math.round(this.dmg * 1.35);
+      this.dmg = Math.round(this.dmg * 1.30); // Tăng 30% sát thương qua mỗi phase
       this.spd = Math.round(this.spd * 1.15);
-      // Thay vì hồi 100% full máu, tăng giới hạn máu tối đa và hồi 40% phục hồi
-      const hpMultiplier = phase === 2 ? 1.5 : 2.0;
+      // Giảm 40% máu tích lũy qua phase 2 & 3 (hệ số điều chỉnh từ 1.5/2.0 xuống 1.25/1.40)
+      const hpMultiplier = phase === 2 ? 1.25 : 1.40;
       this.maxHp = Math.round(this.maxHp * hpMultiplier);
       this.hp = this.maxHp;
       this.invuln = 0.8;
@@ -647,7 +653,7 @@
           this.jump = { sx: this.x, sy: this.y, tx: pl.x, ty: pl.y, t: -0.45 * f, dur: 0.60 };
           this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 96, delay: 0.45 * f + 0.60, dmg: this.dmg * 1.35, type, color: col });
           this.anim.play('Charge', { speed: 1.5 });
-          ai.cast = null; ai.cd = G.U.rand(1.2, 1.8);
+          ai.cast = null; ai.cd = G.U.rand(2.2, 3.2);
           break;
         case 'dragon_rush':
           c.wind = 0.7 * f; c.len = 420; c.dur = 0.35;
