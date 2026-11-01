@@ -68,12 +68,12 @@ G.RunQuests = (() => {
         completed: false
       });
     } else if (baseDex === 718) {
-      // Zygarde: farm 3500 quái & đạt Nv. 50 để mở khóa Mega Zygarde & Nihil Light
+      // Zygarde: farm 3500 quái & đạt Lv. 50 để mở khóa Mega Zygarde & Nihil Light
       activeQuests.push({
         id: 'mega_718',
         type: 'mega',
         title: 'THỬ THÁCH MEGA: Zygarde',
-        desc: 'Đạt Nv. 50 & hạ 3500 kẻ địch',
+        desc: 'Đạt Lv. 50 & hạ 3500 kẻ địch',
         targetKills: 3500,
         targetLv: 50,
         kills: (pl && pl.kills) || 0,
@@ -107,7 +107,7 @@ G.RunQuests = (() => {
         id: 'mega_' + megaDex,
         type: 'mega',
         title: 'THỬ THÁCH MEGA: ' + mName,
-        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
+        desc: 'Đạt Lv. 25 & hạ 350 kẻ địch',
         targetKills: 350,
         targetLv: 25,
         kills: (pl && pl.kills) || 0,
@@ -163,7 +163,7 @@ G.RunQuests = (() => {
         type: 'archetype',
         archetype: 'speedster',
         title: 'THỬ THÁCH TỐC ĐỘ',
-        desc: 'Bắt Yêu Tinh HOẶC Nv. 25 trước p.12',
+        desc: 'Bắt Yêu Tinh HOẶC Lv. 25 trước p.12',
         targetLv: 25,
         targetTime: 720,
         caughtRunner: false,
@@ -235,7 +235,7 @@ G.RunQuests = (() => {
         id: 'mega_' + newDex,
         type: 'mega',
         title: 'THỬ THÁCH MEGA: ' + mName,
-        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
+        desc: 'Đạt Lv. 25 & hạ 350 kẻ địch',
         targetKills: 350,
         targetLv: 25,
         kills: (pl && pl.kills) || 0,
@@ -248,7 +248,7 @@ G.RunQuests = (() => {
       };
       activeQuests.unshift(q);
       if (G.Spawner && G.Spawner.say) {
-        G.Spawner.say(`¡Nhiệm vụ Mega: ${mon.name} mở khóa!`, 3.2, true);
+        G.Spawner.say(`Nhiệm vụ Mega: ${mon.name} mở khóa!`, 3.2, true);
       }
       if (G.Audio && G.Audio.sfx) G.Audio.sfx('legend');
     }
@@ -380,7 +380,7 @@ G.RunQuests = (() => {
 
     const titleStr = G.T ? G.T(q.title) : q.title;
     if (G.Spawner && G.Spawner.say) {
-      G.Spawner.say(`¡HOÀN THÀNH: ${titleStr}!`, 3.5, true);
+      G.Spawner.say(`HOÀN THÀNH: ${titleStr}!`, 3.5, true);
     }
 
     // Trao phần thưởng
@@ -441,7 +441,7 @@ G.RunQuests = (() => {
       if (q.id === 'mega_384' && q.targetLv !== undefined) {
         const curLv = (pl && pl.level) || 1;
         const pct = Math.min(1, curLv / q.targetLv);
-        return { current: curLv, max: q.targetLv, pct, label: `Nv.${curLv}/${q.targetLv}` };
+        return { current: curLv, max: q.targetLv, pct, label: `Lv. ${curLv}/${q.targetLv}` };
       }
       if (q.targetMoveId && q.targetMoveTier) {
         let curTier = 0;
@@ -469,7 +469,7 @@ G.RunQuests = (() => {
           current: curKills,
           max: q.targetKills,
           pct,
-          label: `${curKills}/${q.targetKills} (Nv.${curLv}/${q.targetLv})`
+          label: `${curKills}/${q.targetKills} (Lv. ${curLv}/${q.targetLv})`
         };
       }
       if (q.id === 'legend_giratina') {
@@ -497,7 +497,7 @@ G.RunQuests = (() => {
         if (q.caughtRunner) return { current: 1, max: 1, pct: 1.0, label: 'Đã bắt Yêu Tinh!' };
         const lv = (pl && pl.level) || 1;
         const lvF = Math.min(1, lv / q.targetLv);
-        return { current: lv, max: q.targetLv, pct: lvF, label: `Nv.${lv}/${q.targetLv} (<12:00)` };
+        return { current: lv, max: q.targetLv, pct: lvF, label: `Lv. ${lv}/${q.targetLv} (<12:00)` };
       }
       if (q.archetype === 'purist') {
         const tF = Math.min(1, curTime / q.targetTime);

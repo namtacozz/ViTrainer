@@ -452,7 +452,7 @@ G.HUD = (() => {
 
     ctx.font = F(700, 14.5);
     ctx.fillStyle = '#ffcb3d';
-    ctx.fillText('Nv. ' + pl.level, px, py + 33);
+    ctx.fillText('Lv. ' + pl.level, px, py + 33);
 
     bar(ctx, px + 62, py + 20, 218, 15, pl.hp / pl.maxHp, '#ff5f6d');
     ctx.font = F(700, 11);
@@ -462,15 +462,6 @@ G.HUD = (() => {
 
     // ---------- HUD ĐẶC TÍNH (ABILITY BADGE) NGAY DƯỚI THANH MÁU ----------
     if (pl.abilId || pl.abil) {
-      const abBoxX = px + 62, abBoxY = py + 39, abBoxW = 218, abBoxH = 19;
-      ctx.save();
-      roundRect(ctx, abBoxX, abBoxY, abBoxW, abBoxH, 5);
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
-      ctx.fill();
-      ctx.lineWidth = 1.1;
-      ctx.strokeStyle = 'rgba(168, 85, 247, 0.55)';
-      ctx.stroke();
-
       const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
       const abName = (G.Mons && G.Mons.abilityName) ? G.Mons.abilityName(pl.abilId) : (pl.abilId || 'Đặc tính');
 
@@ -479,16 +470,37 @@ G.HUD = (() => {
       if (pl.moxieStacks) statusText = ' (' + pl.moxieStacks + 'x)';
       else if (pl.speedBoostT != null) statusText = ' (' + Math.ceil(pl.speedBoostT) + 's)';
       else if (pl.sumT != null) statusText = ' (' + Math.max(0, Math.ceil(pl.sumT)) + 's)';
-      else if (pl.abilId === 'disguise') statusText = pl.disguiseBroken ? (isVi ? ' [Đã vỡ]' : ' [Broken]') : (isVi ? ' [Khiên sẵn sàng]' : ' [Ready]');
-      else if (pl.abil && pl.abil.d) {
-        const rawD = G.T(pl.abil.d);
-        statusText = ': ' + (rawD.length > 24 ? rawD.substring(0, 22) + '...' : rawD);
-      }
+      else if (pl.abilId === 'disguise') statusText = pl.disguiseBroken ? (isVi ? ' [Đã vỡ]' : ' [Broken]') : (isVi ? ' [Sẵn sàng]' : ' [Ready]');
 
+      const rawDesc = (pl.abil && pl.abil.d) ? (G.T ? G.T(pl.abil.d) : pl.abil.d) : '';
+      const abBoxX = px + 62, abBoxY = py + 39, abBoxW = 270;
+
+      ctx.save();
+      ctx.font = F(500, 8.5);
+      // Tách dòng tự nhiên để hiển thị đầy đủ 100% mô tả, không bao giờ cắt '...'
+      const descLines = rawDesc ? wrap(ctx, rawDesc, abBoxW - 14) : [];
+      const lineH = 11;
+      const abBoxH = 16 + descLines.length * lineH + 4;
+
+      roundRect(ctx, abBoxX, abBoxY, abBoxW, abBoxH, 6);
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
+      ctx.fill();
+      ctx.lineWidth = 1.1;
+      ctx.strokeStyle = 'rgba(168, 85, 247, 0.60)';
+      ctx.stroke();
+
+      // Dòng 1: Tiêu đề đặc tính
       ctx.textAlign = 'left';
       ctx.font = F(700, 9);
       ctx.fillStyle = '#e9d5ff';
-      ctx.fillText('✦ ' + abName + statusText, abBoxX + 6, abBoxY + 13);
+      ctx.fillText('✦ ' + abName + statusText, abBoxX + 6, abBoxY + 12);
+
+      // Các dòng tiếp theo: Mô tả trọn vẹn của đặc tính
+      ctx.font = F(500, 8.5);
+      ctx.fillStyle = '#cbd5e1';
+      for (let i = 0; i < descLines.length; i++) {
+        ctx.fillText(descLines[i], abBoxX + 6, abBoxY + 23 + i * lineH);
+      }
       ctx.restore();
     }
 
@@ -498,7 +510,7 @@ G.HUD = (() => {
       const cDex = pl.dex;
       const curLv = pl.level || 1;
 
-      // 1. Zygarde đặc biệt: 10% (Nv. 1 - 24) -> 50% (Nv. 25 - 49) -> 100% (Nv. 50+, Core Enforcer) -> Mega (Nv. 50 + 3500 quái)
+      // 1. Zygarde đặc biệt: 10% (Lv. 1 - 24) -> 50% (Lv. 25 - 49) -> 100% (Lv. 50+, Core Enforcer) -> Mega (Lv. 50 + 3500 quái)
       if (bDex === 718) {
         if (pl.isMega && (cDex === 10121 || pl.megaId === 10121)) {
           return { dex: 10121, label: 'Hoàn thiện', isFinal: true };
@@ -509,15 +521,15 @@ G.HUD = (() => {
           const ready = kills >= 3500 && curLv >= reqLv;
           return {
             dex: 10121,
-            label: ready ? 'Sẵn sàng Mega!' : (curLv < reqLv ? `Nv. ${curLv}/${reqLv}` : `Mega ${kills}/3500`),
+            label: ready ? 'Sẵn sàng Mega!' : (curLv < reqLv ? `Lv. ${curLv}/${reqLv}` : `Mega ${kills}/3500`),
             ready,
             icon: 'megaBadge'
           };
         }
         if (cDex === 718 || curLv >= 25) {
-          return { dex: 10120, exactDex: true, label: `Nv. ${curLv}/50` };
+          return { dex: 10120, exactDex: true, label: `Lv. ${curLv}/50` };
         }
-        return { dex: 718, exactDex: true, label: `Nv. ${curLv}/25` };
+        return { dex: 718, exactDex: true, label: `Lv. ${curLv}/25` };
       }
 
       // 2. Huyền thoại tiến hóa qua chiêu độc quyền + (EXCLUSIVE_PLUS_EVO)
@@ -578,13 +590,13 @@ G.HUD = (() => {
       if (ch && ch.type === '3stage') {
         if (stg === 1) {
           const nDex = ch.stages[1] ? ch.stages[1][0] : cDex;
-          return { dex: nDex, label: `Nv. ${curLv}/15` };
+          return { dex: nDex, label: `Lv. ${curLv}/15` };
         } else if (stg === 2) {
           const nDex = ch.stages[2] ? ch.stages[2][0] : cDex;
-          return { dex: nDex, label: `Nv. ${curLv}/30` };
+          return { dex: nDex, label: `Lv. ${curLv}/30` };
         } else {
           if (hasM) {
-            return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+            return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
             return { icon: 'crown', label: `Apex+ ${curLv}/30` };
@@ -594,10 +606,10 @@ G.HUD = (() => {
       } else if (ch && ch.type === '2stage') {
         if (stg === 1) {
           const nDex = ch.stages[1] ? ch.stages[1][0] : cDex;
-          return { dex: nDex, label: `Nv. ${curLv}/18` };
+          return { dex: nDex, label: `Lv. ${curLv}/18` };
         } else {
           if (hasM) {
-            return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+            return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
             return { icon: 'crown', label: `Apex+ ${curLv}/30` };
@@ -607,10 +619,10 @@ G.HUD = (() => {
       } else if (ch && ch.type === 'branch') {
         if (stg === 1) {
           const nDex = (ch.members || []).find(d => d !== bDex) || cDex;
-          return { dex: nDex, label: `Nv. ${curLv}/15` };
+          return { dex: nDex, label: `Lv. ${curLv}/15` };
         } else {
           if (hasM) {
-            return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+            return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
             return { icon: 'crown', label: `Apex+ ${curLv}/30` };
@@ -619,7 +631,7 @@ G.HUD = (() => {
         }
       } else {
         if (hasM) {
-          return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+          return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
         }
         if (pl.awakeningTier === 0) {
           return { icon: 'star', label: `Thức tỉnh ${curLv}/15` };
@@ -686,7 +698,7 @@ G.HUD = (() => {
       }
       ctx.restore();
 
-      // Nhãn chữ ngay dưới ô vuông (ví dụ: Thức tỉnh 1/15, Nv. 15/25, Hoàn thiện)
+      // Nhãn chữ ngay dưới ô vuông (ví dụ: Thức tỉnh 1/15, Lv. 15/25, Hoàn thiện)
       ctx.font = F(700, 9.5);
       ctx.textAlign = 'center';
       ctx.fillStyle = target.isFinal ? '#fbbf24' : (target.ready ? '#4ade80' : 'rgba(255, 255, 255, 0.95)');

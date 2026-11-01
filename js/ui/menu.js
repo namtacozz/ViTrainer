@@ -410,7 +410,7 @@ G.MenuUI = (() => {
       <p class="move-icons" id="dex-moves">
         ${G.Moves.poolFor(p).map(id => `<span data-move="${id}">${G.Icons.html('move:' + id, 32)}</span>`).join('')}</p>
       ${own ? (usingThis
-        ? '<button class="btn grow" disabled style="width:100%">Es tu compañero</button>'
+        ? '<button class="btn grow" disabled style="width:100%">' + (typeof G !== 'undefined' && G.T ? G.T('Es tu compañero') : 'Bạn đồng hành') + '</button>'
         : !isBase
           ? `<button class="btn grow" disabled style="width:100%" title="${G.T('Solo la fase inicial puede ser compañero')}">${G.T('Evolución (no elegible como compañero)')}</button>
              <button id="dex-pick-base" class="btn gold" data-sfx="confirm" style="width:100%;margin-top:6px">${G.T('Elegir fase inicial')} (${baseMon.name})</button>`
@@ -435,7 +435,7 @@ G.MenuUI = (() => {
       s.partner = dex;
       s.partnerShiny = hasSh && viewShiny;
       G.DB.commit();
-      G.UI.toast(p.name + (s.partnerShiny ? ' shiny' : '') + ' es ahora tu compañero');
+      G.UI.toast(p.name + (s.partnerShiny ? ' shiny' : '') + (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi' ? ' hiện là bạn đồng hành!' : ' is now your partner!'));
       renderGrid(true); showDetail(dex);
     };
     const pickBase = $('dex-pick-base');
@@ -443,7 +443,7 @@ G.MenuUI = (() => {
       s.partner = baseDex;
       s.partnerShiny = G.DB.ownsShiny(baseDex) && viewShiny;
       G.DB.commit();
-      G.UI.toast(baseMon.name + (s.partnerShiny ? ' shiny' : '') + ' es ahora tu compañero');
+      G.UI.toast(baseMon.name + (s.partnerShiny ? ' shiny' : '') + (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi' ? ' hiện là bạn đồng hành!' : ' is now your partner!'));
       renderGrid(true); showDetail(baseDex);
     };
     if (own) wireExtras(dex, box);
@@ -499,29 +499,29 @@ G.MenuUI = (() => {
             <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10118 ? ' current' : ''}" data-dex="10118" title="Zygarde (Dạng 10%): Khởi đầu hành trình">
               <div class="evo-cv-wrap" data-dex="10118" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 10%</div>
-              <div class="evo-lvl">Nv. 1</div>
+              <div class="evo-lvl">Lv. 1</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%): Biến đổi Mãng Xà (Nv. 25)">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%): Biến đổi Mãng Xà (Lv. 25)">
               <div class="evo-cv-wrap" data-dex="718" data-exact-dex="1" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 50%</div>
-              <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Nv. 25</div>
+              <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Lv. 25</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10120 ? ' current' : ''}" data-dex="10120" title="Zygarde Hoàn Thiện (100%): Tặng Core Enforcer (Nv. 50)">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10120 ? ' current' : ''}" data-dex="10120" title="Zygarde Hoàn Thiện (100%): Tặng Core Enforcer (Lv. 50)">
               <div class="evo-cv-wrap" data-dex="10120" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 100%</div>
-              <div class="evo-lvl" style="color:#10b981;font-weight:bold;">Nv. 50</div>
+              <div class="evo-lvl" style="color:#10b981;font-weight:bold;">Lv. 50</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10121" title="Mega Zygarde (Nv. 50 & 3500 quái): Thức tỉnh Nihil Light">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10121" title="Mega Zygarde (Lv. 50 & 3500 quái): Thức tỉnh Nihil Light">
               <div class="evo-cv-wrap" data-dex="10121" data-unlocked="1"></div>
               <div class="evo-name">M-Zygarde</div>
-              <div class="evo-lvl" style="color:#f43f5e;font-weight:bold;">Mega (Nv. 50)</div>
+              <div class="evo-lvl" style="color:#f43f5e;font-weight:bold;">Mega (Lv. 50)</div>
             </div>
           </div>
           <div style="font-size:10px;color:#94a3b8;text-align:center;margin-top:6px;letter-spacing:0.3px;">
-            Mốc thức tỉnh: Nv. 15 Thức tỉnh I · Nv. 30 Apex (+)
+            Mốc thức tỉnh: Lv. 15 Thức tỉnh I · Lv. 30 Apex (+)
           </div>
         </div>
       `;
@@ -562,21 +562,21 @@ G.MenuUI = (() => {
         <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === chain.baseDex ? ' current' : ''}" data-dex="${chain.baseDex}" title="${p1 ? p1.name : ''}">
           <div class="evo-cv-wrap" data-dex="${chain.baseDex}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
-          <div class="evo-lvl">Nv. 1</div>
+          <div class="evo-lvl">Lv. 1</div>
           ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div class="evo-node ${un2 ? 'unlocked' : 'locked'}" title="${un2 ? G.T('Despertar I') : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
           <div class="evo-apex-badge ${un2 ? 'awakening' : 'locked'}">${G.Icons.html('star', 16)}</div>
           <div class="evo-name">${G.T('Despertar I')}</div>
-          <div class="evo-lvl">Nv. 15</div>
+          <div class="evo-lvl">Lv. 15</div>
           ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div class="evo-node ${un3 ? 'unlocked' : 'locked'}" title="${un3 ? G.T('Despertar II (Apex+)') : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
           <div class="evo-apex-badge ${un3 ? 'apex' : 'locked'}">${G.Icons.html('crown', 16)}</div>
           <div class="evo-name">Apex (+)</div>
-          <div class="evo-lvl">Nv. 30</div>
+          <div class="evo-lvl">Lv. 30</div>
           ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         ${megaHtml}
@@ -592,21 +592,21 @@ G.MenuUI = (() => {
         <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}" title="${p1 ? p1.name : ''}">
           <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
-          <div class="evo-lvl">Nv. 1</div>
+          <div class="evo-lvl">Lv. 1</div>
           ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${p2 ? p2.name : ''}">
           <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="1"></div>
           <div class="evo-name">${p2 ? p2.name : '???'}</div>
-          <div class="evo-lvl">Nv. 18</div>
+          <div class="evo-lvl">Lv. 18</div>
           ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div class="evo-node ${un3 ? 'unlocked' : 'locked'}" title="${un3 ? 'Apex (+)' : G.T('Consigue duplicados en el Gacha para desbloquear esta forma')}">
           <div class="evo-apex-badge ${un3 ? 'apex' : 'locked'}">${G.Icons.html('crown', 16)}</div>
           <div class="evo-name">Apex (+)</div>
-          <div class="evo-lvl">Nv. 30</div>
+          <div class="evo-lvl">Lv. 30</div>
           ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         ${megaHtml}
@@ -622,21 +622,21 @@ G.MenuUI = (() => {
         <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}" title="${p1 ? p1.name : ''}">
           <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
-          <div class="evo-lvl">Nv. 1</div>
+          <div class="evo-lvl">Lv. 1</div>
           ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div class="evo-node ${un2 ? 'unlocked' : 'locked'}${dex === d2 ? ' current' : ''}" data-dex="${d2}" title="${p2 ? p2.name : ''}">
           <div class="evo-cv-wrap" data-dex="${d2}" data-unlocked="1"></div>
           <div class="evo-name">${p2 ? p2.name : '???'}</div>
-          <div class="evo-lvl">Nv. 15</div>
+          <div class="evo-lvl">Lv. 15</div>
           ${!un2 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
         <div class="evo-node ${un3 ? 'unlocked' : 'locked'}${dex === d3 ? ' current' : ''}" data-dex="${d3}" title="${p3 ? p3.name : ''}">
           <div class="evo-cv-wrap" data-dex="${d3}" data-unlocked="1"></div>
           <div class="evo-name">${p3 ? p3.name : '???'}</div>
-          <div class="evo-lvl">Nv. 30</div>
+          <div class="evo-lvl">Lv. 30</div>
           ${!un3 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         ${megaHtml}
@@ -650,7 +650,7 @@ G.MenuUI = (() => {
         const pb = G.DEX_BY[d];
         const unb = isUnlocked(d);
         const stage = G.getStage(d);
-        const lvl = stage === 2 ? 'Nv. 15' : 'Nv. 30';
+        const lvl = stage === 2 ? 'Lv. 15' : 'Lv. 30';
         const megaSub = renderMega(d);
         return `
           <div style="display:flex;align-items:center;gap:4px;">
@@ -669,7 +669,7 @@ G.MenuUI = (() => {
         <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === d1 ? ' current' : ''}" data-dex="${d1}" title="${p1 ? p1.name : ''}">
           <div class="evo-cv-wrap" data-dex="${d1}" data-unlocked="1"></div>
           <div class="evo-name">${p1 ? p1.name : '???'}</div>
-          <div class="evo-lvl">Nv. 1</div>
+          <div class="evo-lvl">Lv. 1</div>
           ${!un1 ? '<div class="evo-lock-tag">🔒</div>' : ''}
         </div>
         <span class="evo-arrow">→</span>
@@ -916,7 +916,7 @@ G.MenuUI = (() => {
     const lv = d => Object.values(s.pupg[d] || {}).reduce((a, b) => a + b, 0);
     const mons = Object.keys(s.owned).map(Number).filter(d => G.DEX_BY[d])
       .sort((a, b) => (b === s.partner) - (a === s.partner) || lv(b) - lv(a) || a - b);
-    sel.innerHTML = mons.map(d => `<option value="${d}">${G.DEX_BY[d].name}${d === s.partner ? ' (compañero)' : ''}${lv(d) ? ' · ' + lv(d) + ' niveles' : ''}</option>`).join('');
+    sel.innerHTML = mons.map(d => `<option value="${d}">${G.DEX_BY[d].name}${d === s.partner ? ' (' + (isVi ? 'bạn đồng hành' : 'partner') + ')' : ''}${lv(d) ? ' · ' + lv(d) + (isVi ? ' cấp' : ' levels') : ''}</option>`).join('');
     sel.value = upgDex;
     sel.onchange = () => { upgDex = +sel.value; G.Audio.sfx('select'); renderUpgrades(); };
     renderUpgrades();
@@ -934,14 +934,21 @@ G.MenuUI = (() => {
 
     const box = $('upg-list');
     box.innerHTML = '';
+    box.style.display = 'grid';
+    box.style.gridTemplateColumns = 'repeat(auto-fill, minmax(320px, 1fr))';
+    box.style.gap = '14px';
 
-    // ---------- THANH CHỌN TAB NHÁNH KỸ NĂNG MMORPG & NÚT TẨY ĐIỂM ----------
-    const treeBar = document.createElement('div');
-    treeBar.className = 'upg-tree-tabs';
-    treeBar.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;padding:8px 12px;background:rgba(15,23,42,0.85);border-radius:10px;border:1px solid rgba(255,255,255,0.08);';
+    // ---------- THANH CHỌN TAB NHÁNH KỸ NĂNG MMORPG & NÚT TẨY ĐIỂM (ĐẶT PHÍA TRÊN GRID) ----------
+    let treeBar = $('upg-tree-tabs-bar');
+    if (!treeBar) {
+      treeBar = document.createElement('div');
+      treeBar.id = 'upg-tree-tabs-bar';
+      box.parentNode.insertBefore(treeBar, box);
+    }
+    treeBar.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;padding:10px 14px;background:rgba(15,23,42,0.88);border-radius:10px;border:1px solid rgba(255,255,255,0.12);width:100%;box-sizing:border-box;';
 
     const tabsHtml = `
-      <div class="row" style="gap:6px;">
+      <div class="row" style="gap:8px;flex-wrap:wrap;">
         <button class="btn small ${curTreeTab === 'offense' ? 'gold' : ''}" data-tree="offense" style="${curTreeTab === 'offense' ? 'background:#ef4444;border-color:#f87171;' : ''}">
           ⚔️ ${isVi ? 'Tấn Công' : 'Offense'}
         </button>
@@ -965,9 +972,8 @@ G.MenuUI = (() => {
     ` : '';
 
     treeBar.innerHTML = tabsHtml + resetHtml;
-    box.appendChild(treeBar);
 
-    // Xử lý chuyển tab
+    // Xử lý sự kiện chuyển tab
     treeBar.querySelectorAll('[data-tree]').forEach(btn => {
       btn.onclick = () => {
         curTreeTab = btn.dataset.tree;
@@ -976,7 +982,7 @@ G.MenuUI = (() => {
       };
     });
 
-    // Xử lý nút Tẩy Điểm (Reset Talents)
+    // Xử lý sự kiện nút Tẩy Điểm (Reset Talents)
     if ($('upg-respec-btn')) {
       $('upg-respec-btn').onclick = () => {
         const confirmMsg = isVi ? 'Xác nhận tẩy toàn bộ kỹ năng của Pokémon này? Hoàn trả 100% PokéCoins.' : 'Reset all talents for this Pokémon? 100% PokéCoins will be refunded.';
@@ -991,7 +997,7 @@ G.MenuUI = (() => {
       };
     }
 
-    // ---------- DANH SÁCH NODE KỸ NĂNG MMORPG THEO NHÁNH ----------
+    // ---------- DANH SÁCH THẺ KỸ NĂNG MMORPG THEO NHÁNH (CARD ĐỘC LẬP, KHÔNG ÉP CỘT 40PX) ----------
     const filteredList = G.Upgrades.LIST.filter(u => {
       if (curTreeTab === 'all') return true;
       return (u.tree || 'utility') === curTreeTab;
@@ -1012,10 +1018,12 @@ G.MenuUI = (() => {
         const msName = isVi ? nextMs.name : (nextMs.nameEn || nextMs.name);
         const msDesc = isVi ? nextMs.desc : (nextMs.desc || '');
         milestoneBadgeHtml = `
-          <div style="margin-top:6px;padding:4px 8px;background:${achieved ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)'};border-radius:6px;border:1px solid ${achieved ? '#22c55e' : 'rgba(255,255,255,0.1)'};font-size:11px;">
-            <b style="color:${achieved ? '#4ade80' : '#fbbf24'};">✦ Mốc Lv.${nextMs.lvl}: ${msName}</b>
-            <span style="color:${achieved ? '#86efac' : '#94a3b8'};"> ${achieved ? (isVi ? '(Đã Kích Hoạt!)' : '(Active!)') : `(${lvl}/${nextMs.lvl})`}</span>
-            <div style="font-size:10px;color:#cbd5e1;margin-top:2px;">${msDesc}</div>
+          <div style="margin-top:8px;padding:8px 10px;background:${achieved ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)'};border-radius:6px;border:1px solid ${achieved ? '#22c55e' : 'rgba(255,255,255,0.1)'};font-size:11px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <b style="color:${achieved ? '#4ade80' : '#fbbf24'};font-size:11.5px;">✦ Mốc Lv.${nextMs.lvl}: ${msName}</b>
+              <span style="color:${achieved ? '#86efac' : '#94a3b8'};font-weight:bold;">${achieved ? (isVi ? 'ĐÃ ĐẠT!' : 'ACTIVE!') : `(${lvl}/${nextMs.lvl})`}</span>
+            </div>
+            <div style="font-size:10.5px;color:#cbd5e1;margin-top:3px;line-height:1.35;">${msDesc}</div>
           </div>
         `;
       }
@@ -1025,31 +1033,33 @@ G.MenuUI = (() => {
       const uUnit = isVi ? u.unit : (u.unitEn || u.unit);
 
       const el = document.createElement('div');
-      el.className = 'panel upg-item mmorpg-talent-node';
-      el.style.cssText = `position:relative;margin-bottom:10px;padding:12px 14px;background:rgba(15,23,42,0.75);border-radius:10px;border-left:4px solid ${treeColor};border-top:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);`;
+      el.className = 'panel mmorpg-talent-card';
+      el.style.cssText = `display:flex;flex-direction:column;justify-content:space-between;gap:8px;margin-bottom:0;padding:12px 14px;background:rgba(15,23,42,0.85);border-radius:10px;border-left:4px solid ${treeColor};border-top:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);`;
 
       el.innerHTML = `
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div class="ic" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border-radius:8px;border:1px solid ${treeColor};">${G.Icons.html(u.icon, 24)}</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;">
-              <b style="font-size:14px;color:#f1f5f9;">${uName}</b>
-              <span style="font-size:13px;font-weight:bold;color:${maxed ? '#4ade80' : '#fbbf24'};font-family:monospace;">Lv. ${lvl}/${u.max}</span>
-            </div>
-            <div style="color:var(--muted);font-size:12px;margin:2px 0 6px;">${uUnit}</div>
-            <div style="height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;width:${Math.min(100, (lvl / u.max) * 100)}%;background:linear-gradient(90deg, ${treeColor}, #fbbf24);transition:width 0.3s;"></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:38px;height:38px;min-width:38px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border-radius:8px;border:1px solid ${treeColor};">${G.Icons.html(u.icon, 22)}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;">
+                <b style="font-size:13.5px;color:#f1f5f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${uName}</b>
+                <span style="font-size:13px;font-weight:bold;color:${maxed ? '#4ade80' : '#fbbf24'};font-family:monospace;white-space:nowrap;">Lv. ${lvl}/${u.max}</span>
+              </div>
+              <div style="color:#94a3b8;font-size:11.5px;margin:2px 0 4px;white-space:normal;line-height:1.2;">${uUnit}</div>
             </div>
           </div>
+          <div style="height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-top:6px;">
+            <div style="height:100%;width:${Math.min(100, (lvl / u.max) * 100)}%;background:linear-gradient(90deg, ${treeColor}, #fbbf24);transition:width 0.3s;"></div>
+          </div>
+          ${milestoneBadgeHtml}
         </div>
-        ${milestoneBadgeHtml}
-        <div class="upg-btns" style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;">
-          ${u.id === 'ban' && lvl > 0 ? `<button class="btn small" data-ban>${isVi ? 'Chọn khóa' : 'Pick ban'} (${banList().length}/${lvl})</button>` : ''}
-          ${u.id === 'start' && lvl > 0 ? `<button class="btn small" data-start>${isVi ? 'Chiêu khởi đầu' : 'Start'}: ${G.Moves.BY_ID[G.startMoveOf(upgDex)].name}</button>` : ''}
-          ${u.id === 'start2' && lvl > 0 ? `<button class="btn small" data-start2>${isVi ? 'Chiêu 2' : '2nd'}: ${pick2 ? G.Moves.BY_ID[pick2].name : G.T('Al azar')}</button>` : ''}
+        <div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:6px;border-top:1px solid rgba(255,255,255,0.06);padding-top:8px;">
+          ${u.id === 'ban' && lvl > 0 ? `<button class="btn small" data-ban>${isVi ? 'Khóa chiêu' : 'Ban'} (${banList().length}/${lvl})</button>` : ''}
+          ${u.id === 'start' && lvl > 0 ? `<button class="btn small" data-start>${isVi ? 'Khởi đầu' : 'Start'}: ${G.Moves.BY_ID[G.startMoveOf(upgDex)].name}</button>` : ''}
+          ${u.id === 'start2' && lvl > 0 ? `<button class="btn small" data-start2>${isVi ? 'Chiêu 2' : '2nd'}: ${pick2 ? G.Moves.BY_ID[pick2].name : (isVi ? 'Ngẫu nhiên' : 'Random')}</button>` : ''}
           <button class="btn small ${maxed ? '' : 'gold'}" data-buy data-sfx="none" ${maxed || locked || s.coins < cost ? 'disabled' : ''}
-            ${locked ? `title="${G.T('Primero compra Repertorio')}"` : ''}>
-          ${maxed ? (isVi ? 'TỐI ĐA' : 'MAX') : locked ? (isVi ? 'Cần Song Đao' : 'Needs Dual') : `<span class="coin"></span> ${cost}`}</button>
+            ${locked ? `title="${isVi ? 'Cần mở khóa kỹ năng trước' : 'Requires prerequisite skill'}"` : ''}>
+          ${maxed ? (isVi ? 'TỐI ĐA' : 'MAX') : locked ? (isVi ? 'Chưa mở' : 'Locked') : `<span class="coin"></span> ${cost}`}</button>
         </div>
       `;
 
@@ -1076,7 +1086,13 @@ G.MenuUI = (() => {
       if (u.id === 'start' && lvl > 0 && startOpen) box.appendChild(startPicker());
       if (u.id === 'start2' && lvl > 0 && start2Open) box.appendChild(start2Picker());
     }
-    box.appendChild(bindPanel());
+
+    // Gán bind panel ra toàn bộ chiều rộng
+    const bp = bindPanel();
+    if (bp) {
+      bp.style.gridColumn = '1 / -1';
+      box.appendChild(bp);
+    }
   }
 
   function bindPanel() {

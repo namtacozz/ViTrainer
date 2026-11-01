@@ -1188,3 +1188,17 @@ html:lang(zh) .btn, html:lang(zh) .chip { letter-spacing: 0; }
   border: 1px dashed rgba(255,255,255,0.2);
   background: rgba(255,255,255,0.03);
 }
+
+/* ---------- MMORPG Talent Tree Styles ---------- */
+.mmorpg-talent-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  min-height: 140px !important;
+  box-sizing: border-box !important;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.mmorpg-talent-card:hover {
+  transform: translateY(-2px);
+}
