@@ -1,4 +1,4 @@
-# PokéSurvivor
+# ViTrainer
 User-agent: *
 Allow: /
 Disallow: /tools/

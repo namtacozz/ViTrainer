@@ -75,13 +75,13 @@ def page(pid, lang, title, desc, body, ld=None):
     foot = ' · '.join(f'<a href="{rel(me, PATH[lang][p])}">{esc(t)}</a>' for p, t in FOOT[lang])
     play = 'Jugar gratis' if lang == 'es' else 'Play free'
     switch = f'<a class="lang" hreflang="{other}" href="{rel(me, PATH[other][pid])}">{"English" if lang == "es" else "Español"}</a>'
-    legal = ('PokéSurvivor es un juego de fans <b>gratuito y sin ánimo de lucro</b>, sin anuncios ni compras (sólo donaciones voluntarias para los servidores). No está afiliado a Nintendo, Creatures, '
+    legal = ('ViTrainer es un juego de fans <b>gratuito y sin ánimo de lucro</b>, sin anuncios ni compras (sólo donaciones voluntarias para los servidores). No está afiliado a Nintendo, Creatures, '
              'GAME FREAK ni The Pokémon Company; Pokémon y sus personajes son propiedad de sus respectivos dueños. Sprites de PMD SpriteCollab '
              '(CC BY-NC 4.0) · datos de PokéAPI · música y sonidos originales. No tiene ninguna criptomoneda ni token oficial: '
              'cualquiera que use su nombre es de terceros y no nos hacemos cargo de compras ni inversiones. '
              '<b>La única web oficial es pokesurvivor.com</b> y el juego es y será gratis: si alguien te pide pagar, no somos nosotros. '
              'Código bajo PolyForm Noncommercial 1.0.0 (hasta el 14-10-2026, MIT).') if lang == 'es' else (
-             'PokéSurvivor is a <b>free, non-profit</b> fan game with no ads or purchases (only voluntary donations for the servers). It is not affiliated with Nintendo, Creatures, GAME FREAK '
+             'ViTrainer is a <b>free, non-profit</b> fan game with no ads or purchases (only voluntary donations for the servers). It is not affiliated with Nintendo, Creatures, GAME FREAK '
              'or The Pokémon Company; Pokémon and its characters are owned by their respective owners. Sprites from PMD SpriteCollab (CC BY-NC 4.0) '
              '· data from PokéAPI · original music and sounds. It has no official cryptocurrency or token: any using its name '
              'belongs to third parties and we take no responsibility for purchases or investments. '
@@ -98,13 +98,14 @@ def page(pid, lang, title, desc, body, ld=None):
 <link rel="canonical" href="{SITE}{me}">
 {alts}<meta name="theme-color" content="#0a1430">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="PokéSurvivor">
+<meta property="og:site_name" content="ViTrainer">
 <meta property="og:locale" content="{'es_ES' if lang == 'es' else 'en_US'}">
 <meta property="og:url" content="{SITE}{me}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
-<meta property="og:image" content="{SITE}assets/og-image.jpg">
+<meta property="og:image" content="{SITE}assets/icons/ViTrainer.png">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="{up}assets/icons/ViTrainer.ico" sizes="any">
 <link rel="icon" href="{up}favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="{up}assets/icons/icon-48.png">
 <link rel="icon" type="image/png" sizes="96x96" href="{up}assets/icons/icon-96.png">
@@ -116,7 +117,7 @@ def page(pid, lang, title, desc, body, ld=None):
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="{rel(me, PATH[lang]['home'])}">PokéSurvivor</a>
+  <a class="brand" href="{rel(me, PATH[lang]['home'])}">ViTrainer</a>
   <nav>{nav}{switch}<a class="play" href="{rel(me, PATH[lang]['home'])}">{play}</a></nav>
 </header>
 <main>
@@ -591,17 +592,17 @@ def game_en():
     s = src.replace('<html lang="es">', '<html lang="en">')
     s = s.replace('<head>\n<meta charset="utf-8">', '<head>\n<meta charset="utf-8">\n<base href="../">', 1)
     rep = [
-        ('<title>PokéSurvivor – Juego Pokémon gratis online estilo Survivor.io</title>', '<title>PokéSurvivor – Free online Pokémon survival game (Survivor.io style)</title>'),
-        ('content="Sobrevive a hordas de Pokémon con tu compañero en este fan game gratis para navegador y móvil: 966 Pokémon, shinies, legendarios y cooperativo con amigos. Sin descargas ni anuncios."',
-         f'content="Survive hordes of Pokémon with your partner in this free fan game for browser and mobile: {N} Pokémon, shinies, legendaries and online co-op with friends. No downloads, no ads."'),
+        ('<title>ViTrainer – Trò chơi sinh tồn Pokémon trực tuyến miễn phí (kiểu Survivor.io)</title>', '<title>ViTrainer – Free online Pokémon survival game (Survivor.io style)</title>'),
+        ('content="ViTrainer – Sinh tồn cùng đồng đội Pokémon trước các đàn quái trong fan game miễn phí cho trình duyệt và di động. 1022 Pokémon, dạng Mega, shinies và tổ đội tới 8 người."',
+         f'content="ViTrainer: survive hordes of Pokémon with your partner in this free fan game for browser and mobile: {N} Pokémon, shinies, mega forms and online co-op with up to 8 friends. No downloads, no ads."'),
         ('<link rel="canonical" href="https://pokesurvivor.com/">', '<link rel="canonical" href="https://pokesurvivor.com/en/">'),
         ('<meta property="og:locale" content="es_ES">', '<meta property="og:locale" content="en_US">'),
         ('<meta property="og:url" content="https://pokesurvivor.com/">', '<meta property="og:url" content="https://pokesurvivor.com/en/">'),
-        ('<meta property="og:title" content="PokéSurvivor – Sobrevive a las hordas Pokémon">', '<meta property="og:title" content="PokéSurvivor – Survive the Pokémon hordes">'),
-        ('<meta property="og:description" content="Fan game gratis para navegador y móvil: 966 Pokémon, shinies, legendarios y cooperativo hasta 8 amigos. Sin descargas ni anuncios.">',
-         f'<meta property="og:description" content="A free fan game for browser and mobile: {N} Pokémon, shinies, legendaries and co-op with up to 8 friends. No downloads, no ads.">'),
-        ('<meta name="twitter:title" content="PokéSurvivor – Sobrevive a las hordas Pokémon">', '<meta name="twitter:title" content="PokéSurvivor – Survive the Pokémon hordes">'),
-        ('<meta name="twitter:description" content="Fan game gratis para navegador y móvil, con cooperativo hasta 8. Sin descargas ni anuncios.">',
+        ('<meta property="og:title" content="ViTrainer – Trò chơi sinh tồn Pokémon trực tuyến miễn phí">', '<meta property="og:title" content="ViTrainer – Survive the Pokémon hordes">'),
+        ('<meta property="og:description" content="ViTrainer – Fan game miễn phí trên trình duyệt và di động: 1022 Pokémon, shinies, dạng Mega và chế độ tổ đội tới 8 người chơi.">',
+         f'<meta property="og:description" content="A free fan game for browser and mobile: {N} Pokémon, shinies, mega forms and co-op with up to 8 friends. No downloads, no ads.">'),
+        ('<meta name="twitter:title" content="ViTrainer – Sinh tồn cùng Pokémon">', '<meta name="twitter:title" content="ViTrainer – Survive the Pokémon hordes">'),
+        ('<meta name="twitter:description" content="ViTrainer – Fan game miễn phí cho trình duyệt và di động, tổ đội tới 8 người. Không quảng cáo.">',
          '<meta name="twitter:description" content="A free fan game for browser and mobile, with co-op for up to 8. No downloads, no ads.">'),
         ('<p>Juego de supervivencia con Pokémon, gratis en el navegador y en el móvil.</p>', '<p>A Pokémon survival game, free in your browser and on mobile.</p>'),
         ('<p class="boot-ld">Cargando…</p>', '<p class="boot-ld">Loading…</p>'),
@@ -620,14 +621,14 @@ def game_en():
 # ================= 404, robots y sitemap =================
 def extra():
     nf = '''<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex"><title>404 · PokéSurvivor</title><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="/assets/icons/icon-48.png"><link rel="stylesheet" href="/css/pages.css"></head>
+<meta name="robots" content="noindex"><title>404 · ViTrainer</title><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="/assets/icons/icon-48.png"><link rel="stylesheet" href="/css/pages.css"></head>
 <body><header class="top"><a class="brand" href="/">PokéSurvivor</a><nav><a href="/guia/">Guía</a><a href="/en/">English</a><a class="play" href="/">Jugar gratis</a></nav></header>
 <main><article class="doc center"><h1>404 · Te has perdido en la mazmorra</h1><p class="lead">Esta página no existe. Pero las hordas siguen esperando…</p>
 <p class="lead" lang="en">This page doesn't exist. But the hordes are still waiting…</p>
 <p class="cta"><a class="btn" href="/">Volver al juego</a> <a class="btn ghost" href="/en/">Play in English</a></p></article></main></body></html>
 '''
     open(os.path.join(ROOT, '404.html'), 'w', encoding='utf-8').write(nf)
-    open(os.path.join(ROOT, 'robots.txt'), 'w', encoding='utf-8').write(f'# PokéSurvivor\nUser-agent: *\nAllow: /\nDisallow: /tools/\nDisallow: /docs/\nDisallow: /dev.html\n\nSitemap: {SITE}sitemap.xml\n')
+    open(os.path.join(ROOT, 'robots.txt'), 'w', encoding='utf-8').write(f'# ViTrainer\nUser-agent: *\nAllow: /\nDisallow: /tools/\nDisallow: /docs/\nDisallow: /dev.html\n\nSitemap: {SITE}sitemap.xml\n')
     PRI = {'home': '1.0', 'guide': '0.8', 'pokedex': '0.7', 'legends': '0.7', 'moves': '0.6', 'types': '0.6', 'shinies': '0.6', 'achievements': '0.5', 'items': '0.5', 'news': '0.5', 'support': '0.4'}
     urls = []
     for pid in PAGES:
