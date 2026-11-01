@@ -381,12 +381,12 @@ G.HUD = (() => {
       const cDex = pl.dex;
       const curLv = pl.level || 1;
 
-      // 1. Zygarde đặc biệt: 10% (Nv. 1 - 9) -> 50% (Nv. 10 - 24) -> 100% (Nv. 25+, Core Enforcer) -> Mega (Nv. 50 + 3500 quái)
+      // 1. Zygarde đặc biệt: 10% (Nv. 1 - 24) -> 50% (Nv. 25 - 49) -> 100% (Nv. 50+, Core Enforcer) -> Mega (Nv. 50 + 3500 quái)
       if (bDex === 718) {
         if (pl.isMega && (cDex === 10121 || pl.megaId === 10121)) {
           return { dex: 10121, label: 'Hoàn thiện', isFinal: true };
         }
-        if (cDex === 10120 || curLv >= 25) {
+        if (cDex === 10120 || curLv >= 50) {
           const kills = (pl && pl.kills) || 0;
           const reqLv = 50;
           const ready = kills >= 3500 && curLv >= reqLv;
@@ -397,10 +397,10 @@ G.HUD = (() => {
             icon: 'megaBadge'
           };
         }
-        if (cDex === 718 || curLv >= 10) {
-          return { dex: 10120, exactDex: true, label: `Nv. ${curLv}/25` };
+        if (cDex === 718 || curLv >= 25) {
+          return { dex: 10120, exactDex: true, label: `Nv. ${curLv}/50` };
         }
-        return { dex: 718, exactDex: true, label: `Nv. ${curLv}/10` };
+        return { dex: 718, exactDex: true, label: `Nv. ${curLv}/25` };
       }
 
       // 2. Huyền thoại tiến hóa qua chiêu độc quyền + (EXCLUSIVE_PLUS_EVO)

@@ -1196,7 +1196,7 @@ G.Player = class Player {
 
   triggerMegaIfAvailable() {
     if (this.isMega) return;
-    const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
+    const megas = (typeof G !== 'undefined' && G.getMegasFor) ? (G.getMegasFor(this.dex).length ? G.getMegasFor(this.dex) : G.getMegasFor(this.baseDex)) : [];
     if (!megas || megas.length === 0) return;
     if (megas.length === 1) {
       this.megaEvolve(megas[0].id);

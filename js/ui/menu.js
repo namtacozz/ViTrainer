@@ -502,16 +502,16 @@ G.MenuUI = (() => {
               <div class="evo-lvl">Nv. 1</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%): Biến đổi Mãng Xà">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%): Biến đổi Mãng Xà (Nv. 25)">
               <div class="evo-cv-wrap" data-dex="718" data-exact-dex="1" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 50%</div>
-              <div class="evo-lvl">Nv. 10</div>
+              <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Nv. 25</div>
             </div>
             <span class="evo-arrow">→</span>
-            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10120 ? ' current' : ''}" data-dex="10120" title="Zygarde Hoàn Thiện (100%): Tặng Core Enforcer">
+            <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10120 ? ' current' : ''}" data-dex="10120" title="Zygarde Hoàn Thiện (100%): Tặng Core Enforcer (Nv. 50)">
               <div class="evo-cv-wrap" data-dex="10120" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 100%</div>
-              <div class="evo-lvl" style="color:var(--gold);font-weight:bold;">Nv. 25</div>
+              <div class="evo-lvl" style="color:#10b981;font-weight:bold;">Nv. 50</div>
             </div>
             <span class="evo-arrow">→</span>
             <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 10121 ? ' current' : ''}" data-mega-id="10121" data-mega-dex="10121" title="Mega Zygarde (Nv. 50 & 3500 quái): Thức tỉnh Nihil Light">
@@ -519,6 +519,9 @@ G.MenuUI = (() => {
               <div class="evo-name">M-Zygarde</div>
               <div class="evo-lvl" style="color:#f43f5e;font-weight:bold;">Mega (Nv. 50)</div>
             </div>
+          </div>
+          <div style="font-size:10px;color:#94a3b8;text-align:center;margin-top:6px;letter-spacing:0.3px;">
+            Mốc thức tỉnh: Nv. 15 Thức tỉnh I · Nv. 30 Apex (+)
           </div>
         </div>
       `;
