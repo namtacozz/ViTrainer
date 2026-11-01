@@ -142,6 +142,17 @@ G.Combat = (() => {
     }
     G.FX.spark(pl.x + Math.cos(pl.aim) * pl.r, pl.y - G.LIFT + Math.sin(pl.aim) * pl.r,
                col, Math.cos(pl.aim), Math.sin(pl.aim), 3);
+    // Fusion Flare +++ (Reshiram): Cầu lửa bộc phát quầng nhật hoa rực lửa xung quanh Reshiram và bắn thêm 2 cầu lửa phụ
+    if (m.id === 'fusion-flare' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      G.FX.burst(pl.x, pl.y, '#ef4444', 32, 260);
+      G.FX.ring(pl.x, pl.y, pl.r * 1.5, 150, '#f97316', 0.6, 8);
+      for (const e of G.EnemyMgr.queryCircle(pl.x, pl.y, 150)) {
+        hit(pl, e, m.dmg * pl.atkFor(m) * 0.85, '#ef4444', e.x - pl.x, e.y - pl.y, 120, m);
+      }
+      [-0.35, 0.35].forEach(angOff => {
+        shot(pl, m, pl.aim + angOff, '#f97316', vis);
+      });
+    }
   }
 
   function nova(pl, m) {
@@ -336,6 +347,18 @@ G.Combat = (() => {
         // (Una copia del anfitrión no lleva los estados: vienen en net.st.)
         const hex = m.hex && (cur.burn > 0 || cur.poison > 0 || cur.slow > 0 || (cur.net && cur.net.st & 11)) ? m.hex : 1;
         hit(pl, cur, m.dmg * pl.atkFor(m) * k * hex, col, tx - fx, ty - fy, 0, m);
+        // Freeze Shock +++ (Black Kyurem): Bão lôi băng bộc phá vòng điện lạnh tuyệt đối, bắn ra 4 luồng tinh thể băng lôi đâm xuyên 4 hướng
+        if (m.id === 'freeze-shock' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+          G.FX.ring(tx, ty, 8, 95, '#38bdf8', 0.4, 6);
+          G.FX.burst(tx, ty, '#0284c7', 16, 200);
+          for (let ang = 0; ang < 6.28; ang += 1.57) {
+            G.Projectiles.spawn(Object.assign({
+              x: tx, y: ty, vx: Math.cos(ang) * 320, vy: Math.sin(ang) * 320,
+              dmg: m.dmg * pl.atkFor(m) * 0.75, r: 10, life: 0.65, pierce: 4, color: '#38bdf8',
+              hits: new Set(), vis, ghost, owner: pl, slow: 0.8, stun: 0.8
+            }, payload(m)));
+          }
+        }
       }
       k *= 0.85;
       fx = tx; fy = ty;
@@ -448,6 +471,28 @@ G.Combat = (() => {
         hit(pl, e, m.dmg * pl.atkFor(m) * 1.5, '#f43f5e', e.x - pl.x, e.y - pl.y, 280, m);
       }
     }
+        // Fusion Bolt +++ (Zekrom): Điểm kết thúc cú lướt để lại điện trường ion hóa tồn tại 3.5s và buff +25% tốc chạy/đánh
+    if (m.id === 'fusion-bolt' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      fields.push({
+        kind: 'patch',
+        owner: pl,
+        ghost,
+        m,
+        col: '#38bdf8',
+        vis,
+        x: pl.x,
+        y: pl.y,
+        t: 0,
+        life: 3.5,
+        r: 85,
+        tick: 0.35,
+        dmg: m.dmg * pl.atkFor(m) * 0.5,
+        stun: 0.4
+      });
+      if (pl.addBuff) pl.addBuff('spd', 0.25, 4.0, 1);
+      G.FX.ring(pl.x, pl.y, 12, 170, '#38bdf8', 0.6, 8);
+      G.FX.burst(pl.x, pl.y, '#0ea5e9', 30, 260);
+    }
     G.Camera.kick(0.12);
   }
 
@@ -520,6 +565,32 @@ G.Combat = (() => {
     fields.push({ kind: 'vortex', owner: pl, ghost, m, col, vis, x, y, t: 0, life: m.dur || 2.6, r: m.radius,
                   tick: 0.15, dmg: m.dmg * pl.atkFor(m), pull: m.pull || 140 });
     G.FX.ring(x, y, m.radius, 6, col, 0.4, 3);
+    // Ice Burn +++ (White Kyurem): Tạo 3 vùng lửa băng vĩnh cửu xung quanh tâm xoáy vừa đốt cháy vừa làm chậm
+    if (m.id === 'ice-burn' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      for (let p = 0; p < 3; p++) {
+        const pAng = (p / 3) * 6.28 + Math.random() * 0.5;
+        const pDist = G.U.rand(25, (m.radius || 100) * 0.7);
+        fields.push({
+          kind: 'patch',
+          owner: pl,
+          ghost,
+          m,
+          col: '#38bdf8',
+          vis,
+          x: x + Math.cos(pAng) * pDist,
+          y: y + Math.sin(pAng) * pDist,
+          t: 0,
+          life: 3.8,
+          r: 45,
+          tick: 0.35,
+          dmg: m.dmg * pl.atkFor(m) * 0.45,
+          burn: 1.5,
+          slow: 0.55
+        });
+      }
+      G.FX.ring(x, y, 12, (m.radius || 100) * 1.3, '#f97316', 0.6, 6);
+      G.FX.burst(x, y, '#38bdf8', 25, 200);
+    }
     // Como mucho dos a la vez por jugador.
     const mine = fields.filter(f => f.kind === 'vortex' && f.owner === pl && !f.gone);
     for (const f of mine.slice(0, Math.max(0, mine.length - 2))) f.gone = true;
@@ -705,6 +776,30 @@ G.Combat = (() => {
           G.FX.burst(f.x, f.y - 6, f.col, 12, 170);
           if (G.Camera.sees(f.x, f.y, 40)) { G.Audio.sfx('break'); G.Camera.kick(0.12); }
           blast(f, f.r);
+
+          // Precipice Blades +++ (Primal Groudon): Cột dung nham bộc phát để lại vết nứt nham thạch thiêu đốt và làm chậm
+          if (f.m && f.m.id === 'precipice-blades' && (f.m.evoTier >= 3 || (f.m.name && f.m.name.includes('+++')))) {
+            fields.push({
+              kind: 'patch',
+              owner: f.owner,
+              ghost: f.ghost,
+              m: f.m,
+              col: '#ea580c',
+              vis: f.vis,
+              x: f.x,
+              y: f.y,
+              t: 0,
+              life: 3.5,
+              r: f.r * 0.9,
+              tick: 0.35,
+              dmg: f.dmg * 0.5,
+              burn: 1.5,
+              slow: 0.45
+            });
+            G.FX.ring(f.x, f.y, 10, f.r * 1.35, '#f97316', 0.5, 6);
+            G.FX.burst(f.x, f.y - 8, '#ea580c', 22, 220);
+          }
+
           fields.splice(i, 1);
         }
       } else if (f.kind === 'turret') {

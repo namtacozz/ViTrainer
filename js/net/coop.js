@@ -166,7 +166,7 @@ G.Coop = (() => {
   const mySum = () => (api && api.mySum ? api.mySum() : null);
   function cleanSum(s) {
     if (!s || typeof s !== 'object') return null;
-    const dex = Math.floor(num(s.dex, 0, 0, 5000));
+    const dex = Math.floor(num(s.dex, 0, 0, 50000));
     if (!G.DEX_BY[dex]) return null;
     const mv = (Array.isArray(s.mv) ? s.mv : []).slice(0, 8)
       .filter(m => Array.isArray(m) && typeof m[0] === 'string' && G.Moves.BY_ID[m[0]])
@@ -198,7 +198,7 @@ G.Coop = (() => {
              rev: num(a[12], 0, 0, 60), ch: a[13] === undefined ? undefined : a[13] ? 1 : 0, ld: num(a[14], 0, 0, 1e9),
              wa: typeof a[15] === 'string' ? a[15].slice(0, 64) : '', zm: num(a[16], 1, 1, 1.5) };
     if (a.length >= 19) {
-      res.dex = num(a[17], 0, 0, 5000);
+      res.dex = num(a[17], 0, 0, 50000);
       res.mega = a[18] ? 1 : 0;
     }
     return res;

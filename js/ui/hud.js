@@ -404,18 +404,22 @@ G.HUD = (() => {
 
       // 2. Huyền thoại tiến hóa qua chiêu độc quyền + (EXCLUSIVE_PLUS_EVO)
       const EXCLUSIVE_PLUS_EVO = {
-        384: { move: 'dragon-ascent', targetDex: 10034, name: 'Dragon Ascent' },
-        382: { move: 'origin-pulse', targetDex: 10032, name: 'Origin Pulse' },
-        383: { move: 'precipice-blades', targetDex: 10033, name: 'Precipice Blades' },
+        384: { move: 'dragon-ascent', targetDex: 10079, name: 'Dragon Ascent' },
+        382: { move: 'origin-pulse', targetDex: 10077, name: 'Origin Pulse' },
+        383: { move: 'precipice-blades', targetDex: 10078, name: 'Precipice Blades' },
         483: { move: 'roar-of-time', targetDex: 10008, name: 'Roar of Time' },
         484: { move: 'spacial-rend', targetDex: 10009, name: 'Spacial Rend' },
-        487: { move: 'shadow-force', targetDex: 10010, name: 'Shadow Force' },
+        487: { move: 'shadow-force', targetDex: 10007, name: 'Shadow Force' },
         888: { move: 'behemoth-blade', targetDex: 10188, name: 'Behemoth Blade' },
         889: { move: 'behemoth-bash', targetDex: 10189, name: 'Behemoth Bash' },
         646: { move: 'glaciate', targetDex: 10022, name: 'Glaciate' },
         800: { move: 'prismatic-laser', targetDex: 10157, name: 'Prismatic Laser' },
         801: { move: 'fleur-cannon', targetDex: 10801, name: 'Fleur Cannon' },
-        807: { move: 'plasma-fists', targetDex: 10807, name: 'Plasma Fists' }
+        807: { move: 'plasma-fists', targetDex: 10807, name: 'Plasma Fists' },
+        643: { move: 'fusion-flare', targetDex: 643, name: 'Fusion Flare' },
+        644: { move: 'fusion-bolt', targetDex: 644, name: 'Fusion Bolt' },
+        10022: { move: 'freeze-shock', targetDex: 10022, name: 'Freeze Shock' },
+        10023: { move: 'ice-burn', targetDex: 10023, name: 'Ice Burn' }
       };
 
       const leg = EXCLUSIVE_PLUS_EVO[bDex];

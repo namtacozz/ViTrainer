@@ -36,16 +36,20 @@ G.RunQuests = (() => {
 
     // 1. Kiểm tra Dạng Huyền Thoại / Đặc biệt
     const LEGEND_EXCLUSIVE_QUESTS = {
-      384: { move: 'dragon-ascent', targetDex: 10034, name: 'Mega Rayquaza', moveName: 'Dragon Ascent' },
-      382: { move: 'origin-pulse', targetDex: 10032, name: 'Primal Kyogre', moveName: 'Origin Pulse' },
-      383: { move: 'precipice-blades', targetDex: 10033, name: 'Primal Groudon', moveName: 'Precipice Blades' },
+      384: { move: 'dragon-ascent', targetDex: 10079, name: 'Mega Rayquaza', moveName: 'Dragon Ascent' },
+      382: { move: 'origin-pulse', targetDex: 10077, name: 'Primal Kyogre', moveName: 'Origin Pulse' },
+      383: { move: 'precipice-blades', targetDex: 10078, name: 'Primal Groudon', moveName: 'Precipice Blades' },
       483: { move: 'roar-of-time', targetDex: 10008, name: 'Origin Dialga', moveName: 'Roar of Time' },
       484: { move: 'spacial-rend', targetDex: 10009, name: 'Origin Palkia', moveName: 'Spacial Rend' },
-      487: { move: 'shadow-force', targetDex: 10010, name: 'Origin Giratina', moveName: 'Shadow Force' },
+      487: { move: 'shadow-force', targetDex: 10007, name: 'Origin Giratina', moveName: 'Shadow Force' },
       888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian Crowned', moveName: 'Behemoth Blade' },
       889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta Crowned', moveName: 'Behemoth Bash' },
       646: { move: 'glaciate', targetDex: 10022, name: 'Black Kyurem', moveName: 'Băng Thần' },
-      800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', moveName: 'Quang Phổ' }
+      800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', moveName: 'Quang Phổ' },
+      643: { move: 'fusion-flare', targetDex: 643, name: 'Reshiram', moveName: 'Fusion Flare' },
+      644: { move: 'fusion-bolt', targetDex: 644, name: 'Zekrom', moveName: 'Fusion Bolt' },
+      10022: { move: 'freeze-shock', targetDex: 10022, name: 'Black Kyurem', moveName: 'Freeze Shock' },
+      10023: { move: 'ice-burn', targetDex: 10023, name: 'White Kyurem', moveName: 'Ice Burn' }
     };
 
     if (LEGEND_EXCLUSIVE_QUESTS[baseDex]) {
@@ -390,7 +394,7 @@ G.RunQuests = (() => {
         G.Game.item(q.rewardItem);
       }
     } else if (q.rewardType === 'rayquaza_mega') {
-      if (pl.megaEvolve) pl.megaEvolve(10034);
+      if (pl.megaEvolve) pl.megaEvolve(10079);
       if (G.UI && G.UI.toast) G.UI.toast('Rayquaza đã thức tỉnh thành Chúa Tể Bầu Trời Mega Rayquaza!', 4500);
     } else if (q.rewardType === 'zygarde_mega') {
       if (pl.megaEvolve) pl.megaEvolve(10121);

@@ -195,6 +195,30 @@ G.Player = class Player {
   get regen() { return this.regenFlat + this.buffs.regen.n * this.buffs.regen.amount; }
 
   // ---------------- movimientos ----------------
+  learnOrReplaceMove(id, replaceId) {
+    if (this.hasMove(id)) return;
+    if (this.slots.length < this.maxMoves) {
+      this.addMove(id);
+      return;
+    }
+    const targetId = replaceId || (this.moves[0] ? this.moves[0].id : null);
+    for (let i = 0; i < this.slots.length; i++) {
+      const g = this.slots[i];
+      const list = Array.isArray(g) ? g : [g];
+      const foundIdx = list.findIndex(m => m && (m.id === targetId || (m.def && m.def.id === targetId)));
+      if (foundIdx >= 0) {
+        const oldLvl = list[foundIdx].lvl || 1;
+        const newInst = G.Moves.instance(id, oldLvl);
+        list[foundIdx] = newInst;
+        const mIdx = this.moves.findIndex(m => m && (m.id === targetId || (m.def && m.def.id === targetId)));
+        if (mIdx >= 0) this.moves[mIdx] = newInst;
+        this.arrange();
+        return;
+      }
+    }
+    this.addMove(id);
+  }
+
   addMove(id) {
     if (this.slots.length >= this.maxMoves || this.hasMove(id)) return false;
     const m = G.Moves.instance(id, 1);
@@ -399,9 +423,7 @@ G.Player = class Player {
       G.FX.ring(this.x, this.y, 6, 70, '#c9b48a', 0.5, 4);
     }
     if (ab && ab.hurt && this.hp > 0) ab.hurt(this, type, cls);
-    if (this.hp > 0 && this.hp <= this.maxHp * 0.5 && (this.dex === 718 || this.baseDex === 718) && !this.isMega) {
-      this.triggerZygardeComplete();
-    }
+// Zygarde tiến hóa chuẩn theo cấp độ (10% Nv.1 -> 50% Nv.25 -> 100% Nv.50 -> Mega), không tự nhảy dạng khi tuột máu
     if (this.hp <= 0) {
       this.hp = 0; this.dead = true;
       this.anim.play('Faint', { hold: true });
@@ -622,15 +644,21 @@ G.Player = class Player {
 
     // BẢNG TIẾN HÓA ĐẶC BIỆT QUA CHIÊU ĐỘC QUYỀN + (Rạng 1 +, không cần đánh quái)
     const EXCLUSIVE_PLUS_EVO = {
-      384: { move: 'dragon-ascent', targetDex: 10034, name: 'Mega Rayquaza', title: 'TIẾN HÓA MEGA', desc: 'Dragon Ascent thăng hoa lên Rạng +: Rayquaza thức tỉnh thành Chúa Tể Bầu Trời Mega Rayquaza!' },
-      382: { move: 'origin-pulse', targetDex: 10032, name: 'Primal Kyogre', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Origin Pulse thăng hoa lên Rạng +: Kyogre thức tỉnh sức mạnh Đại Dương Nguyên Thủy!' },
-      383: { move: 'precipice-blades', targetDex: 10033, name: 'Primal Groudon', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Precipice Blades thăng hoa lên Rạng +: Groudon thức tỉnh sức mạnh Lục Địa Nguyên Thủy!' },
+      384: { move: 'dragon-ascent', targetDex: 10079, name: 'Mega Rayquaza', title: 'TIẾN HÓA MEGA', desc: 'Dragon Ascent thăng hoa lên Rạng +: Rayquaza thức tỉnh thành Chúa Tể Bầu Trời Mega Rayquaza!' },
+      382: { move: 'origin-pulse', targetDex: 10077, name: 'Primal Kyogre', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Origin Pulse thăng hoa lên Rạng +: Kyogre thức tỉnh sức mạnh Đại Dương Nguyên Thủy!' },
+      383: { move: 'precipice-blades', targetDex: 10078, name: 'Primal Groudon', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Precipice Blades thăng hoa lên Rạng +: Groudon thức tỉnh sức mạnh Lục Địa Nguyên Thủy!' },
       483: { move: 'roar-of-time', targetDex: 10008, name: 'Origin Dialga', title: 'DẠNG NGUYÊN BẢN', desc: 'Roar of Time thăng hoa lên Rạng +: Dialga trở về hình thái Chúa Tể Thời Gian nguyên bản!' },
       484: { move: 'spacial-rend', targetDex: 10009, name: 'Origin Palkia', title: 'DẠNG NGUYÊN BẢN', desc: 'Spacial Rend thăng hoa lên Rạng +: Palkia trở về hình thái Chúa Tể Không Gian nguyên bản!' },
-      487: { move: 'shadow-force', targetDex: 10010, name: 'Origin Giratina', title: 'DẠNG NGUYÊN BẢN', desc: 'Shadow Force thăng hoa lên Rạng +: Giratina hiển lộ chân thân Chúa Tể Thế Giới Hỗn Mang!' },
+      487: { move: 'shadow-force', targetDex: 10007, name: 'Origin Giratina', title: 'DẠNG NGUYÊN BẢN', desc: 'Shadow Force thăng hoa lên Rạng +: Giratina hiển lộ chân thân Chúa Tể Thế Giới Hỗn Mang!' },
       888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian (Crowned Sword)', title: 'GƯƠM BÁ VƯƠNG', desc: 'Behemoth Blade thăng hoa lên Rạng +: Zacian ngậm Thánh Kiếm thức tỉnh hình hài Hoàng Gia!' },
       889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta (Crowned Shield)', title: 'KHIÊN HỘ QUỐC', desc: 'Behemoth Bash thăng hoa lên Rạng +: Zamazenta khoác Thánh Khiên thức tỉnh hình hài Hoàng Gia!' },
-      646: { move: 'glaciate', targetDex: 10022, name: 'Black Kyurem', title: 'HỢP THỂ DNA', desc: 'Băng Thần thăng hoa lên Rạng +: Hợp nhất sức mạnh rồng đen tối thượng!' },
+      646: {
+        move: 'glaciate',
+        branches: [
+          { targetDex: 10022, name: 'Black Kyurem', title: 'HỢP THỂ DNA (Zekrom)', desc: 'Glaciate thăng hoa lên Rạng +: Thức tỉnh Black Kyurem và nhận chiêu độc quyền Freeze Shock!', grantMove: 'freeze-shock' },
+          { targetDex: 10023, name: 'White Kyurem', title: 'HỢP THỂ DNA (Reshiram)', desc: 'Glaciate thăng hoa lên Rạng +: Thức tỉnh White Kyurem và nhận chiêu độc quyền Ice Burn!', grantMove: 'ice-burn' }
+        ]
+      },
       800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', title: 'ÁNH SÁNG TỐI THƯỢNG', desc: 'Quang phổ thăng hoa lên Rạng +: Necrozma phục hồi toàn vẹn ánh sáng thần thánh!' },
       801: { move: 'fleur-cannon', targetDex: 10801, name: 'Mega Magearna', title: 'TIẾN HÓA MEGA', desc: 'Fleur Cannon thăng hoa lên Rạng +: Trái Tim Linh Hồn khai mở sức mạnh cơ khí tối thượng!' },
       807: { move: 'plasma-fists', targetDex: 10807, name: 'Overdrive Zeraora', title: 'QUÁ TẢI LÔI ĐIỆN', desc: 'Plasma Fists thăng hoa lên Rạng +: Điện tích vượt ngưỡng kích hoạt dạng Overdrive!' }
@@ -656,17 +684,20 @@ G.Player = class Player {
       }
 
       if (hasPlusMove) {
-        this.promptEvo([{
-          dex: legCfg.targetDex,
-          title: legCfg.name,
-          tag: legCfg.title,
+        const opts = legCfg.branches || [legCfg];
+        const cards = opts.map(b => ({
+          dex: b.targetDex,
+          title: b.name,
+          tag: b.title,
           color: '#22c55e',
-          desc: legCfg.desc,
+          desc: b.desc,
           apply: () => {
-            this.megaEvolve(legCfg.targetDex);
-            if (G.UI && G.UI.toast) G.UI.toast(legCfg.name + ' đã thức tỉnh thành công!', 4500);
+            this.megaEvolve(b.targetDex);
+            if (b.grantMove) this.learnOrReplaceMove(b.grantMove, legCfg.move);
+            if (G.UI && G.UI.toast) G.UI.toast(b.name + ' đã thức tỉnh thành công!', 4500);
           }
-        }]);
+        }));
+        this.promptEvo(cards);
         return;
       }
     }
@@ -1000,6 +1031,8 @@ G.Player = class Player {
   }
 
   triggerZygardeComplete() {
+    // Vô hiệu hóa kích hoạt tự phát, Zygarde chỉ tiến hóa theo mốc cấp độ
+    return;
     if (this.isMega || (this.dex !== 718 && this.baseDex !== 718)) return;
     this.megaEvolve(10120);
     this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.5);

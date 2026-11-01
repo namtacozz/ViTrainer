@@ -278,7 +278,18 @@ G.Sprites = (() => {
       }
       const frame = own ? this.frame : 0;
       if (!m || !s || !s.ready) {
-        // Respaldo: bolita, por si falta el fichero.
+        // Dự phòng khi đang tải sprite dạng mới: hiển thị tạm dạng gốc/dạng trước thay vì hiện cục tròn vàng
+        const base = (typeof G !== 'undefined' && G.getBaseDex) ? G.getBaseDex(this.dex) : null;
+        if (base && base !== this.dex) {
+          const fbSheet = sheet(base, 'Idle', this.shiny);
+          const fbMeta = animMeta(base, 'Idle', this.shiny);
+          if (fbSheet && fbSheet.ready && fbMeta) {
+            const sx = 0, sy = 0;
+            const dx = Math.round(x - fbMeta.ax * k), dy = Math.round(y - fbMeta.ay * k);
+            ctx.drawImage(fbSheet.img, sx, sy, fbMeta.w, fbMeta.h, dx, dy, fbMeta.w * k, fbMeta.h * k);
+            return;
+          }
+        }
         ctx.fillStyle = opts.color || '#6b7a94';
         ctx.beginPath(); ctx.arc(x, y - 12 * k, 8 * k, 0, 6.2832); ctx.fill();
         return;
