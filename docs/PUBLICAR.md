@@ -1,72 +1,66 @@
-# Guía de Publicación y Despliegue de PokéSurvivor
+# Quy Trình Biên Dịch, Kiểm Thử & Xuất Bản — ViTrainer
 
-Normas fijas y flujo oficial de publicación del proyecto **PokéSurvivor**.
-
----
-
-## 1. Reglas Estrictas de Edición y Despliegue
-
-1. **Nunca editar `index.html`**:
-   - `index.html` es un archivo generado automáticamente por `tools/build.js`.
-   - Todas las modificaciones de estructura HTML, meta-etiquetas o llamadas a scripts se realizan exclusivamente en **`dev.html`**.
-2. **Ciclo de Compilación y Publicación**:
-   Antes de subir cualquier cambio o versión nueva, ejecutar obligatoriamente:
-   ```bash
-   node tools/build_langs.js
-   node tools/build.js && node tools/export_data.js && python tools/make_seo_pages.py
-   ```
-   - `build_langs.js`: Empaqueta los diccionarios de idiomas en `js/lang/*.js`.
-   - `build.js`: Procesa `dev.html`, ofusca y minifica los scripts en `js/app.min.js`, genera `index.html` y actualiza la huella de versión en **`version.json`**.
-   - `export_data.js`: Exporta los datos consolidados de Pokémon, movimientos y objetos para SEO.
-   - `make_seo_pages.py`: Genera las páginas estáticas en español e inglés, `sitemap.xml` y páginas de error.
-3. **Verificación de Pruebas**:
-   ```bash
-   node --test tests/i18n.test.cjs
-   ```
-   Asegura que no falte ninguna clave de traducción ni se rompan contratos de marcadores de posición (`{x}`).
-4. **Commits y Control de Versiones**:
-   - **Prohibido**: Incluir `"Co-Authored-By"` o cualquier firma o atribución de IA en los mensajes de commit.
-   - Realizar `git push origin main` únicamente cuando el propietario del proyecto lo solicite o tras la validación final.
+Tài liệu quy chuẩn bắt buộc của chủ sở hữu dự án (**ViTeam**) về quy trình phát triển, biên dịch, kiểm thử tự động và xuất bản trò chơi **ViTrainer**.
 
 ---
 
-## 2. Actualización Automática de Jugadores (`version.json` & `updater.js`)
+## 1. Các Quy Tắc Bất Khả Xâm Phạm (STRICT RULES)
 
-Todos los jugadores activos deben recibir la versión nueva automáticamente sin perder su progreso:
-- `js/core/updater.js` consulta `version.json` cada **5 minutos**:
-  - **Fuera de partida** (menú principal, lobby de cooperativo, tienda Kecleon, ajustes): Muestra un aviso de 5 segundos y recarga la página. Si el jugador está escribiendo o en el gacha, espera a que termine.
-  - **En partida**: No interrumpe la run en curso. Al terminar la partida y registrarse los progresos, la página se recarga al volver al menú.
-  - Antes de recargar, sube a la nube cualquier dato pendiente de sincronización.
-- **Importante**: No eliminar `updater.js` ni deshabilitar la escritura de `version.json` en `tools/build.js`.
-
----
-
-## 3. Novedades y Registro de Cambios (`changelog.js`)
-
-Cada adición de contenido o corrección de fallos debe registrarse obligatoriamente en `js/data/changelog.js`:
-- En español e inglés, bajo la fecha de hoy (`new`, `chg`, `fix`).
-- **Exclusión**: Los cambios internos de infraestructura, servidores, base de datos o costes **NO** van en el changelog visible para los jugadores.
-
----
-
-## 4. Infraestructura y Servidores Gratuitos (Zero Cost)
-
-- **Firebase**:
-  - Proyecto oficial: **`pokesurvivor-free`** (autenticación estándar con cuentas gratuitas ilimitadas).
-  - **Nunca activar "Identity Platform"** ni funciones de bloqueo, MFA o "Actualizar para habilitar" (suponen costes por usuario activo).
-  - El proyecto antiguo `pokesurvivor-jpter` con facturación fue eliminado el 13-10-2026.
-- **Cloudflare**:
-  - Exclusivamente para el DNS gratuito del dominio `pokesurvivor.com`.
-  - Sin Cloudflare Workers de pago ni Cloudflare Realtime/TURN (eliminados el 15-10-2026).
-  - El modo cooperativo opera 100% mediante conexión directa P2P (WebRTC DataChannels) utilizando los servidores STUN gratuitos de Google (`stun:stun.l.google.com:19302`).
-- **Modo Mantenimiento**:
-  - Se activa mediante la constante `MAINTENANCE` en `js/main.js`.
-  - Añadiendo `?dev` a la URL se puede acceder para pruebas internas durante periodos de mantenimiento.
+1. **Tuyệt đối KHÔNG chỉnh sửa trực tiếp `index.html`**:
+   - `index.html` là tệp tin được sinh ra tự động từ `tools/build.js` thông qua quá trình nén Terser và Javascript Obfuscator. Mọi chỉnh sửa thủ công vào `index.html` sẽ bị ghi đè và biến mất hoàn toàn.
+   - Luôn luôn chỉnh sửa trên file nguồn gốc: **[`dev.html`](file:///e:/GameMaking/pokesurvivor/dev.html)**.
+2. **Cấu trúc phân vùng file mã nguồn**:
+   - Giao diện HTML và bố cục khung: `dev.html`.
+   - Dữ liệu tĩnh: Thư mục `js/data/` (`moves.js`, `pokedex.js`, `megas.js`, `items.js`, `enemies.js`, `lang-*.js`).
+   - Động cơ thực thể: Thư mục `js/entities/` (`player.js`, `enemy.js`...).
+   - Động cơ hệ thống: Thư mục `js/systems/` (`combat.js`, `levelup.js`, `rift.js`, `judgment.js`, `hazards.js`...).
+   - Giao diện người dùng: Thư mục `js/ui/` (`menu.js`, `settings-ui.js`, `login.js`, `run-ui.js`...).
+   - Kết nối mạng: Thư mục `js/net/` (`coop.js`, `net-codec.js`...).
+3. **Tuyệt đối KHÔNG đính kèm chữ ký AI**:
+   - Không đưa "Co-Authored-By", AI watermark, hay bất kỳ nội dung nhận diện AI nào vào git commit message.
+4. **Bảo toàn cơ chế tự động cập nhật của người chơi**:
+   - Không được sửa đổi hoặc xóa `js/core/updater.js` và logic ghi mã phiên bản `version.json` trong `tools/build.js`.
 
 ---
 
-## 5. Licencias y Normativa de Sprites
+## 2. Chuỗi Pipeline Biên Dịch Đóng Gói (Build Pipeline)
 
-- Los sprites proceden de la comunidad *SpriteCollab* bajo licencia **CC BY-NC 4.0** (Uso No Comercial).
-- **Prohibido**: Añadir anuncios publicitarios, suscripciones de pago, microtransacciones, venta de monedas o paquetes de pago.
-- No alterar los archivos de licencia del repositorio.
+Sau khi hoàn tất chỉnh sửa mã nguồn hoặc dữ liệu, lập trình viên/Agent **BẮT BUỘC** phải chạy toàn bộ lệnh sau theo thứ tự:
+
+```bash
+node tools/build.js && node tools/export_data.js && python tools/make_seo_pages.py
+```
+
+### Chức năng của từng bước:
+1. **`node tools/build.js`**:
+   - Gộp toàn bộ 88 scripts từ `dev.html`.
+   - Nén mã nguồn bằng Terser.
+   - Xáo trộn bảo vệ mã (Javascript Obfuscator) tạo thành `js/app.min.js`.
+   - Đóng gói toàn diện ra `index.html`.
+   - Sinh mã băm phiên bản mới và ghi vào `version.json` (ví dụ: `v=533bbb059e`).
+2. **`node tools/export_data.js`**:
+   - Đồng bộ dữ liệu tĩnh: 1021 Pokémon, 139 chiêu thức, 21 vật phẩm trang bị, 139 thành tựu, 18 đấu trường và hơn 1900 bản dịch.
+3. **`python tools/make_seo_pages.py`**:
+   - Tự động đồng bộ và sinh mới 20 trang SEO tĩnh, phiên bản tiếng Anh tại thư mục `en/`, trang lỗi 404, file `robots.txt` và sơ đồ trang web `sitemap.xml`.
+
+---
+
+## 3. Quy Trình Kiểm Thử Bắt Buộc Trước Khi Commit (Pre-Commit Testing)
+
+Toàn bộ các bộ kiểm thử tự động phải vượt qua (pass) 100%:
+
+```bash
+node --test tests/i18n.test.cjs tests/buffs.test.cjs tests/net.test.cjs
+```
+
+- **`tests/i18n.test.cjs`**: Kiểm tra tính toàn vẹn của từ điển Tiếng Việt, Tiếng Anh, các tham số placeholder và bộ đệm Canvas.
+- **`tests/buffs.test.cjs`**: Kiểm tra tính chính xác của các chỉ số buff/debuff, hiệu ứng trang bị Assault Vest, Eviolite và cơ chế cộng dồn giáp.
+- **`tests/net.test.cjs`**: Kiểm tra 38 bài test giao thức mạng nhị phân WebRTC, xử lý gói tin, kết nối lại khi mất mạng và đồng bộ Co-op 8 người.
+
+---
+
+## 4. Cơ Chế Tự Động Cập Nhật Cho Người Chơi (Live Updater)
+
+- Module `js/core/updater.js` kiểm tra file `version.json` theo chu kỳ mỗi **5 phút**:
+  - **Ở ngoài trận đấu (Sảnh chính / Menu / Phòng chờ Co-op 8 người)**: Khi có bản build mới, hệ thống sẽ hiển thị thanh thông báo đếm ngược 5 giây và trang web tự động tải lại phiên bản mới nhất mà không làm mất dữ liệu tài khoản hay tiến trình của người chơi.
+  - **Khi đang trong trận đấu**: Hệ thống hoàn toàn không can thiệp để tránh làm gián đoạn trải nghiệm của người chơi. Quá trình cập nhật sẽ diễn ra ngay sau khi trận đấu kết thúc.

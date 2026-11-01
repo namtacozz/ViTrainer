@@ -1,64 +1,63 @@
-# Poner pokesurvivor.com en marcha y estado del dominio
+# Cấu Hình Tên Miền, GitHub Pages & Hạ Tầng Mạng — ViTrainer
 
-Información técnica y estado del dominio oficial **`pokesurvivor.com`**.
-
----
-
-## 1. Estado Actual del Proyecto (Actualizado 2026)
-
-- [x] **Dominio**: `pokesurvivor.com` comprado y gestionado en **Cloudflare** (DNS gratis, sin costes adicionales).
-- [x] **Servidor Web**: Alojado de forma 100% gratuita en **GitHub Pages** (`https://namtacozz.github.io/ViTrainer/` $\rightarrow$ `https://pokesurvivor.com/`).
-- [x] **Certificado HTTPS**: Activo con renovación automática mediante Let's Encrypt / GitHub Pages (**Enforce HTTPS** activo).
-- [x] **Firebase**: Migrado definitivamente al proyecto **`pokesurvivor-free`** (el proyecto antiguo `pokesurvivor-jpter` con facturación se eliminó el 13-10-2026).
-  - Autenticación normal ilimitada y gratuita.
-  - Dominios autorizados en Firebase Auth: `pokesurvivor.com`, `www.pokesurvivor.com`, `localhost`, `namtacozz.github.io`.
-- [x] **Cooperativo WebRTC Directo**: Sin costes de TURN ni Workers de pago (eliminados el 15-10-2026). Todo el tráfico P2P utiliza servidores STUN gratuitos de Google (`stun:stun.l.google.com:19302`).
-- [x] **SEO y Páginas Estáticas**: 1.022 Pokémon, 133, 140 logros, 18 arenas generadas mediante `python tools/make_seo_pages.py`.
+Tài liệu kỹ thuật về hạ tầng tên miền, hosting GitHub Pages và chính sách không tốn chi phí (**Zero-Cost Policy**) của trò chơi **ViTrainer** (ViTeam).
 
 ---
 
-## 2. Configuración de DNS en Cloudflare
+## 1. Hiện Trạng Hạ Tầng & Tên Miền (Cập nhật 2026)
 
-En <https://dash.cloudflare.com> $\rightarrow$ dominio **pokesurvivor.com** $\rightarrow$ **DNS → Records**:
-
-Todos los registros deben mantener el estado **DNS only** (nube **gris**, no naranja) para evitar bucles de redirección SSL y permitir la emisión directa del certificado HTTPS por parte de GitHub Pages.
-
-| Tipo | Nombre | Destino / IPv4 / IPv6 | Estado Proxy |
-|---|---|---|---|
-| A | `@` | `185.199.108.153` | DNS only (gris) |
-| A | `@` | `185.199.109.153` | DNS only (gris) |
-| A | `@` | `185.199.110.153` | DNS only (gris) |
-| A | `@` | `185.199.111.153` | DNS only (gris) |
-| AAAA | `@` | `2606:50c0:8000::153` | DNS only (gris) |
-| AAAA | `@` | `2606:50c0:8001::153` | DNS only (gris) |
-| AAAA | `@` | `2606:50c0:8002::153` | DNS only (gris) |
-| AAAA | `@` | `2606:50c0:8003::153` | DNS only (gris) |
-| CNAME | `www` | `namtacozz.github.io` | DNS only (gris) |
-
-> **Nota sobre seguridad y correo (gratis en Cloudflare):**
-> - **DNSSEC**: Activado en DNS → Settings para prevenir suplantación de identidad DNS.
-> - **Email Routing**: Redirección gratuita de `contacto@pokesurvivor.com` hacia la cuenta personal del administrador.
+- **Địa chỉ web chính thức (Production Web)**: `https://namtaccozz.github.io/ViTrainer/`
+- **Mã nguồn chính thức (Official Repository)**: `https://github.com/namtacozz/ViTrainer`
+- **Chính sách hạ tầng miễn phí (Zero Cost Policy)**:
+  - **Hosting**: GitHub Pages phục vụ toàn bộ mã nguồn tĩnh và tài nguyên (`HTML/CSS/JS/Audio/Sprites`).
+  - **DNS & CDN**: Quản lý qua Cloudflare (khi gắn tên miền tùy chỉnh), kích hoạt SSL/TLS miễn phí, chống DDoS và bộ nhớ đệm Cache Rules tối ưu.
+  - **Backend Dữ liệu & Lưu trữ đám mây**: Firebase Spark Plan (miễn phí 100%), bao gồm Cloud Firestore, Firebase Realtime Database và Firebase Authentication.
+  - **Mạng Chơi Hợp Tác (Multiplayer Co-op 8 người)**: Sử dụng kết nối mạng ngang hàng WebRTC qua máy chủ STUN miễn phí của Google (`stun.l.google.com:19302`), không dùng máy chủ TURN trả phí.
 
 ---
 
-## 3. Verificación de Dominio en GitHub
+## 2. Cấu Hình Tên Miền Tùy Chỉnh Trên Cloudflare (Khi Áp Dụng Custom Domain)
 
-1. Entrar en la configuración de la cuenta u organización: <https://github.com/settings/pages>.
-2. En **Custom domain**, verificar `pokesurvivor.com` con el registro TXT provisto por GitHub en Cloudflare DNS (`_github-pages-challenge-namtacozz`).
-3. El archivo raíz `CNAME` contiene:
-   ```text
-   pokesurvivor.com
-   ```
+Nếu triển khai tên miền riêng (ví dụ: `vitrainer.com` hoặc tên miền phụ), quy trình cấu hình chuẩn được thiết lập như sau:
+
+### 2.1. Cấu hình bản ghi DNS (DNS Records)
+Trong bảng điều khiển Cloudflare DNS:
+- **Bản ghi Apex / Root (@)**:
+  - Loại `A` $\rightarrow$ `185.199.108.153` (Bật Proxy đám mây màu cam)
+  - Loại `A` $\rightarrow$ `185.199.109.153` (Bật Proxy đám mây màu cam)
+  - Loại `A` $\rightarrow$ `185.199.110.153` (Bật Proxy đám mây màu cam)
+  - Loại `A` $\rightarrow$ `185.199.111.153` (Bật Proxy đám mây màu cam)
+- **Bản ghi Tên miền phụ (`www`)**:
+  - Loại `CNAME` $\rightarrow$ `namtaccozz.github.io` (Bật Proxy đám mây màu cam)
+
+### 2.2. Thiết lập SSL/TLS & Bảo Mật
+- **Chế độ mã hóa SSL/TLS**: Chọn **Full** (hoặc *Full (strict)*) để đảm bảo toàn bộ luồng truyền giữa người chơi, Cloudflare và GitHub Pages luôn được mã hóa HTTPS 100%.
+- **Luôn sử dụng HTTPS (Always Use HTTPS)**: Bật kích hoạt (`ON`).
+- **Tự động viết lại HTTPS (Automatic HTTPS Rewrites)**: Bật kích hoạt (`ON`).
+- **Phiên bản TLS tối thiểu**: Chọn `TLS 1.2` hoặc `TLS 1.3`.
 
 ---
 
-## 4. Google Search Console y Bing Webmaster Tools
+## 3. Quy Chuẩn Bộ Nhớ Đệm & Cập Nhật Phiên Bản (Caching & Versioning)
 
-1. Propiedad de Dominio en Google Search Console: `pokesurvivor.com` verificada por registro TXT en Cloudflare DNS.
-2. Mapa del sitio enviado: `https://pokesurvivor.com/sitemap.xml`.
-3. URL canónicas principales inspeccionadas e indexadas:
-   - Portada principal: `https://pokesurvivor.com/`
-   - Portada en inglés: `https://pokesurvivor.com/en/`
-   - Guía completa: `https://pokesurvivor.com/guia/`
-   - Pokédex global: `https://pokesurvivor.com/pokedex/`
-   - Novedades y changelog: `https://pokesurvivor.com/novedades/`
+Để đảm bảo người chơi luôn trải nghiệm phiên bản mới nhất ngay khi ViTeam xuất bản mà không bị kẹt cache trình duyệt:
+
+1. **Cơ chế Hash Version (`version.json`)**:
+   - Mỗi lần chạy pipeline `node tools/build.js`, file `version.json` sẽ được tạo mới với mã băm SHA ngẫu nhiên của bản build (ví dụ: `v=533bbb059e`).
+   - Script `js/core/updater.js` tự động kiểm tra `version.json` mỗi 5 phút ngoài trận đấu. Nếu phát hiện phiên bản mới, trò chơi hiển thị thông báo đếm ngược 5 giây và tải lại trang tự động.
+2. **Quy tắc Cache cho Cloudflare / Nginx (Cache Rules)**:
+   - **Tài nguyên tĩnh có băm phiên bản (`js/app.min.js?v=...`, sprites, audio)**: Đặt thời gian lưu cache trình duyệt dài (Cache Everything, TTL 1 tháng).
+   - **File cấu trúc và định danh (`index.html`, `version.json`, `robots.txt`, `sitemap.xml`)**: Đặt `Cache-Control: no-cache, no-store, must-revalidate` để trình duyệt luôn kiểm tra phiên bản mới từ máy chủ gốc.
+3. **Service Worker (`sw.js`)**:
+   - Quản lý bộ nhớ đệm ngoại tuyến (Offline Storage) cho các tài nguyên hình ảnh và âm thanh đã tải, giải phóng băng thông cho người chơi di động.
+
+---
+
+## 4. Xác Thực Tên Miền Trong Firebase Authentication
+
+Khi người chơi đăng nhập bằng Google hoặc Tên tài khoản:
+- Truy cập vào **Firebase Console $\rightarrow$ Authentication $\rightarrow$ Settings $\rightarrow$ Authorized Domains**.
+- Đảm bảo các tên miền sau đã được thêm vào danh sách cho phép (Authorized Domains):
+  - `namtaccozz.github.io` (Web chính thức trên GitHub Pages)
+  - `localhost` và `127.0.0.1` (Môi trường kiểm thử nội bộ)
+  - Tên miền tùy chỉnh chính thức (nếu có).

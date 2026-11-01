@@ -646,17 +646,35 @@ G.Coop = (() => {
         break;
       }
       case 'bp': {
-        const b = G.EnemyMgr && G.EnemyMgr.get ? G.EnemyMgr.get(ev[1]) : null;
+        const bossId = ev[1], phase = ev[2], maxHp = ev[3], newDex = ev[4], bossName = ev[5];
+        let b = G.EnemyMgr && G.EnemyMgr.get ? G.EnemyMgr.get(bossId) : null;
+        if (!b && G.EnemyMgr && G.EnemyMgr.all) {
+          b = G.EnemyMgr.all().find(e => e.boss && !e.dead);
+        }
         if (b) {
-          b.bossPhase = ev[2];
-          b.maxHp = ev[3];
-          b.hp = ev[3];
-          b.dex = ev[4] || b.dex;
-          if (ev[5]) b.name = ev[5];
-          b.scale = G.Sprites.enemyScale(b.dex, true);
+          b.bossPhase = phase;
+          b.maxHp = maxHp;
+          b.hp = maxHp;
+          b.dex = newDex || b.dex;
+          if (bossName) b.name = bossName;
+          const calcScale = (G.Sprites && G.Sprites.bossScale) ? G.Sprites.bossScale(b.dex) : (b.scale || 1.5);
+          b.scale = calcScale;
           b.anim = new G.Sprites.Animator(b.dex, b.scale);
+          b.r = G.Sprites.bodyRadius(b.dex, b.scale);
+          b.bodyH = G.Sprites.bodyHeight(b.dex, b.scale);
+          if (G.Sprites && G.Sprites.preload) G.Sprites.preload([b.dex], 8000);
           b.invuln = 0.8;
           b.ccImmuneT = 2.0;
+
+          // Hiệu ứng đổi dạng hiển thị đầy đủ cho khách (Guest)
+          const title = '¡FASE ' + phase + ': ' + (b.name || '').toUpperCase() + ' SE REGENERA!';
+          if (G.Spawner && G.Spawner.say) G.Spawner.say(title, 3.5, true);
+          if (G.Camera && G.Camera.kick) G.Camera.kick(1.4);
+          if (G.Audio && G.Audio.sfx) { G.Audio.sfx('boss'); G.Audio.sfx('legend'); }
+          if (G.FX) {
+            G.FX.burst(b.x, b.y - b.bodyH * 0.5, '#ffd23f', 40, 280);
+            G.FX.ring(b.x, b.y, b.r, b.r * 8, '#f43f5e', 0.8, 8);
+          }
         }
         break;
       }

@@ -798,7 +798,7 @@
    * Demora, Sustituto); efectos y energía, especiales (Tóxico, Granizo, Fuego
    * Fatuo). Los potenciadores (buff) no tienen: no hacen daño.
    */
-  const PHYSICAL = new Set(['freeze-shock', 'fusion-bolt', 'precipice-blades', 'close-combat', 'thunder-punch', 'fire-punch', 'ice-punch', 'bullet-punch', 'plasma-fists', 'thousand-arrows', 'thousand-waves', 'lands-wrath', 'precipice-blades', 'sunsteel-strike', 'dragon-ascent', 'fiery-dance', 'gear-grind', 'spectral-thief', 'tackle', 'quick-attack', 'vine-whip', 'razor-leaf', 'wing-attack', 'body-slam', 'poison-sting',
+  const PHYSICAL = new Set(['freeze-shock', 'fusion-bolt', 'precipice-blades', 'close-combat', 'thunder-punch', 'fire-punch', 'ice-punch', 'bullet-punch', 'plasma-fists', 'thousand-arrows', 'thousand-waves', 'lands-wrath', 'sunsteel-strike', 'dragon-ascent', 'gear-grind', 'spectral-thief', 'behemoth-blade', 'behemoth-bash', 'shadow-force', 'tackle', 'quick-attack', 'vine-whip', 'razor-leaf', 'wing-attack', 'body-slam', 'poison-sting',
     'bulldoze', 'bug-bite', 'string-shot', 'rock-throw', 'rock-slide', 'karate-chop', 'lick', 'metal-claw', 'bite',
     'bonemerang', 'psycho-cut', 'spikes', 'toxic-spikes', 'meteor-mash', 'substitute', 'aerial-ace', 'flame-wheel',
     // nuevos del 19-10-2026
@@ -903,7 +903,7 @@
    * carta dorada. Los potenciadores (buff) no evolucionan.
    */
   const NEED_NAME = { hp: 'Vigor', atk: 'Potencia', spd: 'Carrera', cd: 'Reflejos', def: 'Coraza',
-                      rgn: 'Síntesis', mag: 'Imán', xp: 'Aprendizaje' };
+                      rgn: 'Síntesis', mag: 'Imán', xp: 'Aprendizaje' , pdef: 'Coraza Física', sdef: 'Coraza Especial' };
   // Condición de cada uno. Al evolucionar se llama igual con « +» (Puño Meteoro +):
   // así ningún nombre de movimiento queda gastado en una evolución.
   const EVO = {
@@ -1030,7 +1030,7 @@
       if (m.lvl < m.def.maxLvl) return null;
       return {
         name: evoName(m.def.name, 1), needs, needName: NEED_NAME[needs], text: EVO_MODS[m.kind].t,
-        ready: !!(statsTaken && statsTaken[needs]), tier: 1
+        ready: !!(statsTaken && (statsTaken[needs] || (needs === 'def' && (statsTaken.pdef || statsTaken.sdef)))), tier: 1
       };
     }
 
@@ -1046,14 +1046,14 @@
       };
     }
 
-    // Rango 3 (+++): requiere tener este movimiento en Rango ++ y los otros 3 movimientos activos al menos en Rango +
+    // Rango 3 (+++): chỉ cần có 1 chiêu ++ (chính chiêu này) và ít nhất 1 chiêu khác đạt Rango + trở lên
     if (m.evoTier === 2) {
       const otherMoves = allMoves.filter(other => other !== m);
-      const ready = otherMoves.length >= 3 && otherMoves.every(other => other.evoTier >= 1 || other.evolved);
-      const countPlus = otherMoves.filter(other => other.evoTier >= 1 || other.evolved).length;
+      const ready = otherMoves.some(other => (other.evoTier >= 1 || other.evolved));
+      const hasPlus = ready ? 1 : 0;
       return {
         name: evoName(m.def.name, 3), needs, needName: 'Sincronía Dominio',
-        text: `Despierta Rango SUPREMO +++ (×2,0 daño colosal, efectos duplicados). Requiere 3 ataques compañeros en Rango + o superior (${countPlus}/3 listos)`,
+        text: `Despierta Rango SUPREMO +++ (×2,0 daño colosal, efectos duplicados). Requiere 1 chiêu khác đạt Rango + trở lên (${hasPlus}/1 listo)`,
         ready, tier: 3
       };
     }

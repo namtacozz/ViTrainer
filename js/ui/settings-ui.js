@@ -160,12 +160,45 @@ G.SettingsUI = (() => {
       return;
     }
     const nick = G.Social.me ? G.Social.me.name : (G.DB.user || '');
-    const kind = G.DB.mode === 'local' ? 'Cuenta de este navegador' : G.DB.nameAccount ? 'Nombre y contraseña' : 'Google';
+    const isCloud = G.DB.mode === 'cloud';
+    const hasG = G.DB.hasGoogle;
+    const hasP = G.DB.hasPassword;
+    let kind = 'Cuenta de este navegador';
+    if (isCloud) {
+      if (hasG && hasP) kind = 'Google + Usuario vinculado';
+      else if (hasG) kind = 'Google';
+      else kind = 'Nombre y contraseña';
+    }
+
+    let linkMethodsHtml = '';
+    if (isCloud) {
+      const gHtml = hasG
+        ? `<span class="badge on" style="color:#22c55e;font-weight:bold">✓ Google vinculado</span>`
+        : `<button class="btn small google" id="set-link-google" type="button">Vincular con Google</button>`;
+      const linkedUser = G.DB.linkedUsername || nick;
+      const pHtml = hasP
+        ? `<span class="badge on" style="color:#22c55e;font-weight:bold">✓ Usuario vinculado: <b translate="no">${esc(linkedUser)}</b></span>`
+        : `<div class="link-pass-card" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;width:100%">
+             <div style="font-weight:bold;margin-bottom:4px;">Vincular usuario y contraseña</div>
+             <p class="sub" style="margin:0 0 10px 0;font-size:12px;color:var(--muted)">Podrás entrar indistintamente con tu Google o con este usuario y contraseña a la misma cuenta.</p>
+             <div class="row wrap" style="gap:8px">
+               <input id="set-link-user" class="field small" maxlength="16" placeholder="Nuevo usuario" spellcheck="false" autocomplete="username" autocapitalize="none" style="flex:1;min-width:120px">
+               <input id="set-link-pass" class="field small" type="password" maxlength="64" placeholder="Contraseña (mín. 6)" autocomplete="new-password" style="flex:1;min-width:120px">
+               <button id="set-btn-link-pass" class="btn small gold" type="button">Vincular</button>
+             </div>
+             <p id="set-link-err" class="err" style="margin-top:6px;font-size:12px"></p>
+           </div>`;
+
+      linkMethodsHtml = `<div class="set-row"><div class="grow"><b>Google</b><small>Acceso rápido con tu Gmail</small></div>${gHtml}</div>`
+        + (!hasP ? pHtml : `<div class="set-row"><div class="grow"><b>Usuario y contraseña</b><small>Acceso con credenciales</small></div>${pHtml}</div>`);
+    }
+
     box.innerHTML = section('Cuenta')
       + `<div class="set-row"><div class="grow"><b>Apodo</b><small>Es único y no se puede cambiar.</small></div><span class="gold" translate="no">${esc(nick)}</span></div>`
       + `<div class="set-row"><div class="grow"><b>Tipo de cuenta</b></div><span>${esc(kind)}</span></div>`
       + `<div class="set-row"><div class="grow"><b>Partida</b></div><span>${esc(SYNC[st] || st)}</span></div>`
-      + `<div class="row wrap" style="gap:8px;margin-top:12px">
+      + linkMethodsHtml
+      + `<div class="row wrap" style="gap:8px;margin-top:14px">
            <button class="btn" id="set-logout">Cerrar sesión</button>
            <button class="btn danger" id="set-delete">Borrar cuenta</button>
          </div><p class="note" id="set-msg"></p>`;
@@ -181,6 +214,30 @@ G.SettingsUI = (() => {
     box.querySelectorAll('[data-lang]').forEach(b => { b.onclick = () => { if (b.dataset.lang !== G.I18n.lang) G.I18n.set(b.dataset.lang); }; });
     const lo = $('set-login'); if (lo) lo.onclick = () => { close(); leave(); };
     const out = $('set-logout'); if (out) out.onclick = () => { close(); leave(); };
+    const linkG = $('set-link-google');
+    if (linkG) linkG.onclick = async () => {
+      linkG.disabled = true;
+      const r = await G.DB.linkGoogle();
+      linkG.disabled = false;
+      if (!r.ok) { G.UI.toast(r.error || 'Error al vincular Google', 4000); return; }
+      G.UI.toast('¡Google vinculado!', 3500);
+      render();
+    };
+    const btnLinkP = $('set-btn-link-pass');
+    if (btnLinkP) btnLinkP.onclick = async () => {
+      const uEl = $('set-link-user'), pEl = $('set-link-pass'), errEl = $('set-link-err');
+      if (errEl) errEl.textContent = '';
+      const uVal = uEl ? uEl.value : '', pVal = pEl ? pEl.value : '';
+      btnLinkP.disabled = true;
+      const r = await G.DB.linkPassword(uVal, pVal);
+      btnLinkP.disabled = false;
+      if (!r.ok) {
+        if (errEl) errEl.textContent = r.error;
+        return;
+      }
+      G.UI.toast('¡Usuario y contraseña vinculados! Ahora puedes entrar con ambos métodos.', 4500);
+      render();
+    };
     const del = $('set-delete');
     if (del) del.onclick = async () => {
       const ok = await G.UI.confirmDelete();

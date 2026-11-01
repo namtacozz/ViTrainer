@@ -1,186 +1,123 @@
-# CẨM NANG TOÀN TẬP VỀ GAMEPLAY & CƠ CHẾ POKÉSURVIVOR
-*(PokéSurvivor Comprehensive Gameplay & Systems Manual)*
+# Cẩm Nang Gameplay & Cơ Chế Hoạt Động Toàn Tập — ViTrainer
+*(ViTrainer Comprehensive Gameplay & Systems Manual)*
 
 ---
 
-## 1. TỔNG QUAN DỰ ÁN (GAME OVERVIEW)
+## 1. Tổng Quan Trò Chơi (Game Overview)
 
-**PokéSurvivor** là một tựa game hành động sinh tồn rogue-lite kết hợp phong cách *Pokémon Mystery Dungeon* và lối chơi cuốn hút của dòng *Survivor*. Người chơi điều khiển một chú Pokémon bạn đồng hành (Partner Pokémon), di chuyển trên một bản đồ mở rộng lớn, đối đầu với hàng ngàn quái thú hoang dã tràn ngập màn hình, thu thập hạt kinh nghiệm (EXP), lên cấp, lựa chọn và kết hợp các đòn đánh huyền thoại, tiến hóa qua từng giai đoạn, kích hoạt dạng Mega/Primal tối thượng, tham gia các sự kiện tuần tự gay cấn, chinh phục các Đấu trường Vết Nứt (Rifts) và đối mặt với Thẩm Phán Tối Cao Arceus ở phút thứ 30.
+**ViTrainer** là một tựa game hành động sinh tồn rogue-lite kết hợp phong cách đồ họa hoài niệm *Pokémon Mystery Dungeon* và lối chơi cuốn hút của dòng *Survivor*. Người chơi sẽ đồng hành cùng Pokémon khởi đầu, chiến đấu chống lại hàng ngàn quái vật hoang dã tràn ngập bản đồ, thu thập kinh nghiệm để lên cấp, tiến hóa hình thái, học và dung hợp các chiêu thức hủy diệt, đánh bại các Đại Boss thần thoại và vượt qua Phán Quyết của Thẩm Phán Arceus ở phút thứ 30.
 
-Game chạy trực tiếp trên trình duyệt Web (HTML5 Canvas), hỗ trợ đa nền tảng (PC, Mobile, Tablet) với khả năng chơi đơn (Single Player) hoặc chơi hợp tác mạng trực tiếp (Co-op Multiplayer lên tới 8 người) qua giao thức WebRTC P2P không độ trễ.
+Trò chơi chạy mượt mà trực tiếp trên mọi trình duyệt web hiện đại (máy tính và điện thoại di động) hoàn toàn miễn phí, hỗ trợ chơi đơn và chơi phối hợp nhiều người (**Multiplayer Co-op tối đa 8 người**).
 
 ---
 
-## 2. VÒNG LẶP CHƠI CỐT LÕI (CORE GAMEPLAY LOOP)
+## 2. Vòng Lặp Trò Chơi Cốt Lõi (Core Gameplay Loop)
 
-```
-[Chọn Bạn Đồng Hành & Bản Đồ] 
-           │
-           ▼
-[Vào Trận: Di Chuyển & Tự Động Tấn Công] 
-           │
-           ▼
-[Thu Nhặt Hạt EXP, Pha Lê & Pokémonedas (Vàng)] 
-           │
-           ▼
-[Lên Cấp: Chọn / Nâng Cấp Chiêu Thức & Vật Phẩm] 
-           │
-           ▼
-[Tiến Hóa Cấp Độ: Giai đoạn 2 (Lv15) ➔ Giai đoạn 3 / Mega (Lv30)] 
-           │
-           ▼
-[Tham Gia Sự Kiện Tuần Tự: Chiếm Cờ, Nhặt Đá, Chạy Trốn Tử Thần]
-           │
-           ▼
-[Sống Sót Qua Các Làn Sóng Quái & Đánh Bại Boss Đa Phase] 
-           │
-           ▼
-[Chinh Phục Đấu Trường Vết Nứt (Rifts - 18 Hệ)] 
-           │
-           ▼
-[Phút 30: Đối Mặt Với Thẩm Phán Arceus (Judgment)] 
-           │
-           ▼
-[Kết Thúc Trận: Nhận Thưởng, Mở Gacha, Nâng Cấp Vĩnh Viễn]
+```mermaid
+flowchart TD
+    A["1. Chọn Pokémon Khởi Đầu & Bạn Đồng Hành"] --> B["2. Chiến Đấu Với Quái Bầy (0 - 3 Phút)"]
+    B --> C["3. Thu Thập Ngọc EXP & Rút Thẻ Nâng Cấp"]
+    C --> D["4. Tiến Hóa Cấp Độ: Lv 15 (Dạng 2), Lv 30 (Dạng 3)"]
+    D --> E["5. Đột Phá Mega Evolution / Thần Năng Vũ Trụ"]
+    E --> F["6. Chinh Phục Đại Boss Mỗi 3 Phút & Cổng Vết Nứt (Rifts)"]
+    F --> G["7. Vượt Qua Phán Quyết Arceus (Sentencia phút 30)"]
+    G --> H["8. Thu Thập Vàng, Mở Rương Gacha & Nâng Cấp Vĩnh Viễn"]
+    H --> A
 ```
 
 ---
 
-## 3. ĐIỀU KHIỂN & GIAO DIỆN TƯƠNG TÁC (CONTROLS & INPUT)
+## 3. Hệ Thống Pokémon & Cân Bằng Tiến Hóa Động
 
-Game hỗ trợ mượt mà mọi loại thiết bị đầu vào:
-1. **Bàn phím & Chuột (PC)**:
-   - **Chế độ Bàn phím chuẩn**: Phím `W`, `A`, `S`, `D` hoặc 4 phím Mũi tên để di chuyển.
-   - **Chế độ Di chuyển Theo Con Trỏ Chuột (Mouse Follower)**: Bật trong Cài đặt (Settings), Pokémon sẽ tự động lướt bám theo vị trí con trỏ chuột trên màn hình, giúp chơi thoải mái nhiều giờ không mỏi tay.
-   - Tương tác / Nhặt đồ / Chọn thẻ nâng cấp: Chuột trái hoặc phím `Space` / `Enter` (phím số `1`, `2`, `3` để chọn thẻ nhanh).
-   - Dùng Túi Cứu Cứu (Orbs): Phím số hoặc click trực tiếp vào ô vật phẩm trên màn hình.
-   - Tạm dừng (Pause): Phím `Escape` hoặc nút Pause góc trên.
-2. **Màn hình cảm ứng (Mobile / Tablet)**:
-   - Cần điều khiển ảo (Virtual Joystick): Hỗ trợ cả 2 chế độ:
-     + *Floating Joystick (Mặc định)*: Chạm bất cứ đâu trên màn hình để tạo tâm di chuyển linh hoạt.
-     + *Anchored Joystick*: Cần gạt cố định góc dưới màn hình.
-   - Chọn thẻ và kích hoạt Orb bằng thao tác chạm (Touch Tap) trực quan, có cơ chế chống chạm nhầm khi kéo ngón tay.
-3. **Tay cầm chơi game (Gamepad)**:
-   - Cần analog trái (D-Pad): Di chuyển nhân vật.
-   - Nút `A` / `Cross`: Xác nhận lựa chọn thẻ nâng cấp.
-   - Cò `L1`/`R1` hoặc `X`/`Y`: Sử dụng các Quả cầu Phép thuật (Orbs).
+### 3.1. Pokédex 1.021 Loài & Độ Hiếm (Rarity)
+- Toàn bộ Pokémon từ Thế hệ 1 đến Thế hệ 9 được phân loại theo tổng chỉ số cơ bản (**BST**) và độ hiếm từ 1 Sao đến 5 Sao.
+- **6 Chỉ số chiến đấu cốt lõi**:
+  - `HP`: Máu cơ bản.
+  - `PA` / `SA`: Tấn công Vật Lý (*Physical Attack*) & Tấn công Phép (*Special Attack*).
+  - `DF` / `SD`: Phòng thủ Vật Lý (*Physical Defense*) & Phòng thủ Phép (*Special Defense*).
+  - `SPD`: Tốc độ di chuyển trên chiến trường.
 
----
+### 3.2. Thuật Toán Cân Bằng Chỉ Số 3 Bậc (Stage Balance)
+Để khắc phục điểm yếu của các loài 3 bậc ở giai đoạn đầu game, ViTrainer áp dụng cơ chế tự động bù trừ chỉ số:
+- **Dạng 1 (Đầu game)**: Nhận thêm **$+35\%$ Tấn công**, **$+35\%$ Máu tối đa**, và **$+8\%$ Tốc độ di chuyển**. Giúp người chơi dễ dàng vượt qua các đợt quái đầu mà không bị quá đuối sức.
+- **Dạng 2 (Cấp 15 — Middle Stage)**: Tương đương chỉ số của một Pokémon đơn bậc mạnh mẽ (~$500$ BST baseline: $+28\%$ Tấn công, $+25\%$ Máu, $+10\%$ Tốc độ). Khi tiến hóa, Pokémon được **hồi phục ngay 50% Máu tối đa**.
+- **Dạng 3 (Cấp 30 — Final Stage)**: Dạng tối thượng ($+45\%$ Tấn công, $+45\%$ Máu, $+20\%$ Tốc độ), nhỉnh hơn dạng 2 khoảng $30\%$, hồi phục ngay 50% Máu tối đa.
 
-## 4. HỆ THỐNG POKÉDEX, ĐỘ HIẾM & CHỈ SỐ
-
-### 4.1. Quy mô Pokédex
-- Game sở hữu kho dữ liệu đồ sộ với **hơn 1.022 Pokémon** trải dài từ Thế hệ 1 (Kanto) đến Thế hệ 9 (Paldea).
-- Bao gồm đầy đủ các Pokémon Khởi đầu (Starters), Pokémon thường, Bán huyền thoại (Pseudo-legendaries), Pokémon Huyền thoại (Legendaries), Thần thoại (Mythicals), và các dạng Biến thể Khu vực (Alolan, Galarian, Hisuian, Paldean).
-
-### 4.2. Hệ thống Độ hiếm (Rarity Tiers)
-1. **★ Común (Common - 1 sao)**: Pokémon cơ bản cấp 1 (ví dụ: Caterpie, Pidgey, Slakoth, Rattata). Tỷ lệ xuất hiện cao trong Gacha.
-2. **★★ Poco Común (Uncommon - 2 sao)**: Pokémon giai đoạn 2 hoặc Pokémon đơn giai đoạn chỉ số trung bình (ví dụ: Pidgeotto, Vigoroth, Nidorino).
-3. **★★★ Rara (Rare - 3 sao)**: Pokémon giai đoạn 3 thông thường (như Pidgeot, Slaking, Butterfree) hoặc các Pokémon có chỉ số tốt.
-4. **★★★★ Épica (Epic - 4 sao)**: Pokémon tiến hóa mạnh mẽ, Pokémon dạng đặc biệt hoặc Pseudo-legendary giai đoạn 2 (ví dụ: Alakazam, Gengar, Machamp, Dragonair).
-5. **★★★★★ Legendaria (Legendary - 5 sao)**: Dành riêng cho Pokémon Huyền thoại, Thần thoại và Siêu huyền thoại (Mewtwo, Rayquaza, Dialga, Arceus, Zacian, Koraidon, Miraidon...).
-
-### 4.3. Các Chỉ số Cơ bản & Thiên hướng
-- **HP (Máu)**, **PA (Tấn công Vật lý)**, **SA (Tấn công Đặc biệt)**, **DF (Phòng thủ Vật lý)**, **SD (Phòng thủ Đặc biệt)**, **SPD (Tốc độ)**.
-- **Thiên hướng**: Pokémon có `PA > SA` sẽ tối ưu hơn khi học các đòn Physical; ngược lại sẽ mạnh hơn với đòn Special.
-  * Khi lên cấp, nếu người chơi chọn một chiêu thức không khớp thiên hướng (ví dụ Mud Shot Đặc biệt trên Zygarde Vật lý), trò chơi sẽ hiển thị cảnh báo rõ ràng:  
-    `⚠ (Giảm hiệu suất còn 92%: Pokémon này đánh mạnh hơn bằng chiêu vật lý)`
-- **Thưởng Đơn hệ (Monotype Bonus)**: Pokémon chỉ mang duy nhất 1 hệ nguyên tố sẽ nhận thêm **+20% sát thương** vĩnh viễn cho tất cả các chiêu thức cùng hệ đó.
+### 3.3. Dạng Đặc Biệt: Mega Evolution, Primal Reversion & Ultra Burst
+- **Chỉ số bùng nổ khi thức tỉnh**: Tăng ngay **$+50\%$ Tấn công**, **$+45\%$ Máu tối đa**, **$+25\%$ Tốc độ chạy**, **$+15\%$ Tỉ lệ Chí Mạng**, **$-20\%$ Sát thương gánh chịu**, **$-15\%$ Thời gian hồi chiêu**, và hồi phục đầy 100% Máu.
+- **Hào quang Thần Năng (Mega Aura)**: Mỗi 2.2 giây tự động phát ra một vòng sóng năng lượng 360 độ hất văng và gây sát thương diện rộng lên toàn bộ quái vật áp sát.
+- **Dòng tiến hóa Zygarde**: 10% (Lv. 1-9) $\rightarrow$ 50% (Lv. 10-24) $\rightarrow$ 100% Titan (Lv. 25+, tặng ô chiêu thứ 5 và chiêu độc quyền *Core Enforcer*) $\rightarrow$ Mega Zygarde (Lv. 50 + tiêu diệt 3500 quái, mở khóa chùm sáng hủy diệt *Nihil Light*).
 
 ---
 
-## 5. HỆ THỐNG TIẾN HÓA TRONG TRẬN (IN-RUN EVOLUTION)
+## 4. Hệ Thống 139 Chiêu Thức Chiến Đấu & Dung Hợp (Bonds)
 
-### 5.1. Các Mốc Tiến Hóa Chuẩn Chỉ
-Tiến hóa trong trận là quyền lợi gameplay cốt lõi của người chơi trong chế độ sinh tồn:
-1. **Dòng 3 Giai đoạn (3-Stage Family)**:
-   - *Level 15*: Tự động hiện bảng tiến hóa lên Giai đoạn 2.
-   - *Level 30*: Tự động hiện bảng tiến hóa lên Giai đoạn 3 (hoặc kích hoạt dạng Mega nếu loài đó có Mega ở bậc cuối, ví dụ Charizard X/Y).
-   - Nếu tăng cấp nhảy vọt (ví dụ từ cấp 14 lên cấp 33 trong co-op): Sau khi chọn xong dạng 2, game lập tức kích hoạt tiếp bảng chọn dạng 3/Mega mà không bỏ sót.
-2. **Dòng 2 Giai đoạn (2-Stage Family)**:
-   - *Level 15*: Tiến hóa lên Giai đoạn 2.
-   - *Level 30*: Kích hoạt trạng thái Vương Miện Apex (+) với hào quang sức mạnh tối thượng (+20% chỉ số, hồi phục máu) hoặc tiến hóa Mega.
-3. **Dòng Đơn Giai đoạn (Single Stage) & Huyền Thoại**:
-   - *Level 15*: Thức tỉnh Giai đoạn I (Despertar I) tăng chỉ số cơ bản.
-   - *Level 30*: Thức tỉnh Giai đoạn II (Apex+) hoặc đánh thức sức mạnh Nguyên Thủy / Mega.
-4. **Tiến hóa Phân Nhánh (Branch Evolution)**:
-   - Eevee, Gloom, Poliwhirl, Kirlia...: Mở bảng chọn trực quan với các nhánh tiến hóa tương ứng.
+### 4.1. Phân Loại Chuẩn Canon: Vật Lý vs Đặc Biệt
+Tất cả 139 chiêu thức trong game được chuẩn hóa 100% theo Bulbapedia và Pokémon Showdown:
+- **Chiêu Vật Lý (Physical Moves)**: Dùng chỉ số `PA` của Pokémon và bị cản bởi Giáp Vật Lý (`PDEF`) của kẻ địch.
+- **Chiêu Đặc Biệt / Phép (Special Moves)**: Dùng chỉ số `SA` của Pokémon và bị cản bởi Giáp Phép (`SDEF`) của kẻ địch.
 
-### 5.2. Độc Lập Hoàn Toàn Khỏi Gacha
-- Tiến hóa trong ván chơi KHÔNG BỊ KHÓA bởi cấp độ Gacha (`tierUnlocked`). Mọi Pokémon đều tiến hóa đầy đủ khi đạt mốc cấp độ.
-- Thanh tiến trình trên HUD hiển thị `✦ ` thể hiện mốc tiến độ rõ ràng.
+### 4.2. Cơ Chế Chiêu Thức Độc Quyền (Signature Moves)
+Các chiêu thức tối thượng của Pokémon Huyền thoại sở hữu cơ chế gameplay hoàn toàn khác biệt:
+- **Chùm tia thiêu đốt duy trì (*Continuous Beam*)**: Chiếu cố định vào 1 quái vật mục tiêu cho đến khi bị tiêu diệt rồi lập tức đổi mục tiêu khác; điểm hồi chiêu chuyển thành tốc độ thiêu đốt tăng nhanh.
+- **Hút máu sinh lực (*Lifesteal*)**: Như *Oblivion Wing* của Yveltal, chuyển hóa 20% sát thương gây ra thành máu hồi trực tiếp cho người chơi.
+- **Chuỗi sét lan (*Chain Lightning*)**: Như *Plasma Fists* của Zeraora, đấm phóng điện lan qua 5 mục tiêu gây sốc điện tê liệt.
+- **Bắn rơi quái bay & Ghim chân (*Grounding*)**: Bộ chiêu Zygarde (*Thousand Arrows*, *Thousand Waves*, *Land's Wrath*) kéo toàn bộ quái bay xuống đất và ghim chân không cho di chuyển.
+- **Hư vô ác mộng & Ru ngủ (*Sleep Vortex*)**: Như *Dark Void* của Darkrai, tạo lốc xoáy bóng tối hút quái vào tâm điểm và ru ngủ toàn bộ trong 3 giây.
+- **Đóng băng tuyệt đối (*Freeze Stun*)**: Như *Glaciate* của Kyurem, làm đông cứng quái vật trong 2.2 giây và làm chậm 60% tốc độ chạy.
 
-### 5.3. Hàng Đợi An Toàn & Đồng Bộ Co-op
-- Nếu người chơi đang gục ngã hoặc đang mở bảng đồ/tạm dừng, lựa chọn tiến hóa sẽ lưu vào `pendingEvoModal` và tự động bật lại ngay khi đóng menu hoặc được cứu sống.
-- Trong Co-op, máy client nhận cấp từ host qua `syncTeam` tự động mở modal tiến hóa tức thì. Sprite mới được đồng bộ thời gian thực tới tất cả đồng đội trong phòng.
+### 4.3. Dung Hợp Chiêu Thức (Bond System) & Tiến Hóa 3 Nấc
+- Mỗi ô chiêu thức cho phép dung hợp tối đa **4 chiêu khác nhau** (`BOND_MAX = 4`), đồng thời kích hoạt cùng một lúc khi tung đòn.
+- **Tiến hóa chiêu 3 nấc (+, ++, +++)**: Để mở khóa thẻ tiến hóa tối thượng `+++`, người chơi chỉ cần sở hữu **01 chiêu đạt cấp ++** và **01 chiêu đạt cấp +** khác trong bộ chiêu của mình.
 
 ---
 
-## 6. CÁC SỰ KIỆN TUẦN TỰ TRONG TRẬN (`inrun-events.js`)
+## 5. Hệ Thống Phòng Thủ Độc Lập & Cắt Bỏ Thẻ Đã MAX
 
-Trong suốt ván đấu, hệ thống sẽ kích hoạt ngẫu nhiên các Sự Kiện Tuần Tự (In-Run Events) mang lại nhịp độ cao trào:
-1. **Chiếm Cờ (Zone Capture)**:
-   - Một vòng tròn chiến thuật bán kính lớn xuất hiện tại bãi đất trống ngẫu nhiên.
-   - Nhiệm vụ: Đứng trong vòng tròn cho đến khi thanh tiến trình quét đủ 360° theo chiều kim đồng hồ.
-   - Cơ chế: Càng nhiều đồng đội cùng đứng trong vòng thì tốc độ quét càng nhanh. Quái vật sẽ đổ dồn về vòng và nhắm vào người chiếm giữ.
-2. **Thu Thập Đá Pha Lê (Scavenger Hunt)**:
-   - Rải các viên pha lê giá trị cao xung quanh khu vực người chơi.
-   - Trên viền màn hình xuất hiện các **Mũi tên la bàn điều hướng** hiển thị khoảng cách theo mét hướng về phía từng viên pha lê, đồng thời có cột sáng thiên không vươn thẳng lên trời dễ nhận diện từ xa.
-3. **Chạy Trốn Tử Thần (Boss Pursuit)**:
-   - Một Boss Pokémon Alpha bất tử cực mạnh xuất hiện ở cự ly an toàn.
-   - Người chơi không thể tiêu diệt nó; nhiệm vụ duy nhất là sống sót, luồn lách né tránh các đòn đánh cảnh báo đỏ rực cho đến khi hết thời gian đếm ngược.
-4. **Phần Thưởng Hậu Hĩnh**:
-   - Hồi sinh ngay lập tức toàn bộ đồng đội đã gục ngã với 50% HP và lá chắn bất tử tạm thời.
-   - Tăng vĩnh viễn chỉ số trong trận (+15% sát thương, +8 tốc độ chạy).
-   - Rơi cơn mưa tiền vàng, vé quay gacha và hút tự động về nhân vật.
-5. **Quy Tắc Cách Ly**:
-   - Các sự kiện này tự động bị hoãn khi người chơi đang giao chiến trong Đấu Trường Vết Nứt (Rift Arena) hoặc Trận Chiến Phán Quyết Arceus.
+- **Phân định 2 loại giáp phòng thủ**:
+  - **Giáp Vật Lý (`pdefReduce`)**: Giảm sát thương từ đòn cắn, lao húc, chấn động đất của quái vật và Boss.
+  - **Giáp Phép (`sdefReduce`)**: Giảm sát thương từ đạn ma thuật, tia lửa, bão tuyết, sấm sét và độc tố.
+  - Mỗi loại giáp có thể nâng tối đa 8 cấp (+70% giảm sát thương).
+- **Bộ lọc thẻ Level-up thông minh**: Bất kỳ chỉ số nào đã đạt mức tối đa (Giáp 8/8, Giảm hồi chiêu 10/10, Tốc độ chạy 8/8, Tầm hút ngọc 6/6...) sẽ **biến mất vĩnh viễn khỏi danh sách rút thẻ**, nhường chỗ cho các nâng cấp hữu ích vô hạn (+20 Máu tối đa, +0.9 Hồi máu/s, Hồi phục tức thì 45% HP).
 
 ---
 
-## 7. HỆ THỐNG ĐÒN ĐÁNH & TIẾN HÓA CHIÊU THỨC (+ / ++ / +++)
+## 6. Hệ Thống 21 Trang Bị Giữ (Held Items)
 
-- **Tên Chiêu Thức Chuẩn Canon**: Toàn bộ 133 thức giữ nguyên tên tiếng Anh chuẩn (như *Thousand Arrows*, *Plasma Fists*, *Core Enforcer*, *Dragon Ascent*, *Earthquake*...) giúp nhận diện đồng nhất trên toàn cầu; phần mô tả được dịch chuẩn theo cài đặt ngôn ngữ.
-- **Biểu tượng kiểu đòn trên HUD (Kind Badges 10x10)**:
-  + Nắm đấm: Cận chiến (Melee).
-  + Mũi tên: Bắn đạn (Projectile).
-  + Tia sáng: Bắn tia (Beam).
-  + Vòng tròn: Hào quang bảo vệ (Aura Circle).
-  + Chữ thập: Hồi máu / Buff.
-  + Tia sét: Khống chế / Choáng (Stun).
-- **Tiến Hóa Chiêu Thức**:
-  + Bậc cơ bản: Lv 1 đến Lv 8.
-  + Bậc +: Khi đạt Lv 8 và mang theo Held Item tương thích.
-  + Bậc ++: Đạt bậc + và hoàn thành nhiệm vụ thực chiến trong trận.
-  + Bậc +++: Chiêu đạt bậc ++ kết hợp cùng ít nhất 3 chiêu thức khác đạt bậc +.
+Người chơi có thể mang duy nhất **01 Trang Bị Giữ** thu thập từ rương báu hoặc hạ gục Boss:
+- **Áo Giáp Tấn Công (`assaultvest`)**: Tăng trực tiếp **+20% Giảm sát thương**, nằm ngoài trần giới hạn 70% của thẻ Giáp.
+- **Khoáng Thạch Tiến Hóa (`eviolite`)**: Tăng **+40% Giáp Vật Lý và Phép** nếu Pokémon chưa tiến hóa đến hình thái cuối cùng.
+- **Đai Tập Trung (`focussash`)**: Giữ lại 1 Máu khi dính đòn chí tử (Hồi chiêu 60 giây).
+- **Băng Buộc Lựa Chọn (`choiceband`)**: +40% Sát thương tổng đầu ra.
+- **Vòng Mega (`keystone`)**: Kích hoạt tiến hóa Mega tức thì tại bất kỳ cấp độ nào.
+- **Mảnh Thiên Thạch (`meteorite`)**: Chuyển đổi linh hoạt các dạng của Deoxys (Tấn công, Phòng thủ, Tốc độ).
 
 ---
 
-## 8. KẺ ĐỊCH & ĐẠI BOSS ĐA PHASE
+## 7. Cơ Chế Đại Boss Đa Phase & Sơ Hở Phản Công
 
-1. **Cân Bằng Máu Boss Hợp Lý**:
-   - Boss đầu trận (phút thứ 3) được điều chỉnh thang máu vừa phải (~4.200 HP), giúp trải nghiệm khởi đầu mượt mà, không tạo bức tường máu vô lý.
-2. **Cơ Chế Chuyển Phase Đa Tầng**:
-   - Phase 1: Boss thông thường với các vùng cảnh báo nguy hiểm telegraphed hazards.
-   - Phase 2 (Cuồng nộ): Boss phát nổ sóng xung kích, hồi 100% HP, tăng +35% sát thương và +15% tốc chạy. Thời gian bất tử khi chuyển phase được giới hạn ở **0.8 giây** và khả năng kháng khống chế (Tenacity) tối đa **2.0 giây**.
-   - Phase 3: Thức tỉnh dạng Mega / Primal với bộ chiêu thức tối thượng.
-3. **Đấu Trường Vết Nứt (18 Rifts) & Arceus (Phút 30+)**:
-   - 18 Đấu trường riêng biệt tương ứng 18 hệ để chinh phục các Thủ Hộ Huyền Thoại.
-   - Phút 30: Đấng Sáng Tạo Arceus giáng lâm cho trận chiến sinh tử ghi danh Bảng Xếp Hạng.
-
----
-
-## 9. CHẾ ĐỘ CHƠI ĐỒNG ĐỘI (MULTIPLAYER CO-OP LÊN TỚI 8 NGƯỜI)
-
-- **Phòng chơi tối đa 8 người**: Hỗ trợ tổ đội lớn với khả năng tạo phòng trực tiếp không cần mã mời rườm rà.
-- **Hồi Sinh Siêu Tốc**: Thời gian đứng cạnh cứu đồng đội gục ngã giảm dần theo số người trong phòng (xuống chỉ còn **1.0 giây** khi đủ 8 người). Nhiều đồng đội cùng đứng cạnh sẽ cộng dồn tốc độ cứu nhanh gấp bội.
-- **Co-op Combos (Combo Đồng Đội)**: Khi 2 người chơi cùng đánh trúng một mục tiêu trong vòng 1.2 giây, một vụ nổ ánh sáng bùng phát gây thêm **+35% sát thương cộng hưởng**.
-- **Quản Lý Tầm Nhìn Thích Ứng (Interest Management)**: Giới hạn tầm truyền 720px và 50 quái/packet cho các phòng đông người, bảo đảm host WebRTC không bị giật lag mạng.
-- **Đồng Bộ Dạng Tức Thì**: Trạng thái tiến hóa và Mega được phát sóng liên tục, đảm bảo cả 8 người luôn thấy đúng hình ảnh chiến đấu của nhau.
+Cứ mỗi **3 phút (180 giây)** sẽ có một Đại Boss xuất hiện:
+- **Công thức tăng tiến làm dịu sau phút 20**: Tốc độ tăng trưởng máu và sát thương của Boss được kiềm chế, đảm bảo người chơi có thể tiêu diệt được Boss và không rơi vào tình trạng bất tử.
+- **One-Shot Protection**: Trần sát thương tối đa từ Boss **không được vượt quá 40% Máu tối đa** của người chơi trong một đòn đánh.
+- **3 Phase tiến hóa**:
+  - *Phase 1 (100% - 60% HP)*: Giai đoạn cơ bản.
+  - *Phase 2 (Dưới 60% HP — Cuồng Nộ)*: Tăng 25% tốc độ chạy, giảm 20% thời gian niệm chiêu, triệu hồi bầy đệ tử hỗ trợ, tăng số lượng tia hazards, nhận 2 giây Kháng Hiệu Ứng.
+  - *Phase 3 (Dưới 30% HP — Mega/Thần Năng)*: Biến đổi sang hình thái Mega khổng lồ, mở khóa đại chiêu toàn màn hình, đồng bộ thời gian thực tới tất cả thành viên trong phòng Co-op 8 người.
+- **Cửa sổ sơ hở (`VULNERABLE!`)**: Kéo dài đúng **1.5 giây** sau mỗi đại chiêu của Boss. Hiển thị chữ xanh rực rỡ và nhận thêm **$+50\%$ sát thương** từ mọi nguồn.
 
 ---
 
-## 10. NHIỆM VỤ NGÀY / TUẦN & KINH TẾ
+## 8. Cổng Không Gian (Dimensional Rifts) & Hàng Đợi Timeline
 
-- **8 Nhiệm Vụ Hàng Ngày & 4 Nhiệm Vụ Hàng Tuần**: Bổ sung các thử thách phong phú (hoàn thành sự kiện trong trận, tiến hóa trong trận, nhặt kẹo Halloween, gây sát thương lớn).
-- **Kinh Tế Lành Mạnh**: Tiền vàng Pokémonedas, Shop Kecleon mỗi ngày, Vé quay Gacha theo từng banner thế hệ và hơn 140 huy hiệu Thành Tựu.
+- **18 Đấu trường Vết Nứt Thần Bí**: Nơi người chơi đối đầu với các Thần thú Cổ xưa (Dialga, Palkia, Giratina, Kyogre, Groudon, Rayquaza...).
+- **Cơ chế Hàng Đợi An Toàn (Rift Queue)**: Nếu đến mốc thời gian mở cổng Rift mà đang có Boss xuất hiện, hệ thống sẽ kiên nhẫn chờ Boss bị tiêu diệt rồi mới mở cổng ngay lập tức, không bao giờ làm trôi mất mốc thời gian của người chơi.
+- **3 Tầng Fallback vị trí**: Tìm vị trí mở cổng ở cự ly xa $\rightarrow$ cự ly trung bình $\rightarrow$ ngay cạnh người chơi, đảm bảo 100% mở cổng thành công.
+
+---
+
+## 9. Liên Kết Tài Khoản Linh Hoạt (Account Linking)
+
+Người chơi có thể tự do liên kết phương thức đăng nhập trong **Cài Đặt $\rightarrow$ Tài Khoản**:
+- Người dùng đăng nhập bằng **Google**: Có thể nhập thêm **Tên tài khoản & Mật khẩu** thuần để đăng nhập linh hoạt bằng cả 2 cách trên mọi thiết bị.
+- Người dùng đăng ký bằng **Tên/Mật khẩu**: Có thể liên kết tài khoản **Google** để phục hồi nhanh khi quên mật khẩu.
+- Cả hai phương thức đều đồng bộ vào **cùng một tài khoản dữ liệu duy nhất** trên nền tảng Firebase đám mây.

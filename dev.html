@@ -268,6 +268,26 @@
   </div>
 </section>
 
+<!-- ====== Vincular usuario y contraseña para cuentas de Google (js/ui/login.js) ====== -->
+<section id="scr-link-account" class="scr dim hidden">
+  <div class="box" style="width:min(440px,100%)">
+    <h2>¿Quieres vincular un usuario y contraseña?</h2>
+    <p>Crea un nombre y contraseña para tu cuenta. Así podrás entrar indistintamente con Google o con tu usuario en cualquier dispositivo.</p>
+    <div style="margin:12px 0">
+      <label for="link-dlg-user" style="display:block;margin-bottom:4px;font-size:13px">Nombre de usuario</label>
+      <input id="link-dlg-user" class="field" maxlength="16" placeholder="Nuevo usuario" spellcheck="false" autocomplete="username" autocapitalize="none" style="width:100%;margin-bottom:8px">
+      <label for="link-dlg-pass" style="display:block;margin-bottom:4px;font-size:13px">Contraseña</label>
+      <input id="link-dlg-pass" class="field" type="password" maxlength="64" placeholder="Contraseña (mín. 6)" autocomplete="new-password" style="width:100%">
+    </div>
+    <p class="err" id="link-dlg-err"></p>
+    <div class="row" style="gap:8px;flex-wrap:wrap">
+      <button class="btn gold grow" id="link-dlg-ok" type="button">Vincular cuenta</button>
+      <button class="btn ghost" id="link-dlg-later" type="button">Ahora no</button>
+    </div>
+    <p class="note center"><a href="#" id="link-dlg-never">No volver a preguntar</a></p>
+  </div>
+</section>
+
 <!-- ====== Avisos de una actualización (una vez por navegador, ver LoginUI.updateNotices) ====== -->
 <section id="scr-savenote" class="scr dim hidden">
   <div class="box" style="width:min(460px,100%)" translate="no">

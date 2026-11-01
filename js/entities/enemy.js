@@ -20,6 +20,7 @@
     // número entero de píxeles de pantalla (escalas como 1,37 lo deforman).
     return G.U.clamp(Math.round(110 / h * 2) / 2, 1, 2);
   }
+  if (typeof G !== 'undefined' && G.Sprites) G.Sprites.bossScale = bossScale;
 
   /*
    * Curas y escudos sobre un jefe (18-10-2026): van con el daño que le estás
@@ -79,6 +80,9 @@
       this.atkType = this.types[0];         // tipo de sus golpes (tabla de tipos)
       this.mon = G.DEX_BY[def.dex] || null;   // sus Defensas (G.Stats)
       this.cat = G.Stats.sideOf(this.mon);    // pega con su lado fuerte: físico o especial
+      const physTypes = new Set(['rock', 'ground', 'steel', 'fighting']);
+      this.contactCat = (this.types.includes('ghost') || this.types.includes('psychic')) && this.cat === 'special' ? 'special' : 'physical';
+      this.shotCat = physTypes.has(this.atkType) ? 'physical' : (this.cat || 'special');
       // Vuelan por encima de rocas y agua sólo los que FLOTAN en su sprite (un
       // Rowlet camina aunque sea Volador). Los jefes, por su tamaño, también.
       this.flying = boss || G.Sprites.hovers(def.dex);
@@ -258,7 +262,11 @@
           const mega = megas[0];
           this.name = mega.name;
           this.dex = mega.spriteDex || mega.id || this.dex;
+          this.scale = bossScale(this.dex);
           this.anim = new G.Sprites.Animator(this.dex, this.scale);
+          this.r = G.Sprites.bodyRadius(this.dex, this.scale);
+          this.bodyH = G.Sprites.bodyHeight(this.dex, this.scale);
+          if (typeof G !== 'undefined' && G.Sprites && G.Sprites.preload) G.Sprites.preload([this.dex], 8000);
           if (mega.types) this.types = mega.types;
           if (mega.types && mega.types[0]) this.atkType = mega.types[0];
         }
@@ -637,46 +645,46 @@
       switch (id) {
         case 'slam':
           c.wind = 0.75 * f;
-          this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 110 + this.r, delay: c.wind, dmg: this.dmg * 1.35, type, color: col });
+          this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 110 + this.r, delay: c.wind, dmg: this.dmg * 1.35, type, color: col, cat: 'physical' });
           this.anim.play('Charge', { speed: 1.3 });
           break;
         case 'dash':
           c.wind = 0.65 * f; c.len = 360; c.dur = 0.30;
           this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang, len: c.len + this.r, w: this.r * 2 + 24,
-                          delay: c.wind + c.dur, dmg: this.dmg * 1.3, type, color: col });
+                          delay: c.wind + c.dur, dmg: this.dmg * 1.3, type, color: col, cat: 'physical' });
           this.anim.play('Charge', { speed: 1.4 });
           break;
         case 'leap':
           this.jump = { sx: this.x, sy: this.y, tx: pl.x, ty: pl.y, t: -0.45 * f, dur: 0.60 };
-          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 96, delay: 0.45 * f + 0.60, dmg: this.dmg * 1.35, type, color: col });
+          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 96, delay: 0.45 * f + 0.60, dmg: this.dmg * 1.35, type, color: col, cat: 'physical' });
           this.anim.play('Charge', { speed: 1.5 });
           ai.cast = null; ai.cd = G.U.rand(2.2, 3.2);
           break;
         case 'dragon_rush':
           c.wind = 0.7 * f; c.len = 420; c.dur = 0.35;
           this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang, len: c.len + this.r, w: this.r * 2 + 36,
-                          delay: c.wind + c.dur, dmg: this.dmg * 1.5, type, color: '#f59e0b' });
-          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 120, delay: c.wind + c.dur + 0.1, dmg: this.dmg * 1.4, type, color: '#f59e0b' });
+                          delay: c.wind + c.dur, dmg: this.dmg * 1.5, type, color: '#f59e0b', cat: 'physical' });
+          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 120, delay: c.wind + c.dur + 0.1, dmg: this.dmg * 1.4, type, color: '#f59e0b', cat: 'physical' });
           this.anim.play('Charge', { speed: 1.3 });
           break;
         case 'inferno':
           c.wind = 0.75 * f;
-          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 115, delay: c.wind, dmg: this.shotDmg() * 1.4, type: 'fire', color: '#ef4444' });
+          this.hazard({ kind: 'zone', x: pl.x, y: pl.y, r: 115, delay: c.wind, dmg: this.shotDmg() * 1.4, type: 'fire', color: '#ef4444', cat: 'special' });
           for (let i = 0; i < 4; i++) {
-            this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang + i * (Math.PI / 2), len: 380, w: 28, delay: c.wind + 0.15, dmg: this.shotDmg() * 1.25, type: 'fire', color: '#f97316' });
+            this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang + i * (Math.PI / 2), len: 380, w: 28, delay: c.wind + 0.15, dmg: this.shotDmg() * 1.25, type: 'fire', color: '#f97316', cat: 'special' });
           }
           this.anim.play('Shoot');
           break;
         case 'blizzard':
           c.wind = 0.7 * f;
-          this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 160, delay: c.wind, dmg: this.shotDmg() * 1.2, type: 'ice', color: '#38bdf8' });
+          this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 160, delay: c.wind, dmg: this.shotDmg() * 1.2, type: 'ice', color: '#38bdf8', cat: 'special' });
           this.anim.play('Charge', { speed: 1.4 });
           break;
         case 'thunderstorm':
           c.wind = 0.65 * f;
           for (let i = 0; i < 4; i++) {
             const rx = pl.x + (i ? G.U.rand(-90, 90) : 0), ry = pl.y + (i ? G.U.rand(-90, 90) : 0);
-            this.hazard({ kind: 'zone', x: rx, y: ry, r: 64, delay: c.wind + i * 0.18, dmg: this.shotDmg() * 1.3, type: 'electric', color: '#facc15' });
+            this.hazard({ kind: 'zone', x: rx, y: ry, r: 64, delay: c.wind + i * 0.18, dmg: this.shotDmg() * 1.3, type: 'electric', color: '#facc15', cat: 'special' });
           }
           this.anim.play('Shoot');
           break;
@@ -684,13 +692,13 @@
           c.wind = 0.65 * f;
           for (let i = 0; i < 5; i++) {
             const a = i * 1.256, d = i ? G.U.rand(50, 110) : 0;
-            this.hazard({ kind: 'zone', x: pl.x + Math.cos(a) * d, y: pl.y + Math.sin(a) * d, r: 58, delay: c.wind + i * 0.12, dmg: this.shotDmg() * 1.15, type: 'poison', color: '#a855f7' });
+            this.hazard({ kind: 'zone', x: pl.x + Math.cos(a) * d, y: pl.y + Math.sin(a) * d, r: 58, delay: c.wind + i * 0.12, dmg: this.shotDmg() * 1.15, type: 'poison', color: '#a855f7', cat: 'special' });
           }
           this.anim.play('Shoot');
           break;
         case 'shadow_void':
           c.wind = 0.8 * f;
-          this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 140, delay: c.wind, dmg: this.shotDmg() * 1.3, type: 'ghost', color: '#7c3aed' });
+          this.hazard({ kind: 'zone', x: this.x, y: this.y, r: 140, delay: c.wind, dmg: this.shotDmg() * 1.3, type: 'ghost', color: '#7c3aed', cat: 'special' });
           this.anim.play('Charge', { speed: 1.2 });
           break;
         case 'rain': {
@@ -698,7 +706,7 @@
           for (let i = 0; i < n; i++) {
             const a = i ? Math.random() * 6.2832 : 0, d = i ? G.U.rand(40, 130) : 0;
             this.hazard({ kind: 'zone', x: pl.x + Math.cos(a) * d, y: pl.y + Math.sin(a) * d * 0.8, r: 56,
-                            delay: 0.95 + i * 0.10, dmg: this.shotDmg() * 1.2, type, color: col });
+                            delay: 0.95 + i * 0.10, dmg: this.shotDmg() * 1.2, type, color: col, cat: 'special' });
           }
           c.wind = 0.45; this.anim.play('Shoot');
           break;
@@ -707,7 +715,7 @@
           const n = ai.fury ? 6 : 4, sp = ai.fury ? 0.38 : 0.45;
           for (let i = 0; i < n; i++) {
             this.hazard({ kind: 'beam', x: this.x, y: this.y, angle: ang + (i - (n - 1) / 2) * sp, len: 440, w: 30,
-                            delay: 0.9, dmg: this.shotDmg() * 1.25, type, color: col });
+                            delay: 0.9, dmg: this.shotDmg() * 1.25, type, color: col, cat: 'special' });
           }
           c.wind = 0.85; c.after = 0.2; this.anim.play('Charge', { speed: 1.2 });
           break;
@@ -768,7 +776,7 @@
         const a = base + (n === 1 ? 0 : (i / (n - 1) - 0.5) * spread);
         const shot = G.Projectiles.spawn({
           x: this.x, y: this.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-          dmg: this.shotDmg() * k, r: 7, life: 2.4, friendly: false, color: '#ff7a9e', mtype: type, cat: this.cat,
+          dmg: this.shotDmg() * k, r: 7, life: 2.4, friendly: false, color: this.shotCat === 'physical' ? '#fb923c' : '#c084fc', mtype: type, cat: this.shotCat || this.cat,
           vis: G.VFX.forType(type)
         });
         if (G.Coop.isHost) G.Coop.enemyShot(shot, type);
@@ -778,7 +786,7 @@
     }
 
     /** Zona o rayo con aviso, con la categoría de sus golpes (tu defensa que la para). */
-    hazard(o) { G.Hazards.add(Object.assign({ cat: this.cat }, o)); }
+    hazard(o) { G.Hazards.add(Object.assign({ cat: o.cat || this.cat }, o)); }
 
     /** Lo que hace cada personalidad cuando le toca (anfitrión / solitario). */
     special(pl, dx, dy) {

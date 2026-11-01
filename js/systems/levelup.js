@@ -15,8 +15,10 @@ G.LevelUp = (() => {
       apply: pl => pl.spdMul *= 1.07, max: 8 },
     { id: 'cd',   icon: 'clock', title: 'Reflejos',     desc: '-8% de recarga en todos los movimientos.',
       apply: pl => pl.cdMul *= 0.92, max: 10 },
-    { id: 'def',  icon: 'shield', title: 'Coraza',       desc: '+6% de reducción de daño recibido.',
-      apply: pl => pl.dmgReduce = Math.min(0.7, pl.dmgReduce + 0.06), max: 12 },
+    { id: 'pdef', icon: 'shield', title: 'Coraza Física', desc: '+10% de reducción de daño físico recibido.',
+      apply: pl => pl.pdefReduce = Math.min(0.70, (pl.pdefReduce || 0) + 0.10), max: 8 },
+    { id: 'sdef', icon: 'shield', title: 'Coraza Especial', desc: '+10% de reducción de daño especial recibido.',
+      apply: pl => pl.sdefReduce = Math.min(0.70, (pl.sdefReduce || 0) + 0.10), max: 8 },
     { id: 'rgn',  icon: 'sprout', title: 'Síntesis',     desc: '+0.9 de vida regenerada por segundo.',
       apply: pl => pl.regenFlat += 0.9 },
     { id: 'mag',  icon: 'magnet', title: 'Imán',         desc: '+30% de radio de recogida de experiencia.',
@@ -117,7 +119,13 @@ G.LevelUp = (() => {
     for (const m of pl.moves) {
       const ev = G.Moves.evoInfo(m, pl.statsTaken, pl.moves);
       if (!ev) continue;
-      if (!ev.ready) { if (ev.tier === 1) waiting[ev.needs] = m; continue; }
+      if (!ev.ready) {
+        if (ev.tier === 1) {
+          if (ev.needs === 'def') { waiting['pdef'] = m; waiting['sdef'] = m; }
+          else { waiting[ev.needs] = m; }
+        }
+        continue;
+      }
       const tierTag = ev.tier === 1 ? 'EVOLUCIÓN +' : ev.tier === 2 ? 'MAESTRÍA ++' : 'DOMINIO +++';
       const tierColor = ev.tier === 1 ? '#ffd23f' : ev.tier === 2 ? '#38bdf8' : '#ec4899';
       const weight = ev.tier === 3 ? 120 : ev.tier === 2 ? 80 : 40;
@@ -157,12 +165,12 @@ G.LevelUp = (() => {
     }
 
     // --- stats ---
-    // Las que desbloquean una evolución salen siempre y con aviso.
-    // Cada mejora tiene un tope de veces (`max`): en partidas muy largas se
-    // acumulaban sin fin (velocidad, recarga y experiencia por las nubes) y el
-    // juego acababa colgándose. Las que piden una evolución salen siempre.
+    // Quy tắc: Khi đã đạt full giới hạn tối đa (max) một loại nâng cấp (như tốc chiêu, thủ vật lý, thủ phép...),
+    // thẻ đó TUYỆT ĐỐI không bao giờ xuất hiện nữa, nhường chỗ hoàn toàn cho các nâng cấp khác có ích.
     const room = s => !s.max || (pl.statsTaken[s.id] || 0) < s.max;
-    const pickStats = G.U.pickN(STATS.filter(s => !waiting[s.id] && room(s)), 5).concat(STATS.filter(s => waiting[s.id]));
+    const availableStats = STATS.filter(s => room(s));
+    const pickStats = G.U.pickN(availableStats.filter(s => !waiting[s.id]), 5)
+      .concat(availableStats.filter(s => waiting[s.id]));
     for (const s of pickStats) {
       const evoFor = waiting[s.id];
       out.push({

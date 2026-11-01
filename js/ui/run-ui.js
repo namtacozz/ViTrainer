@@ -413,7 +413,8 @@ G.RunUI = (() => {
       ['Def. Esp.', n(mon.sd) + ' <small>' + guard(esp) + ' especial</small>'],
       ['Velocidad', n(pl.spd)],
       ['Crítico', pct(pl.critChance || 0)],
-      ['Reducción de daño', pct(pl.reduction)],
+      ['Reducción física', pct(pl.pReduction)],
+      ['Reducción especial', pct(pl.sReduction)],
       ['Recarga', pl.cdMul < 0.995 ? '−' + pct(1 - pl.cdMul) : '0 %'],
       ['Regeneración', pl.regen.toFixed(1).replace('.', ',') + ' /s']
     ].map(([a, b]) => `<div><span>${a}</span><b>${b}</b></div>`).join('');

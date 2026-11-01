@@ -28,6 +28,8 @@ G.Player = class Player {
     this.spdMul = perks.spdMul || 1;
     this.cdMul = perks.cdMul || 1;
     this.dmgReduce = perks.dmgReduce || 0;
+    this.pdefReduce = perks.pdefReduce || 0;
+    this.sdefReduce = perks.sdefReduce || 0;
     this.itemReduce = 0;          // el del objeto (Chaleco Asalto): no cuenta para el tope de las cartas Coraza
     this.regenFlat = perks.regen || 0;
     this.magnet = 78 * (perks.magnetMul || 1);
@@ -71,11 +73,28 @@ G.Player = class Player {
     this.evoChain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(this.baseDex) : null;
     this.evoTierUnlocked = (typeof G !== 'undefined' && G.DB && G.DB.getEvoTier) ? G.DB.getEvoTier(this.baseDex) : 1;
 
-    // Cân bằng giai đoạn tiến hóa (user rule): Pokémon 3 bậc ở dạng 1 đầu game được buff +25% baseAtk, +25% maxHp
-    if (this.evoChain && this.evoChain.type === '3stage' && this.evoStage === 1) {
-      this.baseAtk *= 1.25;
-      this.maxHp = Math.round(this.maxHp * 1.25);
-      this.hp = this.maxHp;
+    // Cân bằng giai đoạn tiến hóa (user rule):
+    // - Dạng 1 của loài 3 dạng trở lên quá yếu: buff mạnh cho đầu game đỡ cực (+35% baseAtk, +35% maxHp, +8% spd)
+    // - Dạng 2: ngang bằng một con không có dạng tiến hoá (~500 BST baseline, +28% baseAtk, +25% maxHp, +10% spd)
+    // - Dạng 3: nhỉnh hơn tầm 30% (+45% baseAtk, +45% maxHp, +20% spd)
+    const is3StageOrMore = this.evoChain && (this.evoChain.type === '3stage' || this.evoChain.maxStage >= 3);
+    if (is3StageOrMore) {
+      if (this.evoStage === 1) {
+        this.baseAtk *= 1.35;
+        this.maxHp = Math.round(this.maxHp * 1.35);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.08);
+      } else if (this.evoStage === 2) {
+        this.baseAtk *= 1.28;
+        this.maxHp = Math.round(this.maxHp * 1.25);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.10);
+      } else if (this.evoStage >= 3) {
+        this.baseAtk *= 1.45;
+        this.maxHp = Math.round(this.maxHp * 1.45);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.20);
+      }
     }
     this.isApex = false;
     this.awakeningTier = 0;
@@ -201,6 +220,8 @@ G.Player = class Player {
     return G.Judgment && G.Judgment.active ? G.Judgment.capSpd(s * slow * w) : s * slow * w;
   }
   get reduction() { return Math.min(0.8, this.dmgReduce + this.itemReduce + this.buffs.def.n * this.buffs.def.amount); }
+  get pReduction() { return Math.min(0.85, this.reduction + (this.pdefReduce || 0)); }
+  get sReduction() { return Math.min(0.85, this.reduction + (this.sdefReduce || 0)); }
   get regen() { return this.regenFlat + this.buffs.regen.n * this.buffs.regen.amount; }
 
   // ---------------- movimientos ----------------
@@ -378,12 +399,13 @@ G.Player = class Player {
       }
       if (ab.inMul) amount *= ab.inMul(this, type, cls);
     }
+    const finalCat = cat || 'physical';
     if (!pure) {
       if (this.hasItem && this.hasItem('eviolite')) {
         const chain = this.evoChain;
         if (chain && this.evoStage < chain.maxStage) amount *= 0.714;
       }
-      amount *= G.Stats.taken(this.mon, cat);
+      amount *= G.Stats.taken(this.mon, finalCat);
     }
     let eff = null;
     if (type) {
@@ -399,15 +421,26 @@ G.Player = class Player {
     // Con un ataque cuerpo a cuerpo activo se recibe un 25 % menos: hay que
     // estar encima de los enemigos para pegar (iban muy por detrás).
     const close = this.activeGroup().some(m => m.kind === 'melee') ? 0.75 : 1;
-    const d = pure ? Math.max(1, amount) : Math.max(1, amount * (1 - this.reduction) * close);
+    const curReduction = finalCat === 'special' ? this.sReduction : this.pReduction;
+    let d = pure ? Math.max(1, amount) : Math.max(1, amount * (1 - curReduction) * close);
+    // Cơ chế chống sốc sát thương (One-shot Protection): không được quá 40% máu tối đa trong 1 lần dính đòn
+    const maxAllowedDmg = Math.max(1, Math.floor(this.maxHp * 0.40));
+    if (d > maxAllowedDmg) {
+      d = maxAllowedDmg;
+    }
     this.hp -= d;
     this.invuln = 0.52;
     this.flash = 0.14;
     G.Audio.sfx('hurt');
     G.Camera.kick(0.28);
     if (!this.remote) G.Pad.rumble(0.25 + Math.min(0.75, d / this.maxHp * 3), 140);
-    G.FX.dmgText(this.x, this.y - this.bodyH - 4, '-' + Math.round(d), eff === 'super' ? '#ff3048' : eff === 'weak' ? '#c9a0a8' : '#ff6b7a', eff === 'super');
-    G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ff5f6d', 6, 90);
+    const isSpecial = finalCat === 'special';
+    const tag = isSpecial ? '⚡ -' : '⚔ -';
+    const numColor = isSpecial
+      ? (eff === 'super' ? '#e879f9' : eff === 'weak' ? '#a78bfa' : '#c084fc')
+      : (eff === 'super' ? '#ff3048' : eff === 'weak' ? '#c9a0a8' : '#ff6b7a');
+    G.FX.dmgText(this.x, this.y - this.bodyH - 4, tag + Math.round(d), numColor, eff === 'super');
+    G.FX.burst(this.x, this.y - this.bodyH * 0.5, isSpecial ? '#c084fc' : '#ff5f6d', 6, 90);
     // Banda Focus: aguanta el golpe con 1 de vida (una vez cada 60 s).
     if (this.hp <= 0 && this.hasItem('focussash') && performance.now() - this.sashT > 60000) {
       this.sashT = performance.now();
@@ -483,18 +516,20 @@ G.Player = class Player {
     this.baseAtk = nextMon.atk;
     this.maxHp = nextMon.hp + (this.perksHp || 0) + (this.bonusMaxHp || 0);
 
-    // Cân bằng giai đoạn tiến hóa:
-    // - Dạng 2: ngang bằng Pokémon không có dạng tiến hóa (single-stage ~500 BST baseline, +15% atk, +15% maxHp)
-    // - Dạng 3: nhỉnh hơn tầm 30% (+30% atk, +30% maxHp, +15% spd)
+    // Cân bằng giai đoạn tiến hóa (user rule):
+    // - Dạng 2: ngang bằng Pokémon không có dạng tiến hóa (single-stage ~500 BST baseline: +28% atk, +25% maxHp, +10% spd)
+    // - Dạng 3: nhỉnh hơn tầm 30% (+45% atk, +45% maxHp, +20% spd)
     const stageNow = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
-    if (this.evoChain && this.evoChain.type === '3stage') {
+    const is3StageOrMore = this.evoChain && (this.evoChain.type === '3stage' || this.evoChain.maxStage >= 3);
+    if (is3StageOrMore) {
       if (stageNow === 2) {
-        this.baseAtk *= 1.15;
-        this.maxHp = Math.round(this.maxHp * 1.15);
+        this.baseAtk *= 1.28;
+        this.maxHp = Math.round(this.maxHp * 1.25);
+        this.baseSpd = Math.round(this.baseSpd * 1.10);
       } else if (stageNow >= 3) {
-        this.baseAtk *= 1.30;
-        this.maxHp = Math.round(this.maxHp * 1.30);
-        this.baseSpd = Math.round(this.baseSpd * 1.15);
+        this.baseAtk *= 1.45;
+        this.maxHp = Math.round(this.maxHp * 1.45);
+        this.baseSpd = Math.round(this.baseSpd * 1.20);
       }
     }
 
@@ -1078,11 +1113,15 @@ G.Player = class Player {
       : this.dex;
     this.dex = targetDex;
 
-    // Dạng đặc biệt (Mega / Primal / Ultra / Hợp thể): khác biệt rõ rệt so với trước khi tiến hóa (+35% atk, +30% maxHp, +15% spd)
-    this.baseAtk *= 1.35;
-    this.maxHp = Math.round(this.maxHp * 1.30);
-    this.baseSpd = Math.round(this.baseSpd * 1.15);
+    // Dạng đặc biệt (Mega / Primal / Ultra / Hợp thể): khác biệt rõ rệt so với trước khi tiến hóa (+50% atk, +45% maxHp, +25% spd, +15% crit, -20% dmg taken, -15% cooldown)
+    this.baseAtk *= 1.50;
+    this.maxHp = Math.round(this.maxHp * 1.45);
+    this.baseSpd = Math.round(this.baseSpd * 1.25);
     this.hp = this.maxHp;
+    this.critChance = (this.critChance || 0) + 0.15;
+    this.dmgReduce = Math.min(0.60, (this.dmgReduce || 0) + 0.20);
+    this.cdMul = (this.cdMul || 1) * 0.85;
+    this.megaAura = true;
 
     if (typeof G !== 'undefined' && G.Sprites) {
       this.scale = G.Sprites.playerScale(targetDex);
@@ -1186,6 +1225,29 @@ G.Player = class Player {
             if (d2 <= r2) {
               const ang = Math.atan2(e.y - this.y, e.x - this.x);
               e.hurt(jDmg, '#eab308', Math.cos(ang) * 40, Math.sin(ang) * 40, 40, 'shockwave');
+            }
+          }
+        }
+      }
+    }
+    // Hào quang Thần Năng (Mega / Primal / Ultra / Hợp thể): mỗi 2.2s quét sóng năng lượng 360 độ
+    if (this.megaAura && !this.dead) {
+      this.megaAuraTimer = (this.megaAuraTimer || 0) + dt;
+      if (this.megaAuraTimer >= 2.2) {
+        this.megaAuraTimer = 0;
+        if (G.FX && G.FX.ring) {
+          G.FX.ring(this.x, this.y, 8, 160, '#ffd23f', 0.5, 5);
+          G.FX.ring(this.x, this.y, 14, 110, '#f43f5e', 0.4, 4);
+        }
+        if (G.EnemyMgr && G.EnemyMgr.all) {
+          const auraDmg = (this.maxHp * 0.25 + this.atk * 80);
+          const r2 = 160 * 160;
+          for (const e of G.EnemyMgr.all()) {
+            if (e.dead) continue;
+            const d2 = G.U.dist2(this.x, this.y, e.x, e.y);
+            if (d2 <= r2) {
+              const ang = Math.atan2(e.y - this.y, e.x - this.x);
+              e.hurt(auraDmg, '#ffd23f', Math.cos(ang) * 50, Math.sin(ang) * 50, 50, 'mega_aura');
             }
           }
         }

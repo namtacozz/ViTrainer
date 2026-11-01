@@ -47,10 +47,10 @@ G.Enemies = (() => {
     { at: 540,  hp: 36000,   dmg: 42,  xp: 1600,  bst: [540, 600] },
     { at: 720,  hp: 120000,  dmg: 65,  xp: 2600,  bst: [580, 700] },
     { at: 900,  hp: 320000,  dmg: 95,  xp: 4500,  bst: [600, 700] },
-    { at: 1080, hp: 750000,  dmg: 130, xp: 6000,  bst: [600, 720] },
-    { at: 1260, hp: 1600000, dmg: 165, xp: 8500,  bst: [620, 750] },
-    { at: 1440, hp: 3200000, dmg: 210, xp: 12000, bst: [650, 780] },
-    { at: 1620, hp: 6500000, dmg: 260, xp: 16000, bst: [680, 800] }
+    { at: 1080, hp: 450000,  dmg: 95,  xp: 6000,  bst: [600, 720] },
+    { at: 1260, hp: 850000,  dmg: 110, xp: 8500,  bst: [620, 750] },
+    { at: 1440, hp: 1500000, dmg: 130, xp: 12000, bst: [650, 780] },
+    { at: 1620, hp: 2400000, dmg: 155, xp: 16000, bst: [680, 800] }
   ];
 
   // Stats base aproximados a partir de los de juego (inverso de fetch_pokedex).
@@ -194,15 +194,16 @@ G.Enemies = (() => {
   }
 
   /**
-   * Thang điểm nâng cấp Boss theo hàm số mũ tới phút 30 (1800s):
-   * Giảm ~20% tốc độ tăng tiến và nerf dịu đầu game.
+   * Thang điểm nâng cấp Boss tới phút 30 (1800s):
+   * Cân bằng lại sau phút 20: giảm tốc độ tăng trưởng máu & sát thương,
+   * tránh boss quá trâu không thể tiêu diệt và tránh one-shot.
    */
   function bossScale(t) {
     const p = t / 1800;
     return {
-      hp: 1 + (t / 420) * Math.exp(1.15 * p),
-      dmg: 1 + (t / 360) * Math.exp(1.10 * p),
-      spd: 1 + Math.min(0.35, (t / 1800) * 0.35)
+      hp: 1 + (t / 600) * (1 + 0.85 * p),
+      dmg: 1 + (t / 550) * (1 + 0.50 * p),
+      spd: 1 + Math.min(0.25, (t / 1800) * 0.25)
     };
   }
 

@@ -52,15 +52,16 @@ G.Rift = (() => {
       rift.ttl -= dt;
       if (rift.ttl <= 0) { rift = null; return; }
       if (!arena && !pl.dead && G.U.dist2(pl.x, pl.y, rift.x, rift.y - 10) < 30 * 30) enter();
-    } else if (!arena && authority() && time >= (G.Timeline ? G.Timeline.RIFT_START : FROM) && time < G.Judgment.AT - 120) {
-      // Mở Rift chính xác theo lịch trình của Timeline
-      const rTimes = G.Timeline ? G.Timeline.getRiftTimes(time - 1.5, time + 2) : [];
-      if (rTimes.length > 0) {
-        const rt = rTimes[0];
-        if (!openedRifts.has(rt)) {
-          if (!G.EnemyMgr.bossAlive()) {
-            openedRifts.add(rt);
-            open();
+    } else if (!arena && authority() && time >= (G.Timeline ? G.Timeline.RIFT_START : FROM) && time < (G.Judgment ? G.Judgment.AT - 120 : 1680)) {
+      // Mở Rift chính xác theo chu kỳ Timeline: Không bao giờ bị lỡ mốc do bận đánh Boss
+      const rStart = G.Timeline ? G.Timeline.RIFT_START : FROM;
+      const rTimes = G.Timeline ? G.Timeline.getRiftTimes(rStart, time) : [];
+      const nextRt = rTimes.find(rt => !openedRifts.has(rt));
+      if (nextRt != null) {
+        // Nếu Boss đang sống, kiên nhẫn đợi người chơi hạ Boss xong là mở ngay lập tức
+        if (!G.EnemyMgr || !G.EnemyMgr.bossAlive()) {
+          if (open()) {
+            openedRifts.add(nextRt);
           }
         }
       }
@@ -71,14 +72,30 @@ G.Rift = (() => {
   function open() {
     const alive = G.Game.everyone().filter(p => !p.dead);
     const near = G.U.pick(alive.length ? alive : [G.Game.player]);
+    if (!near) return false;
+
+    // Vòng 1: Tìm vị trí đẹp cách xa vừa phải (260 - 460)
     for (let i = 0; i < 24; i++) {
-      const a = Math.random() * 6.2832, d = G.U.rand(380, 560);
+      const a = Math.random() * 6.2832, d = G.U.rand(260, 460);
       const x = near.x + Math.cos(a) * d, y = near.y + Math.sin(a) * d * 0.85;
       if (!G.World.isFree(x, y, 22)) continue;
       show(x, y, TTL);
       if (G.Coop.isHost) G.Coop.broadcast(['rift', Math.round(x), Math.round(y), TTL]);
-      return;
+      return true;
     }
+    // Vòng 2: Tìm vị trí gần hơn nếu địa hình hẹp (120 - 240)
+    for (let i = 0; i < 20; i++) {
+      const a = Math.random() * 6.2832, d = G.U.rand(120, 240);
+      const x = near.x + Math.cos(a) * d, y = near.y + Math.sin(a) * d * 0.85;
+      if (!G.World.isFree(x, y, 20)) continue;
+      show(x, y, TTL);
+      if (G.Coop.isHost) G.Coop.broadcast(['rift', Math.round(x), Math.round(y), TTL]);
+      return true;
+    }
+    // Fallback đảm bảo 100% Cổng Rift luôn được mở thành công
+    show(near.x, near.y, TTL);
+    if (G.Coop.isHost) G.Coop.broadcast(['rift', Math.round(near.x), Math.round(near.y), TTL]);
+    return true;
   }
 
   /** Aparece la grieta (también la que manda el anfitrión). */
@@ -87,7 +104,10 @@ G.Rift = (() => {
     asked = false;
     // (El aviso grande lo dibuja hud.js mientras rift.t < 4,5 s.)
     G.Audio.sfx('rift');
-    G.FX.ring(x, y, 6, 80, '#b48aff', 0.7, 5);
+    G.FX.ring(x, y, 6, 120, '#b48aff', 0.8, 6);
+    if (G.Spawner && G.Spawner.say) {
+      G.Spawner.say('¡Ha aparecido una Grieta Dimensional!', 3.5, true);
+    }
   }
 
   function enter() {

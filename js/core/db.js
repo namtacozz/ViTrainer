@@ -1088,6 +1088,73 @@ G.DB = (() => {
 
   function nameAccount() { return !!(auth && auth.currentUser && (auth.currentUser.email || '').endsWith('@' + NAME_DOMAIN)); }
 
+  /** Giải mã email nội bộ trở lại thành tên người dùng */
+  function emailToName(email) {
+    if (!email || !email.endsWith('@' + NAME_DOMAIN)) return '';
+    const hex = email.split('@')[0];
+    try {
+      const bytes = new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+      return new TextDecoder().decode(bytes);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function hasPassword() {
+    const u = auth && auth.currentUser;
+    return !!(u && (u.providerData.some(p => p.providerId === 'password') || nameAccount()));
+  }
+
+  function linkedUsername() {
+    const u = auth && auth.currentUser;
+    if (!u) return '';
+    const passProvider = u.providerData.find(p => p.providerId === 'password');
+    if (passProvider && passProvider.email) {
+      const decoded = emailToName(passProvider.email);
+      if (decoded) return decoded;
+    }
+    if (nameAccount() && u.email) {
+      const decoded = emailToName(u.email);
+      if (decoded) return decoded;
+    }
+    return '';
+  }
+
+  /** Liên kết Tên người dùng và Mật khẩu thuần vào tài khoản Google hiện tại. */
+  async function linkPassword(name, pass) {
+    if (mode !== 'cloud' || !auth || !auth.currentUser) {
+      return { ok: false, error: 'Inicia sesión en la nube primero.' };
+    }
+    name = (name || '').trim();
+    if (!VALID.test(name)) {
+      return { ok: false, error: 'El nombre debe tener 3-16 letras, números o _.' };
+    }
+    const min = 6;
+    if ((pass || '').length < min) {
+      return { ok: false, error: 'La contraseña debe tener al menos ' + min + ' caracteres.' };
+    }
+    try {
+      const email = nameToEmail(name);
+      const cred = firebase.auth.EmailAuthProvider.credential(email, pass);
+      await auth.currentUser.linkWithCredential(cred);
+      if (save && (!save.name || save.name === 'Invitado' || save.name === 'Entrenador')) {
+        save.name = name;
+        user = name;
+        commit();
+      }
+      return { ok: true, name };
+    } catch (e) {
+      const c = (e && e.code) || '';
+      if (c === 'auth/provider-already-linked') {
+        return { ok: false, error: 'Esta cuenta ya tiene un usuario y contraseña vinculados.' };
+      }
+      if (c === 'auth/credential-already-in-use' || c === 'auth/email-already-in-use') {
+        return { ok: false, error: 'Ese nombre de usuario ya está registrado en otra cuenta.' };
+      }
+      return { ok: false, error: authError(e) };
+    }
+  }
+
   /*
    * Recuperar la cuenta: las de nombre y contraseña no tienen correo de verdad
    * (no se les puede mandar un enlace), así que se les ofrece VINCULAR su Gmail:
@@ -1210,6 +1277,9 @@ G.DB = (() => {
     /** ¿La cuenta es de usuario y contraseña (no de Google)? */
     get nameAccount() { return nameAccount(); },
     get hasGoogle() { return hasGoogle(); }, linkGoogle,
+    get hasPassword() { return hasPassword(); },
+    get linkedUsername() { return linkedUsername(); },
+    linkPassword,
     get mode() { return mode; },
     get localReason() { return localReason; },
     get syncState() { return syncState; },

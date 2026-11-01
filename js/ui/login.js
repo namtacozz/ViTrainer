@@ -39,6 +39,24 @@ G.LoginUI = (() => {
       try { localStorage.setItem('ps.recover.no.' + G.DB.fb.uid, '1'); } catch (e) { /* nada */ }
       $('scr-recover').classList.add('hidden');
     };
+    // Vincular usuario y contraseña para cuentas con Google
+    if ($('link-dlg-ok')) {
+      $('link-dlg-ok').onclick = async () => {
+        $('link-dlg-err').textContent = '';
+        const u = $('link-dlg-user').value, p = $('link-dlg-pass').value;
+        $('link-dlg-ok').disabled = true;
+        const r = await G.DB.linkPassword(u, p);
+        $('link-dlg-ok').disabled = false;
+        if (!r.ok) { $('link-dlg-err').textContent = r.error; return; }
+        $('scr-link-account').classList.add('hidden');
+        G.UI.toast('¡Usuario y contraseña vinculados! Ahora puedes entrar con ambos métodos.', 4500);
+      };
+      $('link-dlg-later').onclick = () => $('scr-link-account').classList.add('hidden');
+      $('link-dlg-never').onclick = () => {
+        try { localStorage.setItem('ps.linkpass.no.' + G.DB.fb.uid, '1'); } catch (e) { /* nada */ }
+        $('scr-link-account').classList.add('hidden');
+      };
+    }
     $('btn-google').onclick = async () => {
       $('login-err').textContent = '';
       $('btn-google').disabled = true;
@@ -56,11 +74,25 @@ G.LoginUI = (() => {
    */
   let offered = false;
   function offerRecovery() {
-    if (offered || G.DB.mode !== 'cloud' || !G.DB.fb || !G.DB.nameAccount || G.DB.hasGoogle) return;
-    try { if (localStorage.getItem('ps.recover.no.' + G.DB.fb.uid)) return; } catch (e) { /* nada */ }
+    if (offered || G.DB.mode !== 'cloud' || !G.DB.fb || G.DB.guest) return;
     offered = true;
-    $('rec-err').textContent = '';
-    $('scr-recover').classList.remove('hidden');
+
+    // Caso 1: Cuenta de nombre y contraseña que aún no tiene Google vinculado
+    if (G.DB.nameAccount && !G.DB.hasGoogle) {
+      try { if (localStorage.getItem('ps.recover.no.' + G.DB.fb.uid)) return; } catch (e) { /* nada */ }
+      $('rec-err').textContent = '';
+      $('scr-recover').classList.remove('hidden');
+      return;
+    }
+
+    // Caso 2: Cuenta de Google que aún no tiene usuario y contraseña vinculados
+    if (G.DB.hasGoogle && !G.DB.hasPassword) {
+      try { if (localStorage.getItem('ps.linkpass.no.' + G.DB.fb.uid)) return; } catch (e) { /* nada */ }
+      if ($('link-dlg-err')) $('link-dlg-err').textContent = '';
+      if ($('link-dlg-user')) $('link-dlg-user').value = '';
+      if ($('link-dlg-pass')) $('link-dlg-pass').value = '';
+      if ($('scr-link-account')) $('scr-link-account').classList.remove('hidden');
+    }
   }
 
   /*
