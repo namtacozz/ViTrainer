@@ -178,8 +178,8 @@ G.SettingsUI = (() => {
       const linkedUser = G.DB.linkedUsername || nick;
       const pHtml = hasP
         ? `<div class="row wrap" style="gap:8px;align-items:center;justify-content:flex-end">
-             <span class="badge on" style="color:#22c55e;font-weight:bold">✓ Usuario vinculado: <b translate="no">${esc(linkedUser)}</b></span>
-             <button class="btn small" id="set-btn-toggle-chpass" type="button">Cambiar contraseña</button>
+             <span class="badge on" style="color:#22c55e;font-weight:bold">${G.T('✓ Usuario vinculado: ')}<b translate="no">${esc(linkedUser)}</b></span>
+             <button class="btn small" id="set-btn-toggle-chpass" type="button">${G.T('Cambiar contraseña')}</button>
            </div>`
         : `<div class="link-pass-card" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;width:100%">
              <div style="font-weight:bold;margin-bottom:4px;">Vincular usuario y contraseña</div>
@@ -205,7 +205,7 @@ G.SettingsUI = (() => {
         : '';
 
       linkMethodsHtml = `<div class="set-row"><div class="grow"><b>Google</b><small>Acceso rápido con tu Gmail</small></div>${gHtml}</div>`
-        + (!hasP ? pHtml : `<div class="set-row"><div class="grow"><b>Usuario y contraseña</b><small>Acceso con credenciales</small></div>${pHtml}</div>${chPassCardHtml}`);
+        + (!hasP ? pHtml : `<div class="set-row"><div class="grow"><b>${G.T('Usuario y contraseña')}</b><small>${G.T('Acceso con credenciales')}</small></div>${pHtml}</div>${chPassCardHtml}`);
     }
 
     box.innerHTML = section('Cuenta')

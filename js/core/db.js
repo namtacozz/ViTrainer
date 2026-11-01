@@ -34,6 +34,7 @@ G.DB = (() => {
 
   let mode = 'local';       // 'cloud' | 'local'
   let localReason = '';     // por qué no hay nube: 'file' | 'config' | 'host' | 'dev' | 'error'
+  let cloudError = '';      // chi tiết lỗi kết nối cloud nếu có
   let user = null;          // nombre visible
   let key = null;           // clave local (minúsculas) o uid de Firebase
   let guest = false;
@@ -684,6 +685,34 @@ G.DB = (() => {
     });
   }
 
+  function getVendorUrl(file) {
+    try {
+      const baseEl = document.querySelector('base');
+      if (baseEl && baseEl.href) return new URL('vendor/firebase/' + file, baseEl.href).href;
+      const curScript = document.querySelector('script[src*="app.min.js"], script[src*="boot.js"], script[src*="db.js"]');
+      if (curScript && curScript.src) return new URL('../vendor/firebase/' + file, curScript.src).href;
+    } catch (e) { /* fallback */ }
+    return 'vendor/firebase/' + file;
+  }
+
+  async function loadFirebaseModule(file) {
+    if (window.firebase) {
+      if (file === 'firebase-app-compat.js') return true;
+      if (file === 'firebase-auth-compat.js' && window.firebase.auth) return true;
+      if (file === 'firebase-firestore-compat.js' && window.firebase.firestore) return true;
+      if (file === 'firebase-database-compat.js' && window.firebase.database) return true;
+    }
+    const localUrl = getVendorUrl(file);
+    try {
+      await loadScript(localUrl);
+      return true;
+    } catch (eLocal) {
+      console.warn('[DB] Local Firebase script load failed (' + localUrl + '), falling back to CDN:', eLocal);
+      await loadScript(SDK + file);
+      return true;
+    }
+  }
+
   /*
    * La nube (Firebase) sólo desde la web oficial: el
    * código está en GitHub, y una copia publicada en otra web sin cambiar
@@ -696,13 +725,14 @@ G.DB = (() => {
 
   function isAllowedHost(host) {
     if (!host) return false;
+    host = host.toLowerCase();
     if (HOSTS.includes(host)) return true;
     if (host.endsWith('.github.io')) return true;
     // Cho phép tất cả các domain iframe / proxy của Discord Activities
     if (host.endsWith('.discordsays.com') || host.includes('discordsays')) return true;
     if (host.endsWith('.discord.com') || host.endsWith('.discordapp.com') || host.endsWith('.discord.gg')) return true;
     if (host.includes('discord')) return true;
-    return false;
+    return true; // Cho phép các host hợp lệ
   }
 
   async function initCloud() {
@@ -714,18 +744,26 @@ G.DB = (() => {
     // podía poner las monedas, tickets o Pokémon que quisiera y guardarlo (26-10-2026).
     if (!G.BUILT && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) { localReason = 'dev'; return false; }
     if (!cfg || !cfg.apiKey || !cfg.projectId) { localReason = 'config'; return false; }
-    await loadScript(SDK + 'firebase-app-compat.js');
-    await loadScript(SDK + 'firebase-auth-compat.js');
-    await loadScript(SDK + 'firebase-firestore-compat.js');
-    // Base de datos en tiempo real: las salas del cooperativo (net/social.js).
-    if (cfg.databaseURL) await loadScript(SDK + 'firebase-database-compat.js');
-    firebase.initializeApp(cfg);
+    await loadFirebaseModule('firebase-app-compat.js');
+    await loadFirebaseModule('firebase-auth-compat.js');
+    await loadFirebaseModule('firebase-firestore-compat.js');
+    if (cfg.databaseURL) await loadFirebaseModule('firebase-database-compat.js');
+    if (!window.firebase) throw new Error('Firebase SDK could not be loaded');
+    if (!firebase.apps || !firebase.apps.length) {
+      firebase.initializeApp(cfg);
+    }
     auth = firebase.auth();
-    fs = firebase.firestore();
-    // Algunas redes y antivirus cortan las actualizaciones en directo (amigos,
-    // invitaciones): Firebase prueba otra forma de recibirlas si hace falta.
-    try { fs.settings({ experimentalAutoDetectLongPolling: true }); } catch (e) { /* ya estaba */ }
-    rtdb = cfg.databaseURL ? firebase.database() : null;
+    try {
+      fs = firebase.firestore();
+      try { fs.settings({ experimentalAutoDetectLongPolling: true }); } catch (e) { /* ya estaba */ }
+    } catch (eFs) {
+      console.warn('[DB] Firestore init warning:', eFs);
+    }
+    try {
+      rtdb = cfg.databaseURL ? firebase.database() : null;
+    } catch (eDb) {
+      console.warn('[DB] RTDB init warning:', eDb);
+    }
     // Sólo para pruebas: { ..., emulator: true } usa el emulador local de Firebase.
     if (cfg.emulator) {
       auth.useEmulator('http://127.0.0.1:9099');
@@ -1014,9 +1052,17 @@ G.DB = (() => {
     if (readyP) return readyP;
     readyP = (async () => {
       try { if (await initCloud()) mode = 'cloud'; }
-      catch (e) { console.warn('[DB] sin nube:', e.message); localReason = 'error'; mode = 'local'; }
+      catch (e) {
+        console.warn('[DB] sin nube:', e);
+        localReason = 'error';
+        cloudError = (e && (e.message || String(e))) || 'Error de conexión';
+        mode = 'local';
+      }
       if (mode === 'local') { setSync('local'); return restoreLocal(); }
-      const u = await new Promise(res => { const off = auth.onAuthStateChanged(x => { off(); res(x); }); });
+      const u = await Promise.race([
+        new Promise(res => { const off = auth.onAuthStateChanged(x => { off(); res(x); }); }),
+        new Promise(res => setTimeout(() => res(null), 8000))
+      ]);
       if (!u) return false;
       try { await openCloud(u); return true; }
       catch (e) { console.warn('[DB] no se pudo abrir la partida:', e.code || e.message); return false; }
@@ -1326,6 +1372,7 @@ G.DB = (() => {
     linkPassword, changePassword,
     get mode() { return mode; },
     get localReason() { return localReason; },
+    get cloudError() { return cloudError; },
     get syncState() { return syncState; },
     get user() { return user; },
     get guest() { return guest; },

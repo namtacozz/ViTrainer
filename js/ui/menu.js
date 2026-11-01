@@ -80,7 +80,12 @@ G.MenuUI = (() => {
         if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
         reconBtn.classList.add('hidden');
       } else {
-        reconBtn.classList.toggle('hidden', !saved || !saved.id);
+        if (saved && saved.id) {
+        reconBtn.innerHTML = '<span class="mi-ico">' + G.Icons.html('friends', 26) + '</span><span>' + G.T('Reconectarse') + '</span><small>' + G.T('Partida en grupo en curso') + '</small>';
+        reconBtn.classList.remove('hidden');
+      } else {
+        reconBtn.classList.add('hidden');
+      }
       }
     }
     const s = G.DB.save;
