@@ -30,7 +30,16 @@ G.Player = class Player {
     this.dmgReduce = perks.dmgReduce || 0;
     this.pdefReduce = perks.pdefReduce || 0;
     this.sdefReduce = perks.sdefReduce || 0;
-    this.itemReduce = 0;          // el del objeto (Chaleco Asalto): no cuenta para el tope de las cartas Coraza
+    
+    this.critMul = perks.critMul || 1.5;
+    this.pierce = perks.pierce || 0;
+    this.aoeMul = perks.aoeMul || 1.0;
+    this.lifesteal = perks.lifesteal || 0;
+    this.tenacity = perks.tenacity || 0;
+    this.milestones = perks.milestones || {};
+    this.lastShieldTime = 0;
+    this.lastSurgeTime = 0;
+  this.itemReduce = 0;          // el del objeto (Chaleco Asalto): no cuenta para el tope de las cartas Coraza
     this.regenFlat = perks.regen || 0;
     this.magnet = 78 * (perks.magnetMul || 1);
     this.xpMul = perks.xpMul || 1;
@@ -491,7 +500,22 @@ G.Player = class Player {
     }
     if (ab && ab.hurt && this.hp > 0) ab.hurt(this, type, cls);
 // Zygarde tiến hóa chuẩn theo cấp độ (10% Nv.1 -> 50% Nv.25 -> 100% Nv.50 -> Mega), không tự nhảy dạng khi tuột máu
-    if (this.hp <= 0) {
+    
+    // Đột phá Lá Chắn Bất Khuất: Khi máu tụt dưới 30%, nhận Khiên Năng Lượng 25% Max HP (hồi 60s)
+    if (this.milestones && this.milestones.undyingShield && this.hp > 0 && this.hp < this.maxHp * 0.30) {
+      const nowMs = performance.now();
+      if (!this._lastShieldMs || nowMs - this._lastShieldMs > 60000) {
+        this._lastShieldMs = nowMs;
+        const sVal = Math.round(this.maxHp * 0.25);
+        this.shield = (this.shield || 0) + sVal;
+        this.shieldT = 5.0;
+        if (G.FX) {
+          G.FX.ring(this.x, this.y, this.r, this.r * 3.5, '#38bdf8', 0.5, 5);
+          G.FX.dmgText(this.x, this.y - 25, 'LÁ CHẮN BẤT KHUẤT!', '#38bdf8', true);
+        }
+      }
+    }
+  if (this.hp <= 0) {
       this.hp = 0; this.dead = true;
       this.anim.play('Faint', { hold: true });
       G.Projectiles.clearOrbs(this);

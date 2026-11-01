@@ -1293,6 +1293,23 @@ G.Flow = {
     G.Audio.music('village');
     G.MenuUI.open();
     if (!G.LoginUI.updateNotices()) G.LoginUI.offerRecovery();
+
+    // Tự động tham gia phòng nếu được mời qua link Discord Activity (?room=ROOM_ID)
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const inviteRoomId = urlParams.get('room');
+      if (inviteRoomId && G.Social && G.Social.joinRoom) {
+        setTimeout(async () => {
+          if (!G.Social.me) {
+            if (G.Social.ensureFriends) await G.Social.ensureFriends();
+          }
+          const res = await G.Social.joinRoom(inviteRoomId);
+          if (res && res.ok && G.LobbyUI && G.LobbyUI.open) {
+            G.LobbyUI.open();
+          }
+        }, 500);
+      }
+    } catch (e) {}
   },
   /** Al cerrar el resumen: a la sala si sigues en una, si no al menú. */
   afterRun() {

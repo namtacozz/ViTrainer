@@ -97,7 +97,34 @@
     function render() {
       const room = G.Social.room;
       $('fr-me').innerHTML = 'Tu apodo: <b class="gold" translate="no">' + esc(G.Social.me ? G.Social.me.name : '') + '</b> · dáselo a tus amigos para que te añadan.';
-      $('fr-room').classList.toggle('hidden', !room);
+      
+      // Ô nhập mã phòng trực tiếp
+      let joinBox = $('fr-join-box');
+      if (!joinBox) {
+        joinBox = document.createElement('div');
+        joinBox.id = 'fr-join-box';
+        joinBox.style.cssText = 'margin:10px 0;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.1);';
+        const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
+        joinBox.innerHTML = `
+          <form id="fr-join-code-form" class="row" style="gap:8px;">
+            <input id="fr-code-input" class="in" style="flex:1;text-transform:uppercase;" placeholder="${isVi ? 'Nhập mã phòng (Room ID)...' : 'Enter room code...'}">
+            <button type="submit" class="btn gold small">${isVi ? 'Vào phòng' : 'Join'}</button>
+          </form>
+        `;
+        $('fr-list').parentNode.insertBefore(joinBox, $('fr-list'));
+        $('fr-join-code-form').onsubmit = async e => {
+          e.preventDefault();
+          const code = $('fr-code-input').value.trim();
+          if (!code) return;
+          const r = await G.Social.joinRoom(code);
+          if (r && r.ok) {
+            G.LobbyUI.open();
+          } else {
+            G.UI.toast((r && r.error) || (isVi ? 'Không tìm thấy phòng!' : 'Room not found!'), 3000);
+          }
+        };
+      }
+    $('fr-room').classList.toggle('hidden', !room);
       if ($('fr-create-room')) $('fr-create-room').classList.toggle('hidden', !!room);
       const list = G.Social.friends.sort((a, b) => {
         const rank = f => f.status === 'in' ? 0 : f.status === 'ok' ? 1 : 2;
@@ -113,10 +140,15 @@
         const el = document.createElement('div');
         el.className = 'fr-row';
         const inRoom = room && room.members.some(m => m.uid === f.uid);
-        const isVi = (window.PS_LOCALES && window.PS_LOCALES.lang === 'vi') || document.documentElement.lang === 'vi';
-        const dot = f.status !== 'ok' ? 'pend' : 'on';
-        const stText = inRoom ? (isVi ? 'Trong phòng' : 'In your room') : (f.status === 'ok' ? (isVi ? 'Trực tuyến' : 'Online') : stateText(f));
-        el.innerHTML = `<i class="dot ${dot}"></i><b translate="no"><a href="#" class="plink" title="Ver su perfil">${esc(f.name)}</a></b><span class="st">${stText}</span><span class="grow"></span>`;
+        const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
+        const isOnline = f.online || (f.seen && (Date.now() - f.seen < 180000));
+        const dot = inRoom ? 'room' : (f.status !== 'ok' ? 'pend' : (isOnline ? 'on' : 'off'));
+        const stText = inRoom
+          ? (isVi ? 'Trong phòng' : 'In your room')
+          : (f.status === 'ok'
+            ? (isOnline ? (isVi ? 'Trực tuyến' : 'Online') : (isVi ? 'Ngoại tuyến' : 'Offline'))
+            : stateText(f));
+        el.innerHTML = `<i class="dot ${dot}"></i><b translate="no"><a href="#" class="plink" title="Xem hồ sơ">${esc(f.name)}</a></b><span class="st ${isOnline ? 'st-on' : 'st-off'}">${stText}</span><span class="grow"></span>`;
         if (f.status === 'ok') el.querySelector('.plink').onclick = e => { e.preventDefault(); G.ProfileUI.show(f.uid); };
         else el.querySelector('.plink').onclick = e => e.preventDefault();
         const btn = (txt, cls, fn) => {
@@ -266,6 +298,47 @@
         }
       }
 
+      
+      // Box chia sẻ mã phòng và link mời Discord Activity
+      let shareBox = $('lobby-share-box');
+      if (!shareBox && $('lobby-members')) {
+        shareBox = document.createElement('div');
+        shareBox.id = 'lobby-share-box';
+        shareBox.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0;padding:10px 14px;background:rgba(15,23,42,0.85);border:1px solid rgba(245,158,11,0.4);border-radius:8px;';
+        $('lobby-members').parentNode.insertBefore(shareBox, $('lobby-inv-title'));
+      }
+      if (shareBox) {
+        const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
+        const shortCode = room.id.length > 8 ? room.id.substring(0, 8).toUpperCase() : room.id.toUpperCase();
+        shareBox.innerHTML = `
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <span style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;">${isVi ? 'Mã phòng Co-op' : 'Co-op Room ID'}</span>
+            <b style="font-size:15px;color:#fbbf24;font-family:monospace;letter-spacing:1px;">${esc(room.id)}</b>
+          </div>
+          <div class="row" style="gap:6px;">
+            <button id="btn-copy-code" class="btn small" style="background:#1e293b;border:1px solid #475569;">${isVi ? 'Sao chép mã' : 'Copy Code'}</button>
+            <button id="btn-copy-invite" class="btn small gold">${isVi ? 'Mời Discord' : 'Invite Link'}</button>
+          </div>
+        `;
+        $('btn-copy-code').onclick = () => {
+          navigator.clipboard.writeText(room.id).then(() => {
+            G.UI.toast(isVi ? 'Đã sao chép mã phòng!' : 'Room code copied to clipboard!', 2500);
+            if (G.Audio && G.Audio.sfx) G.Audio.sfx('confirm');
+          });
+        };
+        $('btn-copy-invite').onclick = () => {
+          let inviteUrl = 'https://namtaccozz.github.io/ViTrainer/?room=' + encodeURIComponent(room.id);
+          // Nếu đang chạy trong Discord Activity:
+          if (typeof location !== 'undefined' && /discordsays\.com|discord\.com/.test(location.hostname)) {
+            inviteUrl = location.origin + location.pathname + '?room=' + encodeURIComponent(room.id);
+          }
+          navigator.clipboard.writeText(inviteUrl).then(() => {
+            G.UI.toast(isVi ? 'Đã sao chép link mời phòng! Dán vào chat Discord để bạn bè tham gia.' : 'Invite link copied! Share in Discord chat to play together.', 3500);
+            if (G.Audio && G.Audio.sfx) G.Audio.sfx('confirm');
+          });
+        };
+      }
+  
       const btn = $('lobby-start');
       btn.classList.toggle('hidden', !room.isHost);
       const connecting = ms.some(m => m.uid !== room.host && G.Net.mode(m.uid) === 'connecting');

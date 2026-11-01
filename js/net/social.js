@@ -124,7 +124,28 @@ G.Social = (() => {
    * ya comprueba que sean de un amigo.
    */
   const hasFrKey = () => 'ps.hasfr.' + uid;
+  
+  let presenceTimer = null;
+  function startPresenceHeartbeat() {
+    if (presenceTimer) return;
+    const updateSeen = () => {
+      if (fb && fb.fs && uid) {
+        fb.fs.collection('profiles').doc(uid).set({
+          name: me ? me.name : '',
+          lower: me ? me.lower : '',
+          lastSeen: Date.now()
+        }, { merge: true }).catch(() => {});
+      }
+    };
+    updateSeen();
+    presenceTimer = setInterval(updateSeen, 60000);
+  }
+  function stopPresenceHeartbeat() {
+    if (presenceTimer) { clearInterval(presenceTimer); presenceTimer = null; }
+  }
+
   function online() {
+    startPresenceHeartbeat();
     if (listening) return;                    // ya estaba en marcha
     listening = true;
     if (fb.rtdb) fb.rtdb.goOffline();         // se conecta sólo al entrar en una sala
@@ -167,6 +188,7 @@ G.Social = (() => {
   }
 
   async function stop(why) {
+    stopPresenceHeartbeat();
     if (!started) return;
     await leaveRoom().catch(() => {});
     if (unFriends) { unFriends(); unFriends = null; }
@@ -257,7 +279,7 @@ G.Social = (() => {
     if (!f || f.status !== 'in') return { ok: false, error: 'No hay solicitud.' };
     try {
       await fb.fs.collection('friendships').doc(f.pid).update({
-        status: 'ok', at: firebase.firestore.FieldValue.serverTimestamp(), ['names.' + uid]: me.name
+        status: 'ok', at: firebase.firestore.FieldValue.serverTimestamp(), ['names.' + uid]: me.name, ['lastSeen.' + uid]: Date.now()
       });
       return { ok: true, msg: 'Ahora eres amigo de ' + f.name };
     } catch (e) { return { ok: false, error: 'No se pudo aceptar (' + (e.code || 'error') + ').' }; }

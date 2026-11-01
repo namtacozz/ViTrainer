@@ -903,7 +903,7 @@ G.MenuUI = (() => {
 
   // ---------------- mejoras ----------------
 
-  let upgDex = null, upgPartner = null;
+  let upgDex = null, upgPartner = null, curTreeTab = "offense";
 
   function openUpgrades() {
     G.UI.show('scr-upgrades', true);
@@ -927,37 +927,137 @@ G.MenuUI = (() => {
     const levels = G.DB.upgradesOf(upgDex);
     const mon = G.DEX_BY[upgDex];
     const shiny = upgDex === s.partner && !!s.partnerShiny && G.DB.ownsShiny(upgDex);
+    const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
+
     G.UI.sprite($('upg-stage'), upgDex, { lively: true, scale: 2, hero: true, shiny });
     $('upg-stage').style.setProperty('--stage-c', shiny ? '#9ae6ff' : G.U.TYPE_COLOR[mon.types[0]]);
+
     const box = $('upg-list');
     box.innerHTML = '';
-    for (const u of G.Upgrades.LIST) {
+
+    // ---------- THANH CHỌN TAB NHÁNH KỸ NĂNG MMORPG & NÚT TẨY ĐIỂM ----------
+    const treeBar = document.createElement('div');
+    treeBar.className = 'upg-tree-tabs';
+    treeBar.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;padding:8px 12px;background:rgba(15,23,42,0.85);border-radius:10px;border:1px solid rgba(255,255,255,0.08);';
+
+    const tabsHtml = `
+      <div class="row" style="gap:6px;">
+        <button class="btn small ${curTreeTab === 'offense' ? 'gold' : ''}" data-tree="offense" style="${curTreeTab === 'offense' ? 'background:#ef4444;border-color:#f87171;' : ''}">
+          ⚔️ ${isVi ? 'Tấn Công' : 'Offense'}
+        </button>
+        <button class="btn small ${curTreeTab === 'defense' ? 'gold' : ''}" data-tree="defense" style="${curTreeTab === 'defense' ? 'background:#0284c7;border-color:#38bdf8;' : ''}">
+          🛡️ ${isVi ? 'Phòng Thủ' : 'Defense'}
+        </button>
+        <button class="btn small ${curTreeTab === 'utility' ? 'gold' : ''}" data-tree="utility" style="${curTreeTab === 'utility' ? 'background:#059669;border-color:#34d399;' : ''}">
+          ⚡ ${isVi ? 'Chiến Thuật' : 'Utility'}
+        </button>
+        <button class="btn small ${curTreeTab === 'all' ? 'gold' : ''}" data-tree="all">
+          ${isVi ? 'Tất Cả' : 'All'}
+        </button>
+      </div>
+    `;
+
+    const totalSpent = G.Upgrades.totalSpentOnMon ? G.Upgrades.totalSpentOnMon(levels) : 0;
+    const resetHtml = totalSpent > 0 ? `
+      <button id="upg-respec-btn" class="btn small" style="background:#334155;color:#f87171;border:1px solid #ef4444;" title="${isVi ? 'Hoàn lại 100% PokéCoins đã nâng' : 'Refund 100% PokéCoins'}">
+        ↺ ${isVi ? 'Tẩy Điểm' : 'Reset'} (+${totalSpent})
+      </button>
+    ` : '';
+
+    treeBar.innerHTML = tabsHtml + resetHtml;
+    box.appendChild(treeBar);
+
+    // Xử lý chuyển tab
+    treeBar.querySelectorAll('[data-tree]').forEach(btn => {
+      btn.onclick = () => {
+        curTreeTab = btn.dataset.tree;
+        if (G.Audio && G.Audio.sfx) G.Audio.sfx('click');
+        renderUpgrades();
+      };
+    });
+
+    // Xử lý nút Tẩy Điểm (Reset Talents)
+    if ($('upg-respec-btn')) {
+      $('upg-respec-btn').onclick = () => {
+        const confirmMsg = isVi ? 'Xác nhận tẩy toàn bộ kỹ năng của Pokémon này? Hoàn trả 100% PokéCoins.' : 'Reset all talents for this Pokémon? 100% PokéCoins will be refunded.';
+        if (!confirm(confirmMsg)) return;
+        s.coins = (s.coins || 0) + totalSpent;
+        s.pupg[upgDex] = {};
+        G.DB.commit(true);
+        if (G.Audio && G.Audio.sfx) G.Audio.sfx('buy');
+        G.UI.refreshCoins();
+        G.UI.toast(isVi ? `Đã tẩy điểm thành công! Hoàn trả +${totalSpent} PokéCoins.` : `Talents reset! Refunded +${totalSpent} PokéCoins.`);
+        renderUpgrades();
+      };
+    }
+
+    // ---------- DANH SÁCH NODE KỸ NĂNG MMORPG THEO NHÁNH ----------
+    const filteredList = G.Upgrades.LIST.filter(u => {
+      if (curTreeTab === 'all') return true;
+      return (u.tree || 'utility') === curTreeTab;
+    });
+
+    for (const u of filteredList) {
       const lvl = levels[u.id] || 0;
       const maxed = lvl >= u.max;
       const cost = maxed ? 0 : G.Upgrades.cost(u.id, lvl);
-      // Mejoras que necesitan otra (Segundo movimiento inicial → Repertorio).
       const locked = !maxed && u.needs && !levels[u.needs];
       const pick2 = u.id === 'start2' && lvl > 0 ? G.startMove2Of(upgDex) : null;
+
+      // Xác định Mốc Đột Phá (Milestone)
+      let milestoneBadgeHtml = '';
+      if (u.milestones && u.milestones.length > 0) {
+        const nextMs = u.milestones.find(m => lvl < m.lvl) || u.milestones[u.milestones.length - 1];
+        const achieved = lvl >= nextMs.lvl;
+        const msName = isVi ? nextMs.name : (nextMs.nameEn || nextMs.name);
+        const msDesc = isVi ? nextMs.desc : (nextMs.desc || '');
+        milestoneBadgeHtml = `
+          <div style="margin-top:6px;padding:4px 8px;background:${achieved ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)'};border-radius:6px;border:1px solid ${achieved ? '#22c55e' : 'rgba(255,255,255,0.1)'};font-size:11px;">
+            <b style="color:${achieved ? '#4ade80' : '#fbbf24'};">✦ Mốc Lv.${nextMs.lvl}: ${msName}</b>
+            <span style="color:${achieved ? '#86efac' : '#94a3b8'};"> ${achieved ? (isVi ? '(Đã Kích Hoạt!)' : '(Active!)') : `(${lvl}/${nextMs.lvl})`}</span>
+            <div style="font-size:10px;color:#cbd5e1;margin-top:2px;">${msDesc}</div>
+          </div>
+        `;
+      }
+
+      const treeColor = u.tree === 'offense' ? '#ef4444' : u.tree === 'defense' ? '#38bdf8' : '#10b981';
+      const uName = isVi ? u.name : (u.nameEn || u.name);
+      const uUnit = isVi ? u.unit : (u.unitEn || u.unit);
+
       const el = document.createElement('div');
-      el.className = 'panel upg-item';
+      el.className = 'panel upg-item mmorpg-talent-node';
+      el.style.cssText = `position:relative;margin-bottom:10px;padding:12px 14px;background:rgba(15,23,42,0.75);border-radius:10px;border-left:4px solid ${treeColor};border-top:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);`;
+
       el.innerHTML = `
-        <div class="ic">${G.Icons.html(u.icon, 32)}</div>
-        <div>
-          <b>${u.name}</b> <span style="color:var(--muted);font-size:13px">${u.unit}</span>
-          <div class="pips">${Array.from({ length: u.max }, (_, i) => `<i class="${i < lvl ? 'on' : ''}"></i>`).join('')}</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="ic" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border-radius:8px;border:1px solid ${treeColor};">${G.Icons.html(u.icon, 24)}</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <b style="font-size:14px;color:#f1f5f9;">${uName}</b>
+              <span style="font-size:13px;font-weight:bold;color:${maxed ? '#4ade80' : '#fbbf24'};font-family:monospace;">Lv. ${lvl}/${u.max}</span>
+            </div>
+            <div style="color:var(--muted);font-size:12px;margin:2px 0 6px;">${uUnit}</div>
+            <div style="height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:${Math.min(100, (lvl / u.max) * 100)}%;background:linear-gradient(90deg, ${treeColor}, #fbbf24);transition:width 0.3s;"></div>
+            </div>
+          </div>
         </div>
-        <div class="upg-btns">
-          ${u.id === 'ban' && lvl > 0 ? `<button class="btn small" data-ban>Elegir (${banList().length}/${lvl})</button>` : ''}
-          ${u.id === 'start' && lvl > 0 ? `<button class="btn small" data-start>Elegir: ${G.Moves.BY_ID[G.startMoveOf(upgDex)].name}</button>` : ''}
-          ${u.id === 'start2' && lvl > 0 ? `<button class="btn small" data-start2>Elegir: ${pick2 ? G.Moves.BY_ID[pick2].name : G.T('Al azar')}</button>` : ''}
+        ${milestoneBadgeHtml}
+        <div class="upg-btns" style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;">
+          ${u.id === 'ban' && lvl > 0 ? `<button class="btn small" data-ban>${isVi ? 'Chọn khóa' : 'Pick ban'} (${banList().length}/${lvl})</button>` : ''}
+          ${u.id === 'start' && lvl > 0 ? `<button class="btn small" data-start>${isVi ? 'Chiêu khởi đầu' : 'Start'}: ${G.Moves.BY_ID[G.startMoveOf(upgDex)].name}</button>` : ''}
+          ${u.id === 'start2' && lvl > 0 ? `<button class="btn small" data-start2>${isVi ? 'Chiêu 2' : '2nd'}: ${pick2 ? G.Moves.BY_ID[pick2].name : G.T('Al azar')}</button>` : ''}
           <button class="btn small ${maxed ? '' : 'gold'}" data-buy data-sfx="none" ${maxed || locked || s.coins < cost ? 'disabled' : ''}
             ${locked ? `title="${G.T('Primero compra Repertorio')}"` : ''}>
-          ${maxed ? 'Máx.' : locked ? G.T('Necesita Repertorio') : `<span class="coin"></span> ${cost}`}</button></div>`;
+          ${maxed ? (isVi ? 'TỐI ĐA' : 'MAX') : locked ? (isVi ? 'Cần Song Đao' : 'Needs Dual') : `<span class="coin"></span> ${cost}`}</button>
+        </div>
+      `;
+
       if (u.id === 'ban' && lvl > 0) el.querySelector('[data-ban]').onclick = () => { banOpen = !banOpen; renderUpgrades(); };
       if (u.id === 'start' && lvl > 0) el.querySelector('[data-start]').onclick = () => { startOpen = !startOpen; renderUpgrades(); };
       if (u.id === 'start2' && lvl > 0) el.querySelector('[data-start2]').onclick = () => { start2Open = !start2Open; renderUpgrades(); };
+
       el.querySelector('[data-buy]').onclick = () => {
-        // Se vuelve a leer todo al pulsar (la partida puede haber cambiado desde que se dibujó).
         const sv = G.DB.save, lv = G.DB.upgradesOf(upgDex), now = lv[u.id] || 0;
         if (now >= u.max || (u.needs && !lv[u.needs])) { renderUpgrades(); return; }
         const price = G.Upgrades.cost(u.id, now);
@@ -967,9 +1067,10 @@ G.MenuUI = (() => {
         G.DB.commit(true);
         G.Audio.sfx('buy');
         G.UI.refreshCoins();
-        G.UI.toast(`${mon.name} · ${u.name}: nivel ${now + 1}`);
+        G.UI.toast(`${mon.name} · ${uName}: Cấp ${now + 1}/${u.max}`);
         renderUpgrades();
       };
+
       box.appendChild(el);
       if (u.id === 'ban' && lvl > 0 && banOpen) box.appendChild(banPicker(lvl));
       if (u.id === 'start' && lvl > 0 && startOpen) box.appendChild(startPicker());
@@ -978,8 +1079,6 @@ G.MenuUI = (() => {
     box.appendChild(bindPanel());
   }
 
-  // ---------------- atajos: hueco fijo para cada movimiento ----------------
-  // save.pbind[dex] = [movimiento del hueco 1, del 2, del 3, del 4] (o null).
   function bindPanel() {
     const s = G.DB.save;
     s.pbind = s.pbind || {};

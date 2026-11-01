@@ -282,7 +282,13 @@ G.ABIL = {
   "wonder-guard":["Superguarda","Wonder Guard","Garde Mystik","Magidifesa","神奇守护","神奇守護"],
   "wonder-skin":["Piel Milagro","Wonder Skin","Peau Miracle","Splendicute","奇迹皮肤","奇跡皮膚"],
   "zen-mode":["Modo Daruma","Zen Mode","Mode Transe","Stato Zen","达摩模式","達摩模式"],
-  "zero-to-hero":["Cambio Heroico","Zero to Hero","Supermutation","Supercambio","全能变身","全能變身"]
+  "zero-to-hero":["Cambio Heroico","Zero to Hero","Supermutation","Supercambio","全能变身","全能變身"],
+  "neuroforce":["Fuerza Cerebral","Neuroforce","Cérébro-Force","Neuroforza","脑核之力","腦核之力"],
+  "power-construct":["Agrupamiento","Power Construct","Rassemblement","Sciamefusione","群聚形态","群聚形態"],
+  "mind-eye":["Ojo Mental","Mind's Eye","Œil de l'Esprit","Occhio Mente","心眼","心眼"],
+  "as-one-glastrier":["Relincho Blanco","As One (Glastrier)","Blanche Ruade","Sintonia Equina","人马一体","人馬一體"],
+  "as-one-spectrier":["Relincho Negro","As One (Spectrier)","Noire Ruade","Sintonia Equina","人马一体","人馬一體"],
+  "tera-shell":["Caparazón Tera","Tera Shell","Téra-Carapace","Guscio Tera","太晶硬壳","太晶硬殼"]
 };
 G.DEX_ABIL = {
   1:["overgrow",0,"chlorophyll"],
