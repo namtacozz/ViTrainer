@@ -147,6 +147,7 @@ G.HUD = (() => {
   let lastStatValues = null;
   const statDeltas = {};
   let lastStatTime = 0;
+  let hudEvoAnim = null, hudEvoDex = null, hudEvoShiny = null;
 
   function drawLiveStatsPanel(ctx, w, h, pl, F, roundRect, sa, touch) {
     if (!pl || !pl.mon) return;
@@ -374,74 +375,201 @@ G.HUD = (() => {
     ctx.textAlign = 'center';
     ctx.fillText(Math.ceil(pl.hp) + ' / ' + Math.round(pl.maxHp), px + 62 + 109, py + 32);
 
-    // ---------- Thanh tiến trình Thông thạo / Tiến hóa (Evo / Mastery Milestone Bar) ----------
-    const chain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(pl.baseDex || pl.dex) : null;
-    const stage = pl.evoStage || 1;
-    const tierUnlocked = pl.evoTierUnlocked || 1;
-    const lv = pl.level || 1;
+    // ---------- Ô vuông Mục tiêu Tiến hóa & Cấp độ kế tiếp (Evolution Target Box) ----------
+    function getEvoTarget() {
+      const bDex = pl.baseDex || (pl.mon && pl.mon.dex) || pl.dex;
+      const cDex = pl.dex;
+      const curLv = pl.level || 1;
 
-    let targetLv = 15;
-    let targetLabel = '';
-    let evoFrac = 0;
+      // 1. Zygarde đặc biệt
+      if (bDex === 718) {
+        if (pl.isMega || cDex === 10121) {
+          return { dex: 10120, label: 'Hoàn thiện', isFinal: true };
+        }
+        if (cDex === 10120 || curLv >= 50) {
+          const kills = (pl && pl.kills) || 0;
+          return { dex: 10120, label: kills >= 3500 ? 'Sẵn sàng Mega!' : `Mega ${kills}/3500`, ready: kills >= 3500, icon: 'megaBadge' };
+        }
+        if (pl.isApex || pl.awakeningTier >= 2 || curLv >= 30) {
+          return { dex: 10120, label: `Nv. ${curLv}/50` };
+        }
+        if (cDex === 718 || curLv >= 25) {
+          return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+        }
+        if (pl.awakeningTier >= 1 || curLv >= 15) {
+          return { dex: 718, exactDex: true, label: `Nv. ${curLv}/25` };
+        }
+        return { icon: 'star', label: `Thức tỉnh ${curLv}/15` };
+      }
 
-    if (pl.isMega) {
-      targetLabel = G.T ? G.T('FORMA MEGA') : 'FORMA MEGA';
-      evoFrac = 1.0;
-    } else if (chain && chain.type === '3stage') {
-      if (stage === 1) {
-        targetLv = 15;
-        targetLabel = '✦ ' + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
-        evoFrac = Math.min(1, lv / targetLv);
-      } else if (stage === 2) {
-        targetLv = 30;
-        targetLabel = '✦ ' + (G.T ? G.T('Fase 3') : 'Fase 3') + ' (' + lv + '/' + targetLv + ')';
-        evoFrac = Math.min(1, lv / targetLv);
-      } else {
-        targetLv = 30;
-        targetLabel = pl.isApex ? (G.T ? G.T('Apex (+)') : 'Apex (+)') : '✦ Apex+ (Lv.30)';
-        evoFrac = pl.isApex ? 1.0 : Math.min(1, lv / targetLv);
+      // 2. Huyền thoại tiến hóa qua chiêu độc quyền + (EXCLUSIVE_PLUS_EVO)
+      const EXCLUSIVE_PLUS_EVO = {
+        384: { move: 'dragon-ascent', targetDex: 10034, name: 'Dragon Ascent' },
+        382: { move: 'origin-pulse', targetDex: 10032, name: 'Origin Pulse' },
+        383: { move: 'precipice-blades', targetDex: 10033, name: 'Precipice Blades' },
+        483: { move: 'roar-of-time', targetDex: 10008, name: 'Roar of Time' },
+        484: { move: 'spacial-rend', targetDex: 10009, name: 'Spacial Rend' },
+        487: { move: 'shadow-force', targetDex: 10010, name: 'Shadow Force' },
+        888: { move: 'behemoth-blade', targetDex: 10188, name: 'Behemoth Blade' },
+        889: { move: 'behemoth-bash', targetDex: 10189, name: 'Behemoth Bash' },
+        646: { move: 'glaciate', targetDex: 10022, name: 'Glaciate' },
+        800: { move: 'prismatic-laser', targetDex: 10157, name: 'Prismatic Laser' },
+        801: { move: 'fleur-cannon', targetDex: 10801, name: 'Fleur Cannon' },
+        807: { move: 'plasma-fists', targetDex: 10807, name: 'Plasma Fists' }
+      };
+
+      const leg = EXCLUSIVE_PLUS_EVO[bDex];
+      if (leg) {
+        if (pl.isMega || cDex >= 10000) {
+          return { dex: leg.targetDex, label: 'Hoàn thiện', isFinal: true };
+        }
+        let curTier = 0;
+        if (pl.slots) {
+          for (const g of pl.slots) {
+            const list = Array.isArray(g) ? g : [g];
+            for (const m of list) {
+              if (m && (m.id === leg.move || (m.def && m.def.id === leg.move))) {
+                curTier = Math.max(curTier, m.evoTier || (m.evolved ? 1 : 0));
+              }
+            }
+          }
+        }
+        const ready = curTier >= 1;
+        return {
+          dex: leg.targetDex,
+          label: ready ? 'Sẵn sàng!' : `${leg.name} +`,
+          ready
+        };
       }
-    } else if (chain && chain.type === '2stage') {
-      if (stage === 1) {
-        targetLv = 18;
-        targetLabel = '✦ ' + (G.T ? G.T('Fase 2') : 'Fase 2') + ' (' + lv + '/' + targetLv + ')';
-        evoFrac = Math.min(1, lv / targetLv);
-      } else {
-        targetLv = 30;
-        targetLabel = pl.isApex ? (G.T ? G.T('Apex (+)') : 'Apex (+)') : '✦ Apex+ (Lv.30)';
-        evoFrac = pl.isApex ? 1.0 : Math.min(1, lv / targetLv);
+
+      // 3. Chuỗi tiến hóa thông thường
+      const ch = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(bDex) : null;
+      const stg = pl.evoStage || 1;
+      const mList = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(bDex) : [];
+      const hasM = mList && mList.length > 0;
+      const mDex = hasM ? (mList[0].spriteDex || mList[0].id) : null;
+
+      if (pl.isMega) {
+        return { dex: mDex || cDex, label: 'Hoàn thiện', isFinal: true };
       }
-    } else if (chain && chain.type === 'branch') {
-      if (stage === 1) {
-        targetLv = 15;
-        targetLabel = '✦ ' + (G.T ? G.T('Evolución') : 'Evolución') + ' (' + lv + '/' + targetLv + ')';
-        evoFrac = Math.min(1, lv / targetLv);
+
+      if (ch && ch.type === '3stage') {
+        if (stg === 1) {
+          const nDex = ch.stages[1] ? ch.stages[1][0] : cDex;
+          return { dex: nDex, label: `Nv. ${curLv}/15` };
+        } else if (stg === 2) {
+          const nDex = ch.stages[2] ? ch.stages[2][0] : cDex;
+          return { dex: nDex, label: `Nv. ${curLv}/30` };
+        } else {
+          if (hasM) {
+            return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+          }
+          if (!pl.isApex) {
+            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+          }
+          return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
+        }
+      } else if (ch && ch.type === '2stage') {
+        if (stg === 1) {
+          const nDex = ch.stages[1] ? ch.stages[1][0] : cDex;
+          return { dex: nDex, label: `Nv. ${curLv}/18` };
+        } else {
+          if (hasM) {
+            return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+          }
+          if (!pl.isApex) {
+            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+          }
+          return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
+        }
+      } else if (ch && ch.type === 'branch') {
+        if (stg === 1) {
+          const nDex = (ch.members || []).find(d => d !== bDex) || cDex;
+          return { dex: nDex, label: `Nv. ${curLv}/15` };
+        } else {
+          if (hasM) {
+            return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+          }
+          if (!pl.isApex) {
+            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+          }
+          return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
+        }
       } else {
-        targetLv = 30;
-        targetLabel = pl.isApex ? (G.T ? G.T('Apex (+)') : 'Apex (+)') : '✦ Apex+ (Lv.30)';
-        evoFrac = pl.isApex ? 1.0 : Math.min(1, lv / targetLv);
-      }
-    } else {
-      if (pl.awakeningTier === 0) {
-        targetLv = 15;
-        targetLabel = '✦ ' + (G.T ? G.T('Despertar I') : 'Despertar I') + ' (' + lv + '/' + targetLv + ')';
-        evoFrac = Math.min(1, lv / targetLv);
-      } else if (pl.awakeningTier === 1) {
-        targetLv = 30;
-        targetLabel = '✦ ' + (G.T ? G.T('Despertar II (Apex+)') : 'Despertar II') + ' (' + lv + '/' + targetLv + ')';
-        evoFrac = Math.min(1, lv / targetLv);
-      } else {
-        targetLabel = G.T ? G.T('Apex (+)') : 'Apex (+)';
-        evoFrac = 1.0;
+        if (hasM) {
+          return { dex: mDex, label: `Mega (Nv.${curLv}/30)`, icon: 'megaBadge' };
+        }
+        if (pl.awakeningTier === 0) {
+          return { icon: 'star', label: `Thức tỉnh ${curLv}/15` };
+        } else if (pl.awakeningTier === 1) {
+          return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+        } else {
+          return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
+        }
       }
     }
 
-    const evoY = py + 41;
-    bar(ctx, px + 62, evoY, 218, 11, evoFrac, '#ffd23f', 'rgba(0,0,0,.6)');
-    ctx.font = F(700, 10.5);
-    ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'center';
-    ctx.fillText(targetLabel, px + 62 + 109, evoY + 9);
+    const target = getEvoTarget();
+    if (target) {
+      const boxX = px + 288, boxY = py + 7, boxW = 46, boxH = 46;
+
+      // Nền hộp vuông (Glassmorphic)
+      roundRect(ctx, boxX, boxY, boxW, boxH, 8);
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.82)';
+      ctx.fill();
+
+      // Viền hộp: Gold nếu hoàn thiện, Xanh nếu sẵn sàng, Viền xám sáng nếu đang cày
+      ctx.lineWidth = 1.5;
+      if (target.isFinal) {
+        ctx.strokeStyle = '#fbbf24';
+        ctx.shadowColor = 'rgba(251, 191, 36, 0.4)';
+        ctx.shadowBlur = 8;
+      } else if (target.ready) {
+        ctx.strokeStyle = '#22c55e';
+        ctx.shadowColor = 'rgba(34, 197, 94, 0.5)';
+        ctx.shadowBlur = 8;
+      } else {
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Vẽ sprite / biểu tượng bên trong ô
+      ctx.save();
+      roundRect(ctx, boxX + 1, boxY + 1, boxW - 2, boxH - 2, 7);
+      ctx.clip();
+
+      if (target.dex) {
+        const drawDex = (target.dex === 718 && !target.exactDex) ? 10118 : target.dex;
+        if (hudEvoDex !== drawDex || hudEvoShiny !== pl.shiny) {
+          hudEvoDex = drawDex;
+          hudEvoShiny = pl.shiny;
+          hudEvoAnim = new G.Sprites.Animator(drawDex, 1, pl.shiny);
+          if (G.Sprites.preload) G.Sprites.preload([drawDex], 8000, pl.shiny);
+        }
+        if (hudEvoAnim) {
+          hudEvoAnim.update(0.016);
+          const meta = G.Sprites.animMeta(drawDex, 'Idle', pl.shiny);
+          const maxDim = meta ? Math.max(meta.w || 32, meta.h || 32) : 32;
+          hudEvoAnim.scale = Math.min(1.2, 34 / (maxDim * G.Sprites.PX));
+          hudEvoAnim.draw(ctx, boxX + boxW / 2, boxY + boxH - 5);
+        }
+        if (target.icon && G.Icons) {
+          G.Icons.draw(ctx, target.icon, boxX + boxW - 16, boxY + 3, 13);
+        }
+      } else if (target.icon && G.Icons) {
+        G.Icons.draw(ctx, target.icon, boxX + (boxW - 26) / 2, boxY + (boxH - 26) / 2, 26);
+      }
+      ctx.restore();
+
+      // Nhãn chữ ngay dưới ô vuông (ví dụ: Thức tỉnh 1/15, Nv. 15/25, Hoàn thiện)
+      ctx.font = F(700, 9.5);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = target.isFinal ? '#fbbf24' : (target.ready ? '#4ade80' : 'rgba(255, 255, 255, 0.95)');
+      ctx.fillText(target.label, boxX + boxW / 2, boxY + boxH + 11);
+    }
 
     // buffs activos
     const COL = { atk: '#ff6b4d', patk: '#ff6b4d', satk: '#c47bff', spd: '#7fe0ff', def: '#b0b8c8', regen: '#5fe08a' };
@@ -454,10 +582,10 @@ G.HUD = (() => {
       ctx.font = F(800, 9);
       const txt = LBL[k] + ' ×' + b.n;
       const tw = ctx.measureText(txt).width + 12;
-      roundRect(ctx, bx, py + 58, tw, 15, 7);
+      roundRect(ctx, bx, py + 41, tw, 15, 7);
       ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fill();
       ctx.fillStyle = COL[k];
-      ctx.fillText(txt, bx + 6, py + 69);
+      ctx.fillText(txt, bx + 6, py + 52);
       bx += tw + 5;
     }
 

@@ -35,7 +35,35 @@ G.RunQuests = (() => {
     if (!mon) return;
 
     // 1. Kiểm tra Dạng Huyền Thoại / Đặc biệt
-    if (baseDex === 718) {
+    const LEGEND_EXCLUSIVE_QUESTS = {
+      384: { move: 'dragon-ascent', targetDex: 10034, name: 'Mega Rayquaza', moveName: 'Dragon Ascent' },
+      382: { move: 'origin-pulse', targetDex: 10032, name: 'Primal Kyogre', moveName: 'Origin Pulse' },
+      383: { move: 'precipice-blades', targetDex: 10033, name: 'Primal Groudon', moveName: 'Precipice Blades' },
+      483: { move: 'roar-of-time', targetDex: 10008, name: 'Origin Dialga', moveName: 'Roar of Time' },
+      484: { move: 'spacial-rend', targetDex: 10009, name: 'Origin Palkia', moveName: 'Spacial Rend' },
+      487: { move: 'shadow-force', targetDex: 10010, name: 'Origin Giratina', moveName: 'Shadow Force' },
+      888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian Crowned', moveName: 'Behemoth Blade' },
+      889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta Crowned', moveName: 'Behemoth Bash' },
+      646: { move: 'glaciate', targetDex: 10022, name: 'Black Kyurem', moveName: 'Băng Thần' },
+      800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', moveName: 'Quang Phổ' }
+    };
+
+    if (LEGEND_EXCLUSIVE_QUESTS[baseDex]) {
+      const lq = LEGEND_EXCLUSIVE_QUESTS[baseDex];
+      activeQuests.push({
+        id: 'legend_evo_' + baseDex,
+        type: 'exclusive_plus',
+        targetMoveId: lq.move,
+        title: 'THỬ THÁCH TIẾN HÓA: ' + lq.name,
+        desc: 'Nâng ' + lq.moveName + ' lên Rạng +',
+        rewardType: 'legend_plus_evo',
+        rewardTargetDex: lq.targetDex,
+        rewardName: lq.name,
+        color: '#22c55e',
+        icon: 'megaBadge',
+        completed: false
+      });
+    } else if (baseDex === 718) {
       // Zygarde: farm 3500 quái & đạt Nv. 50 để mở khóa Mega Zygarde & Nihil Light
       activeQuests.push({
         id: 'mega_718',
@@ -49,105 +77,6 @@ G.RunQuests = (() => {
         rewardName: 'Mega Zygarde & Nihil Light',
         color: '#f43f5e',
         icon: 'megaBadge',
-        completed: false
-      });
-    } else if (baseDex === 384) {
-      // Rayquaza: có sẵn Dragon Ascent, đạt Nv. 25 là mở khóa Mega Rayquaza
-      activeQuests.push({
-        id: 'mega_384',
-        type: 'mega',
-        title: 'THỬ THÁCH MEGA: Rayquaza',
-        desc: 'Đạt Nv. 25 để thức tỉnh Chúa Tể Bầu Trời',
-        targetLv: 25,
-        rewardType: 'rayquaza_mega',
-        rewardItem: 'meteorite',
-        rewardName: 'Mega Rayquaza & Thiên Thạch',
-        color: '#22c55e',
-        icon: 'megaBadge',
-        completed: false
-      });
-    } else if (baseDex === 646) {
-      // Kyurem
-      activeQuests.push({
-        id: 'legend_kyurem',
-        type: 'legend_form',
-        title: 'HỢP THỂ DNA: Kyurem',
-        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
-        targetKills: 350,
-        targetLv: 25,
-        kills: (pl && pl.kills) || 0,
-        rewardType: 'item',
-        rewardItem: 'dnasplicers',
-        rewardName: 'Punta ADN (Kyurem)',
-        color: '#38bdf8',
-        icon: 'dnasplicers',
-        completed: false
-      });
-    } else if (baseDex === 800) {
-      // Necrozma
-      activeQuests.push({
-        id: 'legend_necrozma',
-        type: 'legend_form',
-        title: 'ÁNH SÁNG TỐI THƯỢNG',
-        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
-        targetKills: 350,
-        targetLv: 25,
-        kills: (pl && pl.kills) || 0,
-        rewardType: 'item',
-        rewardItem: 'ultranecroziumz',
-        rewardName: 'Ultranecrostal Z',
-        color: '#facc15',
-        icon: 'ultranecroziumz',
-        completed: false
-      });
-    } else if (baseDex === 487) {
-      // Giratina
-      activeQuests.push({
-        id: 'legend_giratina',
-        type: 'legend_form',
-        title: 'DẠNG NGUYÊN BẢN: Giratina',
-        desc: 'Sống sót 10 phút hoặc hạ 1 Boss',
-        targetTime: 600,
-        targetBosses: 1,
-        rewardType: 'item',
-        rewardItem: 'griseousorb',
-        rewardName: 'Griseosfera (Origin)',
-        color: '#a855f7',
-        icon: 'griseousorb',
-        completed: false
-      });
-    } else if (baseDex === 888) {
-      // Zacian Crowned
-      activeQuests.push({
-        id: 'legend_zacian',
-        type: 'legend_form',
-        title: 'GƯƠM BÁ VƯƠNG: Zacian',
-        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
-        targetKills: 350,
-        targetLv: 25,
-        kills: (pl && pl.kills) || 0,
-        rewardType: 'item',
-        rewardItem: 'keystone',
-        rewardName: 'Gươm Rỉ Sét (Crowned)',
-        color: '#38bdf8',
-        icon: 'star',
-        completed: false
-      });
-    } else if (baseDex === 889) {
-      // Zamazenta Crowned
-      activeQuests.push({
-        id: 'legend_zamazenta',
-        type: 'legend_form',
-        title: 'KHIÊN HỘ QUỐC: Zamazenta',
-        desc: 'Đạt Nv. 25 & hạ 350 kẻ địch',
-        targetKills: 350,
-        targetLv: 25,
-        kills: (pl && pl.kills) || 0,
-        rewardType: 'item',
-        rewardItem: 'keystone',
-        rewardName: 'Khiên Rỉ Sét (Crowned)',
-        color: '#f43f5e',
-        icon: 'star',
         completed: false
       });
     }
@@ -168,7 +97,7 @@ G.RunQuests = (() => {
         }
       }
     }
-    if (megas && megas.length > 0 && !activeQuests.some(q => q.type === 'mega')) {
+    if (megas && megas.length > 0 && !activeQuests.some(q => q.type === 'mega' || q.type === 'exclusive_plus') && !LEGEND_EXCLUSIVE_QUESTS[baseDex]) {
       const mName = megas[0].name.replace(/^Mega\s+/, 'M-').replace(/^Primal\s+/, 'P-');
       activeQuests.unshift({
         id: 'mega_' + megaDex,
@@ -364,7 +293,36 @@ G.RunQuests = (() => {
       if (q.completed) continue;
 
       let isDone = false;
-      if (q.type === 'mega' || q.type === 'legend_form') {
+      if (q.type === 'exclusive_plus') {
+        let curTier = 0;
+        if (pl && pl.slots) {
+          for (const g of pl.slots) {
+            const list = Array.isArray(g) ? g : [g];
+            for (const m of list) {
+              if (m && (m.id === q.targetMoveId || (m.def && m.def.id === q.targetMoveId))) {
+                curTier = Math.max(curTier, m.evoTier || (m.evolved ? 1 : 0));
+              }
+            }
+          }
+        }
+        if (curTier >= 1) isDone = true;
+      }
+    if (q.type === 'exclusive_plus') {
+      let curTier = 0;
+      if (pl && pl.slots) {
+        for (const g of pl.slots) {
+          const list = Array.isArray(g) ? g : [g];
+          for (const m of list) {
+            if (m && (m.id === q.targetMoveId || (m.def && m.def.id === q.targetMoveId))) {
+              curTier = Math.max(curTier, m.evoTier || (m.evolved ? 1 : 0));
+            }
+          }
+        }
+      }
+      const isReady = curTier >= 1;
+      return { current: isReady ? 1 : 0, max: 1, pct: isReady ? 1.0 : 0.0, label: isReady ? 'Rạng + (Sẵn sàng!)' : 'Chưa lên +' };
+    }
+    if (q.type === 'mega' || q.type === 'legend_form') {
         if (q.id === 'mega_384') {
           if ((pl.level || 1) >= (q.targetLv || 25)) isDone = true;
         } else if (q.targetMoveId && q.targetMoveTier) {
@@ -422,7 +380,10 @@ G.RunQuests = (() => {
     }
 
     // Trao phần thưởng
-    if (q.rewardType === 'item') {
+    if (q.rewardType === 'legend_plus_evo') {
+      if (pl.megaEvolve && q.rewardTargetDex) pl.megaEvolve(q.rewardTargetDex);
+      if (G.UI && G.UI.toast) G.UI.toast((q.rewardName || 'Pokémon') + ' đã tiến hóa thành công!', 4500);
+    } else if (q.rewardType === 'item') {
       if (G.Game && G.Game.offerItem) {
         G.Game.offerItem(q.rewardItem);
       } else if (G.Game && G.Game.item) {

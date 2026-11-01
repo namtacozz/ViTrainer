@@ -248,11 +248,12 @@ G.UI = (() => {
   function sprite(cv, dex, opts = {}) {
     const prev = byCanvas.get(cv);
     if (prev) live.delete(prev);
-    const a = new G.Sprites.Animator(dex, 1, !!opts.shiny);
+    const useDex = (dex === 718 && !opts.exactDex) ? 10118 : dex;
+    const a = new G.Sprites.Animator(useDex, 1, !!opts.shiny);
     a.dir = opts.dir || 0;
     a.skin = opts.skin || null;
     a.loop(opts.anim || 'Idle');
-    const s = { cv, ctx: cv.getContext('2d'), a, dex, opts, t: Math.random() * 3, spinT: 0, sparkT: 0 };
+    const s = { cv, ctx: cv.getContext('2d'), a, dex: useDex, opts, t: Math.random() * 3, spinT: 0, sparkT: 0 };
     live.add(s);
     byCanvas.set(cv, s);
     if (io) io.observe(cv);

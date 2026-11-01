@@ -1029,9 +1029,11 @@ G.DEX = [
   {"dex": 11713, "name": "Hisuian Avalugg", "types": ["ice", "rock"], "hp": 112, "spd": 75, "atk": 1.35, "pa": 1.35, "sa": 0.7, "df": 184, "sd": 36, "rarity": 4, "bst": 514, "starter": false, "gen": 4},
   {"dex": 11724, "name": "Hisuian Decidueye", "types": ["grass", "fighting"], "hp": 108, "spd": 90, "atk": 1.35, "pa": 1.35, "sa": 1.2, "df": 80, "sd": 95, "rarity": 4, "bst": 530, "starter": false, "gen": 4},
   {"dex": 11128, "name": "Paldean Tauros", "types": ["fighting"], "hp": 105, "spd": 118, "atk": 1.35, "pa": 1.35, "sa": 0.8, "df": 105, "sd": 70, "rarity": 4, "bst": 490, "starter": false, "gen": 9},
-  {"dex": 10118, "name": "Zygarde (Forma 10%)", "types": ["dragon", "ground"], "hp": 94, "spd": 126, "atk": 1.25, "pa": 1.25, "sa": 1.04, "df": 71, "sd": 85, "rarity": 5, "bst": 486, "starter": false, "gen": 6, "leg": true},
 ];
 
 G.DEX_BY = {};
 for (const p of G.DEX) G.DEX_BY[p.dex] = p;
+// Dạng phụ Zygarde lưu trong DEX_BY để tra cứu chỉ số nhưng không hiển thị thành Pokémon riêng trong Pokédex
+G.DEX_BY[10118] = {"dex": 10118, "name": "Zygarde (Forma 10%)", "types": ["dragon", "ground"], "hp": 94, "spd": 126, "atk": 1.25, "pa": 1.25, "sa": 1.04, "df": 71, "sd": 85, "rarity": 5, "bst": 486, "starter": false, "gen": 6, "leg": true};
+G.DEX_BY[10120] = {"dex": 10120, "name": "Zygarde (Forma 100%)", "types": ["dragon", "ground"], "hp": 216, "spd": 85, "atk": 1.4, "pa": 1.4, "sa": 1.4, "df": 121, "sd": 95, "rarity": 5, "bst": 708, "starter": false, "gen": 6, "leg": true};
 G.getPokemon = dex => G.DEX_BY[dex] || null;

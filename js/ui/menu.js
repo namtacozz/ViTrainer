@@ -248,6 +248,7 @@ G.MenuUI = (() => {
     const q = f.q.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const num = /^#?\d+$/.test(q) ? +q.replace('#', '') : null;
     const list = G.DEX.filter(p => {
+      if (p.dex === 10118 || p.dex === 10120 || p.dex === 10121) return false;
       const own = !!s.owned[p.dex];
       if (q) {
         // Por número, o por nombre (sin tildes); de los que no tienes no se busca el nombre.
@@ -322,7 +323,8 @@ G.MenuUI = (() => {
     if (p.dex === s.partner) cell.insertAdjacentHTML('beforeend', `<span class="badge-r" title="Compañero">${G.Icons.html('crown', 14)}</span>`);
     else if (sh) cell.insertAdjacentHTML('beforeend', `<span class="badge-r" title="Tienes su shiny">${G.Icons.html('shiny', 12)}</span>`);
     const useShiny = sh && p.dex === s.partner && s.partnerShiny;
-    cell.appendChild(G.UI.spriteCanvas(p.dex, 92, 80, { scale: 2, silhouette: !own, shadow: own, shiny: useShiny }));
+    const drawCellDex = (p.dex === 718) ? 10118 : p.dex;
+    cell.appendChild(G.UI.spriteCanvas(drawCellDex, 92, 80, { scale: 2, silhouette: !own, shadow: own, shiny: useShiny }));
     cell.insertAdjacentHTML('beforeend', `<b>${own ? p.name : '???'}</b>${G.UI.stars(p.rarity, 9)}`);
     cell.onclick = () => {
       dexSel = p.dex;
@@ -493,7 +495,7 @@ G.MenuUI = (() => {
             </div>
             <span class="evo-arrow">→</span>
             <div class="evo-node ${un1 ? 'unlocked' : 'locked'}${dex === 718 ? ' current' : ''}" data-dex="718" title="Zygarde (Dạng 50%)">
-              <div class="evo-cv-wrap" data-dex="718" data-unlocked="1"></div>
+              <div class="evo-cv-wrap" data-dex="718" data-exact-dex="1" data-unlocked="1"></div>
               <div class="evo-name">Zygarde 50%</div>
               <div class="evo-lvl">Nv. 25</div>
             </div>
@@ -734,7 +736,8 @@ G.MenuUI = (() => {
     const hasSh = G.DB.ownsShiny(dex);
     box.querySelectorAll('.evo-cv-wrap').forEach(w => {
       const d = +w.dataset.dex;
-      w.appendChild(G.UI.spriteCanvas(d, 40, 36, { scale: 1.5, silhouette: false, shiny: hasSh && viewShiny }));
+      const exactDex = w.dataset.exactDex === '1';
+      w.appendChild(G.UI.spriteCanvas(d, 40, 36, { scale: 1.5, silhouette: false, shiny: hasSh && viewShiny, exactDex }));
     });
     box.querySelectorAll('.evo-node[data-dex]').forEach(n => {
       n.onclick = () => {

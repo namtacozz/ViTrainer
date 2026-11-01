@@ -620,23 +620,57 @@ G.Player = class Player {
       });
     };
 
-    // Tiến trình đặc biệt Rayquaza: có sẵn Dragon Ascent, đạt Nv. 25 là hiển thị bảng tiến hóa Mega Rayquaza ngay
-    if (this.baseDex === 384) {
-      if (this.level >= 25 && !this.isMega) {
+    // BẢNG TIẾN HÓA ĐẶC BIỆT QUA CHIÊU ĐỘC QUYỀN + (Rạng 1 +, không cần đánh quái)
+    const EXCLUSIVE_PLUS_EVO = {
+      384: { move: 'dragon-ascent', targetDex: 10034, name: 'Mega Rayquaza', title: 'TIẾN HÓA MEGA', desc: 'Dragon Ascent thăng hoa lên Rạng +: Rayquaza thức tỉnh thành Chúa Tể Bầu Trời Mega Rayquaza!' },
+      382: { move: 'origin-pulse', targetDex: 10032, name: 'Primal Kyogre', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Origin Pulse thăng hoa lên Rạng +: Kyogre thức tỉnh sức mạnh Đại Dương Nguyên Thủy!' },
+      383: { move: 'precipice-blades', targetDex: 10033, name: 'Primal Groudon', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Precipice Blades thăng hoa lên Rạng +: Groudon thức tỉnh sức mạnh Lục Địa Nguyên Thủy!' },
+      483: { move: 'roar-of-time', targetDex: 10008, name: 'Origin Dialga', title: 'DẠNG NGUYÊN BẢN', desc: 'Roar of Time thăng hoa lên Rạng +: Dialga trở về hình thái Chúa Tể Thời Gian nguyên bản!' },
+      484: { move: 'spacial-rend', targetDex: 10009, name: 'Origin Palkia', title: 'DẠNG NGUYÊN BẢN', desc: 'Spacial Rend thăng hoa lên Rạng +: Palkia trở về hình thái Chúa Tể Không Gian nguyên bản!' },
+      487: { move: 'shadow-force', targetDex: 10010, name: 'Origin Giratina', title: 'DẠNG NGUYÊN BẢN', desc: 'Shadow Force thăng hoa lên Rạng +: Giratina hiển lộ chân thân Chúa Tể Thế Giới Hỗn Mang!' },
+      888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian (Crowned Sword)', title: 'GƯƠM BÁ VƯƠNG', desc: 'Behemoth Blade thăng hoa lên Rạng +: Zacian ngậm Thánh Kiếm thức tỉnh hình hài Hoàng Gia!' },
+      889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta (Crowned Shield)', title: 'KHIÊN HỘ QUỐC', desc: 'Behemoth Bash thăng hoa lên Rạng +: Zamazenta khoác Thánh Khiên thức tỉnh hình hài Hoàng Gia!' },
+      646: { move: 'glaciate', targetDex: 10022, name: 'Black Kyurem', title: 'HỢP THỂ DNA', desc: 'Băng Thần thăng hoa lên Rạng +: Hợp nhất sức mạnh rồng đen tối thượng!' },
+      800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', title: 'ÁNH SÁNG TỐI THƯỢNG', desc: 'Quang phổ thăng hoa lên Rạng +: Necrozma phục hồi toàn vẹn ánh sáng thần thánh!' },
+      801: { move: 'fleur-cannon', targetDex: 10801, name: 'Mega Magearna', title: 'TIẾN HÓA MEGA', desc: 'Fleur Cannon thăng hoa lên Rạng +: Trái Tim Linh Hồn khai mở sức mạnh cơ khí tối thượng!' },
+      807: { move: 'plasma-fists', targetDex: 10807, name: 'Overdrive Zeraora', title: 'QUÁ TẢI LÔI ĐIỆN', desc: 'Plasma Fists thăng hoa lên Rạng +: Điện tích vượt ngưỡng kích hoạt dạng Overdrive!' }
+    };
+
+    const legCfg = EXCLUSIVE_PLUS_EVO[this.baseDex];
+    if (legCfg && !this.isMega && this.dex < 10000) {
+      // Kiểm tra xem player đã có chiêu độc quyền đạt cấp + (Tier >= 1 hoặc evolved) hay chưa
+      let hasPlusMove = false;
+      if (this.slots) {
+        for (const g of this.slots) {
+          const list = Array.isArray(g) ? g : [g];
+          for (const m of list) {
+            if (m && (m.id === legCfg.move || (m.def && m.def.id === legCfg.move))) {
+              if (m.evoTier >= 1 || m.evolved || (m.name && m.name.includes('+'))) {
+                hasPlusMove = true;
+                break;
+              }
+            }
+          }
+          if (hasPlusMove) break;
+        }
+      }
+
+      if (hasPlusMove) {
         this.promptEvo([{
-          dex: 10034,
-          title: 'Mega Rayquaza',
-          tag: 'TIẾN HÓA MEGA',
+          dex: legCfg.targetDex,
+          title: legCfg.name,
+          tag: legCfg.title,
           color: '#22c55e',
-          desc: 'Rayquaza thức tỉnh sức mạnh Thiên Thạch từ tầng thượng khí quyển, thăng hoa thành Chúa Tể Bầu Trời Mega Rayquaza!',
+          desc: legCfg.desc,
           apply: () => {
-            this.megaEvolve(10034);
-            if (G.UI && G.UI.toast) G.UI.toast('Rayquaza đã tiến hóa thành Mega Rayquaza!', 4500);
+            this.megaEvolve(legCfg.targetDex);
+            if (G.UI && G.UI.toast) G.UI.toast(legCfg.name + ' đã thức tỉnh thành công!', 4500);
           }
         }]);
+        return;
       }
-      return;
     }
+
 
     // Tiến trình đặc biệt Zygarde: 10% (Lv 1) -> Thức Tỉnh I (Lv 15) -> 50% (Lv 25) -> Apex + (Lv 30) -> 100% (Lv 50) -> Mega
     if (this.baseDex === 718) {
