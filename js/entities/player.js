@@ -43,13 +43,13 @@ G.Player = class Player {
     this.baseSpd = mon.spd;
     this.baseAtk = mon.atk;
 
-    // Zygarde: Dạng 10% (Lvl 1 - 9) -> Dạng 50% (Lvl 10 - 24) -> Dạng 100% (Lvl 25+)
+    // Zygarde: Dạng 10% (Lvl 1 - 24) -> Dạng 50% (Lvl 25 - 49) -> Dạng 100% (Lvl 50+)
     if (mon.dex === 718 || this.baseDex === 718 || mon.dex === 10118 || mon.dex === 10120 || mon.dex === 10121) {
       this.baseDex = 718;
       const curL = this.level || 1;
       let startDex = 10118;
-      if (curL >= 25) startDex = 10120;
-      else if (curL >= 10) startDex = 718;
+      if (curL >= 50) startDex = 10120;
+      else if (curL >= 25) startDex = 718;
       const startMon = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[startDex] : null;
       if (startMon) {
         mon = startMon;
@@ -73,11 +73,14 @@ G.Player = class Player {
     this.evoChain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(this.baseDex) : null;
     this.evoTierUnlocked = (typeof G !== 'undefined' && G.DB && G.DB.getEvoTier) ? G.DB.getEvoTier(this.baseDex) : 1;
 
-    // Cân bằng giai đoạn tiến hóa (user rule):
+    // Cân bằng giai đoạn tiến hóa (user rule & Master Plan):
     // - Dạng 1 của loài 3 dạng trở lên quá yếu: buff mạnh cho đầu game đỡ cực (+35% baseAtk, +35% maxHp, +8% spd)
-    // - Dạng 2: ngang bằng một con không có dạng tiến hoá (~500 BST baseline, +28% baseAtk, +25% maxHp, +10% spd)
-    // - Dạng 3: nhỉnh hơn tầm 30% (+45% baseAtk, +45% maxHp, +20% spd)
+    // - Dạng 2 của loài 3 dạng: ngang bằng một con không có dạng tiến hoá (~500 BST baseline, +28% baseAtk, +25% maxHp, +10% spd)
+    // - Dạng 3 của loài 3 dạng: nhỉnh hơn tầm 30% (+45% baseAtk, +45% maxHp, +20% spd)
+    // - Dạng 1 của loài 2 dạng: hỗ trợ vượt ải đầu game (+30% baseAtk, +30% maxHp, +6% spd)
+    // - Dạng 2 của loài 2 dạng: tiệm cận dạng cuối (+35% baseAtk, +35% maxHp, +12% spd)
     const is3StageOrMore = this.evoChain && (this.evoChain.type === '3stage' || this.evoChain.maxStage >= 3);
+    const is2Stage = this.evoChain && (this.evoChain.type === '2stage' || this.evoChain.maxStage === 2);
     if (is3StageOrMore) {
       if (this.evoStage === 1) {
         this.baseAtk *= 1.35;
@@ -94,6 +97,18 @@ G.Player = class Player {
         this.maxHp = Math.round(this.maxHp * 1.45);
         this.hp = this.maxHp;
         this.baseSpd = Math.round(this.baseSpd * 1.20);
+      }
+    } else if (is2Stage) {
+      if (this.evoStage === 1) {
+        this.baseAtk *= 1.30;
+        this.maxHp = Math.round(this.maxHp * 1.30);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.06);
+      } else if (this.evoStage >= 2) {
+        this.baseAtk *= 1.35;
+        this.maxHp = Math.round(this.maxHp * 1.35);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.12);
       }
     }
     // BST Compression cho loài single (Plan.md Section 7.2)
@@ -541,6 +556,7 @@ G.Player = class Player {
     // - Dạng 3: nhỉnh hơn tầm 30% (+45% atk, +45% maxHp, +20% spd)
     const stageNow = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
     const is3StageOrMore = this.evoChain && (this.evoChain.type === '3stage' || this.evoChain.maxStage >= 3);
+    const is2Stage = this.evoChain && (this.evoChain.type === '2stage' || this.evoChain.maxStage === 2);
     if (is3StageOrMore) {
       if (stageNow === 2) {
         this.baseAtk *= 1.28;
@@ -550,6 +566,12 @@ G.Player = class Player {
         this.baseAtk *= 1.45;
         this.maxHp = Math.round(this.maxHp * 1.45);
         this.baseSpd = Math.round(this.baseSpd * 1.20);
+      }
+    } else if (is2Stage) {
+      if (stageNow >= 2) {
+        this.baseAtk *= 1.35;
+        this.maxHp = Math.round(this.maxHp * 1.35);
+        this.baseSpd = Math.round(this.baseSpd * 1.12);
       }
     }
 
@@ -784,9 +806,42 @@ G.Player = class Player {
     }
 
 
-    // Dòng tiến hóa Zygarde: Dạng 10% (Lvl 1 - 9) -> Dạng 50% (Lvl 10 - 24) -> Dạng 100% (Lvl 25+, tặng Core Enforcer) -> Dạng Mega (Lvl 50 + 3500 quái)
+    // Dòng tiến hóa Zygarde chuẩn Master Plan:
+    // Lv1: Dạng 10% -> Lv15: Thức tỉnh I -> Lv25: Dạng 50% -> Lv30: Apex -> Lv50: Dạng 100% và mở khóa Mega
     if (this.baseDex === 718) {
-      if (this.level >= 10 && this.dex === 10118) {
+      // Mốc Lv 15: Thức tỉnh I
+      if (this.level >= 15 && this.awakeningTier === 0 && this.dex === 10118) {
+        this.awakeningTier = 1;
+        this.promptEvo([
+          {
+            dex: this.dex,
+            title: 'Zygarde 10% · Berserker Crest',
+            tag: 'CUỒNG CHIẾN',
+            color: '#ef4444',
+            desc: '+25% Máu, +15% Công, +15% Chí mạng và kiếm khí rực lửa.',
+            apply: () => this.activateAwakening(1, 'berserker')
+          },
+          {
+            dex: this.dex,
+            title: 'Zygarde 10% · Bastion Crest',
+            tag: 'PHÁO ĐÀI',
+            color: '#3b82f6',
+            desc: '+25% Máu, +20% Giáp PDEF/SDEF và khiên hộ thể đẩy lùi.',
+            apply: () => this.activateAwakening(1, 'bastion')
+          },
+          {
+            dex: this.dex,
+            title: 'Zygarde 10% · Tempest Crest',
+            tag: 'THẦN TỐC',
+            color: '#10b981',
+            desc: '+25% Máu, +20% Tốc chạy, -15% Hồi chiêu và tàn ảnh ánh sáng.',
+            apply: () => this.activateAwakening(1, 'tempest')
+          }
+        ]);
+        return;
+      }
+      // Mốc Lv 25: Tiến hóa Dạng 50% (Serpent Forme)
+      if (this.level >= 25 && this.dex === 10118) {
         this.promptEvo([{
           dex: 718,
           title: 'Zygarde (Dạng 50%)',
@@ -795,14 +850,29 @@ G.Player = class Player {
           desc: 'Tập hợp 50% tế bào Zygarde: Biến đổi thành dạng Mãng Xà (Serpent Forme). Tăng mạnh tấn công và phòng thủ.',
           apply: () => this.evolveTo(718)
         }]);
+        return;
       }
-      if (this.level >= 25 && this.dex === 718 && !this.isMega) {
+      // Mốc Lv 30: Thức tỉnh Apex (+)
+      if (this.level >= 30 && this.dex === 718 && this.awakeningTier < 2 && !this.isApex) {
+        this.awakeningTier = 2;
+        this.promptEvo([{
+          dex: this.dex,
+          title: 'Zygarde 50% · Apex (+)',
+          tag: 'APEX (+)',
+          color: '#ffd23f',
+          desc: 'Thức tỉnh Apex tối thượng: vương miện hoàng kim, +35% sát thương và hào quang thần thánh.',
+          apply: () => this.activateAwakening(2)
+        }]);
+        return;
+      }
+      // Mốc Lv 50: Tiến hóa Dạng 100% (Complete Forme) + Chiêu độc quyền Core Enforcer + Mở khóa Mega
+      if (this.level >= 50 && this.dex === 718 && !this.isMega) {
         this.promptEvo([{
           dex: 10120,
           title: 'Zygarde Hoàn Thiện (100%)',
           tag: 'TIẾN HÓA DẠNG 100%',
           color: '#10b981',
-          desc: 'Tập hợp 100% tế bào: Thức tỉnh hình hài Cự Thần Titan (Complete Forme). TẶNG KÈM CHIÊU ĐỘC QUYỀN CORE ENFORCER!',
+          desc: 'Tập hợp 100% tế bào: Thức tỉnh hình hài Cự Thần Titan (Complete Forme). TẶNG KÈM CHIÊU ĐỘC QUYỀN CORE ENFORCER VÀ MỞ KHÓA MEGA!',
           apply: () => {
             this.evolveTo(10120);
             this.maxMoves = Math.max(this.maxMoves, this.slots.length + 1);
@@ -811,6 +881,7 @@ G.Player = class Player {
             }
           }
         }]);
+        return;
       }
       return;
     }
@@ -1057,6 +1128,9 @@ G.Player = class Player {
 
   canMegaEvolve() {
     if (this.isMega) return false;
+    if (this.baseDex === 718) {
+      return (this.level >= 50 && this.dex === 10120) || (this.hasItem && this.hasItem('keystone'));
+    }
     const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
     return megas && megas.length > 0 && (this.level >= 30 || (this.hasItem && this.hasItem('keystone')));
   }

@@ -279,10 +279,9 @@ G.Combat = (() => {
   function beam(pl, m) {
     const col = G.U.TYPE_COLOR[m.type] || '#ffd23f';
 
-    // Tia beam liên tục: duy trì / làm mới thời gian chiếu đốt
+    // Tia beam chuẩn survivor: thời lượng 0.50s dứt khoát, không spam kéo dài vô hạn
     let existing = fields.find(f => f.kind === 'continuous_beam' && f.owner === pl && f.m.id === m.id);
     if (existing) {
-      existing.life = Math.max(existing.life, existing.t + 1.8);
       return;
     }
 
@@ -294,7 +293,7 @@ G.Combat = (() => {
       col,
       vis: G.VFX.forMove(m),
       t: 0,
-      life: 1.8,
+      life: 0.50,
       tick: 0,
       target: null,
       aim: pl.aim
@@ -773,8 +772,6 @@ G.Combat = (() => {
       if (f.target && !f.target.dead) {
         f.aim = Math.atan2(f.target.y - pl.y, f.target.x - pl.x);
         pl.aim = f.aim;
-        // Bù thêm thời gian chiếu liên tục chừng nào vẫn đang khóa mục tiêu sống
-        if (f.life - f.t < 0.8) f.life = f.t + 0.8;
       } else {
         f.aim = pl.aim;
       }
@@ -823,22 +820,21 @@ G.Combat = (() => {
         G.FX.spark(tipX, tipY, beamColor, -ca * 60 + G.U.rand(-25, 25), -sa * 60 + G.U.rand(-25, 25), 4);
       }
 
-      // 4. Điểm hồi chiêu (CDR) chuyển hóa thành tốc độ đốt dồn dập (burn tick rate)
-      const baseTickRate = 0.065;
-      const cdrFactor = Math.max(0.20, Math.min(1.0, ((m.cd || 1) / (m.baseCd || 1)) * (pl.cdMul || 1)));
-      const tickInterval = baseTickRate * cdrFactor;
+      // 4. Chu kỳ tick chuẩn cân bằng: 5 tick trong 0.50s thời lượng, không rung màn hình liên tục
+      const tickInterval = 0.10;
 
       f.tick -= dt;
       if (f.tick <= 0) {
         f.tick = tickInterval;
         if (!f.ghost) {
-          G.Camera.kick(0.03);
+          if (f.t <= dt && G.Camera && G.Camera.kick) G.Camera.kick(0.12);
 
-          // Dragon Rage: Ramping Damage (càng chiếu lâu sát thương đốt càng tăng vọt)
+          // Dragon Rage: Ramping Damage
           if (m.id === 'dragon-rage') {
-            f.ramping = Math.min(2.8, (f.ramping || 1.0) + 0.06);
+            f.ramping = Math.min(1.5, (f.ramping || 1.0) + 0.05);
           }
-          let tickDmg = m.dmg * pl.atkFor(m) * 0.28 * (f.ramping || 1.0);
+          // Chuẩn hóa sát thương: 5 tick tổng cộng bằng đúng 100% sát thương của chiêu
+          let tickDmg = (m.dmg * pl.atkFor(m) / 5) * (f.ramping || 1.0);
 
           const mx = pl.x + ca * len / 2, my = pl.y + sa * len / 2;
           const onBeam = (x, y, r) => {

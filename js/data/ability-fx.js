@@ -41,7 +41,7 @@ G.AbilityFX = (() => {
   const byName = (re, es, k = 1.3) => ({ d: '+' + Math.round((k - 1) * 100) + ' % de daño con ' + es + '.',
     out: (pl, m) => (re.test(m.id) ? k : 1) });
   const absorb = type => ({ d: 'Los ataques de tipo ' + TN(type) + ' no le hacen daño: le curan un poco.', absorb: type });
-  const rush = (w, es) => ({ d: '+50 % de velocidad con ' + es + '.', speed: () => (wx() === w ? 1.5 : 1) });
+  const rush = (w, es) => ({ d: '+35 % de velocidad con ' + es + '.', speed: () => (wx() === w ? 1.35 : 1) });
   const summon = (w, es) => ({ d: 'Pone ' + es + ' al empezar la partida y cada 3 minutos.', summon: w });
   const steady = { d: 'No le frenan las trampas pegajosas ni el terreno.', steady: true };
   const moxie = { d: 'Cada enemigo derrotado le da +0,5 % de daño (hasta +15 %).',
@@ -220,8 +220,8 @@ G.AbilityFX = (() => {
     'analytic': { d: '+15 % de daño a enemigos con menos de la mitad de vida.', plus: true, out: (pl, m, e) => (e && e.hp < e.maxHp * 0.5 ? 1.15 : 1) },
     'klutz': { d: 'Sin objeto, +12 % de daño.', plus: true, out: pl => (pl.item ? 1 : 1.12) },
     'hyper-cutter': { d: '+6 % de daño con movimientos físicos.', plus: true, out: (pl, m) => (cls(m) === 'p' ? 1.06 : 1) },
-    'contrary': { d: 'Al revés: frenado, va más rápido.', plus: true, speed: pl => (pl.slowT > 0 ? 2.4 : 1) },
-    'quick-feet': { d: 'Frenado, va más rápido (en vez de más lento).', plus: true, speed: pl => (pl.slowT > 0 ? 2.5 : 1) },
+    'contrary': { d: 'Al revés: frenado, va más rápido (+35 %).', plus: true, speed: pl => (pl.slowT > 0 ? 1.35 : 1) },
+    'quick-feet': { d: 'Frenado, va más rápido (+35 % en vez de más lento).', plus: true, speed: pl => (pl.slowT > 0 ? 1.35 : 1) },
     'bulletproof': { d: 'Recibe un 15 % menos de daño especial.', plus: true, inMul: (pl, type, c) => (c === 's' ? 0.85 : 1) },
     'magic-bounce': { d: '50 % de probabilidad de reflejar proyectiles enemigos hacia el atacante e inmune a trampas.', magicBounce: true, steady: true,
       inMul: (pl, type, c) => (c === 's' ? 0.85 : 1), dodge: (pl, type, c) => (c === 's' ? 0.1 : 0) },

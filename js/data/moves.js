@@ -233,7 +233,7 @@
 
     { id: 'hydro-pump', name: 'Hidrobomba', type: 'water', kind: 'beam',
       desc: 'Cañonazo de agua lento pero devastador.',
-      cd: 1.50, dmg: 29, radius: 250, width: 30 },
+      cd: 2.40, dmg: 29, radius: 250, width: 30 },
 
     { id: 'aqua-ring', name: 'Acua Aro', type: 'water', kind: 'buff',
       desc: 'No hace daño: acumula REGENERACIÓN de vida.',
@@ -278,7 +278,7 @@
 
     { id: 'psybeam', name: 'Psicorrayo', type: 'psychic', kind: 'beam',
       desc: 'Rayo psíquico ancho y contundente.',
-      cd: 1.15, dmg: 17, radius: 215, width: 40 },
+      cd: 1.90, dmg: 17, radius: 215, width: 40 },
 
     { id: 'psychic', name: 'Psíquico', type: 'psychic', kind: 'nova',
       desc: 'Estallido mental radial que busca enemigos.',
@@ -349,7 +349,7 @@
     // ---------------- HIELO ----------------
     { id: 'ice-beam', name: 'Rayo Hielo', type: 'ice', kind: 'beam',
       desc: 'Rayo helado que congela casi del todo.',
-      cd: 1.1, dmg: 20, radius: 220, width: 30, slow: 0.7 },
+      cd: 2.2, dmg: 20, radius: 220, width: 30, slow: 0.7 },
 
     { id: 'powder-snow', name: 'Nieve Polvo', type: 'ice', kind: 'aura',
       desc: 'Ventisca a tu alrededor que ralentiza.',
@@ -376,7 +376,7 @@
     // ---------------- DRAGÓN ----------------
     { id: 'dragon-rage', name: 'Furia Dragón', type: 'dragon', kind: 'beam',
       desc: 'Llamarada dracónica en línea recta.',
-      cd: 1.0, dmg: 24, radius: 230, width: 34 },
+      cd: 2.2, dmg: 24, radius: 230, width: 34 },
 
     { id: 'dragon-dance', name: 'Danza Dragón', type: 'dragon', kind: 'buff',
       desc: 'No hace daño: acumula ATAQUE (físico) más rápido que Danza Espada.',
@@ -398,7 +398,7 @@
 
     { id: 'flash-cannon', name: 'Foco Resplandor', type: 'steel', kind: 'beam',
       desc: 'Rayo de luz metálica que perfora.',
-      cd: 1.05, dmg: 23, radius: 220, width: 30 },
+      cd: 2.00, dmg: 23, radius: 220, width: 30 },
 
     // ---------------- SINIESTRO ----------------
     { id: 'bite', name: 'Mordisco', type: 'dark', kind: 'melee',
@@ -607,7 +607,7 @@
 
     { id: 'core-enforcer', name: 'Core Enforcer', type: 'dragon', kind: 'beam',
       desc: 'Rayo colosal de dragón en forma de Z que calcina a las hordas enemigas anulando sus defensas.',
-      cd: 1.35, dmg: 28, radius: 280, width: 50, knock: 100, exclusive: true },
+      cd: 2.60, dmg: 28, radius: 280, width: 50, knock: 100, exclusive: true },
 
     { id: 'nihil-light', name: 'Nihil Light', type: 'dragon', kind: 'charge',
       desc: 'Mega Zygarde canaliza el poder del vacío en un colosal rayo cósmico que incinera todo a su paso.',
@@ -643,7 +643,7 @@
 
     { id: 'origin-pulse', name: 'Origin Pulse', type: 'water', kind: 'beam',
       desc: 'Pilares de agua zafiro que emergen y perforan todo a su paso con fuerza primordial.',
-      cd: 1.35, dmg: 22, radius: 260, width: 45, count: 2, slow: 0.30, exclusive: true },
+      cd: 2.50, dmg: 22, radius: 260, width: 45, count: 2, slow: 0.30, exclusive: true },
 
     { id: 'precipice-blades', name: 'Precipice Blades', type: 'ground', kind: 'meteor',
       desc: 'Monolitos de piedra afilada brotan del suelo empalando y arrojando a los rivales.',
@@ -663,7 +663,7 @@
 
     { id: 'moongeist-beam', name: 'Moongeist Beam', type: 'ghost', kind: 'beam',
       desc: 'Haz de luz lunar espectral que desintegra a los enemigos sin que puedan defenderse.',
-      cd: 1.25, dmg: 24, radius: 260, width: 44, knock: 90, exclusive: true },
+      cd: 2.50, dmg: 24, radius: 260, width: 44, knock: 90, exclusive: true },
 
     { id: 'close-combat', name: 'Close Combat', type: 'fighting', kind: 'melee',
       desc: 'Una ráfaga de golpes demoledores a corta distancia.',
@@ -690,7 +690,7 @@
 
     { id: 'oblivion-wing', name: 'Oblivion Wing', type: 'flying', kind: 'beam',
       desc: 'Haz carmesí destructor que drena vida de todos los enemigos cruzados.',
-      cd: 1.20, dmg: 21, radius: 240, width: 34, drain: 1, exclusive: true },
+      cd: 2.40, dmg: 21, radius: 240, width: 34, drain: 1, exclusive: true },
 
     { id: 'roost', name: 'Roost', type: 'flying', kind: 'buff', healPct: 0.01,
       desc: 'Aterriza un instante para recuperar 1% de PS máximos sin excesos.',
@@ -720,7 +720,7 @@
 
             { id: 'prismatic-laser', name: 'Prismatic Laser', type: 'psychic', kind: 'beam',
       desc: 'Giải phóng chùm tia lăng kính ánh sáng nguyên thủy cực mạnh thiêu rụi và xuyên thủng mọi kẻ thù.',
-      cd: 1.35, dmg: 26, radius: 290, width: 55, knock: 120, exclusive: true },
+      cd: 2.80, dmg: 26, radius: 290, width: 55, knock: 120, exclusive: true },
     { id: 'glaciate', name: 'Glaciate', type: 'ice', kind: 'nova',
       desc: 'Desata una gélida ventisca que congela y ralentiza severamente a los rivales a su alrededor.',
       cd: 1.15, dmg: 16, radius: 210, count: 12, speed: 280, slow: 0.5, knock: 80, exclusive: true },
