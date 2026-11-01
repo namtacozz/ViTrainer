@@ -672,9 +672,16 @@
     { id: 'oblivion-wing', name: 'Oblivion Wing', type: 'flying', kind: 'beam',
       desc: 'Haz carmesí destructor que drena vida de todos los enemigos cruzados.',
       cd: 1.4, dmg: 30, radius: 320, width: 36, drain: 1, exclusive: true, maxFusions: 1 },
-    { id: 'roost', name: 'Roost', type: 'flying', kind: 'buff', stat: 'def',
-      desc: 'Aterriza un instante para recuperar vida y reforzar defensas.',
-      cd: 3.5, dur: 4.0, amount: 0.15, stacks: 3 },
+    { id: 'roost', name: 'Roost', type: 'flying', kind: 'buff', healPct: 0.01,
+      desc: 'Aterriza un instante para recuperar 1% de PS máximos sin excesos.',
+      cd: 4.5,
+      ups: [
+        { t: '-0.3s recarga', m: { cd: 0.93 } },
+        { t: '-0.3s recarga', m: { cd: 0.93 } },
+        { t: '-0.3s recarga', m: { cd: 0.93 } },
+        { t: '-0.4s recarga', m: { cd: 0.90 } }
+      ]
+    },
     { id: 'fiery-dance', name: 'Fiery Dance', type: 'fire', kind: 'spin',
       desc: 'Danza flamígera envolvente que gira incinerando el entorno.',
       cd: 0.85, dmg: 18, count: 4, radius: 75, burn: 1, exclusive: true, maxFusions: 1 },
@@ -760,7 +767,7 @@
   const BY_ID = {};
   for (const m of RAW) {
     m.cat = m.kind === 'buff' ? null : PHYSICAL.has(m.id) ? 'physical' : 'special';
-    m.ups = LADDERS[m.kind];
+    m.ups = m.ups || LADDERS[m.kind];
     m.maxLvl = m.ups.length + 1;
     BY_ID[m.id] = m;
   }

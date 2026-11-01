@@ -620,6 +620,24 @@ G.Player = class Player {
       });
     };
 
+    // Tiến trình đặc biệt Rayquaza: có sẵn Dragon Ascent, đạt Nv. 25 là hiển thị bảng tiến hóa Mega Rayquaza ngay
+    if (this.baseDex === 384) {
+      if (this.level >= 25 && !this.isMega) {
+        this.promptEvo([{
+          dex: 10034,
+          title: 'Mega Rayquaza',
+          tag: 'TIẾN HÓA MEGA',
+          color: '#22c55e',
+          desc: 'Rayquaza thức tỉnh sức mạnh Thiên Thạch từ tầng thượng khí quyển, thăng hoa thành Chúa Tể Bầu Trời Mega Rayquaza!',
+          apply: () => {
+            this.megaEvolve(10034);
+            if (G.UI && G.UI.toast) G.UI.toast('Rayquaza đã tiến hóa thành Mega Rayquaza!', 4500);
+          }
+        }]);
+      }
+      return;
+    }
+
     // Tiến trình đặc biệt Zygarde: 10% (Lv 1) -> Thức Tỉnh I (Lv 15) -> 50% (Lv 25) -> Apex + (Lv 30) -> 100% (Lv 50) -> Mega
     if (this.baseDex === 718) {
       if (this.level >= 15 && this.awakeningTier === 0) {

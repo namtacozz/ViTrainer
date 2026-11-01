@@ -52,17 +52,16 @@ G.RunQuests = (() => {
         completed: false
       });
     } else if (baseDex === 384) {
-      // Rayquaza: nâng Dragon Ascent lên Rạng +++
+      // Rayquaza: có sẵn Dragon Ascent, đạt Nv. 25 là mở khóa Mega Rayquaza
       activeQuests.push({
         id: 'mega_384',
         type: 'mega',
         title: 'THỬ THÁCH MEGA: Rayquaza',
-        desc: 'Nâng Dragon Ascent lên +++',
-        targetMoveId: 'dragon-ascent',
-        targetMoveTier: 3,
-        rewardType: 'item',
+        desc: 'Đạt Nv. 25 để thức tỉnh Chúa Tể Bầu Trời',
+        targetLv: 25,
+        rewardType: 'rayquaza_mega',
         rewardItem: 'meteorite',
-        rewardName: 'Thiên Thạch (Mega Rayquaza)',
+        rewardName: 'Mega Rayquaza & Thiên Thạch',
         color: '#22c55e',
         icon: 'megaBadge',
         completed: false
@@ -366,7 +365,9 @@ G.RunQuests = (() => {
 
       let isDone = false;
       if (q.type === 'mega' || q.type === 'legend_form') {
-        if (q.targetMoveId && q.targetMoveTier) {
+        if (q.id === 'mega_384') {
+          if ((pl.level || 1) >= (q.targetLv || 25)) isDone = true;
+        } else if (q.targetMoveId && q.targetMoveTier) {
           let curTier = 0;
           if (pl.slots) {
             for (const g of pl.slots) {
@@ -427,6 +428,9 @@ G.RunQuests = (() => {
       } else if (G.Game && G.Game.item) {
         G.Game.item(q.rewardItem);
       }
+    } else if (q.rewardType === 'rayquaza_mega') {
+      if (pl.megaEvolve) pl.megaEvolve(10034);
+      if (G.UI && G.UI.toast) G.UI.toast('Rayquaza đã thức tỉnh thành Chúa Tể Bầu Trời Mega Rayquaza!', 4500);
     } else if (q.rewardType === 'zygarde_mega') {
       if (pl.megaEvolve) pl.megaEvolve(10121);
       if (pl.upgradeToNihilLight) pl.upgradeToNihilLight();
@@ -469,6 +473,11 @@ G.RunQuests = (() => {
     if (q.completed) return { current: 100, max: 100, pct: 1.0, label: '✓ Xong!' };
 
     if (q.type === 'mega' || q.type === 'legend_form') {
+      if (q.id === 'mega_384' && q.targetLv !== undefined) {
+        const curLv = (pl && pl.level) || 1;
+        const pct = Math.min(1, curLv / q.targetLv);
+        return { current: curLv, max: q.targetLv, pct, label: `Nv.${curLv}/${q.targetLv}` };
+      }
       if (q.targetMoveId && q.targetMoveTier) {
         let curTier = 0;
         if (pl && pl.slots) {

@@ -153,6 +153,14 @@ G.Combat = (() => {
       shot(pl, m, a, col, vis);
     }
     G.FX.ring(pl.x, pl.y, pl.r, pl.r * 4, col, 0.3, 3);
+    // Roar of Time +++: Ngưng đọng thời gian làm đóng băng toàn bộ kẻ địch trong 2.5s
+    if (m.id === 'roar-of-time' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      for (const e of G.EnemyMgr.queryCircle(pl.x, pl.y, (m.radius || 280) * 1.25)) {
+        if (!e.dead) e.applyStun(2.5);
+      }
+      G.FX.ring(pl.x, pl.y, 10, (m.radius || 280) * 1.25, '#38bdf8', 0.6, 5);
+      G.FX.burst(pl.x, pl.y, '#93c5fd', 25, 260);
+    }
   }
 
   function inArc(px, py, x, y, aim, half) {
@@ -172,6 +180,28 @@ G.Combat = (() => {
     }
     for (const p of G.World.propsInCircle(pl.x, pl.y, m.radius)) {
       if (inArc(pl.x, pl.y, p.x, p.y, pl.aim, half)) G.World.damageProp(p, m.dmg * pl.atkFor(m), col);
+    }
+    // Spacial Rend +++: Để lại vết rách không gian chân không tồn tại 3s liên tục chém chí mạng
+    if (m.id === 'spacial-rend' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      const rx = pl.x + Math.cos(pl.aim) * (m.radius * 0.75);
+      const ry = pl.y + Math.sin(pl.aim) * (m.radius * 0.75);
+      fields.push({
+        kind: 'patch', owner: pl, ghost, m, col: '#a855f7', vis: G.VFX.forMove(m),
+        x: rx, y: ry, t: 0, life: 3.0, r: 80, tick: 0, dmg: m.dmg * pl.atkFor(m) * 1.4
+      });
+      G.FX.burst(rx, ry, '#c084fc', 20, 200);
+      G.FX.ring(rx, ry, 6, 90, '#a855f7', 0.45, 4);
+    }
+    // Behemoth Blade +++: Phóng sóng kiếm khí xuyên toàn bộ bản đồ
+    if (m.id === 'behemoth-blade' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      const sp = 650;
+      const bca = Math.cos(pl.aim), bsa = Math.sin(pl.aim);
+      G.Projectiles.spawn(Object.assign({
+        x: pl.x + bca * 24, y: pl.y + bsa * 24, vx: bca * sp, vy: bsa * sp,
+        dmg: m.dmg * pl.atkFor(m) * 2.2, r: 24, life: 1.8, pierce: 999, color: '#38bdf8',
+        hits: new Set(), vis: G.VFX.forMove(m), ghost, owner: pl
+      }, payload(m)));
+      G.FX.slash(pl.x + bca * 50, pl.y + bsa * 50 - G.LIFT * 0.5, pl.aim, m.radius * 1.5, 2.5, '#38bdf8', G.VFX.forMove(m));
     }
   }
 
@@ -202,6 +232,29 @@ G.Combat = (() => {
     for (const p of G.World.propsInCircle(mx, my, len / 2 + w)) {
       if (onBeam(p.x, p.y, p.r)) G.World.damageProp(p, m.dmg * pl.atkFor(m), col);
     }
+    // Core Enforcer +++: Bắn thêm 2 luồng năng lượng chữ Z phụ quét chéo 30 độ sang 2 bên
+    if (m.id === 'core-enforcer' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      [-0.45, 0.45].forEach(angOff => {
+        const bAim = pl.aim + angOff;
+        const bca = Math.cos(bAim), bsa = Math.sin(bAim);
+        const subLen = len * 0.85;
+        G.FX.beam(pl.x, pl.y - G.LIFT, bAim, subLen, w * 0.7, '#10b981', G.VFX.forMove(m));
+        const smx = pl.x + bca * subLen / 2, smy = pl.y + bsa * subLen / 2;
+        for (const e of G.EnemyMgr.queryCircle(smx, smy, subLen / 2 + w)) {
+          hit(pl, e, m.dmg * pl.atkFor(m) * 0.8, '#10b981', bca, bsa, 80, m);
+        }
+      });
+    }
+    // Nihil Light +++: Tạo vòng xoáy hố đen hư vô tại đích đến hút quái và phát nổ cực đại
+    if (m.id === 'nihil-light' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      const destX = pl.x + ca * (len * 0.75);
+      const destY = pl.y + sa * (len * 0.75);
+      fields.push({
+        kind: 'vortex', owner: pl, ghost, m, col: '#f43f5e', vis: G.VFX.forMove(m),
+        x: destX, y: destY, t: 0, life: 2.2, r: 160, pull: 320, tick: 0, dmg: m.dmg * pl.atkFor(m) * 1.5
+      });
+      G.FX.burst(destX, destY, '#f43f5e', 28, 280);
+    }
   }
 
   function aura(pl, m) {
@@ -231,7 +284,15 @@ G.Combat = (() => {
   }
 
   function buff(pl, m) {
-    pl.addBuff(m.stat, m.amount, m.dur, m.stacks | 0);
+    if (m.stat) {
+      pl.addBuff(m.stat, m.amount, m.dur, m.stacks | 0);
+    }
+    // Chiêu Roost: chỉ thuần túy hồi 1% máu tối đa mỗi lần cast, không tăng def, không quá OP
+    if (m.id === 'roost' || m.healPct) {
+      const healAmt = Math.max(1, Math.round(pl.maxHp * (m.healPct || 0.01)));
+      pl.heal(healAmt);
+      if (G.FX && G.FX.floatText) G.FX.floatText(pl.x, pl.y - pl.r * 1.2, '+' + healAmt, '#5fe08a');
+    }
     const col = G.U.TYPE_COLOR[m.type];
     G.FX.ring(pl.x, pl.y, pl.r * 2.4, pl.r * 1.1, col, 0.35, 2.5);
     const vis = G.VFX.forMove(m);
@@ -353,6 +414,40 @@ G.Combat = (() => {
     for (const p of G.World.propsInCircle(mx, my, len / 2 + w)) {
       if (segDist2(sx, sy, pl.x, pl.y, p.x, p.y) <= (w / 2 + p.r) ** 2) G.World.damageProp(p, m.dmg * pl.atkFor(m), col);
     }
+    // Cơ chế đặc quyền Dragon Ascent +++: Lúc lướt để lại các vệt nổ tuần tự từ đầu lướt đến đích sau một khoảng thời gian
+    if (m.id === 'dragon-ascent' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      const steps = 7;
+      for (let s = 1; s <= steps; s++) {
+        const frac = s / steps;
+        const wx = sx + ca * (len * frac);
+        const wy = sy + sa * (len * frac);
+        fields.push({
+          kind: 'dragon_wake',
+          owner: pl,
+          ghost,
+          m,
+          col: '#22c55e',
+          vis,
+          x: wx,
+          y: wy,
+          t: 0,
+          delay: 0.12 + s * 0.07, // nổ tuần tự từ vị trí đầu lướt đến đích sau một khoảng thời gian
+          r: 54,
+          dmg: m.dmg * pl.atkFor(m) * 1.15,
+          ca,
+          sa
+        });
+      }
+    }
+    // Behemoth Bash +++: Tạo khiên hộ thể phản đòn và sóng xung kích đẩy lui 360 độ
+    if (m.id === 'behemoth-bash' && (m.evoTier >= 3 || (m.name && m.name.includes('+++')))) {
+      pl.invuln = Math.max(pl.invuln || 0, 1.2);
+      G.FX.ring(pl.x, pl.y, pl.r * 2, 160, '#f43f5e', 0.5, 6);
+      G.FX.burst(pl.x, pl.y, '#fb7185', 25, 240);
+      for (const e of G.EnemyMgr.queryCircle(pl.x, pl.y, 160)) {
+        hit(pl, e, m.dmg * pl.atkFor(m) * 1.5, '#f43f5e', e.x - pl.x, e.y - pl.y, 280, m);
+      }
+    }
     G.Camera.kick(0.12);
   }
 
@@ -473,6 +568,31 @@ G.Combat = (() => {
   /** Cada fotograma de los campos nuevos (los llama updateFields). → true si hay que quitarlo. */
   function tickNewField(f, dt) {
     const pl = f.owner, m = f.m;
+    if (f.kind === 'dragon_wake') {
+      if (f.t < f.delay) {
+        if (G.Camera.sees(f.x, f.y, 40)) {
+          G.FX.ring(f.x, f.y, 3, 18, '#22c55e', 0.15, 1.5);
+          if (Math.random() < 0.4) G.FX.spark(f.x, f.y - 4, '#86efac', f.ca || 0, f.sa || 0, 3);
+        }
+        return false;
+      }
+      // Nổ tuần tự gây sát thương diện rộng và hất tung kẻ địch
+      if (G.Camera.sees(f.x, f.y, 40)) {
+        G.FX.burst(f.x, f.y - 6, '#22c55e', 16, 200);
+        G.FX.ring(f.x, f.y, 8, f.r, '#4ade80', 0.35, 4);
+        G.Audio.sfx('hit');
+      }
+      if (!f.ghost) {
+        blast({ ghost: f.ghost, owner: pl, m, col: f.col, dmg: f.dmg, x: f.x, y: f.y }, f.r);
+        for (const e of G.EnemyMgr.queryCircle(f.x, f.y, f.r)) {
+          if (!e.dead) {
+            e.applyStun(0.35);
+            hit(pl, e, f.dmg, f.col, (f.ca || 0) * 120, (f.sa || 0) * 120, 160, m);
+          }
+        }
+      }
+      return true;
+    }
     if (f.kind === 'charge') {
       f.x = pl.x; f.y = pl.y;
       // La energía se junta en ti mientras carga.
