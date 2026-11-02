@@ -89,15 +89,6 @@ G.Upgrades = (() => {
       ]
     },
     {
-      id: 'lifesteal', tree: 'defense', icon: 'ball',
-      name: 'Hấp Huyết (Hút Máu)', nameEn: 'Lifesteal',
-      unit: '+0.3% hút máu theo sát thương gây ra', unitEn: '+0.3% lifesteal from damage',
-      max: 15, base: 110, grow: 1.35,
-      milestones: [
-        { lvl: 10, name: 'Huyết Tế', nameEn: 'Blood Feast', desc: 'Hạ gục Boss hoặc quái Tinh Anh hồi phục ngay 10% Máu tối đa.' }
-      ]
-    },
-    {
       id: 'tenacity', tree: 'defense', icon: 'boot',
       name: 'Kiên Cường (Kháng Khống Chế)', nameEn: 'Tenacity',
       unit: '+2% giảm thời gian bị làm chậm & khống chế', unitEn: '+2% CC & slow reduction',
@@ -228,7 +219,6 @@ G.Upgrades = (() => {
       eternalSurge: L('hp') >= 20,
       diamondBody: L('def') >= 10,
       meditation: L('regen') >= 10,
-      bloodFeast: L('lifesteal') >= 10,
       unstoppableWill: L('tenacity') >= 10,
       galeStep: L('spd') >= 10,
       instantFlow: L('cd') >= 10,
@@ -252,7 +242,6 @@ G.Upgrades = (() => {
       critMul: 1.5 + L('critMul') * 0.04,
       pierce: L('pierce') * 0.015,
       aoeMul: 1 + L('aoe') * 0.02,
-      lifesteal: L('lifesteal') * 0.003,
       tenacity: L('tenacity') * 0.025,
       rerolls: L('reroll'),
       bans: L('ban'),

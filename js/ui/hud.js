@@ -158,12 +158,14 @@ G.HUD = (() => {
     // Tính toán toàn diện mọi chỉ số từ lõi game (canon stats)
     const patkVal = Math.round(pl.atkFor ? pl.atkFor({ cat: 'physical' }) * 100 : pl.atk * 100);
     const satkVal = Math.round(pl.atkFor ? pl.atkFor({ cat: 'special' }) * 100 : (pl.mon.sa || 1) * pl.atkMul * 100);
-    const pdefVal = Math.round(pl.pdef ? pl.pdef : (pl.mon && pl.mon.df) || 50);
-    const sdefVal = Math.round(pl.sdef ? pl.sdef : (pl.mon && pl.mon.sd) || 50);
+    const pdefVal = Math.round(pl.pdef ? pl.pdef : (pl.df || (pl.mon && pl.mon.df) || 50));
+    const sdefVal = Math.round(pl.sdef ? pl.sdef : (pl.sd || (pl.mon && pl.mon.sd) || 50));
     const spdVal = Math.round(pl.spd);
+    const xpVal = Math.round(((pl.xpMul || 1) - 1) * 100);
     const critVal = Math.round((pl.critChance || 0.05) * 100);
     const cdrVal = Math.round(Math.max(0, (1 - (pl.cdMul || 1)) * 100));
     const drVal = Math.round((pl.dmgReduce || 0) * 100);
+    const rgnVal = pl.regen ? pl.regen.toFixed(1) : '0';
 
     const curStats = {
       patk: patkVal,
@@ -171,14 +173,16 @@ G.HUD = (() => {
       pdef: pdefVal,
       sdef: sdefVal,
       spd: spdVal,
+      xp: xpVal,
       crit: critVal,
       cdr: cdrVal,
-      dr: drVal
+      dr: drVal,
+      rgn: rgnVal
     };
 
     if (lastStatValues) {
       for (const k in curStats) {
-        const diff = curStats[k] - lastStatValues[k];
+        const diff = (typeof curStats[k] === 'number') ? (curStats[k] - lastStatValues[k]) : 0;
         if (diff !== 0) {
           statDeltas[k] = { val: diff, timer: 2.5 };
         }
@@ -194,7 +198,7 @@ G.HUD = (() => {
       }
     }
 
-    const panelW = 210, panelH = 74;
+    const panelW = 216, panelH = 92;
     const px = 14 + sa.left;
     const py = h - panelH - 12 - sa.bottom - (touch ? 46 : 0);
 
@@ -237,21 +241,25 @@ G.HUD = (() => {
     const L_PDEF = isVi ? 'GIÁP.VẬT' : 'P.DEF';
     const L_SDEF = isVi ? 'GIÁP.PHÉP' : 'SP.DEF';
     const L_SPD  = isVi ? 'TỐC ĐỘ' : 'SPD';
+    const L_XP   = isVi ? 'EXP CỘNG' : 'EXP+';
     const L_CRIT = isVi ? 'CHÍ MẠNG' : 'CRIT';
     const L_CDR  = isVi ? 'HỒI CHIÊU' : 'CDR';
     const L_DR   = isVi ? 'GIẢM ST' : 'DMG.RED';
+    const L_RGN  = isVi ? 'HỒI MÁU' : 'HP.REG';
 
     // Cột 1
     renderStat(L_PATK, curStats.patk + '%', 'patk', px + 6, py + 16, '#ff6b4d');
     renderStat(L_PDEF, curStats.pdef, 'pdef', px + 6, py + 34, '#94a3b8');
     renderStat(L_SPD, curStats.spd, 'spd', px + 6, py + 52, '#7fe0ff');
-    renderStat(L_CDR, curStats.cdr + '%', 'cdr', px + 6, py + 69, '#4ade80');
+    renderStat(L_CRIT, curStats.crit + '%', 'crit', px + 6, py + 70, '#fbbf24');
+    renderStat(L_DR, curStats.dr + '%', 'dr', px + 6, py + 88, '#fb923c');
 
     // Cột 2
-    renderStat(L_SATK, curStats.satk + '%', 'satk', px + 106, py + 16, '#c47bff');
-    renderStat(L_SDEF, curStats.sdef, 'sdef', px + 106, py + 34, '#38bdf8');
-    renderStat(L_CRIT, curStats.crit + '%', 'crit', px + 106, py + 52, '#fbbf24');
-    renderStat(L_DR, curStats.dr + '%', 'dr', px + 106, py + 69, '#fb923c');
+    renderStat(L_SATK, curStats.satk + '%', 'satk', px + 108, py + 16, '#c47bff');
+    renderStat(L_SDEF, curStats.sdef, 'sdef', px + 108, py + 34, '#38bdf8');
+    renderStat(L_XP, '+' + curStats.xp + '%', 'xp', px + 108, py + 52, '#a7f3d0');
+    renderStat(L_CDR, curStats.cdr + '%', 'cdr', px + 108, py + 70, '#4ade80');
+    renderStat(L_RGN, curStats.rgn + '/s', 'rgn', px + 108, py + 88, '#34d399');
 
     ctx.restore();
   }
@@ -510,7 +518,7 @@ G.HUD = (() => {
       const cDex = pl.dex;
       const curLv = pl.level || 1;
 
-      // 1. Zygarde đặc biệt: 10% (Lv. 1 - 24) -> 50% (Lv. 25 - 49) -> 100% (Lv. 50+, Core Enforcer) -> Mega (Lv. 50 + 3500 quái)
+      // 1. Zygarde đặc biệt: 10% (Lv. 1 - 19) -> 50% (Lv. 20 - 49) -> 100% (Lv. 50+, Core Enforcer) -> Mega (Lv. 50 + 5000 quái)
       if (bDex === 718) {
         if (pl.isMega && (cDex === 10121 || pl.megaId === 10121)) {
           return { dex: 10121, label: 'Hoàn thiện', isFinal: true };
@@ -518,18 +526,18 @@ G.HUD = (() => {
         if (cDex === 10120 || curLv >= 50) {
           const kills = (pl && pl.kills) || 0;
           const reqLv = 50;
-          const ready = kills >= 3500 && curLv >= reqLv;
+          const ready = kills >= 5000 && curLv >= reqLv;
           return {
             dex: 10121,
-            label: ready ? 'Sẵn sàng Mega!' : (curLv < reqLv ? `Lv. ${curLv}/${reqLv}` : `Mega ${kills}/3500`),
+            label: ready ? 'Sẵn sàng Mega!' : (curLv < reqLv ? `Lv. ${curLv}/${reqLv}` : `Mega ${kills}/5000`),
             ready,
             icon: 'megaBadge'
           };
         }
-        if (cDex === 718 || curLv >= 25) {
+        if (cDex === 718 || curLv >= 20) {
           return { dex: 10120, exactDex: true, label: `Lv. ${curLv}/50` };
         }
-        return { dex: 718, exactDex: true, label: `Lv. ${curLv}/25` };
+        return { dex: 718, exactDex: true, label: `Lv. ${curLv}/20` };
       }
 
       // 2. Huyền thoại tiến hóa qua chiêu độc quyền + (EXCLUSIVE_PLUS_EVO)
@@ -568,10 +576,10 @@ G.HUD = (() => {
             }
           }
         }
-        const ready = curTier >= 1;
+        const ready = curTier >= 3 && curLv >= 50;
         return {
           dex: leg.targetDex,
-          label: ready ? 'Sẵn sàng!' : `${leg.name} +`,
+          label: ready ? 'Sẵn sàng!' : (curTier < 3 ? `${leg.name} +++` : `Lv. ${curLv}/50`),
           ready
         };
       }
@@ -590,53 +598,56 @@ G.HUD = (() => {
       if (ch && ch.type === '3stage') {
         if (stg === 1) {
           const nDex = ch.stages[1] ? ch.stages[1][0] : cDex;
-          return { dex: nDex, label: `Lv. ${curLv}/15` };
+          return { dex: nDex, label: `Lv. ${curLv}/18` };
         } else if (stg === 2) {
           const nDex = ch.stages[2] ? ch.stages[2][0] : cDex;
-          return { dex: nDex, label: `Lv. ${curLv}/30` };
+          return { dex: nDex, label: `Lv. ${curLv}/36` };
         } else {
           if (hasM) {
-            return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
+            return { dex: mDex, label: `Mega (Lv. ${curLv}/50)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
-            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+            return { icon: 'crown', label: `Apex (20:00)` };
           }
           return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
         }
       } else if (ch && ch.type === '2stage') {
         if (stg === 1) {
           const nDex = ch.stages[1] ? ch.stages[1][0] : cDex;
-          return { dex: nDex, label: `Lv. ${curLv}/18` };
+          return { dex: nDex, label: `Lv. ${curLv}/35` };
         } else {
           if (hasM) {
-            return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
+            return { dex: mDex, label: `Mega (Lv. ${curLv}/50)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
-            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+            return { icon: 'crown', label: `Apex (20:00)` };
           }
           return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
         }
       } else if (ch && ch.type === 'branch') {
         if (stg === 1) {
           const nDex = (ch.members || []).find(d => d !== bDex) || cDex;
-          return { dex: nDex, label: `Lv. ${curLv}/15` };
+          return { dex: nDex, label: `Lv. ${curLv}/18` };
+        } else if (stg === 2 && (ch.maxStage || 2) >= 3) {
+          const nDex = (ch.stages[2] && ch.stages[2][0]) || cDex;
+          return { dex: nDex, label: `Lv. ${curLv}/36` };
         } else {
           if (hasM) {
-            return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
+            return { dex: mDex, label: `Mega (Lv. ${curLv}/50)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
-            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+            return { icon: 'crown', label: `Apex (20:00)` };
           }
           return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
         }
       } else {
         if (hasM) {
-          return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
+          return { dex: mDex, label: `Mega (Lv. ${curLv}/50)`, icon: 'megaBadge' };
         }
-        if (pl.awakeningTier === 0) {
-          return { icon: 'star', label: `Thức tỉnh ${curLv}/15` };
-        } else if (pl.awakeningTier === 1) {
-          return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+        if (!pl.hasChosenSingleBranch) {
+          return { icon: 'star', label: `Nhánh (20:00)` };
+        } else if (!pl.isApex) {
+          return { icon: 'crown', label: `Apex (20:00)` };
         } else {
           return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
         }

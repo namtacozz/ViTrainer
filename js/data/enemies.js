@@ -182,13 +182,18 @@ G.Enemies = (() => {
     return { cast, bosses };
   }
 
-  // (El "tiempo extra" del minuto 60 se quitó al llegar la Sentencia de Arceus,
-  //  que acaba todas las partidas en el minuto 30: ver systems/judgment.js.)
-  // Tăng tiến sức mạnh quái & boss theo hàm số mũ tới phút 30 (1800s) - đã giảm ~20% tốc độ tăng tiến & làm dịu đầu game
+  // Tăng tiến sức mạnh quái & boss:
+  // Từ 10p trở đi, quái trụ được >= 4s trước DPS người chơi; từ 20p trở đi trụ được >= 6s. Sát thương giữ nguyên.
   function scale(t) {
     const p = t / 1800;
+    let hpMul = 1 + (t / 100) * Math.exp(1.35 * p);
+    if (t > 600) {
+      const extra10 = (t - 600) / 600; // 0 at 10m, 1 at 20m
+      const factor10 = 1 + extra10 * 1.8 + Math.pow(Math.max(0, extra10), 2) * 3.2;
+      hpMul *= (1.5 + factor10);
+    }
     return {
-      hp: 1 + (t / 100) * Math.exp(1.35 * p),
+      hp: hpMul,
       dmg: 1 + (t / 380) * Math.exp(1.18 * p),
       spd: 1 + Math.min(0.50, (t / 1800) * 0.50)
     };
@@ -196,13 +201,14 @@ G.Enemies = (() => {
 
   /**
    * Thang điểm nâng cấp Boss tới phút 30 (1800s):
-   * Cân bằng lại sau phút 20: giảm tốc độ tăng trưởng máu & sát thương,
-   * tránh boss quá trâu không thể tiêu diệt và tránh one-shot.
+   * Giảm 40% sinh lực boss trước 10p (x0.6), tăng 60% sau 10p (x1.6).
    */
   function bossScale(t) {
     const p = t / 1800;
+    const baseHp = 1 + (t / 600) * (1 + 0.85 * p);
+    const bossHpMul = t < 600 ? 0.60 : 1.60;
     return {
-      hp: 1 + (t / 600) * (1 + 0.85 * p),
+      hp: baseHp * bossHpMul,
       dmg: 1 + (t / 550) * (1 + 0.50 * p),
       spd: 1 + Math.min(0.25, (t / 1800) * 0.25)
     };
@@ -224,7 +230,28 @@ G.Enemies = (() => {
     return G.U.pickN(pool, 4).map(p => defFor(p, TIERS[ti], ti));
   }
 
-  /** Bolsa de enemigos disponibles en el segundo `t`. */
+  function isStageAllowed(dex, t) {
+    const info = (typeof G !== 'undefined' && G.getEvoInfo) ? G.getEvoInfo(dex) : null;
+    const stage = info ? (info.stage || 1) : 1;
+    const chain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(dex) : null;
+    const maxStage = chain ? (chain.maxStage || (chain.stages ? chain.stages.length : 1)) : 1;
+    const isMega = dex >= 10000 || ((typeof G !== 'undefined' && G.MEGAS && G.MEGAS[dex]));
+    const isFinal = isMega || (stage >= maxStage);
+
+    if (t < 300) { // < 5m: Dạng 1 của dòng tiến hóa áp dụng cho tất cả
+      return stage === 1 && !isMega;
+    } else if (t < 720) { // 5m - 12m: Dạng 2
+      return (stage === 2 && !isMega) || (stage === 1 && maxStage === 1);
+    } else if (t < 1020) { // 12m - 17m: Giai đoạn chuyển tiếp
+      return (stage >= 2 && !isMega) || (stage === 1 && maxStage === 1);
+    } else if (t < 1380) { // 17m - 23m: Dạng 3 (hoặc dạng cuối của loài 2 dạng)
+      return (stage >= 3 || (stage >= 2 && maxStage <= 2)) && !isMega;
+    } else { // 23m+: Dạng cuối cùng (mega / dạng đặc biệt)
+      return isFinal;
+    }
+  }
+
+  /** Bolsa de enemigos disponibles en el segundo `t` lọc theo Stage chuẩn Master Plan. */
   function bagAt(t) {
     // Durante una horda de un tipo sólo salen los de ese tipo (systems/events.js).
     const horde = G.Events && G.Events.bag();
@@ -233,8 +260,21 @@ G.Enemies = (() => {
     const bag = [];
     for (const tier of cast) {
       if (t < tier.from) continue;
-      const w = t - tier.from > 260 ? 3 : 10;       // los tramos viejos pierden peso
-      for (const e of tier.list) for (let i = 0; i < w; i++) bag.push(e);
+      const w = t - tier.from > 260 ? 3 : 10;
+      for (const e of tier.list) {
+        if (isStageAllowed(e.dex, t)) {
+          for (let i = 0; i < w; i++) bag.push(e);
+        }
+      }
+    }
+    // Bổ sung nếu chưa có Pokémon khớp stage
+    if (!bag.length) {
+      const ti = tierAt(t);
+      const tier = TIERS[ti];
+      const validDexes = G.DEX.filter(p => p.rarity < 5 && G.SPRITE_META && G.SPRITE_META[p.dex] && isStageAllowed(p.dex, t));
+      const pool = validDexes.length ? validDexes : G.DEX.filter(p => G.SPRITE_META && G.SPRITE_META[p.dex]);
+      const picked = G.U.pickN(pool, 4);
+      for (const p of picked) bag.push(defFor(p, tier, ti));
     }
     return bag.length ? bag : cast[0].list;
   }

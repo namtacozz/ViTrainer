@@ -58,8 +58,9 @@ G.RunQuests = (() => {
         id: 'legend_evo_' + baseDex,
         type: 'exclusive_plus',
         targetMoveId: lq.move,
+        targetLv: 50,
         title: 'THỬ THÁCH TIẾN HÓA: ' + lq.name,
-        desc: 'Nâng ' + lq.moveName + ' lên Rạng +',
+        desc: 'Nâng ' + lq.moveName + ' lên Rạng +++ & Đạt Lv. 50',
         rewardType: 'legend_plus_evo',
         rewardTargetDex: lq.targetDex,
         rewardName: lq.name,
@@ -68,13 +69,13 @@ G.RunQuests = (() => {
         completed: false
       });
     } else if (baseDex === 718) {
-      // Zygarde: farm 3500 quái & đạt Lv. 50 để mở khóa Mega Zygarde & Nihil Light
+      // Zygarde: farm 5000 quái & đạt Lv. 50 để mở khóa Mega Zygarde & Nihil Light
       activeQuests.push({
         id: 'mega_718',
         type: 'mega',
         title: 'THỬ THÁCH MEGA: Zygarde',
-        desc: 'Đạt Lv. 50 & hạ 3500 kẻ địch',
-        targetKills: 3500,
+        desc: 'Đạt Lv. 50 & hạ 5000 kẻ địch',
+        targetKills: 5000,
         targetLv: 50,
         kills: (pl && pl.kills) || 0,
         rewardType: 'zygarde_mega',
@@ -107,8 +108,8 @@ G.RunQuests = (() => {
         id: 'mega_' + megaDex,
         type: 'mega',
         title: 'THỬ THÁCH MEGA: ' + mName,
-        desc: 'Đạt Lv. 25 & hạ 350 kẻ địch',
-        targetKills: 350,
+        desc: 'Đạt Lv. 25 & hạ 1000 kẻ địch',
+        targetKills: 1000,
         targetLv: 25,
         kills: (pl && pl.kills) || 0,
         rewardType: 'item',
@@ -235,8 +236,8 @@ G.RunQuests = (() => {
         id: 'mega_' + newDex,
         type: 'mega',
         title: 'THỬ THÁCH MEGA: ' + mName,
-        desc: 'Đạt Lv. 25 & hạ 350 kẻ địch',
-        targetKills: 350,
+        desc: 'Đạt Lv. 25 & hạ 1000 kẻ địch',
+        targetKills: 1000,
         targetLv: 25,
         kills: (pl && pl.kills) || 0,
         rewardType: 'item',
@@ -309,7 +310,7 @@ G.RunQuests = (() => {
             }
           }
         }
-        if (curTier >= 1) isDone = true;
+        if (curTier >= 3 && (pl.level || 1) >= (q.targetLv || 50)) isDone = true;
       }
     if (q.type === 'mega' || q.type === 'legend_form') {
         if (q.id === 'mega_384') {
@@ -434,8 +435,11 @@ G.RunQuests = (() => {
           }
         }
       }
-      const isReady = curTier >= 1;
-      return { current: isReady ? 1 : 0, max: 1, pct: isReady ? 1.0 : 0.0, label: isReady ? 'Rạng + (Sẵn sàng!)' : 'Chưa lên +' };
+      const curLv = (pl && pl.level) || 1;
+      const isReady = curTier >= 3 && curLv >= 50;
+      const stars = curTier === 0 ? '0' : '+'.repeat(curTier);
+      const label = isReady ? 'Rạng +++ (Sẵn sàng!)' : (curTier < 3 ? `Chiêu: ${stars}/+++` : `Cần Lv. ${curLv}/50`);
+      return { current: isReady ? 1 : 0, max: 1, pct: isReady ? 1.0 : (curTier / 3) * 0.5 + (Math.min(50, curLv) / 50) * 0.5, label };
     }
 
     if (q.type === 'mega' || q.type === 'legend_form') {

@@ -25,18 +25,20 @@ G.Spawner = (() => {
   const dmgK = t => 1.5 + Math.min(0.7, (t / 300) * 0.7);
   const SHINY_RATE = 1 / 4096;
   let acc = 0, bossIdx = 0, surgeT = 32, announce = null, announceT = 0, preloadT = 0;
+  let enrageAnnounced = false;
   let forceShiny = 0;           // para pruebas: los N próximos salen shiny
 
   function reset() {
-    acc = 0; bossIdx = 0; surgeT = 32;
+    acc = 0; bossIdx = 0; surgeT = 32; enrageAnnounced = false;
     if (G.Director && G.Director.reset) G.Director.reset(); announce = null; announceT = 0; preloadT = 0;
     G.Enemies.rollRun();
     G.Sprites.preload(G.Enemies.upcomingDex(0, 80));
   }
 
-  /** Enemigos por segundo según el minuto de la run. */
+  /** Enemigos por segundo: tăng đầu game (+20%), giảm 10% sau 15p (900s). */
   function rate(t) {
-    return (1.6 + t * 0.028 + Math.pow(t / 60, 1.6) * 0.5) * DENSITY;
+    const spawnScale = t < 900 ? 1.20 : 0.90;
+    return (1.6 + t * 0.028 + Math.pow(t / 60, 1.6) * 0.5) * DENSITY * spawnScale;
   }
 
   /** Radio de "fuera de la vista": el de la cámara, o más si alguien la tiene alejada (Luminosfera). */
@@ -179,6 +181,14 @@ G.Spawner = (() => {
     // Precarga lo que va a salir en el próximo minuto.
     preloadT -= dt;
     if (preloadT <= 0) { preloadT = 10; G.Sprites.preload(G.Enemies.upcomingDex(t, 60)); }
+
+    // Thông báo Giai đoạn Cuồng nộ ở phút thứ 10 (600s)
+    if (t >= 600 && !enrageAnnounced) {
+      enrageAnnounced = true;
+      say('GIAI ĐOẠN CUỒNG NỘ ĐÃ BẮT ĐẦU!', 4.5);
+      if (G.Audio && G.Audio.sfx) G.Audio.sfx('legend');
+      if (G.Camera && G.Camera.kick) G.Camera.kick(1.3);
+    }
 
     // --- jefes ---
     const b = G.Enemies.BOSSES[bossIdx];

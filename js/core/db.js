@@ -131,6 +131,28 @@ G.DB = (() => {
       s.partner = G.getBaseDex(s.partner);
     }
 
+    // Hoàn trả 100% tiền PokéCoins đã nâng cấp Hấp Huyết (lifesteal) và loại bỏ khỏi save
+    let lifestealRefund = 0;
+    const lifestealCost = lvl => Math.round(110 * Math.pow(1.35, lvl) / 10) * 10;
+    if (s.pupg) {
+      for (const d in s.pupg) {
+        const u = s.pupg[d];
+        if (u && u.lifesteal) {
+          const lvl = Math.min(15, Math.floor(+u.lifesteal || 0));
+          for (let l = 0; l < lvl; l++) lifestealRefund += lifestealCost(l);
+          delete u.lifesteal;
+        }
+      }
+    }
+    if (s.upgrades && s.upgrades.lifesteal) {
+      const lvl = Math.min(15, Math.floor(+s.upgrades.lifesteal || 0));
+      for (let l = 0; l < lvl; l++) lifestealRefund += lifestealCost(l);
+      delete s.upgrades.lifesteal;
+    }
+    if (lifestealRefund > 0) {
+      s.coins = (s.coins || 0) + lifestealRefund;
+    }
+
     const ownedDexes = Object.keys(s.owned).map(Number).filter(d => G.DEX_BY && G.DEX_BY[d]);
     const chainMembers = {};
     for (const dex of ownedDexes) {

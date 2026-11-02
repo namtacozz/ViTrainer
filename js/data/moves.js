@@ -42,7 +42,7 @@
       { t: '+1 proyectil',                  m: { count: 1, spread: 1.4 } },
       { t: '+45% daño',                     m: { dmg: 1.45 } },
       { t: '-25% recarga',                  m: { cd: 0.75 } },
-      { t: '+1 proyectil y +1 perforación',   m: { count: 1, pierce: 1, spread: 1.2 } }
+      { t: '+1 perforación y +35% daño',    m: { pierce: 1, dmg: 1.35, spread: 1.2 } }
     ],
     melee: [
       { t: '+40% daño',                     m: { dmg: 1.40 } },
@@ -117,22 +117,22 @@
       { t: '+50% daño y +30% radio',        m: { dmg: 1.50, radius: 1.30 } }
     ],
     cone: [
-      { t: '+3 disparos',                   m: { count: 3 } },
+      { t: '+2 disparos',                   m: { count: 2 } },
       { t: '+40% daño',                     m: { dmg: 1.40 } },
       { t: '+30% alcance',                  m: { life: 1.30 } },
-      { t: '+3 disparos y +1 perforación',  m: { count: 3, pierce: 1 } }
+      { t: '+2 disparos y +1 perforación',  m: { count: 2, pierce: 1 } }
     ],
     homing: [
       { t: '+1 proyectil',                  m: { count: 1, spread: 1.3 } },
       { t: '+45% daño',                     m: { dmg: 1.45 } },
       { t: '-25% recarga',                  m: { cd: 0.75 } },
-      { t: '+1 proyectil y +40% daño',      m: { count: 1, dmg: 1.40 } }
+      { t: '+1 perforación y +40% daño',    m: { pierce: 1, dmg: 1.40 } }
     ],
     bounce: [
       { t: '+1 rebote',                     m: { bounce: 1 } },
       { t: '+45% daño',                     m: { dmg: 1.45 } },
       { t: '-25% recarga',                  m: { cd: 0.75 } },
-      { t: '+1 proyectil y +1 rebote',      m: { count: 1, bounce: 1, spread: 1.3 } }
+      { t: '+1 rebote y +30% daño',         m: { bounce: 1, dmg: 1.30, spread: 1.2 } }
     ],
     charge: [
       { t: '+45% daño',                     m: { dmg: 1.45 } },
@@ -854,6 +854,27 @@
     const s = Object.assign({}, def, { id, def, lvl, t: 0 });
     delete s.ups;
     for (let i = 0; i < lvl - 1; i++) applyMods(s, def.ups[i].m);
+
+    // Cân bằng chiêu thức (Toàn diện theo Master Plan):
+    // 1. Đạn hạt (projectile, homing, bounce, cone): -20% sát thương mỗi hạt
+    if (['projectile', 'homing', 'bounce', 'cone'].includes(s.kind)) {
+      s.dmg = (s.dmg || 20) * 0.80;
+    }
+    // 2. Cận chiến tầm gần (melee): +20% sát thương
+    else if (s.kind === 'melee') {
+      s.dmg = (s.dmg || 20) * 1.20;
+    }
+    // 3. Chiêu lướt gây sát thương (dash): +40% sát thương
+    else if (s.kind === 'dash') {
+      s.dmg = (s.dmg || 20) * 1.40;
+    }
+    // 4. Chiêu beam / charge: tăng tốc độ ra chiêu 20% (-20% cd / charge time), giảm 10% sát thương
+    else if (['beam', 'charge'].includes(s.kind)) {
+      s.cd = (s.cd || 1) * 0.80;
+      if (s.charge) s.charge *= 0.80;
+      s.dmg = (s.dmg || 20) * 0.90;
+    }
+
     return s;
   }
 
@@ -979,7 +1000,7 @@
   };
   // Lo que gana al evolucionar, según cómo funcione.
   const EVO_MODS = {
-    projectile: { t: '×1,8 daño, +2 proyectiles, +2 perforación y más grandes', m: { dmg: 1.8, count: 2, pierce: 2, size: 1.3, spread: 1.1 } },
+    projectile: { t: '×1,8 daño, +1 proyectil, +2 perforación y más grandes', m: { dmg: 1.8, count: 1, pierce: 2, size: 1.3, spread: 1.1 } },
     melee:      { t: '×1,9 daño, más alcance y golpea en 360°', m: { dmg: 1.9, radius: 1.3, arc: 9 } },
     beam:       { t: '×1,8 daño, rayo un 50% más grueso y más largo', m: { dmg: 1.8, width: 1.5, radius: 1.2, cd: 0.85 } },
     orbit:      { t: '+2 orbes, ×1,7 daño y más radio', m: { count: 2, dmg: 1.7, radius: 1.15 } },
@@ -992,8 +1013,8 @@
     turret:     { t: '×1,8 daño, +1 a la vez y dispara más rápido', m: { dmg: 1.8, count: 1, rate: 0.8 } },
     dash:       { t: '×1,9 daño, más distancia y menos recarga', m: { dmg: 1.9, radius: 1.25, cd: 0.8 } },
     trail:      { t: '×1,8 daño, charcos más grandes y duraderos', m: { dmg: 1.8, radius: 1.25, dur: 1.3 } },
-    cone:       { t: '×1,7 daño, +4 disparos y +1 perforación', m: { dmg: 1.7, count: 4, pierce: 1 } },
-    homing:     { t: '×1,8 daño, +2 proyectiles y más grandes', m: { dmg: 1.8, count: 2, size: 1.3, spread: 1.2 } },
+    cone:       { t: '×1,7 daño, +2 disparos y +1 perforación', m: { dmg: 1.7, count: 2, pierce: 1 } },
+    homing:     { t: '×1,8 daño, +1 proyectil y más grandes', m: { dmg: 1.8, count: 1, size: 1.3, spread: 1.2 } },
     bounce:     { t: '×1,8 daño, +2 rebotes y +1 proyectil', m: { dmg: 1.8, bounce: 2, count: 1, spread: 1.3 } },
     charge:     { t: '×1,8 daño, rayo un 50% más grueso y carga más rápido', m: { dmg: 1.8, width: 1.5, charge: 0.7 } },
     spin:       { t: '×1,8 daño, +1 vuelta y más radio', m: { dmg: 1.8, count: 1, radius: 1.2 } },
@@ -1005,12 +1026,12 @@
 
   const evoName = (name, tier = 1) => name + ' ' + '+'.repeat(tier);
 
-  /** Meta de maestría para pasar de + a ++ */
+  /** Meta de maestría para pasar de + a ++ (Tăng điều kiện gấp 5 lần) */
   function getMasteryGoal(m) {
-    // Si aturde: 15 aturdimientos; si hace daño: 200.000 dmg o 40 lanzamientos
+    // Nếu gây choáng: 75 lần (trước 15); nếu sát thương: 1.000.000 dmg (trước 200.000)
     return {
       type: m.stun ? 'stun' : 'dmg',
-      goal: m.stun ? 15 : 200000,
+      goal: m.stun ? 75 : 1000000,
       prog: m.stun ? (m.stunsDone || 0) : (m.dealt || 0)
     };
   }
@@ -1025,6 +1046,8 @@
     const needs = EVO[m.id];
     if (!needs || !EVO_MODS[m.kind]) return null;
 
+    const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
+
     // Rango 1 (+): requiere maxLvl y statTaken
     if (!m.evoTier && !m.evolved) {
       if (m.lvl < m.def.maxLvl) return null;
@@ -1034,26 +1057,43 @@
       };
     }
 
-    // Rango 2 (++): requiere haber alcanzado Rango 1 (+) y haber completado la misión de maestría de ese movimiento
+    // Rango 2 (++): Yêu cầu Rạng 1 (+) và hoàn thành sứ mệnh tinh thông chiêu thức (gấp 5 lần điều kiện cũ)
     if ((m.evoTier === 1 || (m.evolved && !m.evoTier)) && m.evoTier !== 2 && m.evoTier !== 3) {
       const g = getMasteryGoal(m);
       const ready = g.prog >= g.goal;
-      const metric = g.type === 'stun' ? `${Math.min(g.goal, g.prog)}/${g.goal} aturdimientos` : `${Math.floor(Math.min(g.goal, g.prog) / 1000)}k/${Math.floor(g.goal / 1000)}k daño`;
+      const metric = g.type === 'stun'
+        ? (isVi ? `${Math.min(g.goal, g.prog)}/${g.goal} lần làm choáng` : `${Math.min(g.goal, g.prog)}/${g.goal} stuns`)
+        : (isVi ? `${(Math.min(g.goal, g.prog) / 1000).toFixed(0)}k/${(g.goal / 1000).toFixed(0)}k sát thương` : `${(Math.min(g.goal, g.prog) / 1000).toFixed(0)}k/${(g.goal / 1000).toFixed(0)}k damage`);
       return {
-        name: evoName(m.def.name, 2), needs, needName: 'Maestría',
-        text: `Despierta Rango ++ (×1,4 daño extra, +1 proyectil/área y -15% recarga). Progreso: ${metric}`,
+        name: evoName(m.def.name, 2), needs,
+        needName: isVi ? 'Tinh Anh' : 'Mastery',
+        text: isVi
+          ? `Thức tỉnh Rạng ++ (x1.4 sát thương, +1 số lượng/bán kính và -15% hồi chiêu). Tiến trình: ${metric}`
+          : `Awaken Rank ++ (×1.4 damage, +1 count/area and -15% cooldown). Progress: ${metric}`,
         ready, tier: 2
       };
     }
 
-    // Rango 3 (+++): chỉ cần có 1 chiêu ++ (chính chiêu này) và ít nhất 1 chiêu khác đạt Rango + trở lên
+    // Rango 3 (+++): Tối đa 2 chiêu +++ trong toàn bộ chiêu, cần có ít nhất 4 chiêu Rạng + trở lên,
+    // và chiêu này phải gây đủ sát thương: 10M với đạn hạt, 7M với beam, 5M với cận chiến/lướt/khác.
     if (m.evoTier === 2) {
-      const otherMoves = allMoves.filter(other => other !== m);
-      const ready = otherMoves.some(other => (other.evoTier >= 1 || other.evolved));
-      const hasPlus = ready ? 1 : 0;
+      const plusPlusPlusCount = allMoves.filter(other => (other.evoTier >= 3 || (other.name && other.name.includes('+++')))).length;
+      if (plusPlusPlusCount >= 2) return null;
+
+      const plusMovesCount = allMoves.filter(other => (other.evoTier >= 1 || other.evolved || (other.name && other.name.includes('+')))).length;
+      const isProjectile = ['projectile', 'homing', 'bounce', 'cone'].includes(m.kind);
+      const isBeam = ['beam', 'charge'].includes(m.kind);
+      const dmgThreshold = isProjectile ? 10000000 : (isBeam ? 7000000 : 5000000);
+      const curDmg = m.dealt || 0;
+
+      const ready = plusMovesCount >= 4 && curDmg >= dmgThreshold;
+      const dmgProg = (curDmg / 1000000).toFixed(1) + 'M/' + (dmgThreshold / 1000000).toFixed(0) + 'M';
       return {
-        name: evoName(m.def.name, 3), needs, needName: 'Sincronía Dominio',
-        text: `Despierta Rango SUPREMO +++ (×2,0 daño colosal, efectos duplicados). Requiere 1 chiêu khác đạt Rango + trở lên (${hasPlus}/1 listo)`,
+        name: evoName(m.def.name, 3), needs,
+        needName: isVi ? 'Tối Thượng' : 'Supreme',
+        text: isVi
+          ? `Thức tỉnh Rạng TỐI THƯỢNG +++ (x2.0 sát thương cực đại, hiệu ứng tăng gấp đôi). Yêu cầu: >=4 chiêu Rạng + (${plusMovesCount}/4) và tích lũy sát thương (${dmgProg}). [Tối đa 2 chiêu +++]`
+          : `Awaken SUPREME +++ (×2.0 colossal damage, doubled effects). Requires: >=4 Rank + moves (${plusMovesCount}/4), damage goal (${dmgProg}). [Max 2 +++ moves]`,
         ready, tier: 3
       };
     }
@@ -1082,10 +1122,11 @@
       m.evoTier = 2;
       m.name = evoName(m.baseName || m.def.name, 2);
     } else if (nextTier === 3) {
-      // Potenciador +++: +100% dmg (doble), +2 count / +40% radius, +1 pierce/dur
+      // Potenciador +++: +100% dmg (doble), +2 count / +40% radius (hạt chỉ +1 để tránh quá đà), +1 pierce/dur
       m.dmg = (m.dmg || 20) * 2.0;
       m.cd = (m.cd || 1) * 0.8;
-      if (m.count) m.count += 2;
+      const isProjectile = ['projectile', 'homing', 'bounce', 'cone'].includes(m.kind);
+      if (m.count) m.count += (isProjectile ? 1 : 2);
       if (m.radius) m.radius *= 1.35;
       if (m.pierce) m.pierce += 2;
       m.evoTier = 3;
