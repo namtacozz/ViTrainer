@@ -2494,4 +2494,17 @@ G.I18n.add({
   "Los ataques de tipo Hada no le hacen daño: le curan un poco.": "Đòn tấn công hệ Tiên không gây sát thương mà còn hồi cho nó một ít máu.",
   "Los movimientos Normal se convierten en Hada y hacen +50 % de daño.": "Chiêu thức hệ Normal chuyển thành hệ Tiên và gây thêm +50% sát thương.",
   "Reduce el daño recibido de tipo Hada un 25 %.": "Giảm 25% sát thương nhận vào từ hệ Tiên.",
+
+  // ============ CÂN BẰNG ABILITY (NERF REBALANCING) ============
+  "+30 % de daño con movimientos físicos.": "+30% sát thương với chiêu thức vật lý.",
+  "Cada ataque golpea una segunda vez tras 0,15 s causando un 25 % de daño.": "Mỗi đòn đánh đánh thêm một lần nữa sau 0,15 giây gây 25% sát thương.",
+  "Diluvio Primordial: anula movimientos de Fuego, +35 % daño Agua, recupera 1 % vida/s e inunda el campo frenando rivales.": "Đại Hồng Thủy Nguyên Thủy: vô hiệu hóa chiêu hệ Lửa, +35% sát thương hệ Nước, hồi 1% HP/giây và nhấn chìm sân đấu làm chậm đối thủ.",
+  "Tierra del Ocaso: anula movimientos de Agua, +35 % daño Fuego y Tierra, inmune a lava y ola de calor que quema rivales cada 2,5 s.": "Vùng Đất Tận Cùng: vô hiệu hóa chiêu hệ Nước, +35% sát thương hệ Lửa và Đất, miễn nhiễm dung nham và phát sóng nhiệt thiêu đốt đối thủ mỗi 2,5 giây.",
+  "Ráfaga Delta Primordial: corrientes que otorgan +25 % vel, +35 % daño Volador y Dragón, anula debilidades y genera vórtices protectores.": "Luồng Gió Delta Nguyên Thủy: luồng gió tăng +25% tốc độ, +35% sát thương hệ Bay và Rồng, xóa bỏ điểm yếu và tạo lốc xoáy hộ thể.",
+  "Fuerza Cerebral: +20 % daño (+25 % adicional en golpes supereficaces) y desata una supernova de fotones en 260 px cada 3,5 s.": "Não Bộ Siêu Phàm: +20% sát thương (+25% thêm khi trúng đòn siêu hiệu quả) và kích nổ siêu tân tinh photon trong phạm vi 260 px mỗi 3,5 giây.",
+  "Regeneración Fénix: recupera un 1 % de vida/s y una vez por partida renace de las cenizas al 50 % de vida.": "Hồi Sinh Phượng Hoàng: hồi 1% HP/giây và một lần mỗi trận tái sinh từ tro tàn với 50% HP.",
+  "Escudo Recio: +20 % defensa permanente; al iniciar o ante jefes gana invulnerabilidad 2 s y contraataque con embestida.": "Khiên Kiên Cố: giảm 20% sát thương nhận vào vĩnh viễn; khi bắt đầu hoặc trước Boss nhận 2 giây bất tử và phản đòn húc cực mạnh.",
+  "Aura Feérica: +30 % daño Hada, regenera 1 % vida/s y derrotar enemigos a veces brota flores que sanan un 1 %.": "Hào Quang Tiên Linh: +30% sát thương hệ Tiên, hồi 1% HP/giây và tiêu diệt đối thủ đôi khi nở ra hoa hồi 1% HP.",
+  "Espada Indómita: +25 % daño físico permanente; al iniciar o ante jefes gana +30 % de ataque durante 10 s con ráfagas de corte.": "Thanh Kiếm Bất Khuất: +25% sát thương vật lý vĩnh viễn; khi bắt đầu hoặc trước Boss tăng +30% tấn công trong 10 giây kèm những nhát chém liên hoàn.",
+  "Coránima: cada baja otorga +0,3 % de daño especial (hasta +20 %); derrotar jefes recupera un 15 % de vida.": "Trái Tim Linh Hồn: mỗi lần hạ gục tăng +0,3% sát thương đặc biệt (tối đa +20%); hạ gục Boss hồi 15% HP.",
 }, 'vi');

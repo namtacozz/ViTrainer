@@ -1359,7 +1359,7 @@ G.Combat = (() => {
       if (e.shield > 0) { e.shield = 0; e.shieldT = 0; }
     }
     if (pl && pl.abil && pl.abil.neuroforce && typeK(m.type, e) > 1.2) {
-      k *= 1.60;
+      k *= 1.25;
     }
     if (pl && pl.abil && (pl.abil.turboblaze || pl.abil.teravolt)) {
       const tk = typeK(m.type, e);
@@ -1395,7 +1395,7 @@ G.Combat = (() => {
       setTimeout(() => {
         if (e && !e.dead && pl && !pl.dead) {
           const echoM = Object.assign({}, m, { _parentalEcho: true });
-          hit(pl, e, dmg * 0.35, col, dx * 0.4, dy * 0.4, 0, echoM);
+          hit(pl, e, dmg * 0.25, col, dx * 0.4, dy * 0.4, 0, echoM);
           G.FX.burst(e.x, e.y - e.bodyH * 0.5, col, 4, 70);
         }
       }, 150);
