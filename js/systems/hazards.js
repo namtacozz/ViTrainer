@@ -107,5 +107,9 @@ G.Hazards = (() => {
     }
   }
 
-  return { add, clear, update, draw, inside, get all() { return list; }, get count() { return list.length; } };
+  function telegraph(x, y, r = 60, delay = 1.2, dmg = 30, color = '#f97316') {
+    return add({ kind: 'zone', x, y, r, delay, dmg, type: 'normal', color });
+  }
+
+  return { add, clear, update, draw, inside, telegraph, get all() { return list; }, get count() { return list.length; } };
 })();

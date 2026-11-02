@@ -311,21 +311,6 @@ G.RunQuests = (() => {
         }
         if (curTier >= 1) isDone = true;
       }
-    if (q.type === 'exclusive_plus') {
-      let curTier = 0;
-      if (pl && pl.slots) {
-        for (const g of pl.slots) {
-          const list = Array.isArray(g) ? g : [g];
-          for (const m of list) {
-            if (m && (m.id === q.targetMoveId || (m.def && m.def.id === q.targetMoveId))) {
-              curTier = Math.max(curTier, m.evoTier || (m.evolved ? 1 : 0));
-            }
-          }
-        }
-      }
-      const isReady = curTier >= 1;
-      return { current: isReady ? 1 : 0, max: 1, pct: isReady ? 1.0 : 0.0, label: isReady ? 'Rạng + (Sẵn sàng!)' : 'Chưa lên +' };
-    }
     if (q.type === 'mega' || q.type === 'legend_form') {
         if (q.id === 'mega_384') {
           if ((pl.level || 1) >= (q.targetLv || 25)) isDone = true;
@@ -436,6 +421,22 @@ G.RunQuests = (() => {
   function getProgressInfo(q, pl, st) {
     const curTime = (st && st.time) || 0;
     if (q.completed) return { current: 100, max: 100, pct: 1.0, label: '✓ Xong!' };
+
+    if (q.type === 'exclusive_plus') {
+      let curTier = 0;
+      if (pl && pl.slots) {
+        for (const g of pl.slots) {
+          const list = Array.isArray(g) ? g : [g];
+          for (const m of list) {
+            if (m && (m.id === q.targetMoveId || (m.def && m.def.id === q.targetMoveId))) {
+              curTier = Math.max(curTier, m.evoTier || (m.evolved ? 1 : 0));
+            }
+          }
+        }
+      }
+      const isReady = curTier >= 1;
+      return { current: isReady ? 1 : 0, max: 1, pct: isReady ? 1.0 : 0.0, label: isReady ? 'Rạng + (Sẵn sàng!)' : 'Chưa lên +' };
+    }
 
     if (q.type === 'mega' || q.type === 'legend_form') {
       if (q.id === 'mega_384' && q.targetLv !== undefined) {

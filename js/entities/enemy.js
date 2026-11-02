@@ -1,32 +1,33 @@
 
   function getBossStages(dex) {
     if (typeof G === 'undefined') return [dex, dex, dex];
-    const base = G.getBaseDex ? G.getBaseDex(dex) : dex;
-    const stages = [base];
+    const base = (G.getBaseDex ? G.getBaseDex(dex) : dex) || dex;
+    const chain = (G.getEvoChain ? G.getEvoChain(base) : null) || (G.EVO_CHAINS ? G.EVO_CHAINS[base] : null);
 
-    // Stage 2
-    let s2 = (G.EVO_INTO && G.EVO_INTO[base]) ? G.EVO_INTO[base] : null;
-    if (s2) {
-      stages.push(s2);
-      // Stage 3
-      let s3 = (G.EVO_INTO && G.EVO_INTO[s2]) ? G.EVO_INTO[s2] : null;
-      if (!s3) {
-        const megas = G.getMegasFor ? G.getMegasFor(s2) : [];
-        if (megas.length) s3 = megas[0].spriteDex || megas[0].id;
-      }
-      stages.push(s3 || s2);
+    const safeDex = d => (G.SPRITE_META && G.SPRITE_META[d]) ? d : dex;
+    const validMega = d => {
+      const megas = G.getMegasFor ? G.getMegasFor(d) : [];
+      if (!megas || !megas.length) return null;
+      const mDex = megas[0].spriteDex || megas[0].id;
+      if (G.SPRITE_META && !G.SPRITE_META[mDex]) return null;
+      return mDex;
+    };
+
+    if (chain && chain.stages && chain.stages.length >= 3) {
+      const s1 = safeDex(chain.stages[0][0] || base);
+      const s2 = safeDex(chain.stages[1][0] || s1);
+      const s3 = safeDex((chain.stages[2].includes(dex) ? dex : chain.stages[2][0]) || s2);
+      return [s1, s2, s3];
+    } else if (chain && chain.stages && chain.stages.length === 2) {
+      const s1 = safeDex(chain.stages[0][0] || base);
+      const s2 = safeDex((chain.stages[1].includes(dex) ? dex : chain.stages[1][0]) || s1);
+      const megaDex = validMega(s2) || validMega(dex);
+      return [s1, s2, megaDex || s2];
     } else {
-      // Loài không có chuỗi 3 cấp, kiểm tra Mega
-      const megas = G.getMegasFor ? G.getMegasFor(base) : [];
-      if (megas.length) {
-        stages.push(base);
-        stages.push(megas[0].spriteDex || megas[0].id);
-      } else {
-        stages.push(base);
-        stages.push(base);
-      }
+      const megaDex = validMega(dex) || validMega(base);
+      if (megaDex) return [dex, dex, megaDex];
+      return [dex, dex, dex];
     }
-    return stages;
   }
 /* ============ enemy.js — Pokémon salvajes y su gestor ============
  * (x, y) son los PIES. Animaciones de Mundo Misterioso:
@@ -100,10 +101,13 @@
       this.r = G.Sprites.bodyRadius(this.dex, this.scale);
       this.bodyH = G.Sprites.bodyHeight(this.dex, this.scale);
 
-      this.maxHp = Math.round(def.hp * sc.hp);
+      const hpMul = (sc && typeof sc === 'object' && sc.hp != null) ? sc.hp : (typeof sc === 'number' ? sc : 1);
+      const spdMul = (sc && typeof sc === 'object' && sc.spd != null) ? sc.spd : (typeof sc === 'number' ? sc : 1);
+      const dmgMul = (sc && typeof sc === 'object' && sc.dmg != null) ? sc.dmg : (typeof sc === 'number' ? sc : 1);
+      this.maxHp = Math.round(def.hp * hpMul);
       this.hp = this.maxHp;
-      this.spd = def.spd * sc.spd;
-      this.dmg = def.dmg * sc.dmg;
+      this.spd = def.spd * spdMul;
+      this.dmg = def.dmg * dmgMul;
       if (boss) {
         this.dmg = Math.round(this.dmg * 1.15); // Cân bằng sát thương boss đầu game (+15%)
       }
@@ -376,8 +380,9 @@
           G.Director.onBossKill();
         }
         // Thưởng Hắc Mã (Dark Horse): tặng thêm reroll miễn phí khi diệt Đại Boss
-        if (typeof G !== 'undefined' && G.PlayerMgr && G.PlayerMgr.local && G.PlayerMgr.local.darkHorse) {
-          G.PlayerMgr.local.freeRerolls = (G.PlayerMgr.local.freeRerolls || 0) + 1;
+        const pl = (typeof G !== 'undefined' && G.Game && G.Game.player) ? G.Game.player : null;
+        if (pl && pl.darkHorse) {
+          pl.freeRerolls = (pl.freeRerolls || 0) + 1;
           if (G.FX && G.FX.dmgText) G.FX.dmgText(this.x, this.y - 30, '+1 REROLL HẮC MÃ!', '#38bdf8', true);
         }
         for (let i = 0; i < 10; i++) G.Pickups.drop('coin', this.x + G.U.rand(-40, 40), this.y + G.U.rand(-30, 30), 5);
@@ -1111,6 +1116,43 @@
       if (G.Coop.isHost) G.Coop.enemyAdded(e);
       return e;
     }
+
+    function spawn(x, y, dex, opts = {}) {
+      const mon = (typeof G !== 'undefined' && G.DEX_BY) ? G.DEX_BY[dex] : null;
+      const bst = mon ? (mon.bst || 300) : 300;
+      const baseHp = opts.hp || Math.round(bst * 1.5);
+      const baseDmg = opts.dmg || Math.round(bst * 0.08);
+      const baseSpd = opts.spd || 45;
+      const def = {
+        dex,
+        name: (mon && mon.name) || 'Wild',
+        hp: baseHp,
+        dmg: baseDmg,
+        spd: baseSpd,
+        xp: opts.xp || 20,
+        behavior: opts.behavior || 'chase'
+      };
+      const mul = {
+        hp: opts.hpMul || 1,
+        dmg: opts.dmgMul || 1,
+        spd: opts.spdMul || 1
+      };
+      const e = new Enemy(def, x, y, mul, !!opts.boss);
+      if (opts.alpha || opts.isAlpha) {
+        e.alpha = true;
+        e.isAlpha = true;
+        if (opts.scaleBonus) e.scale = (e.scale || 1) * opts.scaleBonus;
+      }
+      if (opts.isShiny || opts.shiny) {
+        if (e.makeShiny) e.makeShiny();
+      }
+      if (opts.fleeing) {
+        e.behavior = 'thief';
+        e.fleeing = true;
+      }
+      add(e);
+      return e;
+    }
     function get(id) { return byId.get(id); }
 
     /** Copia local de un enemigo del anfitrión (cooperativo). */
@@ -1366,7 +1408,7 @@
     function bossAlive() { return list.some(e => e.boss && !e.dead); }
     function shinies() { return list.filter(e => e.shiny && !e.dead); }
 
-    return { clear, all, add, get, remove, addRemote, removeRemote, stash, restore, clearRemote, update, drawables, queryCircle, rebuildGrid, bossAlive, shinies, nearestPlayer,
+    return { clear, all, add, spawn, get, remove, addRemote, removeRemote, stash, restore, clearRemote, update, drawables, queryCircle, rebuildGrid, bossAlive, shinies, nearestPlayer,
              get enemies() { return list; },
              get count() { return list.length; } };
   })();
