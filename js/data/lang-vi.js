@@ -2,6 +2,12 @@
  * Tự động tạo và đồng bộ từ TRANSLATIONS.md
  */
 G.I18n.add({
+  // Đặc tính bổ sung
+  "50 % de probabilidad de reflejar proyectiles enemigos hacia el atacante e inmune a trampas.": "50% cơ hội phản hồi đạn của kẻ địch về phía kẻ tấn công và miễn nhiễm với bẫy.",
+  "Un disfraz protege de un golpe cada 45 s y ralentiza a los enemigos cercanos al romperse.": "Lớp ngụy trang chặn 1 đòn đánh mỗi 45 giây và làm chậm kẻ địch xung quanh khi bị vỡ.",
+  "Al recibir un golpe libera pelusa que frena a los enemigos cercanos un 40 % durante 3 s.": "Khi trúng đòn giải phóng bông gòn làm chậm 40% kẻ địch xung quanh trong 3 giây.",
+  "Quien le golpea cuerpo a cuerpo queda fuertemente frenado un 50 % durante 3 s.": "Kẻ tấn công cận chiến sẽ bị làm chậm mạnh 50% trong 3 giây.",
+
   "✦ Modo Tester (Full Pokémon)": "✦ Tài khoản Tester (Full Pokémon)",
     "Tấn Công": "Tấn Công",
     "Phòng Thủ": "Phòng Thủ",

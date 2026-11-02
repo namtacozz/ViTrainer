@@ -37,6 +37,12 @@
  * son los oficiales en inglés.
  */
 G.I18n.add({
+  // Additional Abilities
+  "50 % de probabilidad de reflejar proyectiles enemigos hacia el atacante e inmune a trampas.": "50% chance to reflect enemy projectiles back to attacker and immune to traps.",
+  "Un disfraz protege de un golpe cada 45 s y ralentiza a los enemigos cercanos al romperse.": "A disguise protects from 1 hit every 45s and slows nearby foes when broken.",
+  "Al recibir un golpe libera pelusa que frena a los enemigos cercanos un 40 % durante 3 s.": "When hit, scatters cotton fluff slowing nearby enemies by 40% for 3s.",
+  "Quien le golpea cuerpo a cuerpo queda fuertemente frenado un 50 % durante 3 s.": "Melee attackers are heavily slowed by 50% for 3s.",
+
   "MAESTRÍA ++": "MASTERY ++",
   "DOMINIO +++": "SUPREME DOMAIN +++",
   "Maestría": "Mastery",

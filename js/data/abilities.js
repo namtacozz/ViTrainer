@@ -288,7 +288,13 @@ G.ABIL = {
   "mind-eye":["Ojo Mental","Mind's Eye","Œil de l'Esprit","Occhio Mente","心眼","心眼"],
   "as-one-glastrier":["Relincho Blanco","As One (Glastrier)","Blanche Ruade","Sintonia Equina","人马一体","人馬一體"],
   "as-one-spectrier":["Relincho Negro","As One (Spectrier)","Noire Ruade","Sintonia Equina","人马一体","人馬一體"],
-  "tera-shell":["Caparazón Tera","Tera Shell","Téra-Carapace","Guscio Tera","太晶硬壳","太晶硬殼"]
+  "tera-shell":["Caparazón Tera","Tera Shell","Téra-Carapace","Guscio Tera","太晶硬壳","太晶硬殼"],
+  "tablets-of-ruin":["Tablilla Debacle","Tablets of Ruin","Tablettes du Fléau","Tavoletta Nefasta","灾祸之简","災禍之簡"],
+  "sword-of-ruin":["Espada Debacle","Sword of Ruin","Épée du Fléau","Spada Nefasta","灾祸之剑","災禍之劍"],
+  "vessel-of-ruin":["Caldero Debacle","Vessel of Ruin","Urne du Fléau","Urna Nefasta","灾祸之鼎","災禍之鼎"],
+  "hadron-engine":["Motor Hadrónico","Hadron Engine","Moteur Hadronique","Motore Adronico","强子引擎","強子引擎"],
+  "poison-puppeteer":["Títere Tóxico","Poison Puppeteer","Emprise Toxique","Malia Velenosa","毒傀儡","毒傀儡"],
+  "tangling-hair":["Rizos Rebeldes","Tangling Hair","Mèche Rebelle","Boccoli Biondi","卷发","捲髮"]
 };
 G.DEX_ABIL = {
   1:["overgrow",0,"chlorophyll"],
@@ -1242,10 +1248,14 @@ G.DEX_ABIL = {
   997:["thermal-exchange",0,"ice-body"],
   998:["thermal-exchange",0,"ice-body"],
   1000:["good-as-gold",0,0],
+  1001:["tablets-of-ruin",0,0],
+  1002:["sword-of-ruin",0,0],
+  1003:["vessel-of-ruin",0,0],
   1004:["beads-of-ruin",0,0],
   1005:["protosynthesis",0,0],
   1006:["quark-drive",0,0],
   1007:["orichalcum-pulse",0,0],
+  1008:["hadron-engine",0,0],
   1009:["protosynthesis",0,0],
   1010:["quark-drive",0,0],
   1011:["supersweet-syrup","gluttony","sticky-hold"],
@@ -1253,6 +1263,7 @@ G.DEX_ABIL = {
   1013:["hospitality",0,"heatproof"],
   1015:["toxic-chain",0,"frisk"],
   1016:["toxic-chain",0,"technician"],
+  1025:["poison-puppeteer",0,0],
   1017:["defiant",0,0],
   1018:["stamina","sturdy","stalwart"],
   1019:["supersweet-syrup","regenerator","sticky-hold"],
