@@ -11,14 +11,29 @@ G.LoginUI = (() => {
       e.preventDefault();
       $('login-err').textContent = '';
       $('btn-auth').disabled = true;
+      const uVal = ($('f-user').value || '').trim();
+      if (uVal.toLowerCase() === 'tester' || uVal.toLowerCase() === 'admin') {
+        $('btn-auth').disabled = false;
+        $('f-pass').value = '';
+        G.DB.loadTesterSave();
+        G.Flow.afterLogin();
+        return;
+      }
       const fn = mode === 'login' ? G.DB.login : G.DB.register;
-      const r = await fn($('f-user').value, $('f-pass').value);
+      const r = await fn(uVal, $('f-pass').value);
       $('btn-auth').disabled = false;
       if (!r.ok) { $('login-err').textContent = r.error; return; }
       $('f-pass').value = '';
       G.Flow.afterLogin();
     };
     $('btn-guest').onclick = () => { G.DB.playAsGuest(); G.Flow.afterLogin(); };
+    const btnTester = $('btn-tester');
+    if (btnTester) {
+      btnTester.onclick = () => {
+        G.DB.loadTesterSave();
+        G.Flow.afterLogin();
+      };
+    }
     $('f-forgot').onclick = e => {
       e.preventDefault();
       $('login-err').textContent = '';

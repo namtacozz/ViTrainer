@@ -2,6 +2,7 @@
  * Tự động tạo và đồng bộ từ TRANSLATIONS.md
  */
 G.I18n.add({
+  "✦ Modo Tester (Full Pokémon)": "✦ Tài khoản Tester (Full Pokémon)",
     "Tấn Công": "Tấn Công",
     "Phòng Thủ": "Phòng Thủ",
     "Chiến Thuật": "Chiến Thuật",

@@ -705,10 +705,91 @@ G.HUD = (() => {
       ctx.fillText(target.label, boxX + boxW / 2, boxY + boxH + 11);
     }
 
+    // ---------- Habilidad activa en HUD ----------
+    let bx = px;
+    if (pl.abilId && G.Mons && G.Mons.abilityName) {
+      const aName = G.Mons.abilityName(pl.abilId);
+      if (aName) {
+        let extra = '';
+        let abCol = '#ffd23f';
+        if (pl.abilId === 'disguise') {
+          if (pl.disguiseBroken) {
+            const left = Math.ceil(Math.max(0, 45000 - (performance.now() - (pl.disguiseAt || 0))) / 1000);
+            extra = left > 0 ? ` (${left}s)` : ' (OK)';
+            abCol = left > 0 ? '#94a3b8' : '#c084fc';
+          } else {
+            extra = ' (OK)';
+            abCol = '#c084fc';
+          }
+        } else if (pl.abil && pl.abil.sturdy) {
+          const left = Math.ceil(Math.max(0, 45000 - (performance.now() - (pl.sturdyAt || -99999))) / 1000);
+          extra = left > 0 ? ` (${left}s)` : ' (OK)';
+          abCol = left > 0 ? '#94a3b8' : '#22c55e';
+        } else if (pl.abil && pl.abil.shadowShield) {
+          if (pl.shadowShieldBroken) {
+            const left = Math.ceil(Math.max(0, 25000 - (performance.now() - (pl.shadowShieldAt || 0))) / 1000);
+            extra = left > 0 ? ` (${left}s)` : ' (OK)';
+            abCol = left > 0 ? '#94a3b8' : '#c084fc';
+          } else {
+            extra = ' (OK)';
+            abCol = '#c084fc';
+          }
+        } else if (pl.abil && pl.abil.slowStartAwakening) {
+          if (pl.slowStartAwake) {
+            extra = ' ✦ TITÁN';
+            abCol = '#f59e0b';
+          } else {
+            const left = Math.max(0, 25 - Math.floor(pl.ssT || 0));
+            extra = ` (${left}s)`;
+            abCol = '#94a3b8';
+          }
+        } else if (pl.abil && pl.abil.powerConstruct) {
+          extra = pl.powerConstructUsed ? ' ✦ 100%' : ' 50%';
+          abCol = '#22c55e';
+        } else if (pl.beastK) {
+          extra = ` +${Math.round(pl.beastK * 100)}%`;
+          abCol = '#06b6d4';
+        } else if (pl.chillK) {
+          extra = ` +${Math.round(pl.chillK * 100)}%`;
+          abCol = '#38bdf8';
+        } else if (pl.grimK) {
+          extra = ` +${Math.round(pl.grimK * 100)}%`;
+          abCol = '#a855f7';
+        } else if (pl.steadfastStacks) {
+          extra = ` ×${pl.steadfastStacks}`;
+          abCol = '#f97316';
+        } else if (pl.moxie) {
+          extra = ` ×${Math.round(pl.moxie * 100 / 0.5)}`;
+          abCol = '#f97316';
+        } else if (pl.soulB) {
+          extra = ` +${Math.round(pl.soulB * 100)}%`;
+          abCol = '#ec4899';
+        } else if (pl.abSpd) {
+          extra = ` +${Math.round(pl.abSpd * 100)}%`;
+          abCol = '#38bdf8';
+        } else if (pl.electroCharged) {
+          extra = ' ⚡';
+          abCol = '#eab308';
+        } else if (pl.angry) {
+          extra = ' 🔥';
+          abCol = '#ef4444';
+        }
+        ctx.font = F(800, 9.5);
+        ctx.textAlign = 'left';
+        const aTxt = '✦ ' + aName + extra;
+        const aTw = ctx.measureText(aTxt).width + 14;
+        roundRect(ctx, bx, py + 41, aTw, 15, 7);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)'; ctx.fill();
+        ctx.strokeStyle = abCol; ctx.lineWidth = 1; ctx.stroke();
+        ctx.fillStyle = abCol;
+        ctx.fillText(aTxt, bx + 7, py + 52);
+        bx += aTw + 6;
+      }
+    }
+
     // buffs activos
     const COL = { atk: '#ff6b4d', patk: '#ff6b4d', satk: '#c47bff', spd: '#7fe0ff', def: '#b0b8c8', regen: '#5fe08a' };
     const LBL = { atk: 'ATK', patk: 'ATK', satk: 'AT.E', spd: 'VEL', def: 'DEF', regen: 'REG' };
-    let bx = px;
     ctx.textAlign = 'left';
     for (const k in pl.buffs) {
       const b = pl.buffs[k];

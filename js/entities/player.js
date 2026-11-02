@@ -431,6 +431,35 @@ G.Player = class Player {
         this.heal(this.maxHp * 0.03);
         return;
       }
+      if (ab.disguise && !this.disguiseBroken && (!this.disguiseAt || performance.now() - this.disguiseAt > 45000)) {
+        this.disguiseBroken = true;
+        this.disguiseAt = performance.now();
+        this.invuln = 1.0;
+        G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Disfraz!', '#a855f7', true);
+        G.FX.ring(this.x, this.y, 10, 140, '#a855f7', 0.6, 5);
+        if (G.Audio) G.Audio.sfx('break');
+        if (G.EnemyMgr && G.EnemyMgr.queryCircle) for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) e.applySlow(0.6, 3.0);
+        return;
+      }
+      if (ab.iceFace && !this.iceFaceBroken && (!this.iceFaceAt || performance.now() - this.iceFaceAt > 40000) && cls === 'p') {
+        this.iceFaceBroken = true;
+        this.iceFaceAt = performance.now();
+        this.invuln = 0.8;
+        G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Cara de Hielo!', '#38bdf8', true);
+        G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#7dd3fc', 30, 200);
+        if (G.Audio) G.Audio.sfx('break');
+        return;
+      }
+      if (ab.shadowShield && !this.shadowShieldBroken && (!this.shadowShieldAt || performance.now() - this.shadowShieldAt > 25000)) {
+        this.shadowShieldBroken = true;
+        this.shadowShieldAt = performance.now();
+        this.invuln = 1.0;
+        G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Escudo Lunar!', '#c084fc', true);
+        G.FX.ring(this.x, this.y, 12, 160, '#c084fc', 0.6, 5);
+        if (G.Audio) G.Audio.sfx('legend');
+        if (G.EnemyMgr && G.EnemyMgr.queryCircle) for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) e.applySlow(0.5, 3.0);
+        return;
+      }
       if (ab.dodge && Math.random() < ab.dodge(this, type, cls)) {
         this.invuln = 0.3;
         G.FX.dmgText(this.x, this.y - this.bodyH - 4, '¡Esquiva!', '#bfe8ff');
@@ -491,14 +520,45 @@ G.Player = class Player {
         G.Hazards.list = G.Hazards.list.filter(h => Math.hypot(h.x - this.x, h.y - this.y) > 300);
       }
     }
-    // Robustez (habilidad): lo mismo, una vez cada 90 s.
-    if (this.hp <= 0 && ab && ab.sturdy && performance.now() - this.sturdyAt > 90000) {
+    // Robustez / Titán Inamovible (habilidad): lo mismo, una vez cada 45 s.
+    if (this.hp <= 0 && ab && ab.sturdy && performance.now() - this.sturdyAt > 45000) {
       this.sturdyAt = performance.now();
       this.hp = 1; this.invuln = 1.2;
-      G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Robustez!', '#c9b48a', true);
-      G.FX.ring(this.x, this.y, 6, 70, '#c9b48a', 0.5, 4);
+      G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Titán Inamovible!', '#c9b48a', true);
+      G.FX.ring(this.x, this.y, 8, 90, '#c9b48a', 0.5, 4);
+    }
+    // Renacer del Fénix (Ho-Oh / regenerator): renace al 50 % de vida con explosión sagrada
+    if (this.hp <= 0 && ab && ab.phoenixRevive && !this.phoenixUsed) {
+      this.phoenixUsed = true;
+      this.hp = Math.round(this.maxHp * 0.5);
+      this.invuln = 2.0;
+      G.FX.dmgText(this.x, this.y - this.bodyH - 20, '✦ ¡Renacer del Fénix!', '#ef4444', true);
+      G.FX.ring(this.x, this.y, 20, 240, '#f97316', 0.8, 6);
+      if (G.Audio) G.Audio.sfx('legend');
+      if (G.Camera) G.Camera.kick(1.0);
+      if (G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 240)) {
+          e.hurt(60 + this.level * 10, '#ef4444', e.x - this.x, e.y - this.y, 220);
+          e.applyBurn(4);
+        }
+      }
     }
     if (ab && ab.hurt && this.hp > 0) ab.hurt(this, type, cls);
+    if (ab && ab.innardsOut && d > 0 && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+      for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 140)) e.hurt(Math.round(d * 0.5), '#ec4899', e.x - this.x, e.y - this.y, 140);
+    }
+    if (ab && ab.electromorphosis) {
+      this.electroCharged = true;
+      G.FX.ring(this.x, this.y, 6, 70, '#facc15', 0.4, 2);
+    }
+    if (ab && ab.cottonDown && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+      G.FX.burst(this.x, this.y, '#f8fafc', 20, 160);
+      for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) e.applySlow(0.4, 3.0);
+    }
+    if (ab && ab.toxicDebris && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+      G.FX.burst(this.x, this.y, '#a855f7', 15, 140);
+      for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 140)) e.applyPoison(2.5);
+    }
 // Zygarde tiến hóa chuẩn theo cấp độ (10% Nv.1 -> 50% Nv.25 -> 100% Nv.50 -> Mega), không tự nhảy dạng khi tuột máu
     
     // Đột phá Lá Chắn Bất Khuất: Khi máu tụt dưới 30%, nhận Khiên Năng Lượng 25% Max HP (hồi 60s)
@@ -1365,6 +1425,120 @@ G.Player = class Player {
       this.hp = Math.min(this.maxHp, this.hp + this.maxHp * leftoversRate * dt);
     }
     if (this.abil && this.abil.tick) this.abil.tick(this, dt);
+    if (this.abil && !this.dead) {
+      if (this.abil.psychicSurgeBlast && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.psyT = (this.psyT || 0) + dt;
+        if (this.psyT >= 3.0) {
+          this.psyT = 0;
+          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 220).slice(0, 3);
+          for (const e of targets) {
+            if (!e.dead) {
+              e.hurt(35 + this.level * 6, '#ec4899', e.x - this.x, e.y - this.y, 150, 'psystrike');
+              e.applySlow(0.3, 2.0);
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#f472b6', 7, 100);
+            }
+          }
+          if (targets.length > 0) {
+            G.FX.ring(this.x, this.y, 10, 220, '#ec4899', 0.5, 3);
+            if (G.Audio) G.Audio.sfx('legend');
+          }
+        }
+      }
+      if (this.abil.drizzleThunder && G.Weather && G.Weather.current && G.Weather.current.kind === 'rain' && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.thunderT = (this.thunderT || 0) + dt;
+        if (this.thunderT >= 2.5) {
+          this.thunderT = 0;
+          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 240).slice(0, 2);
+          for (const e of targets) {
+            if (!e.dead) {
+              e.hurt(40 + this.level * 6, '#38bdf8', e.x - this.x, e.y - this.y, 120, 'thunder');
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#60a5fa', 8, 100);
+            }
+          }
+          if (targets.length > 0) G.FX.ring(this.x, this.y, 8, 80, '#38bdf8', 0.35, 2);
+        }
+      }
+      if (this.abil.droughtMagma && G.Weather && G.Weather.current && G.Weather.current.kind === 'sun' && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.magmaT = (this.magmaT || 0) + dt;
+        if (this.magmaT >= 2.0) {
+          this.magmaT = 0;
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) {
+            e.applyBurn(2.0);
+            e.hurt(25 + this.level * 4, '#ea580c', e.x - this.x, e.y - this.y, 80, 'magma');
+          }
+          G.FX.ring(this.x, this.y, 8, 160, '#ea580c', 0.4, 2);
+        }
+      }
+      if ((this.abil.airLockBlast || this.abil.deltaStreamVortex) && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.airT = (this.airT || 0) + dt;
+        const interval = this.abil.deltaStreamVortex ? 2.5 : 3.5;
+        if (this.airT >= interval) {
+          this.airT = 0;
+          const col = this.abil.deltaStreamVortex ? '#10b981' : '#67e8f9';
+          const r = this.abil.deltaStreamVortex ? 220 : 180;
+          const dmg = this.abil.deltaStreamVortex ? (45 + this.level * 8) : (35 + this.level * 6);
+          const targets = G.EnemyMgr.queryCircle(this.x, this.y, r);
+          for (const e of targets) {
+            if (!e.dead) {
+              e.hurt(dmg, col, e.x - this.x, e.y - this.y, 200, 'vortex');
+              e.applySlow(0.35, 2.0);
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, col, 7, 90);
+            }
+          }
+          if (targets.length > 0) {
+            G.FX.ring(this.x, this.y, 12, r, col, 0.5, 4);
+            if (G.Audio) G.Audio.sfx('break');
+          }
+        }
+      }
+      if (this.abil.primordialSeaTide && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.tideT = (this.tideT || 0) + dt;
+        if (this.tideT >= 2.5) {
+          this.tideT = 0;
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 240)) {
+            e.applySlow(0.35, 2.0);
+            e.hurt(40 + this.level * 6, '#38bdf8', e.x - this.x, e.y - this.y, 150, 'tide');
+          }
+          G.FX.ring(this.x, this.y, 12, 240, '#0284c7', 0.5, 3);
+        }
+      }
+      if (this.abil.desolateHeat && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.heatT = (this.heatT || 0) + dt;
+        if (this.heatT >= 2.5) {
+          this.heatT = 0;
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 240)) {
+            e.applyBurn(3.0);
+            e.hurt(40 + this.level * 6, '#ea580c', e.x - this.x, e.y - this.y, 120, 'heat');
+          }
+          G.FX.ring(this.x, this.y, 12, 240, '#f97316', 0.5, 3);
+        }
+      }
+      if (this.abil.orichalcumPulse && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.oriT = (this.oriT || 0) + dt;
+        if (this.oriT >= 2.5) {
+          this.oriT = 0;
+          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 200);
+          for (const e of targets) {
+            if (!e.dead) {
+              e.hurt(35 + this.level * 6, '#f97316', e.x - this.x, e.y - this.y, 160, 'oricalco');
+              e.applyBurn(2.0);
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#ea580c', 6, 80);
+            }
+          }
+          if (targets.length > 0) G.FX.ring(this.x, this.y, 10, 200, '#f97316', 0.45, 3);
+        }
+      }
+      if (this.abil.chiYuBurn && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.chiYuT = (this.chiYuT || 0) + dt;
+        if (this.chiYuT >= 2.0) {
+          this.chiYuT = 0;
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
+            e.applyBurn(2.0);
+            e.hurt(25 + this.level * 4, '#38bdf8', e.x - this.x, e.y - this.y, 80, 'beads');
+          }
+        }
+      }
+    }
     if ((this.juggernautActive || this.hasTrialBonus('juggernaut')) && !this.dead) {
       this.juggernautTimer = (this.juggernautTimer || 0) + dt;
       if (this.juggernautTimer >= 5.0) {

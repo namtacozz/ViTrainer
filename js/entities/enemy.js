@@ -1286,6 +1286,27 @@
         if (e.dead) {
           pl.kills++;
           if (pl.abil && pl.abil.kill) pl.abil.kill(pl, e);     // Autoestima y parecidas
+          if (pl.abil && pl.abil.chillingNeigh && pl.chillNova && pl.chillNova % 15 === 0) {
+            pl.chillNova = 0;
+            if (G.FX) { G.FX.ring(pl.x, pl.y, 14, 200, '#38bdf8', 0.6, 5); G.FX.dmgText(pl.x, pl.y - pl.bodyH - 16, '¡Nova Gélida!', '#7dd3fc', true); }
+            if (G.Audio) G.Audio.sfx('freeze');
+            for (const en of G.EnemyMgr.queryCircle(pl.x, pl.y, 200)) { en.hurt(50 + pl.level * 8, '#7dd3fc', en.x - pl.x, en.y - pl.y, 180); en.applySlow(0.6, 2.5); }
+          }
+          if (pl.abil && pl.abil.grimNeigh && pl.grimNova && pl.grimNova % 15 === 0) {
+            pl.grimNova = 0;
+            if (G.FX) { G.FX.ring(pl.x, pl.y, 16, 240, '#a855f7', 0.6, 5); G.FX.dmgText(pl.x, pl.y - pl.bodyH - 16, '¡Alarido Espectral!', '#c084fc', true); }
+            if (G.Audio) G.Audio.sfx('break');
+            for (const en of G.EnemyMgr.queryCircle(pl.x, pl.y, 240)) en.hurt(50 + pl.level * 8, '#a855f7', en.x - pl.x, en.y - pl.y, 180);
+          }
+          if (pl.abil && pl.abil.unnerveAura) {
+            if (G.FX) G.FX.burst(e.x, e.y, '#ec4899', 8, 80);
+            for (const en of G.EnemyMgr.queryCircle(e.x, e.y, 120)) {
+              if (en !== e && !en.dead) en.hurt(25 + pl.level * 4, '#ec4899', en.x - e.x, en.y - e.y, 120);
+            }
+          }
+          if (pl.abil && pl.abil.slowStartAwakening && !pl.slowStartAwake) {
+            pl.ssKills = (pl.ssKills || 0) + 1;
+          }
           if (e.boss && !e.judge) pl.bosses++;
           G.Progress.kill(e);
           if (G.RunQuests && G.RunQuests.onKill) G.RunQuests.onKill(e, pl);

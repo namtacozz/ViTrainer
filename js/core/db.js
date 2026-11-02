@@ -1086,6 +1086,9 @@ G.DB = (() => {
 
   async function login(name, pass) {
     name = (name || '').trim();
+    if (name.toLowerCase() === 'tester' || name.toLowerCase() === 'admin') {
+      return loadTesterSave();
+    }
     if (mode === 'local') return loginLocal(name, pass);
     try {
       const legacy = await legacySave(name, pass);
@@ -1116,6 +1119,64 @@ G.DB = (() => {
     save = newSave('Invitado');
     if (mode === 'local') remove(K_SES);
     return { ok: true, isNew: true };
+  }
+
+  function loadTesterSave() {
+    user = 'Tester'; key = 'tester'; guest = false; uid = 'tester';
+    save = newSave('Tester');
+    save.partner = 25;
+    save.starter = 25;
+    save.partnerShiny = false;
+    save.personality = { trait: 'audaz', scores: {} };
+    unlockAll(save);
+    write(K_SAVE + 'tester', save);
+    write(K_SES, 'tester');
+    return { ok: true, isNew: false };
+  }
+
+  function unlockAll(targetSave) {
+    const s = targetSave || save;
+    if (!s) return;
+    s.coins = 999999;
+    s.bag = s.bag || {};
+    s.bag.mint = 999;
+    s.bag.cap = 999;
+    s.bag.caph = 999;
+    s.bag.candy = 9999;
+    s.owned = s.owned || {};
+    s.shiny = s.shiny || {};
+    s.evoTiers = s.evoTiers || {};
+    s.evoBranches = s.evoBranches || {};
+    s.tms = s.tms || {};
+    s.tickets = { t1: 999, t10: 999 };
+    s.itemsFound = s.itemsFound || {};
+    s.skins = s.skins || {};
+
+    const dexList = (typeof G !== 'undefined' && (G.DEX || G.POKEDEX)) || [];
+    for (const p of dexList) {
+      s.owned[p.dex] = { at: Date.now(), from: 'tester' };
+      s.shiny[p.dex] = { at: Date.now(), from: 'tester' };
+      if (p.dex) s.evoTiers[p.dex] = 3;
+    }
+    if (typeof G !== 'undefined' && G.MEGAS) {
+      for (const mid in G.MEGAS) {
+        const m = G.MEGAS[mid];
+        if (m && m.dex) {
+          s.owned[m.dex] = { at: Date.now(), from: 'tester' };
+          s.shiny[m.dex] = { at: Date.now(), from: 'tester' };
+        }
+      }
+    }
+    if (typeof G !== 'undefined' && G.Moves && G.Moves.ALL) {
+      for (const m of G.Moves.ALL) {
+        if (m && m.id) s.tms[m.id] = 1;
+      }
+    }
+    for (let i = 1; i <= 20; i++) {
+      const sk = 'skin_' + i;
+      s.skins[sk] = Date.now();
+    }
+    if (s === save) commit();
   }
 
   /**
@@ -1343,7 +1404,7 @@ G.DB = (() => {
   }
 
   return {
-    ready, register, login, loginWithGoogle, playAsGuest, logout, commit, deleteAccount, flush: pushNow, saveNow,
+    ready, register, login, loginWithGoogle, playAsGuest, loadTesterSave, unlockAll, logout, commit, deleteAccount, flush: pushNow, saveNow,
     owns, grant, ownsShiny, grantShiny,
     getEvoTier(baseDex) { return (save && save.evoTiers && save.evoTiers[baseDex]) || 1; },
     isEvoUnlocked(dex) {
