@@ -463,6 +463,13 @@ G.Player = class Player {
       if (ab.dodge && Math.random() < ab.dodge(this, type, cls)) {
         this.invuln = 0.3;
         G.FX.dmgText(this.x, this.y - this.bodyH - 4, '¡Esquiva!', '#bfe8ff');
+        if (ab.telepathyTemporal && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+          G.FX.ring(this.x, this.y, 8, 200, '#a855f7', 0.45, 3);
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
+            if (!e.dead) e.applySlow(0.40, 2.5);
+          }
+          this.critChance = Math.min(1.0, (this.critChance || 0) + 0.20);
+        }
         return;
       }
       if (ab.inMul) amount *= ab.inMul(this, type, cls);
@@ -558,6 +565,38 @@ G.Player = class Player {
     if (ab && ab.toxicDebris && G.EnemyMgr && G.EnemyMgr.queryCircle) {
       G.FX.burst(this.x, this.y, '#a855f7', 15, 140);
       for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 140)) e.applyPoison(2.5);
+    }
+    if (ab && ab.seedSower) {
+      this.seedSowerT = 10.0;
+      G.FX.ring(this.x, this.y, 8, 140, '#22c55e', 0.45, 3);
+      G.FX.dmgText(this.x, this.y - 18, '✦ Vùng Cỏ!', '#22c55e', true);
+    }
+    if (ab && ab.sandSpit && G.Weather && (!G.Weather.current || G.Weather.current.kind !== 'sand')) {
+      G.Weather.debugStart('sand', 15);
+      G.FX.ring(this.x, this.y, 10, 180, '#d97706', 0.5, 3);
+      G.FX.dmgText(this.x, this.y - 18, '✦ Bão Cát!', '#d97706', true);
+    }
+    if (ab && ab.thermalExchange && type === 'fire') {
+      this.addBuff('atk', 0.30, 8, 1);
+      G.FX.dmgText(this.x, this.y - 20, '✦ Nhiệt Lực!', '#ea580c', true);
+    }
+    if (ab && ab.waterCompaction && type === 'water') {
+      this.addBuff('def', 0.15, 6, 1);
+      this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.04);
+      G.FX.dmgText(this.x, this.y - 20, '+4% HP', '#38bdf8', true);
+    }
+    if (ab && ab.emergencyExit && this.hp > 0 && this.hp < this.maxHp * 0.35 && (!this._lastEmergAt || performance.now() - this._lastEmergAt > 35000)) {
+      this._lastEmergAt = performance.now();
+      this.invuln = 1.5;
+      this.addBuff('spd', 0.40, 3, 1);
+      G.FX.dmgText(this.x, this.y - this.bodyH - 18, '✦ Rút lui Chiến thuật!', '#06b6d4', true);
+      G.FX.ring(this.x, this.y, 10, 160, '#06b6d4', 0.5, 4);
+      if (G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) {
+          e.applySlow(0.60, 2.5);
+          e.hurt(25 + this.level * 5, '#06b6d4', e.x - this.x, e.y - this.y, 200);
+        }
+      }
     }
 // Zygarde tiến hóa chuẩn theo cấp độ (10% Nv.1 -> 50% Nv.25 -> 100% Nv.50 -> Mega), không tự nhảy dạng khi tuột máu
     
@@ -1426,7 +1465,7 @@ G.Player = class Player {
     }
     if (this.abil && this.abil.tick) this.abil.tick(this, dt);
     if (this.abil && !this.dead) {
-      if (this.abil.psychicSurgeBlast && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+      if ((this.abil.psychicSurgeBlast || this.abil.psystrikeBurst) && G.EnemyMgr && G.EnemyMgr.queryCircle) {
         this.psyT = (this.psyT || 0) + dt;
         if (this.psyT >= 3.0) {
           this.psyT = 0;
@@ -1535,6 +1574,220 @@ G.Player = class Player {
           for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
             e.applyBurn(2.0);
             e.hurt(25 + this.level * 4, '#38bdf8', e.x - this.x, e.y - this.y, 80, 'beads');
+          }
+        }
+      }
+      if (this.seedSowerT > 0) {
+        this.seedSowerT -= dt;
+        this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.015 * dt);
+      }
+      if (this.abil.pressureAura && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.pressureT = (this.pressureT || 0) + dt;
+        this.pressureSlowT = (this.pressureSlowT || 0) + dt;
+        if (this.pressureSlowT >= 0.5) {
+          this.pressureSlowT = 0;
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 220)) {
+            if (!e.dead) e.applySlow(0.25, 0.7);
+          }
+        }
+        if (this.pressureT >= 3.0) {
+          this.pressureT = 0;
+          G.FX.ring(this.x, this.y, 10, 220, '#a855f7', 0.5, 3);
+          if (G.Audio) G.Audio.sfx('legend');
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 220)) {
+            if (!e.dead) {
+              e.hurt(35 + this.level * 6, '#c084fc', e.x - this.x, e.y - this.y, 200, 'pressure');
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a855f7', 6, 80);
+            }
+          }
+        }
+      }
+      if (this.abil.badDreams && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.badDreamsT = (this.badDreamsT || 0) + dt;
+        if (this.badDreamsT >= 1.0) {
+          this.badDreamsT = 0;
+          let hitCount = 0;
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
+            if (!e.dead && (e.slowT > 0 || (e.stunT && e.stunT > 0))) {
+              e.hurt(35 + this.level * 6, '#7e22ce', 0, 0, 0, 'nightmare');
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a855f7', 4, 60);
+              hitCount++;
+            }
+          }
+          if (hitCount > 0) G.FX.ring(this.x, this.y, 6, 200, '#581c87', 0.4, 2);
+        }
+      }
+      if (this.abil.neutralizingGas && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.gasT = (this.gasT || 0) + dt;
+        if (this.gasT >= 0.5) {
+          this.gasT = 0;
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) {
+            if (!e.dead) e.applySlow(0.25, 0.7);
+          }
+        }
+      }
+      if (this.abil.fullMetalBody && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.fullMetalT = (this.fullMetalT || 0) + dt;
+        if (this.fullMetalT >= 2.0) {
+          this.fullMetalT = 0;
+          G.FX.ring(this.x, this.y, 8, 180, '#f59e0b', 0.4, 3);
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) {
+            if (!e.dead) {
+              e.applyBurn(2.0);
+              e.hurt(30 + this.level * 5, '#fbbf24', e.x - this.x, e.y - this.y, 120, 'solar_heat');
+            }
+          }
+        }
+      }
+      if (this.abil.prismArmor && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.prismT = (this.prismT || 0) + dt;
+        if (this.prismT >= 2.5) {
+          this.prismT = 0;
+          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 240).slice(0, 3);
+          for (const e of targets) {
+            if (!e.dead) {
+              e.hurt(40 + this.level * 7, '#38bdf8', e.x - this.x, e.y - this.y, 150, 'prism_laser');
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#c084fc', 8, 90);
+            }
+          }
+          if (targets.length > 0) G.FX.ring(this.x, this.y, 8, 120, '#a855f7', 0.35, 3);
+        }
+      }
+      if (this.abil.teraShell && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.teraT = (this.teraT || 0) + dt;
+        if (this.teraT >= 4.0) {
+          this.teraT = 0;
+          G.FX.ring(this.x, this.y, 10, 200, '#67e8f9', 0.5, 4);
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
+            if (!e.dead) {
+              e.hurt(45 + this.level * 8, '#22d3ee', e.x - this.x, e.y - this.y, 180, 'tera_pulse');
+              e.applySlow(0.4, 2.0);
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a5f3fc', 6, 80);
+            }
+          }
+          if (G.Audio) G.Audio.sfx('break');
+        }
+      }
+      if (this.abil.windRider && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        const isMoving = Math.abs(this.vx) > 10 || Math.abs(this.vy) > 10;
+        this.windT = (this.windT || 0) + (isMoving ? dt * 1.5 : dt * 0.5);
+        if (this.windT >= 5.0) {
+          this.windT = 0;
+          G.FX.ring(this.x, this.y, 8, 190, '#34d399', 0.45, 3);
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 190)) {
+            if (!e.dead) {
+              e.hurt(35 + this.level * 6, '#10b981', e.x - this.x, e.y - this.y, 160, 'wind_vortex');
+              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#6ee7b7', 6, 80);
+            }
+          }
+        }
+      }
+      if (this.abil.telepathyTemporal && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.telepathyT = (this.telepathyT || 0) + dt;
+        if (this.telepathyT >= 4.0) {
+          this.telepathyT = 0;
+          G.FX.ring(this.x, this.y, 8, 200, '#c084fc', 0.4, 3);
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
+            if (!e.dead) e.applySlow(0.40, 2.0);
+          }
+        }
+      }
+      if (this.abil.innerFocus) {
+        const isStill = Math.hypot(this.vx, this.vy) < 8;
+        if (isStill) {
+          this.innerFocusT = (this.innerFocusT || 0) + dt;
+          if (this.innerFocusT >= 1.2 && !this.innerFocusCharged) {
+            this.innerFocusCharged = true;
+            G.FX.ring(this.x, this.y, 4, 100, '#facc15', 0.45, 3);
+            G.FX.dmgText(this.x, this.y - this.bodyH - 18, '✦ Định Tâm!', '#facc15', true);
+            if (G.Audio) G.Audio.sfx('charge');
+          }
+        } else {
+          this.innerFocusT = 0;
+        }
+      }
+      if (this.abil.whiteSmokeTrail && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        const isMoving = Math.hypot(this.vx, this.vy) > 15;
+        if (isMoving) {
+          this.smokeT = (this.smokeT || 0) + dt;
+          if (this.smokeT >= 0.25) {
+            this.smokeT = 0;
+            G.FX.burst(this.x, this.y - 4, '#e2e8f0', 4, 30);
+            for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 75)) {
+              if (!e.dead) {
+                e.applySlow(0.35, 2.0);
+                e.hurt(12 + this.level * 2, '#94a3b8', 0, 0, 0, 'smoke');
+              }
+            }
+          }
+        }
+      }
+      if (this.abil.runAwayEscape && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        const nowMs = performance.now();
+        if (!this._runAwayCd || nowMs - this._runAwayCd > 8000) {
+          const nearby = G.EnemyMgr.queryCircle(this.x, this.y, 85);
+          if (nearby.length >= 4) {
+            this._runAwayCd = nowMs;
+            this.addBuff('spd', 0.50, 2.5, 1);
+            this.invuln = 0.4;
+            G.FX.dmgText(this.x, this.y - this.bodyH - 18, '✦ Tẩu Thoát!', '#38bdf8', true);
+            G.FX.ring(this.x, this.y, 8, 120, '#38bdf8', 0.45, 3);
+            if (G.Audio) G.Audio.sfx('dash');
+          }
+        }
+      }
+      if (this.abil.soundproofBurst && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.soundT = (this.soundT || 0) + dt;
+        if (this.soundT >= 5.0) {
+          this.soundT = 0;
+          G.FX.ring(this.x, this.y, 10, 180, '#93c5fd', 0.5, 4);
+          if (G.Audio) G.Audio.sfx('break');
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) {
+            if (!e.dead) {
+              e.hurt(30 + this.level * 5, '#60a5fa', e.x - this.x, e.y - this.y, 180, 'sonic');
+              if (e.applyStun) e.applyStun(1.0);
+              e.applySlow(0.40, 2.0);
+            }
+          }
+        }
+      }
+      if (this.abil.moltenAura && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        this.moltenT = (this.moltenT || 0) + dt;
+        if (this.moltenT >= 1.5) {
+          this.moltenT = 0;
+          G.FX.ring(this.x, this.y, 6, 140, '#f97316', 0.35, 2);
+          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 140)) {
+            if (!e.dead) {
+              e.applyBurn(2.0);
+              e.hurt(25 + this.level * 4, '#ea580c', e.x - this.x, e.y - this.y, 60, 'molten');
+            }
+          }
+        }
+      }
+      if (this.abil.clumsyDrop && G.EnemyMgr && G.EnemyMgr.queryCircle) {
+        const isMoving = Math.hypot(this.vx, this.vy) > 10;
+        if (isMoving) {
+          this.clumsyT = (this.clumsyT || 0) + dt;
+          if (this.clumsyT >= 3.5) {
+            this.clumsyT = 0;
+            G.FX.dmgText(this.x, this.y - 14, '🍌', '#facc15', false);
+            for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 110)) {
+              if (!e.dead) {
+                e.hurt(30 + this.level * 5, '#facc15', e.x - this.x, e.y - this.y, 220, 'banana_slip');
+                if (e.applyStun) e.applyStun(1.5); else e.applySlow(0.60, 2.5);
+              }
+            }
+          }
+        }
+      }
+      if (this.abil.absoluteImmunity) {
+        const ooc = (performance.now() - (this.lastHitTakenT || 0)) >= 2000;
+        if (ooc) {
+          this.immRegenT = (this.immRegenT || 0) + dt;
+          if (this.immRegenT >= 2.0) {
+            this.immRegenT = 0;
+            this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.02);
+            G.FX.ring(this.x, this.y, 6, 60, '#22c55e', 0.35, 2);
           }
         }
       }

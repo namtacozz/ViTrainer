@@ -99,7 +99,7 @@ G.AbilityFX = (() => {
       tick: (pl, dt) => { if (wx() === 'sun' && pl.hp > pl.maxHp * 0.1) pl.hp -= pl.maxHp * 0.004 * dt; } },
     'sniper': { d: 'Sus golpes críticos hacen ×2 de daño (en vez de ×1,5).', critMul: 2 },
     'super-luck': { d: '+10 % de probabilidad de golpe crítico.', start: pl => { pl.critChance += 0.1; } },
-    'compound-eyes': { d: '+6 % de probabilidad de golpe crítico.', start: pl => { pl.critChance += 0.06; } },
+    'compound-eyes': { d: 'Ojo Compuesto: +15 % de probabilidad de golpe crítico y +25 % de alcance de imán.', start: pl => { pl.critChance += 0.15; pl.magnet *= 1.25; } },
     'moxie': moxie,
     'chilling-neigh': {
       d: 'Hí Tiếng Băng Giá: Mỗi kẻ địch bị hạ gục tăng +0.5 % công vật lý (tối đa +15 %).',
@@ -137,7 +137,7 @@ G.AbilityFX = (() => {
       speed: pl => 1 + (pl.abSpd || 0), cdMul: pl => 1 - (pl.abCd || 0) },
     'swift-swim': rush('rain', 'lluvia'), 'chlorophyll': rush('sun', 'sol'),
     'sand-rush': rush('sand', 'tormenta de arena'), 'slush-rush': rush('snow', 'nieve'),
-    'run-away': { d: '+8 % de velocidad.', speed: () => 1.08 },
+    'run-away': { d: 'Fuga Ágil: +10 % velocidad permanente. Al verse rodeado por 4 o más enemigos cercanos, gana un gran impulso de escape.', speed: () => 1.10, runAwayEscape: true },
 
     // --- climas ---
     'drought': {
@@ -253,14 +253,14 @@ G.AbilityFX = (() => {
     },
     'magic-guard': { d: 'Sólo le hacen daño los ataques: ni la lava ni las trampas.', lavaProof: true, trapProof: true },
     'stamina': { d: 'Cada golpe cuerpo a cuerpo que recibe le sube un poco la defensa.', contact: pl => pl.addBuff('def', 0.03, 6, 5) },
-    'limber': steady, 'own-tempo': steady, 'oblivious': steady, 'inner-focus': steady,
+    'inner-focus': { d: 'Foco Interno: inmune a frenazos. Quedarse quieto 1,2 s carga Golpe de Foco (100 % crítico asegurado y onda de choque).', steady: true, innerFocus: true },
     'clear-body': {
       d: 'Cuerpo Puro Inmutable: inmune a frenazos y trampas, recibe un 20 % menos de daño y devuelve daño por impacto.',
       steady: true, trapProof: true,
       inMul: () => 0.80,
       contact: (pl, e) => e.hurt(20 + pl.level * 4, '#94a3b8')
     },
-    'white-smoke': steady,
+    'white-smoke': { d: 'Humo Blanco: inmune a frenazos. Al moverse deja una estela de humo que frena y desgasta a los rivales que lo siguen.', steady: true, whiteSmokeTrail: true },
     'full-metal-body': {
       d: 'Cuerpo de Metal Solar: inmune a frenazos y trampas, recibe un 25 % menos de daño y cada 2 s emite calor solar abrasador a 180 px.',
       fullMetalBody: true,
@@ -339,9 +339,9 @@ G.AbilityFX = (() => {
     'weak-armor': { d: 'Al recibir un golpe físico se aligera: +20 % de velocidad un momento.', plus: true,
       hurt: (pl, type, c) => { if (c === 'p') pl.addBuff('spd', 0.2, 3, 1); } },
     'steadfast': {
-      d: 'Ascenso Marcial: +40 % daño físico, inmune a retroceso y cada golpe consecutivo otorga +5 % vel y +10 % daño melee (hasta 5 acum).',
+      d: 'Ascenso Marcial: +15 % daño físico, inmune a retroceso y cada golpe consecutivo otorga +5 % vel y +5 % daño melee (hasta 5 acum).',
       steady: true,
-      out: (pl, m) => (cls(m) === 'p' ? 1.4 : 1) * (1 + (pl.steadfastStacks || 0) * 0.10),
+      out: (pl, m) => (cls(m) === 'p' ? 1.15 : 1) * (1 + (pl.steadfastStacks || 0) * 0.05),
       speed: pl => 1 + (pl.steadfastStacks || 0) * 0.05,
       hit: (pl, e, m) => { if (m && (m.kind === 'melee' || m.kind === 'dash')) pl.steadfastStacks = Math.min(5, (pl.steadfastStacks || 0) + 1); }
     },
@@ -369,14 +369,14 @@ G.AbilityFX = (() => {
     'unaware': { d: 'No se deja impresionar: recibe un 8 % menos de daño.', plus: true, inMul: () => 0.92 },
     'defiant': { d: 'Si le frenan, se pica: +20 % de daño físico mientras dure.', plus: true, out: (pl, m) => (pl.slowT > 0 && cls(m) === 'p' ? 1.2 : 1) },
     'competitive': { d: 'Si le frenan, se pica: +20 % de daño especial mientras dure.', plus: true, out: (pl, m) => (pl.slowT > 0 && cls(m) === 's' ? 1.2 : 1) },
-    'soundproof': { d: 'Recibe un 10 % menos de daño especial.', plus: true, inMul: (pl, type, c) => (c === 's' ? 0.9 : 1) },
+    'soundproof': { d: 'Insonorizar: recibe un 20 % menos de daño especial y cada 5 s emite un estallido acústico que aturde y frena a rivales cercanos.', inMul: (pl, type, c) => (c === 's' ? 0.80 : 1), soundproofBurst: true },
     'big-pecks': { d: 'Recibe un 8 % menos de daño físico.', plus: true, inMul: (pl, type, c) => (c === 'p' ? 0.92 : 1) },
     'water-veil': { d: 'La lava no le quema y recibe la mitad de daño de Fuego.', plus: true, lavaProof: true, inMul: (pl, type) => (type === 'fire' ? 0.5 : 1) },
     'pickpocket': { d: 'Al recibir golpes, a veces les quita una moneda.', plus: true,
       hurt: pl => { if (Math.random() < 0.12) G.Pickups.drop('coin', pl.x + G.U.rand(-10, 10), pl.y + G.U.rand(-10, 10), 2); } },
     'analytic': { d: '+15 % de daño a enemigos con menos de la mitad de vida.', plus: true, out: (pl, m, e) => (e && e.hp < e.maxHp * 0.5 ? 1.15 : 1) },
-    'klutz': { d: 'Sin objeto, +12 % de daño.', plus: true, out: pl => (pl.item ? 1 : 1.12) },
-    'hyper-cutter': { d: '+6 % de daño con movimientos físicos.', plus: true, out: (pl, m) => (cls(m) === 'p' ? 1.06 : 1) },
+    'klutz': { d: 'Zoquete Pícaro: +15 % daño y al moverse deja caer cáscaras resbaladizas que hacen tropezar y disparar a los enemigos.', clumsyDrop: true, out: () => 1.15 },
+    'hyper-cutter': { d: 'Corte Fuerte: +20 % daño físico y ejecuta con +30 % de daño a enemigos con menos del 30 % de vida.', hyperCutter: true, out: (pl, m) => (cls(m) === 'p' ? 1.20 : 1) },
     'contrary': { d: 'Al revés: frenado, va más rápido.', plus: true, speed: pl => (pl.slowT > 0 ? 2.4 : 1) },
     'quick-feet': { d: 'Frenado, va más rápido (en vez de más lento).', plus: true, speed: pl => (pl.slowT > 0 ? 2.5 : 1) },
     'bulletproof': { d: 'Recibe un 15 % menos de daño especial.', plus: true, inMul: (pl, type, c) => (c === 's' ? 0.85 : 1) },
@@ -484,7 +484,7 @@ G.AbilityFX = (() => {
     },
     'electric-surge': { d: 'Genera Campo Eléctrico: +30 % daño Eléctrico y descarga rayos automáticos cada 3 s.', electricSurge: true, out: (pl, m) => (m.type === 'electric' ? 1.3 : 1) },
     'grassy-surge': { d: 'Genera Campo de Hierba: +30 % daño Planta y regenera un 1,5 % de vida por segundo.', grassySurge: true, out: (pl, m) => (m.type === 'grass' ? 1.3 : 1), tick: (pl, dt) => heal(pl, 0.015 * dt) },
-    'psychic-surge': { d: 'Genera Campo Psíquico: +30 % daño Psíquico y 12 % de probabilidad de esquivar.', psychicSurge: true, out: (pl, m) => (m.type === 'psychic' ? 1.3 : 1), dodge: () => 0.12 },
+    'psychic-surge': { d: 'Genera Campo Psíquico: +30 % daño Psíquico, 12 % de probabilidad de esquivar y ráfagas psicoquinéticas cada 3 s.', psychicSurge: true, psychicSurgeBlast: true, out: (pl, m) => (m.type === 'psychic' ? 1.3 : 1), dodge: () => 0.12 },
     'misty-surge': { d: 'Genera Campo de Niebla: inmune a estados alterados y recibe un 20 % menos de daño especial.', mistySurge: true, steady: true, inMul: (pl, type, c) => (c === 's' ? 0.8 : 1) },
     'hadron-engine': { d: 'Motor Hadrónico: activa Campo Eléctrico, +35 % daño especial y descarga rayos a rivales cercanos cada 2,5 s.', electricSurge: true, out: (pl, m) => (cls(m) === 's' ? 1.35 : 1) },
     'bad-dreams': { d: 'Los enemigos frenados o aturdidos en un radio de 200 px sufren daño de pesadilla continuo.', badDreams: true },
@@ -606,8 +606,8 @@ G.AbilityFX = (() => {
   FX['aroma-veil'] = steady;
   FX['hunger-switch'] = FX['stance-change'];
   FX['illusion'] = FX['disguise'];
-  FX['immunity'] = steady;
-  FX['magma-armor'] = steady;
+  FX['immunity'] = { d: 'Inmunidad Absoluta: inmune a veneno, quemaduras, frenazos y lava; recupera 2 % de vida cada 2 s si no recibe daño.', steady: true, lavaProof: true, trapProof: true, absoluteImmunity: true };
+  FX['magma-armor'] = { d: 'Armadura Magma: inmune a lava y quemaduras. Su aura funde a los rivales cercanos con daño constante de fuego.', lavaProof: true, steady: true, moltenAura: true, contact: (pl, e) => e.applyBurn(3) };
   FX['poison-heal'] = FX['regenerator'];
   FX['suction-cups'] = FX['heavy-metal'];
   FX['symbiosis'] = FX['power-spot'];
@@ -618,7 +618,7 @@ G.AbilityFX = (() => {
   FX['commander'] = FX['power-spot'];
   FX['receiver'] = FX['power-spot'];
   FX['forecast'] = FX['protosynthesis'];
-  FX['stall'] = steady;
+  FX['stall'] = { d: 'Rezagado: ataca un 25 % más lento pero causa un 35 % más de daño con gran fuerza de empuje.', cdMul: 1.25, out: () => 1.35, steady: true, heavyKnockback: true };
   FX['wandering-spirit'] = FX['mummy'];
 
   /** Pasiva genérica: +8 % con los movimientos de su tipo principal. */

@@ -1279,6 +1279,14 @@ G.Combat = (() => {
   const CRIT_MUL = 1.5;
   const isCrit = pl => {
     if (ghost) return false;
+    if (pl && pl.innerFocusCharged) {
+      pl.innerFocusCharged = false;
+      if (G.FX) {
+        G.FX.ring(pl.x, pl.y, 10, 160, '#facc15', 0.45, 4);
+        G.FX.dmgText(pl.x, pl.y - pl.bodyH - 18, '✦ ĐÒN TÂM PHÁP!', '#facc15', true);
+      }
+      return true;
+    }
     let c = pl.critChance || 0;
     if (pl && (pl.speedsterActive || (pl.hasTrialBonus && pl.hasTrialBonus('speedster')))) {
       const bonusSpd = Math.max(0, (pl.spdMul || 1) - 1);
@@ -1367,7 +1375,12 @@ G.Combat = (() => {
     }
     const crit = isCrit(pl) || (pl && pl.abil && pl.abil.merciless && e && e.poisonT > 0), sk = statusK(pl);
     dmg *= k * (crit ? critMul(pl) : 1);
-    e.hurt(dmg, col, dx, dy, sk ? knock : 0, crit ? 'crit' : G.Types.label(G.Types.mult(m.type, e.types)));
+    if (pl && pl.abil && pl.abil.hyperCutter && e && e.hp < e.maxHp * 0.30) {
+      dmg *= 1.30;
+      if (G.FX) G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#dc2626', 8, 90);
+    }
+    const effectiveKnock = (pl && pl.abil && pl.abil.heavyKnockback) ? Math.max(180, knock * 1.60) : knock;
+    e.hurt(dmg, col, dx, dy, sk ? effectiveKnock : 0, crit ? 'crit' : G.Types.label(G.Types.mult(m.type, e.types)));
     if (!ghost) pl.onDealt(dmg);
     pl.dmgDealt += dmg;
     if (pl && pl.abil && pl.abil.darkAura && m && m.type === 'dark' && !ghost) {

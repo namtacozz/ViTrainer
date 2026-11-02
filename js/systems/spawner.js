@@ -146,6 +146,25 @@ G.Spawner = (() => {
     say('¡' + e.name + (e.shiny ? ' shiny' : '') + ' salvaje apareció!', 3.2);
     G.Camera.kick(1.1);
     G.Audio.sfx('boss');
+    for (const p of players) {
+      if (p && p.abil && !p.dead) {
+        if (p.abil.intrepidSword) {
+          p.addBuff('atk', 0.35, 12, 1);
+          if (G.FX) {
+            G.FX.dmgText(p.x, p.y - p.bodyH - 18, '✦ Kiếm Bất Khuất!', '#38bdf8', true);
+            G.FX.ring(p.x, p.y, 10, 160, '#38bdf8', 0.6, 4);
+          }
+        }
+        if (p.abil.dauntlessShield) {
+          p.invuln = 2.5;
+          p.addBuff('def', 0.40, 12, 1);
+          if (G.FX) {
+            G.FX.dmgText(p.x, p.y - p.bodyH - 18, '✦ Khiên Kiên Cường!', '#fbbf24', true);
+            G.FX.ring(p.x, p.y, 10, 160, '#fbbf24', 0.6, 4);
+          }
+        }
+      }
+    }
     return e;
   }
 
