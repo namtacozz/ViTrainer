@@ -15,24 +15,30 @@ G.LevelUp = (() => {
       apply: pl => pl.addMaxHp(20) },
     { id: 'atk',  icon: 'fist',
       get title() { return isVi() ? 'Công Lực (Sát Thương)' : 'Power'; },
-      get desc() { return isVi() ? '+10 sát thương cố định cho toàn bộ chiêu thức.' : '+10 flat damage for all moves.'; },
-      apply: pl => { pl.flatAtk = (pl.flatAtk || 0) + 10; }, max: 40 },
+      get desc() { return isVi() ? '+10% sát thương cho toàn bộ chiêu thức.' : '+10% damage for all moves.'; },
+      apply: pl => { pl.atkMul = (pl.atkMul || 1) * 1.10; }, max: 40 },
     { id: 'spd',  icon: 'boot',
       get title() { return isVi() ? 'Thần Hành (Tốc Chạy)' : 'Agility'; },
-      get desc() { return isVi() ? '+10 tốc độ di chuyển cố định.' : '+10 flat movement speed.'; },
-      apply: pl => { pl.flatSpd = (pl.flatSpd || 0) + 10; }, max: 10 },
+      get desc() { return isVi() ? '+10% tốc độ di chuyển.' : '+10% movement speed.'; },
+      apply: pl => { pl.spdMul = (pl.spdMul || 1) * 1.10; }, max: 10 },
     { id: 'cd',   icon: 'clock',
       get title() { return isVi() ? 'Linh Hoạt (Hồi Chiêu)' : 'Cooldown'; },
       get desc() { return isVi() ? '-8% thời gian hồi chiêu tất cả kỹ năng.' : '-8% cooldown reduction on all moves.'; },
       apply: pl => { pl.cdMul = Math.max(0.40, (pl.cdMul || 1) * 0.92); }, max: 10 },
     { id: 'pdef', icon: 'shield',
       get title() { return isVi() ? 'Thiết Bích (Giáp Vật Lý)' : 'Iron Guard'; },
-      get desc() { return isVi() ? '+10 Phòng Ngự Vật Lý (P.Def).' : '+10 Physical Defense.'; },
-      apply: pl => { pl.flatPDef = (pl.flatPDef || 0) + 10; }, max: 15 },
+      get desc() { return isVi() ? '+10% chỉ số Phòng Ngự Vật Lý (P.Def).' : '+10% Physical Defense.'; },
+      apply: pl => {
+        pl.pdefMul = (pl.pdefMul || 1) * 1.10;
+        pl.pdefReduce = Math.min(0.70, (pl.pdefReduce || 0) + 0.05);
+      }, max: 15 },
     { id: 'sdef', icon: 'shield',
       get title() { return isVi() ? 'Kim Cương (Giáp Phép)' : 'Diamond Veil'; },
-      get desc() { return isVi() ? '+10 Phòng Ngự Đặc Biệt (Sp.Def).' : '+10 Special Defense.'; },
-      apply: pl => { pl.flatSDef = (pl.flatSDef || 0) + 10; }, max: 15 },
+      get desc() { return isVi() ? '+10% chỉ số Phòng Ngự Đặc Biệt (Sp.Def).' : '+10% Special Defense.'; },
+      apply: pl => {
+        pl.sdefMul = (pl.sdefMul || 1) * 1.10;
+        pl.sdefReduce = Math.min(0.70, (pl.sdefReduce || 0) + 0.05);
+      }, max: 15 },
     { id: 'rgn',  icon: 'sprout',
       get title() { return isVi() ? 'Tức Sinh (Hồi Máu)' : 'Regen'; },
       get desc() { return isVi() ? '+0.9 Máu hồi phục mỗi giây.' : '+0.9 HP regen per second.'; },

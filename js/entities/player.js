@@ -86,6 +86,8 @@ G.Player = class Player {
     this.flatSpd = 0;
     this.flatPDef = 0;
     this.flatSDef = 0;
+    this.pdefMul = 1;
+    this.sdefMul = 1;
     this.hasAwakened10m = false;
     this.hasApex20m = false;
     this.hasChosenSingleBranch = false;
@@ -288,8 +290,8 @@ G.Player = class Player {
     const slow = this.inLiquid && !ab.steady ? G.World.liquidEffect(this.mon.types).slow || 1 : 1;
     return G.Judgment && G.Judgment.active ? G.Judgment.capSpd(s * slow * w) : s * slow * w;
   }
-  get pdef() { return (this.df || (this.mon && this.mon.df) || 50) + (this.flatPDef || 0); }
-  get sdef() { return (this.sd || (this.mon && this.mon.sd) || 50) + (this.flatSDef || 0); }
+  get pdef() { return ((this.df || (this.mon && this.mon.df) || 50) + (this.flatPDef || 0)) * (this.pdefMul || 1); }
+  get sdef() { return ((this.sd || (this.mon && this.mon.sd) || 50) + (this.flatSDef || 0)) * (this.sdefMul || 1); }
   get reduction() { return Math.min(0.8, this.dmgReduce + this.itemReduce + this.buffs.def.n * this.buffs.def.amount); }
   get pReduction() { return Math.min(0.85, this.reduction + (this.pdefReduce || 0) + ((this.flatPDef || 0) * 0.005)); }
   get sReduction() { return Math.min(0.85, this.reduction + (this.sdefReduce || 0) + ((this.flatSDef || 0) * 0.005)); }
