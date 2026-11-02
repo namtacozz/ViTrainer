@@ -152,22 +152,22 @@ G.AbilityFX = (() => {
       tick: (pl, dt) => { if (wx() === 'rain') heal(pl, 0.015 * dt); }
     },
     'primordial-sea': {
-      d: 'Diluvio Primordial: anula movimientos de Fuego, +60 % daño Agua, recupera 2 % vida/s e inunda el campo frenando rivales.',
+      d: 'Diluvio Primordial: anula movimientos de Fuego, +35 % daño Agua, recupera 1 % vida/s e inunda el campo frenando rivales.',
       summon: 'rain', primordialSeaTide: true,
-      out: (pl, m) => (m.type === 'water' ? 1.6 : 1),
+      out: (pl, m) => (m.type === 'water' ? 1.35 : 1),
       inMul: (pl, type) => (type === 'fire' ? 0 : 0.85),
-      tick: (pl, dt) => heal(pl, 0.02 * dt)
+      tick: (pl, dt) => heal(pl, 0.01 * dt)
     },
     'desolate-land': {
-      d: 'Tierra del Ocaso: anula movimientos de Agua, +60 % daño Fuego y Tierra, inmune a lava y ola de calor que quema rivales cada 2,5 s.',
+      d: 'Tierra del Ocaso: anula movimientos de Agua, +35 % daño Fuego y Tierra, inmune a lava y ola de calor que quema rivales cada 2,5 s.',
       summon: 'sun', desolateHeat: true, lavaProof: true,
-      out: (pl, m) => (m.type === 'fire' || m.type === 'ground' ? 1.6 : 1),
+      out: (pl, m) => (m.type === 'fire' || m.type === 'ground' ? 1.35 : 1),
       inMul: (pl, type) => (type === 'water' ? 0 : 0.85)
     },
     'delta-stream': {
-      d: 'Ráfaga Delta Primordial: corrientes que otorgan +25 % vel, +50 % daño Volador y Dragón, anula debilidades y genera vórtices protectores.',
+      d: 'Ráfaga Delta Primordial: corrientes que otorgan +25 % vel, +35 % daño Volador y Dragón, anula debilidades y genera vórtices protectores.',
       lavaProof: true, steady: true, speed: () => 1.25, deltaStreamVortex: true,
-      out: (pl, m) => (m.type === 'flying' || m.type === 'dragon' ? 1.5 : 1),
+      out: (pl, m) => (m.type === 'flying' || m.type === 'dragon' ? 1.35 : 1),
       inMul: (pl, type) => (['electric', 'ice', 'rock'].includes(type) ? 0.6 : 0.85)
     },
     'orichalcum-pulse': {
@@ -206,9 +206,9 @@ G.AbilityFX = (() => {
       inMul: (pl, type) => (superEff(pl, type) ? 0.60 : 0.75)
     },
     'neuroforce': {
-      d: 'Fuerza Cerebral: +30 % daño (+60 % adicional en golpes supereficaces) y desata una supernova de fotones en 260 px cada 3,5 s.',
+      d: 'Fuerza Cerebral: +20 % daño (+25 % adicional en golpes supereficaces) y desata una supernova de fotones en 260 px cada 3,5 s.',
       neuroforce: true,
-      out: () => 1.30
+      out: () => 1.20
     },
     'mind-eye': {
       d: 'Ojo Mental: ataques Normal y Tierra ignoran escudos e inmunidades Fantasma, +15 % crítico y dispara rayos de Luna Carmesí cada 3,5 s.',
@@ -247,8 +247,8 @@ G.AbilityFX = (() => {
       inMul: (pl, type, c) => (c === 'p' ? 0.80 : 1)
     },
     'regenerator': {
-      d: 'Regeneración Fénix: recupera un 2 % de vida/s y una vez por partida renace de las cenizas al 50 % de vida.',
-      tick: (pl, dt) => heal(pl, 0.02 * dt),
+      d: 'Regeneración Fénix: recupera un 1 % de vida/s y una vez por partida renace de las cenizas al 50 % de vida.',
+      tick: (pl, dt) => heal(pl, 0.01 * dt),
       phoenixRevive: true
     },
     'magic-guard': { d: 'Sólo le hacen daño los ataques: ni la lava ni las trampas.', lavaProof: true, trapProof: true },
@@ -421,10 +421,10 @@ G.AbilityFX = (() => {
     'comatose': { d: 'Totalmente inmune a quemaduras, venenos, parálisis y frenazos, y movimientos Normal hacen +20 %.', steady: true, out: (pl, m) => (m.type === 'normal' ? 1.2 : 1) },
     'armor-tail': { d: 'Impide embestidas sorpresa: −25 % de daño cuerpo a cuerpo y frena a los enemigos rápidos cercanos.', inMul: (pl, type, c) => (c === 'p' ? 0.75 : 1), armorTail: true },
     'dauntless-shield': {
-      d: 'Escudo Recio: +35 % defensa permanente; al iniciar o ante jefes gana invulnerabilidad 10 s y contraataque con embestida.',
+      d: 'Escudo Recio: +20 % defensa permanente; al iniciar o ante jefes gana invulnerabilidad 2 s y contraataque con embestida.',
       dauntlessShield: true,
-      inMul: () => 0.65,
-      start: pl => { pl.addBuff('def', 0.5, 20, 1); pl.invuln = 10.0; if (G.FX) G.FX.dmgText(pl.x, pl.y - pl.bodyH - 18, '✦ ¡Escudo Recio!', '#fbbf24', true); }
+      inMul: () => 0.80,
+      start: pl => { pl.addBuff('def', 0.3, 10, 1); pl.invuln = 2.0; if (G.FX) G.FX.dmgText(pl.x, pl.y - pl.bodyH - 18, '✦ ¡Escudo Recio!', '#fbbf24', true); }
     },
 
     // --- contraataque, venganza y explosión ---
@@ -470,11 +470,11 @@ G.AbilityFX = (() => {
       out: (pl, m) => (m.type === 'dark' ? 1.40 : 1)
     },
     'fairy-aura': {
-      d: 'Aura Feérica: +40 % daño Hada, regenera 1,5 % vida/s y derrotar enemigos brota flores curativas que sanan un 2 %.',
+      d: 'Aura Feérica: +30 % daño Hada, regenera 1 % vida/s y derrotar enemigos a veces brota flores que sanan un 1 %.',
       fairyAura: true,
-      out: (pl, m) => (m.type === 'fairy' ? 1.40 : 1),
-      tick: (pl, dt) => heal(pl, 0.015 * dt),
-      kill: pl => heal(pl, 0.02)
+      out: (pl, m) => (m.type === 'fairy' ? 1.30 : 1),
+      tick: (pl, dt) => heal(pl, 0.01 * dt),
+      kill: (pl, e) => { if (e && e.boss) heal(pl, 0.15); else if (Math.random() < 0.15) heal(pl, 0.01); }
     },
     'aura-break': {
       d: 'Rompeaura: invierte las auras cósmicas, +40 % daño Tierra y Dragón y recibe un 30 % menos de daño general.',
@@ -501,21 +501,20 @@ G.AbilityFX = (() => {
     },
     'toxic-chain': { d: 'Cada ataque tiene un 25 % de probabilidad de encadenar con veneno y ralentizar al objetivo.', toxicChain: true },
     'intrepid-sword': {
-      d: 'Espada Indómita: +35 % daño físico permanente; al iniciar o ante jefes gana +50 % de daño durante 20 s con ráfagas de corte.',
+      d: 'Espada Indómita: +25 % daño físico permanente; al iniciar o ante jefes gana +30 % de ataque durante 10 s con ráfagas de corte.',
       intrepidSword: true,
-      out: (pl, m) => (cls(m) === 'p' ? 1.35 : 1) * (pl.hasBuff('atk') ? 1.2 : 1),
-      start: pl => pl.addBuff('atk', 0.5, 20, 1)
+      out: (pl, m) => (cls(m) === 'p' ? 1.25 : 1) * (pl.hasBuff('atk') ? 1.15 : 1),
+      start: pl => pl.addBuff('atk', 0.3, 10, 1)
     },
     'download': { d: 'Descarga: analiza a los enemigos para ganar +20 % de daño físico o especial según su menor defensa.', download: true, out: pl => 1.2 },
     'gale-wings': { d: 'Con más del 75 % de vida, los movimientos Volador recargan un 30 % más rápido y va +18 % veloz.', speed: pl => (pl.hp >= pl.maxHp * 0.75 ? 1.18 : 1), cdMul: pl => (pl.hp >= pl.maxHp * 0.75 ? 0.7 : 1) },
     'soul-heart': {
-      d: 'Coránima: cada baja aumenta el daño especial un 1 % (hasta +40 %) y recupera un 2 % de vida; derrotar jefes sana un 25 %.',
+      d: 'Coránima: cada baja otorga +0,3 % de daño especial (hasta +20 %); derrotar jefes recupera un 15 % de vida.',
       soulHeart: true,
       kill: (pl, e) => {
         pl.soulK = (pl.soulK || 0) + 1;
-        pl.soulB = Math.min(0.40, (pl.soulB || 0) + 0.01);
-        heal(pl, 0.02);
-        if (e && e.boss) heal(pl, 0.25);
+        pl.soulB = Math.min(0.20, (pl.soulB || 0) + 0.003);
+        if (e && e.boss) heal(pl, 0.15);
       },
       out: (pl, m) => (cls(m) === 's' ? 1 + (pl.soulB || 0) : 1)
     },
