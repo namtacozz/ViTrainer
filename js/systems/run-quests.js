@@ -44,7 +44,7 @@ G.RunQuests = (() => {
       487: { move: 'shadow-force', targetDex: 10007, name: 'Origin Giratina', moveName: 'Shadow Force' },
       888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian Crowned', moveName: 'Behemoth Blade' },
       889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta Crowned', moveName: 'Behemoth Bash' },
-      646: { move: 'glaciate', targetDex: 10022, name: 'Hợp Thể DNA (Kyurem)', moveName: 'Băng Thần' },
+      646: { move: 'glaciate', branches: [10022, 10023], name: 'Hợp Thể DNA (Kyurem)', moveName: 'Băng Thần' },
       800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', moveName: 'Quang Phổ' },
       643: { move: 'fusion-flare', targetDex: 643, name: 'Reshiram', moveName: 'Fusion Flare' },
       644: { move: 'fusion-bolt', targetDex: 644, name: 'Zekrom', moveName: 'Fusion Bolt' },
@@ -63,6 +63,7 @@ G.RunQuests = (() => {
         desc: 'Nâng ' + lq.moveName + ' lên Rạng +++ & Đạt Lv. 50',
         rewardType: 'legend_plus_evo',
         rewardTargetDex: lq.targetDex,
+        branches: lq.branches,
         rewardName: lq.name,
         color: '#22c55e',
         icon: 'megaBadge',
@@ -371,8 +372,14 @@ G.RunQuests = (() => {
 
     // Trao phần thưởng
     if (q.rewardType === 'legend_plus_evo') {
-      if (pl.megaEvolve && q.rewardTargetDex) pl.megaEvolve(q.rewardTargetDex);
-      if (G.UI && G.UI.toast) G.UI.toast((q.rewardName || 'Pokémon') + ' đã tiến hóa thành công!', 4500);
+      if (q.branches && q.branches.length > 0) {
+        if (!pl.isMega && pl.checkInRunEvo) {
+          pl.checkInRunEvo();
+        }
+      } else if (q.rewardTargetDex && !pl.isMega) {
+        if (pl.megaEvolve) pl.megaEvolve(q.rewardTargetDex);
+      }
+      if (G.UI && G.UI.toast) G.UI.toast((q.rewardName || 'Pokémon') + ' đã hoàn thành thử thách tiến hóa!', 4500);
     } else if (q.rewardType === 'item') {
       if (G.Game && G.Game.offerItem) {
         G.Game.offerItem(q.rewardItem);

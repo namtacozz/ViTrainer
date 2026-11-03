@@ -550,7 +550,7 @@ G.HUD = (() => {
         487: { move: 'shadow-force', targetDex: 10007, name: 'Shadow Force' },
         888: { move: 'behemoth-blade', targetDex: 10188, name: 'Behemoth Blade' },
         889: { move: 'behemoth-bash', targetDex: 10189, name: 'Behemoth Bash' },
-        646: { move: 'glaciate', targetDex: 10022, name: 'Glaciate' },
+        646: { move: 'glaciate', targetDex: 10022, branches: [10022, 10023], name: 'Glaciate' },
         800: { move: 'prismatic-laser', targetDex: 10157, name: 'Prismatic Laser' },
         801: { move: 'fleur-cannon', targetDex: 10801, name: 'Fleur Cannon' },
         807: { move: 'plasma-fists', targetDex: 10807, name: 'Plasma Fists' },
@@ -563,7 +563,7 @@ G.HUD = (() => {
       const leg = EXCLUSIVE_PLUS_EVO[bDex];
       if (leg) {
         if (pl.isMega || cDex >= 10000) {
-          return { dex: leg.targetDex, label: 'Hoàn thiện', isFinal: true };
+          return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
         }
         let curTier = 0;
         if (pl.slots) {
@@ -578,7 +578,7 @@ G.HUD = (() => {
         }
         const ready = curTier >= 3 && curLv >= 50;
         return {
-          dex: leg.targetDex,
+          dex: leg.targetDex || (leg.branches && leg.branches[0]) || 10022,
           label: ready ? 'Sẵn sàng!' : (curTier < 3 ? `${leg.name} +++` : `Lv. ${curLv}/50`),
           ready
         };

@@ -168,7 +168,7 @@ G.MEGAS = {
     "ability": "turboblaze",
     "hp": 125,
     "spd": 95,
-    "atk": 1.20,
+    "atk": 1.70,
     "pa": 1.20,
     "sa": 1.70,
     "df": 90,

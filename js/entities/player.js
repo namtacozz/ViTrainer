@@ -298,6 +298,26 @@ G.Player = class Player {
   get regen() { return this.regenFlat + this.buffs.regen.n * this.buffs.regen.amount; }
 
   // ---------------- movimientos ----------------
+  grantSignatureFormMove(moveId, inheritFromId = 'glaciate') {
+    if (this.hasMove(moveId)) return;
+    this.maxMoves = Math.max(this.maxMoves, this.slots.length + 1);
+
+    const oldMove = (this.moves || []).find(m => m && (m.id === inheritFromId || (m.def && m.def.id === inheritFromId)));
+    const targetTier = oldMove ? (oldMove.evoTier || (oldMove.evolved ? 1 : 0)) : 3;
+    const targetLvl = oldMove ? (oldMove.lvl || 8) : 8;
+
+    const inst = G.Moves.instance(moveId, targetLvl);
+    inst.since = (typeof G !== 'undefined' && G.Game && G.Game.st && G.Game.st.time) || 0;
+    if (targetTier >= 1 && typeof G !== 'undefined' && G.Moves && G.Moves.evolve) {
+      for (let t = 1; t <= targetTier; t++) {
+        G.Moves.evolve(inst, t);
+      }
+    }
+    this.moves.push(inst);
+    this.slots.push([inst]);
+    this.arrange();
+  }
+
   learnOrReplaceMove(id, replaceId) {
     if (this.hasMove(id)) return;
     if (this.slots.length < this.maxMoves) {
@@ -311,8 +331,18 @@ G.Player = class Player {
       const foundIdx = list.findIndex(m => m && (m.id === targetId || (m.def && m.def.id === targetId)));
       if (foundIdx >= 0) {
         const oldLvl = list[foundIdx].lvl || 1;
+        const oldTier = list[foundIdx].evoTier || (list[foundIdx].evolved ? 1 : 0);
         const newInst = G.Moves.instance(id, oldLvl);
-        list[foundIdx] = newInst;
+        if (oldTier >= 1 && typeof G !== 'undefined' && G.Moves && G.Moves.evolve) {
+          for (let t = 1; t <= oldTier; t++) {
+            G.Moves.evolve(newInst, t);
+          }
+        }
+        if (Array.isArray(g)) {
+          g[foundIdx] = newInst;
+        } else {
+          this.slots[i] = [newInst];
+        }
         const mIdx = this.moves.findIndex(m => m && (m.id === targetId || (m.def && m.def.id === targetId)));
         if (mIdx >= 0) this.moves[mIdx] = newInst;
         this.arrange();
@@ -923,7 +953,7 @@ G.Player = class Player {
           desc: b.desc,
           apply: () => {
             this.megaEvolve(b.targetDex);
-            if (b.grantMove) this.learnOrReplaceMove(b.grantMove, legCfg.move);
+            if (b.grantMove) this.grantSignatureFormMove(b.grantMove, legCfg.move);
             if (G.UI && G.UI.toast) G.UI.toast(b.name + ' đã thức tỉnh thành công!', 4500);
           }
         }));
@@ -1239,6 +1269,14 @@ G.Player = class Player {
 
     // Chuẩn hóa BST = 800 cho dạng Mega / Đặc biệt
     this.applyBstNormalization();
+
+    // Xử lý chiêu độc quyền đặc biệt khi tiến hóa Kyurem (Black: Freeze Shock, White: Ice Burn):
+    if (megaId === 10022 || targetDex === 10022) {
+      this.grantSignatureFormMove('freeze-shock', 'glaciate');
+    } else if (megaId === 10023 || targetDex === 10023) {
+      this.grantSignatureFormMove('ice-burn', 'glaciate');
+    }
+
     this.critChance = (this.critChance || 0) + 0.15;
     this.dmgReduce = Math.min(0.60, (this.dmgReduce || 0) + 0.20);
     this.cdMul = (this.cdMul || 1) * 0.85;
