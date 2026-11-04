@@ -631,22 +631,41 @@ G.Game = (() => {
    */
   function offerBond(quiet = false) {
     if (!pl || pl.bonds <= 0 || pl.dead || (state !== 'playing' && state !== 'held') || G.Rift.inArena) return;
-    if (['scr-bond', 'scr-pause', 'scr-item', 'scr-levelup'].some(G.UI.isOpen)) return;
+    if (['scr-bond', 'scr-pause', 'scr-item', 'scr-levelup', 'scr-evo'].some(G.UI.isOpen)) return;
+
+    // Nếu người chơi đã bấm "Để sau", chỉ tự động kích hoạt lại khi học thêm chiêu mới
+    if (pl.bondsDeferredUntilMoves && pl.moves.length <= pl.bondsDeferredUntilMoves) return;
+    pl.bondsDeferredUntilMoves = 0;
+
     const opt = pl.bondOptions();
-    if (!opt) {
-      if (!quiet) G.Spawner.say('Guardas el vínculo: aprende otro movimiento para usarlo', 3, true);
+    if (!opt || !opt.loose || opt.loose.length === 0) {
+      if (!quiet) {
+        const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.locale === 'vi');
+        G.Spawner.say(isVi ? 'Lưu giữ liên kết: học thêm chiêu mới để kết hợp' : 'Guardas el vínculo: aprende otro movimiento para usarlo', 3, true);
+      }
       return;
     }
-    // Se para el juego; en grupo, para todos hasta que cada uno elige (G.Coop.holdStart).
+
     state = 'choice';
     if (G.Coop.active) G.Coop.holdStart();
     G.Audio.sfx('levelup');
     G.RunUI.showBond(opt, picked => {
+      if (!picked || picked.length === 0) {
+        // Người chơi hoãn việc gộp: lưu giữ liên kết, đợi khi có chiêu mới sẽ tự mở lại
+        pl.bondsDeferredUntilMoves = pl.moves.length;
+        if (state === 'choice') state = holdBy.length ? 'held' : 'playing';
+        if (G.Coop.active) G.Coop.holdEnd();
+        const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.locale === 'vi');
+        if (G.UI && G.UI.toast) G.UI.toast(isVi ? 'Đã lưu liên kết! Sẽ tự động gộp khi học thêm chiêu mới.' : 'Bond saved! Will prompt again when a new move is learned.', 3000);
+        return;
+      }
+
       const group = pl.fuse(picked, opt.group);
       G.Audio.sfx('legend');
       G.FX.ring(pl.x, pl.y, 8, 130, '#ff8ad8', 0.8, 6);
       G.FX.burst(pl.x, pl.y - pl.bodyH * 0.5, '#ffb3e6', 40, 240);
-      G.Spawner.say('¡Vínculo! ' + group.length + ' movimientos a la vez', 2.6, true);
+      const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.locale === 'vi');
+      G.Spawner.say(isVi ? `Dung hợp! ${group.length} chiêu thức cùng xuất trận` : `¡Vínculo! ${group.length} movimientos a la vez`, 2.6, true);
       pl.invuln = Math.max(pl.invuln || 0, 2.5);
       if (G.Combat && G.Combat.repelNear) G.Combat.repelNear(pl, 260);
       if (state === 'choice') state = holdBy.length ? 'held' : 'playing';

@@ -242,28 +242,75 @@ G.RunUI = (() => {
    * @param opt  pl.bondOptions(): 'add' (uno suelto al grupo) o 'pair' (dos sueltos, en dos pasos)
    * @param cb   recibe la lista de movimientos que se juntan
    */
+  function cancelBond() {
+    if (!bond) return;
+    const cb = bond.cb;
+    bond = null;
+    G.UI.hide('scr-bond');
+    if (cb) cb(null);
+  }
+
   function showBond(opt, cb) {
     bond = { opt, cb, first: null, list: [] };
-    if (!$('bond-back').dataset.tap) { $('bond-back').dataset.tap = 1; onTap($('bond-back'), bondBack); }
+    const backBtn = $('bond-back');
+    if (backBtn && !backBtn.dataset.tap) {
+      backBtn.dataset.tap = 1;
+      onTap(backBtn, bondBack);
+    }
+    const skipBtn = $('bond-skip');
+    if (skipBtn && !skipBtn.dataset.tap) {
+      skipBtn.dataset.tap = 1;
+      onTap(skipBtn, cancelBond);
+    }
     renderBond();
     G.UI.show('scr-bond');
     guard($('bond-cards'));
   }
 
   function renderBond() {
+    if (!bond) return;
     const { opt, first } = bond;
+    const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.locale === 'vi');
     const names = ms => ms.map(m => G.T(m.name, 'move')).join(' + ');
     const step2 = opt.mode === 'pair' && first;
-    $('bond-sub').textContent = opt.mode === 'add' ? 'Elige qué movimiento se une a ' + names(opt.group)
-      : step2 ? '¿Con cuál unes ' + G.T(first.name, 'move') + '?' : 'Elige el primer movimiento que vas a unir';
-    $('bond-back').classList.toggle('hidden', !step2);
-    bond.list = step2 ? opt.loose.filter(m => m !== first) : opt.loose;
+
+    const titleEl = document.querySelector('.bond-title');
+    if (titleEl) titleEl.textContent = isVi ? 'Dung Hợp Chiêu Thức!' : '¡Vínculo!';
+    const hintEl = document.querySelector('.bond-hint');
+    if (hintEl) hintEl.textContent = isVi ? 'Các chiêu thức được gộp sẽ kích hoạt đồng thời và chỉ chiếm 1 ô kỹ năng' : 'Los movimientos unidos se lanzan a la vez y ocupan un solo hueco';
+
+    if (opt.mode === 'add') {
+      $('bond-sub').textContent = isVi ? 'Chọn chiêu thức để ghép chung với ' + names(opt.group) : 'Elige qué movimiento se une a ' + names(opt.group);
+    } else if (step2) {
+      $('bond-sub').textContent = isVi ? 'Ghép chung với chiêu nào cho ' + G.T(first.name, 'move') + '?' : '¿Con cuál unes ' + G.T(first.name, 'move') + '?';
+    } else {
+      $('bond-sub').textContent = isVi ? 'Chọn chiêu thức đầu tiên muốn dung hợp' : 'Elige el primer movimiento que vas a unir';
+    }
+
+    const backBtn = $('bond-back');
+    if (backBtn) {
+      backBtn.textContent = step2 ? (isVi ? 'Quay lại' : 'Atrás') : (isVi ? 'Để sau' : 'Cancelar');
+      backBtn.classList.remove('hidden');
+    }
+    const skipBtn = $('bond-skip');
+    if (skipBtn) {
+      skipBtn.textContent = isVi ? 'Lưu lại để sau' : 'Dejar para luego';
+      skipBtn.classList.toggle('hidden', !!step2);
+    }
+
+    bond.list = step2 ? (opt.loose || []).filter(m => m !== first) : (opt.loose || []);
     const box = $('bond-cards');
     box.innerHTML = '';
+
+    if (bond.list.length === 0) {
+      box.innerHTML = `<div class="sub" style="padding:16px;text-align:center">${isVi ? 'Hiện không còn chiêu thức nào khả dụng để gộp vào nhóm này. Liên kết sẽ được giữ nguyên và tự động nhắc lại khi học thêm chiêu mới!' : 'No moves available to bond. Your bond will be saved until a new move is learned!'}</div>`;
+      return;
+    }
+
     bond.list.forEach((m, i) => {
       const col = G.U.TYPE_COLOR[m.type];
-      const desc = opt.mode === 'add' ? 'Se lanzará a la vez que ' + names(opt.group) + '.'
-        : step2 ? 'Se lanzará a la vez que ' + G.T(first.name, 'move') + '. Queda un hueco libre.'
+      const desc = opt.mode === 'add' ? (isVi ? 'Sẽ xuất chiêu cùng lúc với ' + names(opt.group) : 'Se lanzará a la vez que ' + names(opt.group) + '.')
+        : step2 ? (isVi ? 'Sẽ xuất chiêu cùng lúc với ' + G.T(first.name, 'move') + '. Giải phóng 1 ô kỹ năng!' : 'Se lanzará a la vez que ' + G.T(first.name, 'move') + '. Queda un hueco libre.')
         : m.desc || '';
       const el = document.createElement('div');
       el.className = 'card' + (opt.mode === 'add' || step2 ? ' bond' : '');
@@ -358,8 +405,12 @@ G.RunUI = (() => {
 
   function bondBack() {
     if (!bond) return;
-    bond.first = null;
-    renderBond();
+    if (bond.first) {
+      bond.first = null;
+      renderBond();
+    } else {
+      cancelBond();
+    }
   }
 
   /*
@@ -509,5 +560,5 @@ G.RunUI = (() => {
     $('btn-quit').onclick = onQuit;
   }
 
-  return { showLevelUp, showEvoChoice, pickEvo, reroll, showItemChoice, showBond, pickBond, bondBack, pick, setWaiting, closeLevelUp, showOver, wirePause, showPause };
+  return { showLevelUp, showEvoChoice, pickEvo, reroll, showItemChoice, showBond, pickBond, bondBack, cancelBond, pick, setWaiting, closeLevelUp, showOver, wirePause, showPause };
 })();

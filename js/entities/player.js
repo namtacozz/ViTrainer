@@ -363,7 +363,7 @@ G.Player = class Player {
   bondOptions() {
     const loose = this.slots.filter(s => s.length === 1).map(s => s[0]);
     const grow = this.slots.find(s => s.length > 1 && s.length < Player.BOND_MAX);
-    if (grow) return { mode: 'add', group: grow, loose };
+    if (grow && loose.length >= 1) return { mode: 'add', group: grow, loose };
     return loose.length >= 2 ? { mode: 'pair', group: null, loose } : null;
   }
 
@@ -846,7 +846,7 @@ G.Player = class Player {
     // Lv1: Dạng 10% -> Lv15: Thức tỉnh I -> Lv25: Dạng 50% -> Lv30: Apex -> Lv50: Dạng 100% và mở khóa Mega
     if (this.baseDex === 718) {
       // Mốc Lv 15: Thức tỉnh I
-      if (this.level >= 60 && this.awakeningTier === 0 && this.dex === 10118) {
+      if (this.level >= 15 && this.awakeningTier === 0 && this.dex === 10118) {
         this.awakeningTier = 1;
         this.promptEvo([
           {
@@ -889,7 +889,7 @@ G.Player = class Player {
         return;
       }
       // Mốc Lv 30: Thức tỉnh Apex (+)
-      if (this.level >= 60 && this.dex === 718 && this.awakeningTier < 2 && !this.isApex) {
+      if (this.level >= 35 && this.dex === 718 && this.awakeningTier < 2 && !this.isApex) {
         this.awakeningTier = 2;
         this.promptEvo([{
           dex: this.dex,
@@ -924,7 +924,7 @@ G.Player = class Player {
 
     // Especie de fase única (Legendarios / Singulares / Sin evolución)
     if (chain.type === 'single') {
-      if (this.level >= 60 && this.awakeningTier === 0) {
+      if (this.level >= 25 && this.awakeningTier === 0) {
         this.awakeningTier = 1;
         this.promptEvo([
           {
@@ -953,7 +953,7 @@ G.Player = class Player {
           }
         ]);
       }
-      if (this.level >= 60) {
+      if (this.level >= 50) {
         if (!this.isMega && this.hasMegaForm()) {
           const opts = buildMegaOptions();
           if (opts) this.promptEvo(opts);
@@ -974,7 +974,7 @@ G.Player = class Player {
 
     // Especie de 2 fases
     if (chain.type === '2stage') {
-      if (this.level >= 60 && this.evoStage === 1) {
+      if (this.level >= 25 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
@@ -987,7 +987,7 @@ G.Player = class Player {
             desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de PS y amplifica estadísticas base.`,
             apply: () => {
               this.evolveTo(nextDex);
-              if (this.level >= 60) {
+              if (this.level >= 50) {
                 const megas = buildMegaOptions(nextDex);
                 if (megas) this.promptEvo(megas);
               }
@@ -997,7 +997,7 @@ G.Player = class Player {
           this.awakeningTier = 1;
           this.activateAwakening(1);
         }
-      } else if (this.level >= 60 && this.evoStage >= 2) {
+      } else if (this.level >= 50 && this.evoStage >= 2) {
         if (!this.isMega && this.hasMegaForm()) {
           const opts = buildMegaOptions();
           if (opts) this.promptEvo(opts);
@@ -1018,7 +1018,7 @@ G.Player = class Player {
 
     // Especie de 3 fases
     if (chain.type === '3stage') {
-      if (this.level >= 60 && this.evoStage === 1) {
+      if (this.level >= 18 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
@@ -1035,7 +1035,7 @@ G.Player = class Player {
           this.awakeningTier = 1;
           this.activateAwakening(1);
         }
-      } else if (this.level >= 60 && this.evoStage === 2) {
+      } else if (this.level >= 36 && this.evoStage === 2) {
         const nextDex = chain.stages[2] && chain.stages[2][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
@@ -1055,7 +1055,7 @@ G.Player = class Player {
             }
           }]);
         }
-      } else if (this.level >= 60 && this.evoStage >= 3) {
+      } else if (this.level >= 50 && this.evoStage >= 3) {
         if (!this.isMega && this.hasMegaForm()) {
           const opts = buildMegaOptions();
           if (opts) this.promptEvo(opts);
@@ -1078,7 +1078,7 @@ G.Player = class Player {
     if (chain.type === 'branch') {
       const info = (typeof G !== 'undefined' && G.getEvoInfo) ? G.getEvoInfo(this.dex) : null;
       const nextList = (info ? info.next : []).filter(d => G.DEX_BY && G.DEX_BY[d]);
-      if (this.evoStage === 1 && this.level >= 60) {
+      if (this.evoStage === 1 && this.level >= 20) {
         if (nextList.length === 1) {
           const nextDex = nextList[0];
           const mon = G.DEX_BY[nextDex];
@@ -1107,7 +1107,7 @@ G.Player = class Player {
           });
           this.promptEvo(branchOpts);
         }
-      } else if (this.evoStage === 2 && chain.maxStage === 3 && this.level >= 60) {
+      } else if (this.evoStage === 2 && chain.maxStage === 3 && this.level >= 36) {
         if (nextList.length === 1) {
           const nextDex = nextList[0];
           const mon = G.DEX_BY[nextDex];
@@ -1137,7 +1137,7 @@ G.Player = class Player {
           this.promptEvo(branchOpts);
         }
       }
-      if (this.level >= 60 && this.evoStage >= chain.maxStage) {
+      if (this.level >= 50 && this.evoStage >= chain.maxStage) {
         if (!this.isMega && this.hasMegaForm()) {
           const opts = buildMegaOptions();
           if (opts) this.promptEvo(opts);

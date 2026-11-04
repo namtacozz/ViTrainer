@@ -595,16 +595,16 @@ G.HUD = (() => {
       if (ch && ch.type === '3stage') {
         if (stg === 1) {
           const nDex = ch.stages[1] ? ch.stages[1][0] : cDex;
-          return { dex: nDex, label: `Lv. ${curLv}/15` };
+          return { dex: nDex, label: `Lv. ${curLv}/25` };
         } else if (stg === 2) {
           const nDex = ch.stages[2] ? ch.stages[2][0] : cDex;
-          return { dex: nDex, label: `Lv. ${curLv}/30` };
+          return { dex: nDex, label: `Lv. ${curLv}/36` };
         } else {
           if (hasM) {
-            return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
+            return { dex: mDex, label: `Mega (Lv. ${curLv}/50)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
-            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+            return { icon: 'crown', label: `Apex+ ${curLv}/50` };
           }
           return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
         }
@@ -617,14 +617,14 @@ G.HUD = (() => {
             return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
           }
           if (!pl.isApex) {
-            return { icon: 'crown', label: `Apex+ ${curLv}/30` };
+            return { icon: 'crown', label: `Apex+ ${curLv}/50` };
           }
           return { dex: cDex, label: 'Hoàn thiện', isFinal: true };
         }
       } else if (ch && ch.type === 'branch') {
         if (stg === 1) {
           const nDex = (ch.members || []).find(d => d !== bDex) || cDex;
-          return { dex: nDex, label: `Lv. ${curLv}/15` };
+          return { dex: nDex, label: `Lv. ${curLv}/20` };
         } else {
           if (hasM) {
             return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
@@ -639,7 +639,7 @@ G.HUD = (() => {
           return { dex: mDex, label: `Mega (Lv. ${curLv}/30)`, icon: 'megaBadge' };
         }
         if (pl.awakeningTier === 0) {
-          return { icon: 'star', label: `Thức tỉnh ${curLv}/15` };
+          return { icon: 'star', label: `Thức tỉnh ${curLv}/25` };
         } else if (pl.awakeningTier === 1) {
           return { icon: 'crown', label: `Apex+ ${curLv}/30` };
         } else {
