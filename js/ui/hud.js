@@ -347,6 +347,9 @@ G.HUD = (() => {
         ctx.fillText(G.T("Supervivencia") + ": " + left + "s", barX + barW / 2, barY + barH + 12);
       } else if (cur.type === "scavenger") {
         ctx.fillText(G.T("Chatarrero") + ": " + (cur.found || 0) + "/" + (cur.total || 5), barX + barW / 2, barY + barH + 12);
+      } else if (cur.type === "pursuit") {
+        const left = Math.max(0, Math.ceil(cur.t || 0));
+        ctx.fillText((G.T("Supervivencia Extrema") || "Truy kích") + ": " + left + "s", barX + barW / 2, barY + barH + 12);
       }
     }
     ctx.restore();
@@ -765,7 +768,7 @@ G.HUD = (() => {
       ctx.font = F(800, 9.5);
       ctx.fillStyle = '#20160a';
       const phaseTag = boss.bossPhase > 1 ? ' [FASE ' + boss.bossPhase + ']' : '';
-      ctx.fillText(boss.name.toUpperCase() + phaseTag, w / 2, bY + 9.5);
+      ctx.fillText((boss.name || (boss.def && boss.def.name) || "BOSS").toUpperCase() + phaseTag, w / 2, bY + 9.5);
     }
 
     // ---------- aviso ----------

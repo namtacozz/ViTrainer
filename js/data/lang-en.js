@@ -1485,5 +1485,8 @@ G.I18n.add({
   "No se pudo reconectar a la sala": "Could not reconnect to room",
   "Conectado. Sincronizando con la partida…": "Connected. Syncing with match…",
   "Error al reconectar": "Error reconnecting",
+  "Política de privacidad": "Privacy Policy",
+  "auth_discord_proxy_err": "Discord connection error. Please set up URL Mappings in Discord Developer Portal or log in at namtaccozz.github.io/ViTrainer.",
+  "auth_internal_err": "Authentication internal error.",
   "Cancelar": "Cancel",
 });

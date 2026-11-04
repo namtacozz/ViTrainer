@@ -2234,4 +2234,7 @@ G.I18n.add({
   "No se pudo reconectar a la sala": "Không thể kết nối lại phòng",
   "Conectado. Sincronizando con la partida…": "Đã kết nối. Đang đồng bộ với trận đấu…",
   "Error al reconectar": "Lỗi khi kết nối lại",
+  "Política de privacidad": "Chính sách bảo mật",
+  "auth_discord_proxy_err": "Lỗi kết nối từ Discord. Vui lòng thiết lập URL Mappings trong Discord Developer Portal hoặc đăng nhập tại namtaccozz.github.io/ViTrainer.",
+  "auth_internal_err": "Lỗi nội bộ xác thực.",
 }, 'vi');

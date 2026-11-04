@@ -1044,9 +1044,9 @@ G.DB = (() => {
 
     function authError(e) {
     const c = (e && e.code) || '';
-    const isDiscord = typeof location !== 'undefined' && /discordsays\\.com|discord\\.com|discordapp\\.com/.test(location.hostname);
+    const isDiscord = typeof location !== 'undefined' && /discordsays\.com|discord\.com|discordapp\.com/.test(location.hostname);
     const M = {
-      'auth/internal-error': isDiscord ? 'Lỗi kết nối proxy Discord. Vui lòng thiết lập URL Mappings trong Discord Developer Portal.' : 'Lỗi nội bộ xác thực.',
+      'auth/internal-error': isDiscord ? (G.T('auth_discord_proxy_err') || 'Lỗi kết nối từ Discord. Vui lòng thiết lập URL Mappings trong Discord Developer Portal.') : (G.T('auth_internal_err') || 'Lỗi nội bộ xác thực.'),
       'auth/email-already-in-use': 'Ese nombre ya existe.',
       'auth/invalid-credential': 'Usuario o contraseña incorrectos.',
       'auth/invalid-login-credentials': 'Usuario o contraseña incorrectos.',
@@ -1113,6 +1113,9 @@ G.DB = (() => {
 
   async function login(name, pass) {
     name = (name || '').trim();
+    if (mode === 'local') {
+      try { if (await initCloud()) mode = 'cloud'; } catch (e) { /* keep local */ }
+    }
     if (mode === 'local') return loginLocal(name, pass);
     try {
       const email = name.includes('@') ? name.toLowerCase() : nameToEmail(name);

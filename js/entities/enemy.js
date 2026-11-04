@@ -79,10 +79,21 @@
 
   class Enemy {
     constructor(def, x, y, sc, boss = false) {
+      if (typeof sc === 'number') {
+        sc = { hp: sc, spd: 1, dmg: 1 };
+      } else if (!sc || typeof sc !== 'object') {
+        sc = { hp: 1, spd: 1, dmg: 1 };
+      } else {
+        sc = {
+          hp: typeof sc.hp === 'number' && isFinite(sc.hp) ? sc.hp : 1,
+          spd: typeof sc.spd === 'number' && isFinite(sc.spd) ? sc.spd : 1,
+          dmg: typeof sc.dmg === 'number' && isFinite(sc.dmg) ? sc.dmg : 1
+        };
+      }
       this.id = nextId++;
       this.def = def;
       this.dex = def.dex;
-      this.name = (G.DEX_BY[def.dex] && G.DEX_BY[def.dex].name) || def.name;
+      this.name = (G.DEX_BY && G.DEX_BY[def.dex] && G.DEX_BY[def.dex].name) || (def && def.name) || "Enemy";
       this.x = x; this.y = y;
       this.boss = boss;
       this.scale = boss ? bossScale(def.dex) : 1;

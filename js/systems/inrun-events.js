@@ -134,7 +134,7 @@ G.InRunEvents = (() => {
         xp: 0,
         behavior: 'chase'
       };
-      pursuitBoss = new G.Enemy(bDef, sp.x, sp.y, 1, false);
+      pursuitBoss = new G.Enemy(bDef, sp.x, sp.y, { hp: 1, spd: 1, dmg: 1 }, false);
       pursuitBoss.isPursuit = true;
       pursuitBoss.invulnerable = true;
       if (G.EnemyMgr && G.EnemyMgr.add) {
@@ -585,6 +585,7 @@ G.InRunEvents = (() => {
     } else if (current.type === 'pursuit' && current.boss) {
       ctx.save();
       const bx = current.boss.x, by = current.boss.y;
+      if (!isFinite(bx) || !isFinite(by)) return;
       const g = ctx.createRadialGradient(bx, by, 10, bx, by, 70);
       g.addColorStop(0, 'rgba(154, 77, 255, 0.6)');
       g.addColorStop(0.7, 'rgba(255, 45, 90, 0.3)');
@@ -600,7 +601,7 @@ G.InRunEvents = (() => {
   // ---------------- Dibujado de HUD e Indicadores de Brújula ----------------
 
   function edgeArrow(ctx, w, h, cam, x, y, col, label) {
-    if (!cam) return;
+    if (!cam || !isFinite(x) || !isFinite(y)) return;
     const sx = (x - cam.left()) * cam.scale;
     const sy = (y - cam.top()) * cam.scale;
     const pad = 44;

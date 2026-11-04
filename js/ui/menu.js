@@ -46,10 +46,10 @@ G.MenuUI = (() => {
           return;
         }
         reconBtn.disabled = true;
-        reconBtn.innerHTML = `<span class="mi-ico">${G.Icons.html('friends', 26)}</span><span>${G.T('Reconectando…')}</span><small>${G.T('Partida en grupo en curso')}</small>`;
+        setReconnectHtml(reconBtn, 'Reconectando…', 'Partida en grupo en curso');
         G.Social.joinRoom(saved.id, true).then(res => {
           reconBtn.disabled = false;
-          reconBtn.innerHTML = `<span class="mi-ico">${G.Icons.html('friends', 26)}</span><span>${G.T('Reconectarse')}</span><small>${G.T('Partida en grupo en curso')}</small>`;
+          setReconnectHtml(reconBtn, 'Reconectarse', 'Partida en grupo en curso');
           if (!res || !res.ok) {
             G.UI.toast(res && res.error ? res.error : G.T('No se pudo reconectar a la sala'), 3500);
             if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
@@ -60,13 +60,17 @@ G.MenuUI = (() => {
           G.UI.toast(G.T('Conectado. Sincronizando con la partida…'), 3000);
         }).catch(err => {
           reconBtn.disabled = false;
-          reconBtn.innerHTML = `<span class="mi-ico">${G.Icons.html('friends', 26)}</span><span>${G.T('Reconectarse')}</span><small>${G.T('Partida en grupo en curso')}</small>`;
+          setReconnectHtml(reconBtn, 'Reconectarse', 'Partida en grupo en curso');
           if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
           reconBtn.classList.add('hidden');
           G.UI.toast(G.T('Error al reconectar'), 3000);
         });
       };
     }
+  }
+
+  function setReconnectHtml(btn, titleKey, subKey) {
+    btn.innerHTML = '<span class="mi-ico" style="display:flex;align-items:center;">' + G.Icons.html('friends', 22) + '</span><div style="display:flex;flex-direction:column;text-align:left;line-height:1.2;"><span style="font-size:15px;font-weight:bold;color:var(--gold);">' + G.T(titleKey) + '</span><small style="font-size:11px;color:var(--muted);">' + G.T(subKey) + '</small></div>';
   }
 
   // ---------------- menú principal ----------------
@@ -81,7 +85,7 @@ G.MenuUI = (() => {
         reconBtn.classList.add('hidden');
       } else {
         if (saved && saved.id) {
-        reconBtn.innerHTML = '<span class="mi-ico" style="display:flex;align-items:center;">' + G.Icons.html('friends', 22) + '</span><div style="display:flex;flex-direction:column;text-align:left;line-height:1.2;"><span style="font-size:15px;font-weight:bold;color:var(--gold);">' + G.T('Reconectarse') + '</span><small style="font-size:11px;color:var(--muted);">' + G.T('Partida en grupo en curso') + '</small></div>';
+        setReconnectHtml(reconBtn, 'Reconectarse', 'Partida en grupo en curso');
         reconBtn.classList.remove('hidden');
       } else {
         reconBtn.classList.add('hidden');
