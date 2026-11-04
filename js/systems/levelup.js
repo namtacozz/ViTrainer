@@ -6,54 +6,26 @@
  */
 G.LevelUp = (() => {
 
-  const isVi = () => (typeof G !== 'undefined' && G.I18n && G.I18n.lang === 'vi');
-
-  const STATS = [
-    { id: 'hp',   icon: 'heart',
-      get title() { return isVi() ? 'Khí Huyết (Máu)' : 'Vitality'; },
-      get desc() { return isVi() ? '+20 Máu tối đa (và hồi phục ngay).' : '+20 max HP (and restores it).'; },
+    const STATS = [
+    { id: 'hp',   icon: 'heart', title: 'Vigor',        desc: '+20 Máu tối đa (và hồi phục 20 máu).',
       apply: pl => pl.addMaxHp(20) },
-    { id: 'atk',  icon: 'fist',
-      get title() { return isVi() ? 'Công Lực (Sát Thương)' : 'Power'; },
-      get desc() { return isVi() ? '+10% sát thương cho toàn bộ chiêu thức.' : '+10% damage for all moves.'; },
-      apply: pl => { pl.atkMul = (pl.atkMul || 1) * 1.10; }, max: 40 },
-    { id: 'spd',  icon: 'boot',
-      get title() { return isVi() ? 'Thần Hành (Tốc Chạy)' : 'Agility'; },
-      get desc() { return isVi() ? '+10% tốc độ di chuyển.' : '+10% movement speed.'; },
-      apply: pl => { pl.spdMul = (pl.spdMul || 1) * 1.10; }, max: 10 },
-    { id: 'cd',   icon: 'clock',
-      get title() { return isVi() ? 'Linh Hoạt (Hồi Chiêu)' : 'Cooldown'; },
-      get desc() { return isVi() ? '-8% thời gian hồi chiêu tất cả kỹ năng.' : '-8% cooldown reduction on all moves.'; },
-      apply: pl => { pl.cdMul = Math.max(0.40, (pl.cdMul || 1) * 0.92); }, max: 10 },
-    { id: 'pdef', icon: 'shield',
-      get title() { return isVi() ? 'Thiết Bích (Giáp Vật Lý)' : 'Iron Guard'; },
-      get desc() { return isVi() ? '+10% chỉ số Phòng Ngự Vật Lý (P.Def).' : '+10% Physical Defense.'; },
-      apply: pl => {
-        pl.pdefMul = (pl.pdefMul || 1) * 1.10;
-        pl.pdefReduce = Math.min(0.70, (pl.pdefReduce || 0) + 0.05);
-      }, max: 15 },
-    { id: 'sdef', icon: 'shield',
-      get title() { return isVi() ? 'Kim Cương (Giáp Phép)' : 'Diamond Veil'; },
-      get desc() { return isVi() ? '+10% chỉ số Phòng Ngự Đặc Biệt (Sp.Def).' : '+10% Special Defense.'; },
-      apply: pl => {
-        pl.sdefMul = (pl.sdefMul || 1) * 1.10;
-        pl.sdefReduce = Math.min(0.70, (pl.sdefReduce || 0) + 0.05);
-      }, max: 15 },
-    { id: 'rgn',  icon: 'sprout',
-      get title() { return isVi() ? 'Tức Sinh (Hồi Máu)' : 'Regen'; },
-      get desc() { return isVi() ? '+0.9 Máu hồi phục mỗi giây.' : '+0.9 HP regen per second.'; },
-      apply: pl => { pl.regenFlat += 0.9; } },
-    { id: 'mag',  icon: 'magnet',
-      get title() { return isVi() ? 'Từ Tính (Thu Hút)' : 'Magnet'; },
-      get desc() { return isVi() ? '+30% bán kính nhặt vật phẩm.' : '+30% pickup radius.'; },
-      apply: pl => { pl.magnet *= 1.30; }, max: 6 },
-    { id: 'xp',   icon: 'book',
-      get title() { return isVi() ? 'Ngộ Tính (Kinh Nghiệm)' : 'Wisdom'; },
-      get desc() { return isVi() ? '+8% kinh nghiệm nhận thêm.' : '+8% extra XP gained.'; },
-      apply: pl => { pl.xpMul = (pl.xpMul || 1) + 0.08; }, max: 8 },
-    { id: 'heal', icon: 'berry',
-      get title() { return isVi() ? 'Quả Sitrus (Cấp Cứu)' : 'Sitrus Berry'; },
-      get desc() { return isVi() ? 'Hồi phục ngay lập tức 45% Máu tối đa.' : 'Restores 45% max HP immediately.'; },
+    { id: 'atk',  icon: 'fist', title: 'Potencia',     desc: '+10 Điểm Công (Tăng trực tiếp sát thương cơ bản).',
+      apply: pl => { pl.flatAtk = (pl.flatAtk || 0) + 10; }, max: 40 },
+    { id: 'spd',  icon: 'boot', title: 'Carrera',      desc: '+10 Tốc độ chạy cố định.',
+      apply: pl => { pl.flatSpd = (pl.flatSpd || 0) + 10; }, max: 10 },
+    { id: 'cd',   icon: 'clock', title: 'Reflejos',     desc: '-8% Thời gian hồi chiêu tất cả kỹ năng.',
+      apply: pl => pl.cdMul *= 0.92, max: 10 },
+    { id: 'pdef', icon: 'shield', title: 'Coraza Física', desc: '+10 Giáp Phòng Thủ Vật Lý.',
+      apply: pl => { pl.flatPdef = (pl.flatPdef || 0) + 10; pl.pdefReduce = Math.min(0.70, (pl.pdefReduce || 0) + 0.10); }, max: 8 },
+    { id: 'sdef', icon: 'shield', title: 'Coraza Especial', desc: '+10 Giáp Phòng Thủ Đặc Biệt.',
+      apply: pl => { pl.flatSdef = (pl.flatSdef || 0) + 10; pl.sdefReduce = Math.min(0.70, (pl.sdefReduce || 0) + 0.10); }, max: 8 },
+    { id: 'rgn',  icon: 'sprout', title: 'Síntesis',     desc: '+1.0 Máu hồi phục mỗi giây.',
+      apply: pl => pl.regenFlat += 1.0 },
+    { id: 'mag',  icon: 'magnet', title: 'Imán',         desc: '+30% Bán kính hút kinh nghiệm.',
+      apply: pl => pl.magnet *= 1.30, max: 6 },
+    { id: 'xp',   icon: 'book', title: 'Aprendizaje',  desc: '+8% Kinh nghiệm nhận thêm.',
+      apply: pl => pl.xpMul = (pl.xpMul || 1) + 0.08, max: 8 },
+    { id: 'heal', icon: 'berry', title: 'Baya Zidra',   desc: 'Hồi phục ngay 45% Máu tối đa.',
       apply: pl => pl.heal(pl.maxHp * 0.45) }
   ];
 
@@ -112,10 +84,9 @@ G.LevelUp = (() => {
         const typesStr = (mega.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
         out.push({
           w: 1200, type: 'mega_evo', key: 'mega_evo:' + mega.id,
-          icon: 'megaBadge', dex: mega.spriteDex || mega.baseDex || pl.dex, color: '#f43f5e',
-          tag: isVi() ? 'TIẾN HÓA MEGA' : 'MEGA EVOLUTION',
+          icon: 'megaBadge', dex: mega.spriteDex || mega.baseDex || pl.dex, color: '#f43f5e', tag: 'MEGA EVOLUCIÓN',
           title: G.T(mega.name),
-          desc: isVi() ? `Đột phá dạng Mega tối thượng (${typesStr}). BST ${mega.bst}, Đặc tính ${G.T(mega.ability, 'ability') || mega.ability} và uy lực áp đảo.` : `Awaken Mega Evolution (${typesStr}). BST ${mega.bst}, ability ${G.T(mega.ability, 'ability') || mega.ability} and unleashed power.`,
+          desc: `Despierta la Megaevolución (${typesStr}). BST ${mega.bst}, habilidad ${G.T(mega.ability, 'ability') || mega.ability} y poder desatado.`,
           apply: p => {
             p.pendingMegaBranches = null;
             p.megaEvolve(mega.id);
@@ -132,10 +103,9 @@ G.LevelUp = (() => {
         const typesStr = mon.types.map(t => G.U.TYPE_NAME[t] || t).join('/');
         out.push({
           w: 1000, type: 'evo_mon', key: 'evo_mon:' + branchDex,
-          icon: 'star', dex: branchDex, color: '#ffd23f',
-          tag: isVi() ? 'TIẾN HÓA' : 'EVOLUTION',
-          title: (isVi() ? 'Tiến hóa thành ' : 'Evolve to ') + G.T(mon.name),
-          desc: isVi() ? `Tiến hóa lên ${G.T(mon.name)} (${typesStr}). Hồi 40% máu và thăng cấp toàn bộ chỉ số.` : `Evolve to ${G.T(mon.name)} (${typesStr}). Restores 40% HP and upgrades stats.`,
+          icon: 'star', dex: branchDex, color: '#ffd23f', tag: 'EVOLUCIÓN',
+          title: 'Evolucionar a ' + G.T(mon.name),
+          desc: `Evoluciona a ${G.T(mon.name)} (${typesStr}). Recupera 40% de vida y actualiza estadísticas.`,
           apply: p => {
             p.pendingEvoBranches = null;
             p.evolveTo(branchDex);
@@ -156,7 +126,7 @@ G.LevelUp = (() => {
         }
         continue;
       }
-      const tierTag = ev.tier === 1 ? (isVi() ? 'TIẾN HÓA +' : 'EVOLUTION +') : ev.tier === 2 ? (isVi() ? 'TINH ANH ++' : 'MASTERY ++') : (isVi() ? 'TỐI THƯỢNG +++' : 'SUPREME +++');
+      const tierTag = ev.tier === 1 ? 'EVOLUCIÓN +' : ev.tier === 2 ? 'MAESTRÍA ++' : 'DOMINIO +++';
       const tierColor = ev.tier === 1 ? '#ffd23f' : ev.tier === 2 ? '#38bdf8' : '#ec4899';
       const weight = ev.tier === 3 ? 120 : ev.tier === 2 ? 80 : 40;
       out.push({
@@ -206,8 +176,7 @@ G.LevelUp = (() => {
       out.push({
         w: evoFor ? 14 : pl.slots.length < pl.maxMoves ? 4 : 7,
         type: 'stat', key: 'stat:' + s.id,
-        icon: s.icon, color: evoFor ? '#ffd23f' : '#8fa3c4',
-        tag: evoFor ? (isVi() ? 'Tiến hóa ' + G.T(evoFor.name, 'move') : 'Evolves ' + G.T(evoFor.name, 'move')) : (isVi() ? 'Nâng cấp' : 'Upgrade'),
+        icon: s.icon, color: evoFor ? '#ffd23f' : '#8fa3c4', tag: evoFor ? 'Evoluciona ' + G.T(evoFor.name, 'move') : 'Mejora',
         title: s.title, desc: s.desc,
         apply: p => { s.apply(p); p.statsTaken[s.id] = (p.statsTaken[s.id] || 0) + 1; }
       });

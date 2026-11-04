@@ -24,6 +24,10 @@ G.Player = class Player {
     this.r = G.Sprites.playerRadius(mon.dex);
     this.bodyH = G.Sprites.bodyHeight(mon.dex, this.scale);
 
+    this.flatAtk = 0;
+    this.flatSpd = 0;
+    this.flatPdef = 0;
+    this.flatSdef = 0;
     this.atkMul = perks.atkMul || 1;
     this.spdMul = perks.spdMul || 1;
     this.cdMul = perks.cdMul || 1;
@@ -82,15 +86,52 @@ G.Player = class Player {
     this.evoChain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(this.baseDex) : null;
     this.evoTierUnlocked = (typeof G !== 'undefined' && G.DB && G.DB.getEvoTier) ? G.DB.getEvoTier(this.baseDex) : 1;
 
-    this.flatAtk = 0;
-    this.flatSpd = 0;
-    this.flatPDef = 0;
-    this.flatSDef = 0;
-    this.pdefMul = 1;
-    this.sdefMul = 1;
-    this.hasAwakened10m = false;
-    this.hasApex20m = false;
-    this.hasChosenSingleBranch = false;
+    // Cân bằng giai đoạn tiến hóa (user rule & Master Plan):
+    // - Dạng 1 của loài 3 dạng trở lên quá yếu: buff mạnh cho đầu game đỡ cực (+35% baseAtk, +35% maxHp, +8% spd)
+    // - Dạng 2 của loài 3 dạng: ngang bằng một con không có dạng tiến hoá (~500 BST baseline, +28% baseAtk, +25% maxHp, +10% spd)
+    // - Dạng 3 của loài 3 dạng: nhỉnh hơn tầm 30% (+45% baseAtk, +45% maxHp, +20% spd)
+    // - Dạng 1 của loài 2 dạng: hỗ trợ vượt ải đầu game (+30% baseAtk, +30% maxHp, +6% spd)
+    // - Dạng 2 của loài 2 dạng: tiệm cận dạng cuối (+35% baseAtk, +35% maxHp, +12% spd)
+    const is3StageOrMore = this.evoChain && (this.evoChain.type === '3stage' || this.evoChain.maxStage >= 3);
+    const is2Stage = this.evoChain && (this.evoChain.type === '2stage' || this.evoChain.maxStage === 2);
+    if (is3StageOrMore) {
+      if (this.evoStage === 1) {
+        this.baseAtk *= 1.35;
+        this.maxHp = Math.round(this.maxHp * 1.35);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.08);
+      } else if (this.evoStage === 2) {
+        this.baseAtk *= 1.28;
+        this.maxHp = Math.round(this.maxHp * 1.25);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.10);
+      } else if (this.evoStage >= 3) {
+        this.baseAtk *= 1.45;
+        this.maxHp = Math.round(this.maxHp * 1.45);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.20);
+      }
+    } else if (is2Stage) {
+      if (this.evoStage === 1) {
+        this.baseAtk *= 1.30;
+        this.maxHp = Math.round(this.maxHp * 1.30);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.06);
+      } else if (this.evoStage >= 2) {
+        this.baseAtk *= 1.35;
+        this.maxHp = Math.round(this.maxHp * 1.35);
+        this.hp = this.maxHp;
+        this.baseSpd = Math.round(this.baseSpd * 1.12);
+      }
+    }
+    // BST Compression cho loài single (Plan.md Section 7.2)
+    const isSingleSpecies = !this.evoChain || this.evoChain.type === 'single' || this.evoChain.maxStage === 1;
+    if (isSingleSpecies && mon && mon.bst) {
+      const compMult = Math.pow(520 / Math.max(200, mon.bst), 0.30);
+      this.baseAtk *= compMult;
+      this.maxHp = Math.round(this.maxHp * compMult);
+      this.hp = this.maxHp;
+    }
     this.isApex = false;
     this.awakeningTier = 0;
     this.pendingEvoBranches = null;
@@ -98,9 +139,6 @@ G.Player = class Player {
     this.megaId = null;
     this.pendingMegaBranches = null;
     this.weaknessPolicyT = -999;
-
-    // Chuẩn hóa toàn diện chỉ số BST theo quy chuẩn Master Plan
-    this.applyBstNormalization();
 
     this.moves = [];           // todos los movimientos aprendidos
     this.slots = [];           // huecos: cada uno, una lista de movimientos que se lanzan a la vez
@@ -187,75 +225,11 @@ G.Player = class Player {
 
   cy() { return this.y; }
 
-  /**
-   * Chuẩn hóa BST toàn diện:
-   * - Tất cả Pokémon dạng cuối cùng đều có tổng chỉ số BST = 800.
-   * - Loài 3 dạng: Dạng 1 = 300, Dạng 2 = 500, Dạng 3 = 800.
-   * - Loài 2 dạng: Dạng 1 = 400, Dạng 2 = 800.
-   * - Loài 1 dạng: Gốc = 400, sau khi chọn nhánh ở phút 20 = 800.
-   * - Dạng Mega / Primal / Đặc biệt: BST = 800.
-   * - Thức tỉnh 10p: +25% toàn bộ chỉ số; Apex 20p: +25% tiếp theo.
-   */
-  applyBstNormalization() {
-    const mon = this.mon;
-    if (!mon) return;
-    const chain = this.evoChain;
-    const chainType = chain ? chain.type : 'single';
-    const is3Stage = chain && (chainType === '3stage' || (chain.maxStage || 1) >= 3);
-    const is2Stage = chain && (chainType === '2stage' || (chain.maxStage || 1) === 2);
-    const isSingle = !chain || chainType === 'single' || (chain.maxStage || 1) === 1;
-
-    let targetBST = 400;
-    if (this.isMega) {
-      targetBST = 800;
-    } else if (is3Stage) {
-      if (this.evoStage === 1) targetBST = 300;
-      else if (this.evoStage === 2) targetBST = 500;
-      else targetBST = 800;
-    } else if (is2Stage) {
-      if (this.evoStage === 1) targetBST = 400;
-      else targetBST = 800;
-    } else if (isSingle) {
-      targetBST = this.hasChosenSingleBranch ? 800 : 400;
-    } else { // branch
-      if (this.evoStage === 1) targetBST = (chain.maxStage >= 3 ? 300 : 400);
-      else if (this.evoStage === 2) targetBST = (chain.maxStage >= 3 ? 500 : 800);
-      else targetBST = 800;
-    }
-
-    const rawBST = Math.max(150, mon.bst || 400);
-    const ratio = targetBST / rawBST;
-
-    // Hệ số thức tỉnh (Thức tỉnh 10p +25%, Apex 20p +25%)
-    let awakeMul = 1.0;
-    if (this.hasAwakened10m) awakeMul *= 1.25;
-    if (this.hasApex20m) awakeMul *= 1.25;
-
-    this.bstRatio = ratio;
-    this.targetBST = targetBST;
-    this.baseAtk = (mon.atk || 1) * ratio * awakeMul;
-    this.pa = (mon.pa || mon.atk || 1) * ratio * awakeMul;
-    this.sa = (mon.sa || mon.atk || 1) * ratio * awakeMul;
-    this.df = (mon.df || 50) * ratio * awakeMul;
-    this.sd = (mon.sd || 50) * ratio * awakeMul;
-
-    // Tốc độ di chuyển theo tỉ lệ ổn định
-    const spdRatio = 1 + (ratio - 1) * 0.25;
-    this.baseSpd = Math.round((mon.spd || 100) * spdRatio * (awakeMul > 1 ? Math.sqrt(awakeMul) : 1));
-
-    // Máu tối đa theo targetBST
-    const oldMaxHp = this.maxHp || mon.hp;
-    const oldHp = this.hp != null ? this.hp : oldMaxHp;
-    const hpFrac = oldMaxHp > 0 ? (oldHp / oldMaxHp) : 1;
-    this.maxHp = Math.round((mon.hp || 100) * ratio * awakeMul) + (this.perksHp || 0) + (this.bonusMaxHp || 0);
-    this.hp = Math.max(1, Math.round(this.maxHp * hpFrac));
-  }
-
   // ---------------- stats efectivos ----------------
   get atk() {
     const wp = (this.hasItem && this.hasItem('weaknesspolicy') && performance.now() - (this.weaknessPolicyT || 0) < 8000) ? 1.35 : 1;
-    const flat = this.flatAtk || 0;
-    return (this.baseAtk + flat) * this.atkMul * wp * (1 + this.buffs.atk.n * this.buffs.atk.amount);
+    const baseWithFlat = (this.baseAtk || 1) + (this.flatAtk || 0) * 0.01;
+    return baseWithFlat * this.atkMul * wp * (1 + this.buffs.atk.n * this.buffs.atk.amount);
   }
   /**
    * Ataque con un movimiento: el físico o el especial de tu Pokémon (ver
@@ -273,7 +247,7 @@ G.Player = class Player {
     const cat = m && m.cat, b = cat === 'physical' ? this.buffs.patk : cat === 'special' ? this.buffs.satk : null;
     const monoK = (this.puristActive || this.hasTrialBonus('purist')) ? 1.35 : Player.MONO_K;
     let mult = (b ? 1 + b.n * b.amount : 1) * (m && this.monoType(m.type) ? monoK : 1);
-    if (cat === 'physical' && (this.berserkerActive || this.hasTrialBonus('berserker') || this.berserkerCrest)) {
+    if (cat === 'physical' && (this.berserkerActive || this.hasTrialBonus('berserker'))) {
       mult *= 1.15;
     }
     return this.atk * G.Stats.fit(this.mon, cat) * mult;
@@ -284,40 +258,17 @@ G.Player = class Player {
   get spd() {
     // (Habilidades: "steady" no se frena; speed() multiplica, ver data/ability-fx.js.)
     const ab = this.abil || {}, stuck = this.slowT > 0 && !ab.steady;
-    const flat = this.flatSpd || 0;
-    const s = (this.baseSpd + flat) * this.spdMul * (1 + this.buffs.spd.n * this.buffs.spd.amount) * (stuck ? 0.5 : 1) * (ab.speed ? ab.speed(this) : 1);
+    const s = (this.baseSpd + (this.flatSpd || 0)) * this.spdMul * (1 + this.buffs.spd.n * this.buffs.spd.amount) * (stuck ? 0.5 : 1) * (ab.speed ? ab.speed(this) : 1);
     const w = G.Weather.speedFor(this.mon.types);
     const slow = this.inLiquid && !ab.steady ? G.World.liquidEffect(this.mon.types).slow || 1 : 1;
     return G.Judgment && G.Judgment.active ? G.Judgment.capSpd(s * slow * w) : s * slow * w;
   }
-  get pdef() { return ((this.df || (this.mon && this.mon.df) || 50) + (this.flatPDef || 0)) * (this.pdefMul || 1); }
-  get sdef() { return ((this.sd || (this.mon && this.mon.sd) || 50) + (this.flatSDef || 0)) * (this.sdefMul || 1); }
   get reduction() { return Math.min(0.8, this.dmgReduce + this.itemReduce + this.buffs.def.n * this.buffs.def.amount); }
-  get pReduction() { return Math.min(0.85, this.reduction + (this.pdefReduce || 0) + ((this.flatPDef || 0) * 0.005)); }
-  get sReduction() { return Math.min(0.85, this.reduction + (this.sdefReduce || 0) + ((this.flatSDef || 0) * 0.005)); }
+  get pReduction() { return Math.min(0.85, this.reduction + (this.pdefReduce || 0)); }
+  get sReduction() { return Math.min(0.85, this.reduction + (this.sdefReduce || 0)); }
   get regen() { return this.regenFlat + this.buffs.regen.n * this.buffs.regen.amount; }
 
   // ---------------- movimientos ----------------
-  grantSignatureFormMove(moveId, inheritFromId = 'glaciate') {
-    if (this.hasMove(moveId)) return;
-    this.maxMoves = Math.max(this.maxMoves, this.slots.length + 1);
-
-    const oldMove = (this.moves || []).find(m => m && (m.id === inheritFromId || (m.def && m.def.id === inheritFromId)));
-    const targetTier = oldMove ? (oldMove.evoTier || (oldMove.evolved ? 1 : 0)) : 3;
-    const targetLvl = oldMove ? (oldMove.lvl || 8) : 8;
-
-    const inst = G.Moves.instance(moveId, targetLvl);
-    inst.since = (typeof G !== 'undefined' && G.Game && G.Game.st && G.Game.st.time) || 0;
-    if (targetTier >= 1 && typeof G !== 'undefined' && G.Moves && G.Moves.evolve) {
-      for (let t = 1; t <= targetTier; t++) {
-        G.Moves.evolve(inst, t);
-      }
-    }
-    this.moves.push(inst);
-    this.slots.push([inst]);
-    this.arrange();
-  }
-
   learnOrReplaceMove(id, replaceId) {
     if (this.hasMove(id)) return;
     if (this.slots.length < this.maxMoves) {
@@ -331,18 +282,8 @@ G.Player = class Player {
       const foundIdx = list.findIndex(m => m && (m.id === targetId || (m.def && m.def.id === targetId)));
       if (foundIdx >= 0) {
         const oldLvl = list[foundIdx].lvl || 1;
-        const oldTier = list[foundIdx].evoTier || (list[foundIdx].evolved ? 1 : 0);
         const newInst = G.Moves.instance(id, oldLvl);
-        if (oldTier >= 1 && typeof G !== 'undefined' && G.Moves && G.Moves.evolve) {
-          for (let t = 1; t <= oldTier; t++) {
-            G.Moves.evolve(newInst, t);
-          }
-        }
-        if (Array.isArray(g)) {
-          g[foundIdx] = newInst;
-        } else {
-          this.slots[i] = [newInst];
-        }
+        list[foundIdx] = newInst;
         const mIdx = this.moves.findIndex(m => m && (m.id === targetId || (m.def && m.def.id === targetId)));
         if (mIdx >= 0) this.moves[mIdx] = newInst;
         this.arrange();
@@ -495,45 +436,9 @@ G.Player = class Player {
         this.heal(this.maxHp * 0.03);
         return;
       }
-      if (ab.disguise && !this.disguiseBroken && (!this.disguiseAt || performance.now() - this.disguiseAt > 45000)) {
-        this.disguiseBroken = true;
-        this.disguiseAt = performance.now();
-        this.invuln = 1.0;
-        G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Disfraz!', '#a855f7', true);
-        G.FX.ring(this.x, this.y, 10, 140, '#a855f7', 0.6, 5);
-        if (G.Audio) G.Audio.sfx('break');
-        if (G.EnemyMgr && G.EnemyMgr.queryCircle) for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) e.applySlow(0.6, 3.0);
-        return;
-      }
-      if (ab.iceFace && !this.iceFaceBroken && (!this.iceFaceAt || performance.now() - this.iceFaceAt > 40000) && cls === 'p') {
-        this.iceFaceBroken = true;
-        this.iceFaceAt = performance.now();
-        this.invuln = 0.8;
-        G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Cara de Hielo!', '#38bdf8', true);
-        G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#7dd3fc', 30, 200);
-        if (G.Audio) G.Audio.sfx('break');
-        return;
-      }
-      if (ab.shadowShield && !this.shadowShieldBroken && (!this.shadowShieldAt || performance.now() - this.shadowShieldAt > 25000)) {
-        this.shadowShieldBroken = true;
-        this.shadowShieldAt = performance.now();
-        this.invuln = 1.0;
-        G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Escudo Lunar!', '#c084fc', true);
-        G.FX.ring(this.x, this.y, 12, 160, '#c084fc', 0.6, 5);
-        if (G.Audio) G.Audio.sfx('legend');
-        if (G.EnemyMgr && G.EnemyMgr.queryCircle) for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) e.applySlow(0.5, 3.0);
-        return;
-      }
       if (ab.dodge && Math.random() < ab.dodge(this, type, cls)) {
         this.invuln = 0.3;
         G.FX.dmgText(this.x, this.y - this.bodyH - 4, '¡Esquiva!', '#bfe8ff');
-        if (ab.telepathyTemporal && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-          G.FX.ring(this.x, this.y, 8, 200, '#a855f7', 0.45, 3);
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
-            if (!e.dead) e.applySlow(0.40, 2.5);
-          }
-          this.critChance = Math.min(1.0, (this.critChance || 0) + 0.20);
-        }
         return;
       }
       if (ab.inMul) amount *= ab.inMul(this, type, cls);
@@ -591,77 +496,14 @@ G.Player = class Player {
         G.Hazards.list = G.Hazards.list.filter(h => Math.hypot(h.x - this.x, h.y - this.y) > 300);
       }
     }
-    // Robustez / Titán Inamovible (habilidad): lo mismo, una vez cada 45 s.
-    if (this.hp <= 0 && ab && ab.sturdy && performance.now() - this.sturdyAt > 45000) {
+    // Robustez (habilidad): lo mismo, una vez cada 90 s.
+    if (this.hp <= 0 && ab && ab.sturdy && performance.now() - this.sturdyAt > 90000) {
       this.sturdyAt = performance.now();
       this.hp = 1; this.invuln = 1.2;
-      G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Titán Inamovible!', '#c9b48a', true);
-      G.FX.ring(this.x, this.y, 8, 90, '#c9b48a', 0.5, 4);
-    }
-    // Renacer del Fénix (Ho-Oh / regenerator): renace al 50 % de vida con explosión sagrada
-    if (this.hp <= 0 && ab && ab.phoenixRevive && !this.phoenixUsed) {
-      this.phoenixUsed = true;
-      this.hp = Math.round(this.maxHp * 0.5);
-      this.invuln = 2.0;
-      G.FX.dmgText(this.x, this.y - this.bodyH - 20, '✦ ¡Renacer del Fénix!', '#ef4444', true);
-      G.FX.ring(this.x, this.y, 20, 240, '#f97316', 0.8, 6);
-      if (G.Audio) G.Audio.sfx('legend');
-      if (G.Camera) G.Camera.kick(1.0);
-      if (G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 240)) {
-          e.hurt(60 + this.level * 10, '#ef4444', e.x - this.x, e.y - this.y, 220);
-          e.applyBurn(4);
-        }
-      }
+      G.FX.dmgText(this.x, this.y - this.bodyH - 16, '¡Robustez!', '#c9b48a', true);
+      G.FX.ring(this.x, this.y, 6, 70, '#c9b48a', 0.5, 4);
     }
     if (ab && ab.hurt && this.hp > 0) ab.hurt(this, type, cls);
-    if (ab && ab.innardsOut && d > 0 && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-      for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 140)) e.hurt(Math.round(d * 0.5), '#ec4899', e.x - this.x, e.y - this.y, 140);
-    }
-    if (ab && ab.electromorphosis) {
-      this.electroCharged = true;
-      G.FX.ring(this.x, this.y, 6, 70, '#facc15', 0.4, 2);
-    }
-    if (ab && ab.cottonDown && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-      G.FX.burst(this.x, this.y, '#f8fafc', 20, 160);
-      for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) e.applySlow(0.4, 3.0);
-    }
-    if (ab && ab.toxicDebris && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-      G.FX.burst(this.x, this.y, '#a855f7', 15, 140);
-      for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 140)) e.applyPoison(2.5);
-    }
-    if (ab && ab.seedSower) {
-      this.seedSowerT = 10.0;
-      G.FX.ring(this.x, this.y, 8, 140, '#22c55e', 0.45, 3);
-      G.FX.dmgText(this.x, this.y - 18, '✦ Vùng Cỏ!', '#22c55e', true);
-    }
-    if (ab && ab.sandSpit && G.Weather && (!G.Weather.current || G.Weather.current.kind !== 'sand')) {
-      G.Weather.debugStart('sand', 15);
-      G.FX.ring(this.x, this.y, 10, 180, '#d97706', 0.5, 3);
-      G.FX.dmgText(this.x, this.y - 18, '✦ Bão Cát!', '#d97706', true);
-    }
-    if (ab && ab.thermalExchange && type === 'fire') {
-      this.addBuff('atk', 0.30, 8, 1);
-      G.FX.dmgText(this.x, this.y - 20, '✦ Nhiệt Lực!', '#ea580c', true);
-    }
-    if (ab && ab.waterCompaction && type === 'water') {
-      this.addBuff('def', 0.15, 6, 1);
-      this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.04);
-      G.FX.dmgText(this.x, this.y - 20, '+4% HP', '#38bdf8', true);
-    }
-    if (ab && ab.emergencyExit && this.hp > 0 && this.hp < this.maxHp * 0.35 && (!this._lastEmergAt || performance.now() - this._lastEmergAt > 35000)) {
-      this._lastEmergAt = performance.now();
-      this.invuln = 1.5;
-      this.addBuff('spd', 0.40, 3, 1);
-      G.FX.dmgText(this.x, this.y - this.bodyH - 18, '✦ Rút lui Chiến thuật!', '#06b6d4', true);
-      G.FX.ring(this.x, this.y, 10, 160, '#06b6d4', 0.5, 4);
-      if (G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) {
-          e.applySlow(0.60, 2.5);
-          e.hurt(25 + this.level * 5, '#06b6d4', e.x - this.x, e.y - this.y, 200);
-        }
-      }
-    }
 // Zygarde tiến hóa chuẩn theo cấp độ (10% Nv.1 -> 50% Nv.25 -> 100% Nv.50 -> Mega), không tự nhảy dạng khi tuột máu
     
     // Đột phá Lá Chắn Bất Khuất: Khi máu tụt dưới 30%, nhận Khiên Năng Lượng 25% Max HP (hồi 60s)
@@ -698,7 +540,9 @@ G.Player = class Player {
 
   /** Devuelve cuántos niveles ha subido (pueden ser varios de golpe). */
   gainXp(amount) {
-    const add = amount * this.xpMul;
+    const runTime = (typeof G !== 'undefined' && G.Game && G.Game.time) || 0;
+    const timeScale = runTime >= 600 ? 0.70 : 1.0;
+    const add = amount * this.xpMul * timeScale;
     if (!Number.isFinite(add) || add <= 0) return 0;     // una experiencia infinita no acababa nunca de subir niveles
     this.xp += add;
     let leveled = 0;
@@ -738,9 +582,38 @@ G.Player = class Player {
     this.baseAtk = nextMon.atk;
     this.maxHp = nextMon.hp + (this.perksHp || 0) + (this.bonusMaxHp || 0);
 
+    // Cân bằng giai đoạn tiến hóa (user rule):
+    // - Dạng 2: ngang bằng Pokémon không có dạng tiến hóa (single-stage ~500 BST baseline: +28% atk, +25% maxHp, +10% spd)
+    // - Dạng 3: nhỉnh hơn tầm 30% (+45% atk, +45% maxHp, +20% spd)
+    const stageNow = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
+    const is3StageOrMore = this.evoChain && (this.evoChain.type === '3stage' || this.evoChain.maxStage >= 3);
+    const is2Stage = this.evoChain && (this.evoChain.type === '2stage' || this.evoChain.maxStage === 2);
+    if (is3StageOrMore) {
+      if (stageNow === 2) {
+        this.baseAtk *= 1.28;
+        this.maxHp = Math.round(this.maxHp * 1.25);
+        this.baseSpd = Math.round(this.baseSpd * 1.10);
+      } else if (stageNow >= 3) {
+        this.baseAtk *= 1.45;
+        this.maxHp = Math.round(this.maxHp * 1.45);
+        this.baseSpd = Math.round(this.baseSpd * 1.20);
+      }
+    } else if (is2Stage) {
+      if (stageNow >= 2) {
+        this.baseAtk *= 1.35;
+        this.maxHp = Math.round(this.maxHp * 1.35);
+        this.baseSpd = Math.round(this.baseSpd * 1.12);
+      }
+    }
+
+    if (isApex) {
+      this.isApex = true;
+      this.maxHp = Math.round(this.maxHp * 1.15);
+      this.baseAtk *= 1.15;
+      this.baseSpd *= 1.1;
+    }
+
     this.evoStage = (typeof G !== 'undefined' && G.getStage) ? G.getStage(newDex) : (this.evoStage + 1);
-    if (isApex) this.isApex = true;
-    this.applyBstNormalization();
     if (s && s.owned && !s.owned[newDex]) {
       s.owned[newDex] = { at: Date.now(), from: 'run_evo' };
       if (this.shiny && s.shiny && !s.shiny[newDex]) s.shiny[newDex] = { at: Date.now(), from: 'inherited' };
@@ -895,55 +768,56 @@ G.Player = class Player {
         return {
           dex: m.spriteDex || m.baseDex || targetDex,
           title: m.name,
-          tag: 'TIẾN HÓA MEGA',
+          tag: 'MEGA EVOLUCIÓN',
           color: '#f43f5e',
-          desc: `Thức tỉnh hình thái tối thượng (${typesStr}). Chuẩn hóa BST 800, nội tại ${m.ability || 'Sức Mạnh Khai Mở'} và gia tăng toàn diện năng lực.`,
+          desc: `Despierta la forma definitiva (${typesStr}). BST ${m.bst}, habilidad ${m.ability || 'Poder Desatado'} y aumento descomunal de poder.`,
           apply: () => this.megaEvolve(m.id)
         };
       });
     };
 
-    // BẢNG TIẾN HÓA ĐẶC BIỆT QUA CHIÊU ĐỘC QUYỀN +++ (Yêu cầu Lv. 50 + Chiêu Rank +++)
+    // BẢNG TIẾN HÓA ĐẶC BIỆT QUA CHIÊU ĐỘC QUYỀN + (Rạng 1 +, không cần đánh quái)
     const EXCLUSIVE_PLUS_EVO = {
-      384: { move: 'dragon-ascent', targetDex: 10079, name: 'Mega Rayquaza', title: 'TIẾN HÓA MEGA', desc: 'Dragon Ascent đạt Rạng +++ (Lv.50): Rayquaza thức tỉnh thành Chúa Tể Bầu Trời Mega Rayquaza (BST 800)!' },
-      382: { move: 'origin-pulse', targetDex: 10077, name: 'Primal Kyogre', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Origin Pulse đạt Rạng +++ (Lv.50): Kyogre thức tỉnh sức mạnh Đại Dương Nguyên Thủy (BST 800)!' },
-      383: { move: 'precipice-blades', targetDex: 10078, name: 'Primal Groudon', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Precipice Blades đạt Rạng +++ (Lv.50): Groudon thức tỉnh sức mạnh Lục Địa Nguyên Thủy (BST 800)!' },
-      483: { move: 'roar-of-time', targetDex: 10008, name: 'Origin Dialga', title: 'DẠNG NGUYÊN BẢN', desc: 'Roar of Time đạt Rạng +++ (Lv.50): Dialga trở về hình thái Chúa Tể Thời Gian nguyên bản (BST 800)!' },
-      484: { move: 'spacial-rend', targetDex: 10009, name: 'Origin Palkia', title: 'DẠNG NGUYÊN BẢN', desc: 'Spacial Rend đạt Rạng +++ (Lv.50): Palkia trở về hình thái Chúa Tể Không Gian nguyên bản (BST 800)!' },
-      487: { move: 'shadow-force', targetDex: 10007, name: 'Origin Giratina', title: 'DẠNG NGUYÊN BẢN', desc: 'Shadow Force đạt Rạng +++ (Lv.50): Giratina hiển lộ chân thân Thế Giới Hỗn Mang (BST 800)!' },
-      888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian (Crowned Sword)', title: 'GƯƠM BÁ VƯƠNG', desc: 'Behemoth Blade đạt Rạng +++ (Lv.50): Zacian ngậm Thánh Kiếm thức tỉnh hình hài Hoàng Gia (BST 800)!' },
-      889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta (Crowned Shield)', title: 'KHIÊN HỘ QUỐC', desc: 'Behemoth Bash đạt Rạng +++ (Lv.50): Zamazenta khoác Thánh Khiên thức tỉnh hình hài Hoàng Gia (BST 800)!' },
+      384: { move: 'dragon-ascent', targetDex: 10079, name: 'Mega Rayquaza', title: 'TIẾN HÓA MEGA', desc: 'Dragon Ascent thăng hoa lên Rạng +: Rayquaza thức tỉnh thành Chúa Tể Bầu Trời Mega Rayquaza!' },
+      382: { move: 'origin-pulse', targetDex: 10077, name: 'Primal Kyogre', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Origin Pulse thăng hoa lên Rạng +: Kyogre thức tỉnh sức mạnh Đại Dương Nguyên Thủy!' },
+      383: { move: 'precipice-blades', targetDex: 10078, name: 'Primal Groudon', title: 'TIẾN HÓA NGUYÊN THỦY', desc: 'Precipice Blades thăng hoa lên Rạng +: Groudon thức tỉnh sức mạnh Lục Địa Nguyên Thủy!' },
+      483: { move: 'roar-of-time', targetDex: 10008, name: 'Origin Dialga', title: 'DẠNG NGUYÊN BẢN', desc: 'Roar of Time thăng hoa lên Rạng +: Dialga trở về hình thái Chúa Tể Thời Gian nguyên bản!' },
+      484: { move: 'spacial-rend', targetDex: 10009, name: 'Origin Palkia', title: 'DẠNG NGUYÊN BẢN', desc: 'Spacial Rend thăng hoa lên Rạng +: Palkia trở về hình thái Chúa Tể Không Gian nguyên bản!' },
+      487: { move: 'shadow-force', targetDex: 10007, name: 'Origin Giratina', title: 'DẠNG NGUYÊN BẢN', desc: 'Shadow Force thăng hoa lên Rạng +: Giratina hiển lộ chân thân Chúa Tể Thế Giới Hỗn Mang!' },
+      888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian (Crowned Sword)', title: 'GƯƠM BÁ VƯƠNG', desc: 'Behemoth Blade thăng hoa lên Rạng +: Zacian ngậm Thánh Kiếm thức tỉnh hình hài Hoàng Gia!' },
+      889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta (Crowned Shield)', title: 'KHIÊN HỘ QUỐC', desc: 'Behemoth Bash thăng hoa lên Rạng +: Zamazenta khoác Thánh Khiên thức tỉnh hình hài Hoàng Gia!' },
       646: {
         move: 'glaciate',
         branches: [
-          { targetDex: 10022, name: 'Black Kyurem', title: 'HỢP THỂ DNA (Zekrom)', desc: 'Glaciate đạt Rạng +++ (Lv.50): Thức tỉnh Black Kyurem (BST 800) và nhận Freeze Shock!', grantMove: 'freeze-shock' },
-          { targetDex: 10023, name: 'White Kyurem', title: 'HỢP THỂ DNA (Reshiram)', desc: 'Glaciate đạt Rạng +++ (Lv.50): Thức tỉnh White Kyurem (BST 800) và nhận Ice Burn!', grantMove: 'ice-burn' }
+          { targetDex: 10022, name: 'Black Kyurem', title: 'HỢP THỂ DNA (Zekrom)', desc: 'Glaciate thăng hoa lên Rạng +: Thức tỉnh Black Kyurem và nhận chiêu độc quyền Freeze Shock!', grantMove: 'freeze-shock' },
+          { targetDex: 10023, name: 'White Kyurem', title: 'HỢP THỂ DNA (Reshiram)', desc: 'Glaciate thăng hoa lên Rạng +: Thức tỉnh White Kyurem và nhận chiêu độc quyền Ice Burn!', grantMove: 'ice-burn' }
         ]
       },
-      800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', title: 'ÁNH SÁNG TỐI THƯỢNG', desc: 'Quang phổ đạt Rạng +++ (Lv.50): Necrozma phục hồi toàn vẹn ánh sáng thần thánh (BST 800)!' },
-      801: { move: 'fleur-cannon', targetDex: 10801, name: 'Mega Magearna', title: 'TIẾN HÓA MEGA', desc: 'Fleur Cannon đạt Rạng +++ (Lv.50): Trái Tim Linh Hồn khai mở sức mạnh tối thượng (BST 800)!' },
-      807: { move: 'plasma-fists', targetDex: 10807, name: 'Overdrive Zeraora', title: 'QUÁ TẢI LÔI ĐIỆN', desc: 'Plasma Fists đạt Rạng +++ (Lv.50): Điện tích vượt ngưỡng kích hoạt dạng Overdrive (BST 800)!' }
+      800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', title: 'ÁNH SÁNG TỐI THƯỢNG', desc: 'Quang phổ thăng hoa lên Rạng +: Necrozma phục hồi toàn vẹn ánh sáng thần thánh!' },
+      801: { move: 'fleur-cannon', targetDex: 10801, name: 'Mega Magearna', title: 'TIẾN HÓA MEGA', desc: 'Fleur Cannon thăng hoa lên Rạng +: Trái Tim Linh Hồn khai mở sức mạnh cơ khí tối thượng!' },
+      807: { move: 'plasma-fists', targetDex: 10807, name: 'Overdrive Zeraora', title: 'QUÁ TẢI LÔI ĐIỆN', desc: 'Plasma Fists thăng hoa lên Rạng +: Điện tích vượt ngưỡng kích hoạt dạng Overdrive!' }
     };
 
     const legCfg = EXCLUSIVE_PLUS_EVO[this.baseDex];
     if (legCfg && !this.isMega && this.dex < 10000) {
-      let hasTriplePlusMove = false;
+      // Chiêu độc quyền yêu cầu đạt Cấp TỐI THƯỢNG +++ và Level >= 50
+      let hasPlus3Move = false;
       if (this.level >= 50 && this.slots) {
         for (const g of this.slots) {
           const list = Array.isArray(g) ? g : [g];
           for (const m of list) {
             if (m && (m.id === legCfg.move || (m.def && m.def.id === legCfg.move))) {
               if (m.evoTier >= 3 || (m.name && m.name.includes('+++'))) {
-                hasTriplePlusMove = true;
+                hasPlus3Move = true;
                 break;
               }
             }
           }
-          if (hasTriplePlusMove) break;
+          if (hasPlus3Move) break;
         }
       }
 
-      if (hasTriplePlusMove) {
+      if (hasPlus3Move) {
         const opts = legCfg.branches || [legCfg];
         const cards = opts.map(b => ({
           dex: b.targetDex,
@@ -953,7 +827,7 @@ G.Player = class Player {
           desc: b.desc,
           apply: () => {
             this.megaEvolve(b.targetDex);
-            if (b.grantMove) this.grantSignatureFormMove(b.grantMove, legCfg.move);
+            if (b.grantMove) this.learnOrReplaceMove(b.grantMove, legCfg.move);
             if (G.UI && G.UI.toast) G.UI.toast(b.name + ' đã thức tỉnh thành công!', 4500);
           }
         }));
@@ -962,10 +836,43 @@ G.Player = class Player {
       }
     }
 
-    // Dòng tiến hóa Zygarde:
-    // Dạng 10% (Lvl 1 - 19) -> Dạng 50% (Lvl 20 - 49) -> Dạng 100% (Lvl 50+, tặng Core Enforcer) -> Dạng Mega (Nhiệm vụ 5000 quái)
+
+    // Dòng tiến hóa Zygarde chuẩn Master Plan:
+    // Lv1: Dạng 10% -> Lv15: Thức tỉnh I -> Lv25: Dạng 50% -> Lv30: Apex -> Lv50: Dạng 100% và mở khóa Mega
     if (this.baseDex === 718) {
-      if (this.level >= 20 && this.dex === 10118) {
+      // Mốc Lv 15: Thức tỉnh I
+      if (this.level >= 60 && this.awakeningTier === 0 && this.dex === 10118) {
+        this.awakeningTier = 1;
+        this.promptEvo([
+          {
+            dex: this.dex,
+            title: 'Zygarde 10% · Berserker Crest',
+            tag: 'CUỒNG CHIẾN',
+            color: '#ef4444',
+            desc: '+25% Máu, +15% Công, +15% Chí mạng và kiếm khí rực lửa.',
+            apply: () => this.activateAwakening(1, 'berserker')
+          },
+          {
+            dex: this.dex,
+            title: 'Zygarde 10% · Bastion Crest',
+            tag: 'PHÁO ĐÀI',
+            color: '#3b82f6',
+            desc: '+25% Máu, +20% Giáp PDEF/SDEF và khiên hộ thể đẩy lùi.',
+            apply: () => this.activateAwakening(1, 'bastion')
+          },
+          {
+            dex: this.dex,
+            title: 'Zygarde 10% · Tempest Crest',
+            tag: 'THẦN TỐC',
+            color: '#10b981',
+            desc: '+25% Máu, +20% Tốc chạy, -15% Hồi chiêu và tàn ảnh ánh sáng.',
+            apply: () => this.activateAwakening(1, 'tempest')
+          }
+        ]);
+        return;
+      }
+      // Mốc Lv 25: Tiến hóa Dạng 50% (Serpent Forme)
+      if (this.level >= 25 && this.dex === 10118) {
         this.promptEvo([{
           dex: 718,
           title: 'Zygarde (Dạng 50%)',
@@ -976,13 +883,27 @@ G.Player = class Player {
         }]);
         return;
       }
+      // Mốc Lv 30: Thức tỉnh Apex (+)
+      if (this.level >= 60 && this.dex === 718 && this.awakeningTier < 2 && !this.isApex) {
+        this.awakeningTier = 2;
+        this.promptEvo([{
+          dex: this.dex,
+          title: 'Zygarde 50% · Apex (+)',
+          tag: 'APEX (+)',
+          color: '#ffd23f',
+          desc: 'Thức tỉnh Apex tối thượng: vương miện hoàng kim, +35% sát thương và hào quang thần thánh.',
+          apply: () => this.activateAwakening(2)
+        }]);
+        return;
+      }
+      // Mốc Lv 50: Tiến hóa Dạng 100% (Complete Forme) + Chiêu độc quyền Core Enforcer + Mở khóa Mega
       if (this.level >= 50 && this.dex === 718 && !this.isMega) {
         this.promptEvo([{
           dex: 10120,
           title: 'Zygarde Hoàn Thiện (100%)',
           tag: 'TIẾN HÓA DẠNG 100%',
           color: '#10b981',
-          desc: 'Tập hợp 100% tế bào: Thức tỉnh hình hài Cự Thần Titan (Complete Forme, BST 800). TẶNG KÈM CHIÊU ĐỘC QUYỀN CORE ENFORCER VÀ MỞ KHÓA MEGA!',
+          desc: 'Tập hợp 100% tế bào: Thức tỉnh hình hài Cự Thần Titan (Complete Forme). TẶNG KÈM CHIÊU ĐỘC QUYỀN CORE ENFORCER VÀ MỞ KHÓA MEGA!',
           apply: () => {
             this.evolveTo(10120);
             this.maxMoves = Math.max(this.maxMoves, this.slots.length + 1);
@@ -996,18 +917,59 @@ G.Player = class Player {
       return;
     }
 
-    // Loài 1 dạng (Single-stage: Legendaries / Singulares / Pokémon không tiến hóa)
+    // Especie de fase única (Legendarios / Singulares / Sin evolución)
     if (chain.type === 'single') {
-      if (this.level >= 50 && !this.isMega && this.hasMegaForm()) {
-        const opts = buildMegaOptions();
-        if (opts) this.promptEvo(opts);
+      if (this.level >= 60 && this.awakeningTier === 0) {
+        this.awakeningTier = 1;
+        this.promptEvo([
+          {
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Berserker Crest',
+            tag: 'CUỒNG CHIẾN',
+            color: '#ef4444',
+            desc: '+25% Máu, +15% Công, +15% Chí mạng và kiếm khí rực lửa.',
+            apply: () => this.activateAwakening(1, 'berserker')
+          },
+          {
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Bastion Crest',
+            tag: 'PHÁO ĐÀI',
+            color: '#3b82f6',
+            desc: '+25% Máu, +20% Giáp PDEF/SDEF và khiên hộ thể đẩy lùi.',
+            apply: () => this.activateAwakening(1, 'bastion')
+          },
+          {
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Tempest Crest',
+            tag: 'THẦN TỐC',
+            color: '#10b981',
+            desc: '+25% Máu, +20% Tốc chạy, -15% Hồi chiêu và tàn ảnh ánh sáng.',
+            apply: () => this.activateAwakening(1, 'tempest')
+          }
+        ]);
+      }
+      if (this.level >= 60) {
+        if (!this.isMega && this.hasMegaForm()) {
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
+        } else if (!this.isMega && !this.pendingMegaBranches && this.awakeningTier < 2) {
+          this.awakeningTier = 2;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Poder Apex definitivo: corona dorada, +35% de daño total y regeneración aumentada.',
+            apply: () => this.activateAwakening(2)
+          }]);
+        }
       }
       return;
     }
 
-    // Loài 2 dạng: Dạng 2 đạt ở Lv 35 (15p - 20p), Mega ở Lv 50 (20p - 25p)
+    // Especie de 2 fases
     if (chain.type === '2stage') {
-      if (this.level >= 35 && this.evoStage === 1) {
+      if (this.level >= 60 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
@@ -1015,28 +977,43 @@ G.Player = class Player {
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
-            tag: 'GIAI ĐOẠN 2',
+            tag: 'FASE 2',
             color: '#38bdf8',
-            desc: `Tiến hóa lên ${mon.name} (${typesStr}). Hồi 50% HP và chuẩn hóa BST 800.`,
+            desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de PS y amplifica estadísticas base.`,
             apply: () => {
               this.evolveTo(nextDex);
-              if (this.level >= 50) {
+              if (this.level >= 60) {
                 const megas = buildMegaOptions(nextDex);
                 if (megas) this.promptEvo(megas);
               }
             }
           }]);
+        } else if (this.awakeningTier === 0) {
+          this.awakeningTier = 1;
+          this.activateAwakening(1);
         }
-      } else if (this.level >= 50 && this.evoStage >= 2 && !this.isMega && this.hasMegaForm()) {
-        const opts = buildMegaOptions();
-        if (opts) this.promptEvo(opts);
+      } else if (this.level >= 60 && this.evoStage >= 2) {
+        if (!this.isMega && this.hasMegaForm()) {
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
+        } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
+          this.isApex = true;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Estado Apex (+) desatado: corona celestial, +30% daño y recuperación total.',
+            apply: () => this.activateApex()
+          }]);
+        }
       }
       return;
     }
 
-    // Loài 3 dạng: Dạng 2 ở Lv 18 (trước 10p, BST 500), Dạng 3 ở Lv 36 (trước 20p, BST 800), Mega ở Lv 50 (trước 25p)
+    // Especie de 3 fases
     if (chain.type === '3stage') {
-      if (this.level >= 18 && this.evoStage === 1) {
+      if (this.level >= 60 && this.evoStage === 1) {
         const nextDex = chain.stages[1] && chain.stages[1][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
@@ -1044,13 +1021,16 @@ G.Player = class Player {
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
-            tag: 'GIAI ĐOẠN 2',
+            tag: 'FASE 2',
             color: '#38bdf8',
-            desc: `Tiến hóa lên ${mon.name} (${typesStr}). Hồi 50% HP và nâng cấp BST 500.`,
+            desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de PS y aumenta estadísticas.`,
             apply: () => this.evolveTo(nextDex)
           }]);
+        } else if (this.awakeningTier === 0) {
+          this.awakeningTier = 1;
+          this.activateAwakening(1);
         }
-      } else if (this.level >= 36 && this.evoStage === 2) {
+      } else if (this.level >= 60 && this.evoStage === 2) {
         const nextDex = chain.stages[2] && chain.stages[2][0];
         if (nextDex && G.DEX_BY && G.DEX_BY[nextDex]) {
           const mon = G.DEX_BY[nextDex];
@@ -1058,32 +1038,42 @@ G.Player = class Player {
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
-            tag: 'GIAI ĐOẠN 3',
+            tag: 'FASE 3',
             color: '#38bdf8',
-            desc: `Tiến hóa tối hậu lên ${mon.name} (${typesStr}). Hồi 50% HP và chuẩn hóa BST 800.`,
+            desc: `Evolución final a ${mon.name} (${typesStr}). Recupera 50% de PS y desata estadísticas definitivas.`,
             apply: () => {
               this.evolveTo(nextDex);
-              if (this.level >= 50) {
-                const megas = buildMegaOptions(nextDex);
-                if (megas) this.promptEvo(megas);
+              const megas = buildMegaOptions(nextDex);
+              if (megas) {
+                this.promptEvo(megas);
               }
             }
           }]);
         }
-      } else if (this.level >= 50 && this.evoStage >= 3 && !this.isMega && this.hasMegaForm()) {
-        const opts = buildMegaOptions();
-        if (opts) this.promptEvo(opts);
+      } else if (this.level >= 60 && this.evoStage >= 3) {
+        if (!this.isMega && this.hasMegaForm()) {
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
+        } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
+          this.isApex = true;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Estado Apex (+) desatado: corona celestial, +30% daño y recuperación total.',
+            apply: () => this.activateApex()
+          }]);
+        }
       }
       return;
     }
 
-    // Loài có phân nhánh (Eevee, Slowpoke, Tyrogue, Ralts...)
+    // Especie con ramificación (Eevee, Slowpoke, Tyrogue, Ralts...)
     if (chain.type === 'branch') {
       const info = (typeof G !== 'undefined' && G.getEvoInfo) ? G.getEvoInfo(this.dex) : null;
       const nextList = (info ? info.next : []).filter(d => G.DEX_BY && G.DEX_BY[d]);
-      const is3st = chain.maxStage >= 3;
-      const reqLvl1 = is3st ? 18 : 35;
-      if (this.evoStage === 1 && this.level >= reqLvl1) {
+      if (this.evoStage === 1 && this.level >= 60) {
         if (nextList.length === 1) {
           const nextDex = nextList[0];
           const mon = G.DEX_BY[nextDex];
@@ -1091,9 +1081,9 @@ G.Player = class Player {
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
-            tag: is3st ? 'GIAI ĐOẠN 2' : 'GIAI ĐOẠN 2 (BST 800)',
+            tag: 'EVOLUCIÓN',
             color: '#38bdf8',
-            desc: `Tiến hóa lên ${mon.name}. Hồi 50% HP và nâng cấp chỉ số.`,
+            desc: `Evoluciona a ${mon.name}. Recupera 50% de vida y mejora estadísticas.`,
             apply: () => this.evolveTo(nextDex)
           }]);
         } else if (nextList.length > 1) {
@@ -1104,15 +1094,15 @@ G.Player = class Player {
             return {
               dex: d,
               title: mon.name,
-              tag: 'NHÁNH TIẾN HÓA',
+              tag: 'EVOLUCIÓN',
               color: '#ffd23f',
-              desc: `Tiến hóa lên ${mon.name} (${typesStr}). Hồi 50% HP và thích nghi hệ mới.`,
+              desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de vida y adopta nuevo tipo.`,
               apply: () => this.evolveTo(d)
             };
           });
           this.promptEvo(branchOpts);
         }
-      } else if (this.evoStage === 2 && is3st && this.level >= 36) {
+      } else if (this.evoStage === 2 && chain.maxStage === 3 && this.level >= 60) {
         if (nextList.length === 1) {
           const nextDex = nextList[0];
           const mon = G.DEX_BY[nextDex];
@@ -1120,9 +1110,9 @@ G.Player = class Player {
           this.promptEvo([{
             dex: nextDex,
             title: mon.name,
-            tag: 'GIAI ĐOẠN 3 (BST 800)',
+            tag: 'FASE 3',
             color: '#38bdf8',
-            desc: `Tiến hóa tối hậu lên ${mon.name}. Hồi 50% HP và chuẩn hóa BST 800.`,
+            desc: `Evolución final a ${mon.name}. Recupera 50% de vida y estadísticas máximas.`,
             apply: () => this.evolveTo(nextDex)
           }]);
         } else if (nextList.length > 1) {
@@ -1133,18 +1123,30 @@ G.Player = class Player {
             return {
               dex: d,
               title: mon.name,
-              tag: 'GIAI ĐOẠN 3 (BST 800)',
+              tag: 'FASE 3',
               color: '#ffd23f',
-              desc: `Tiến hóa tối hậu lên ${mon.name} (${typesStr}). Hồi 50% HP và chuẩn hóa BST 800.`,
+              desc: `Evoluciona a ${mon.name} (${typesStr}). Recupera 50% de vida.`,
               apply: () => this.evolveTo(d)
             };
           });
           this.promptEvo(branchOpts);
         }
       }
-      if (this.level >= 50 && this.evoStage >= chain.maxStage && !this.isMega && this.hasMegaForm()) {
-        const opts = buildMegaOptions();
-        if (opts) this.promptEvo(opts);
+      if (this.level >= 60 && this.evoStage >= chain.maxStage) {
+        if (!this.isMega && this.hasMegaForm()) {
+          const opts = buildMegaOptions();
+          if (opts) this.promptEvo(opts);
+        } else if (!this.isMega && !this.pendingMegaBranches && !this.isApex) {
+          this.isApex = true;
+          this.promptEvo([{
+            dex: this.dex,
+            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Apex (+)',
+            tag: 'APEX (+)',
+            color: '#ffd23f',
+            desc: 'Estado Apex (+) desatado: corona celestial, +30% daño y recuperación total.',
+            apply: () => this.activateApex()
+          }]);
+        }
       }
     }
   }
@@ -1161,7 +1163,7 @@ G.Player = class Player {
       return (this.level >= 50 && this.dex === 10120) || (this.hasItem && this.hasItem('keystone'));
     }
     const megas = (typeof G !== 'undefined' && G.getMegasFor) ? G.getMegasFor(this.dex) : [];
-    return megas && megas.length > 0 && (this.level >= 30 || (this.hasItem && this.hasItem('keystone')));
+    return megas && megas.length > 0 && (this.level >= 60 || (this.hasItem && this.hasItem('keystone')));
   }
 
   triggerFormIfAvailable() {
@@ -1267,16 +1269,11 @@ G.Player = class Player {
       : this.dex;
     this.dex = targetDex;
 
-    // Chuẩn hóa BST = 800 cho dạng Mega / Đặc biệt
-    this.applyBstNormalization();
-
-    // Xử lý chiêu độc quyền đặc biệt khi tiến hóa Kyurem (Black: Freeze Shock, White: Ice Burn):
-    if (megaId === 10022 || targetDex === 10022) {
-      this.grantSignatureFormMove('freeze-shock', 'glaciate');
-    } else if (megaId === 10023 || targetDex === 10023) {
-      this.grantSignatureFormMove('ice-burn', 'glaciate');
-    }
-
+    // Dạng đặc biệt (Mega / Primal / Ultra / Hợp thể): khác biệt rõ rệt so với trước khi tiến hóa (+50% atk, +45% maxHp, +25% spd, +15% crit, -20% dmg taken, -15% cooldown)
+    this.baseAtk *= 1.50;
+    this.maxHp = Math.round(this.maxHp * 1.45);
+    this.baseSpd = Math.round(this.baseSpd * 1.25);
+    this.hp = this.maxHp;
     this.critChance = (this.critChance || 0) + 0.15;
     this.dmgReduce = Math.min(0.60, (this.dmgReduce || 0) + 0.20);
     this.cdMul = (this.cdMul || 1) * 0.85;
@@ -1307,11 +1304,11 @@ G.Player = class Player {
         G.FX.ring(this.x, this.y, 14, 110, '#f43f5e', 0.7, 5);
         G.FX.ring(this.x, this.y, 18, 80, '#38bdf8', 0.6, 4);
         G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ffd23f', 30, 260);
-        G.FX.dmgText(this.x, this.y - this.bodyH - 28, 'TIẾN HÓA MEGA!', '#f43f5e', true);
+        G.FX.dmgText(this.x, this.y - this.bodyH - 28, '¡MEGA EVOLUCIÓN!', '#f43f5e', true);
       }
       if (G.Audio) G.Audio.sfx('legend');
       if (G.Camera) G.Camera.kick(0.45);
-      if (G.UI && G.UI.toast) G.UI.toast(mega.name + ' ĐÃ THỨC TỈNH!', 2500);
+      if (G.UI && G.UI.toast) G.UI.toast(mega.name + ' AWAKENED!', 2500);
       if (G.Coop && G.Coop.active) {
         if (G.Coop.broadcastMega) G.Coop.broadcastMega(mega.id, targetDex);
       }
@@ -1356,95 +1353,6 @@ G.Player = class Player {
   update(dt) {
     this.anim.update(dt);
     if (this.dead) return;
-
-    // Kiểm tra Thức Tỉnh (10p) và Apex+ (20p) khi đã roll trùng mở khóa
-    const curRunTime = (typeof G !== 'undefined' && G.Game && G.Game.st && typeof G.Game.st.time === 'number') ? G.Game.st.time : 0;
-    if (!this.remote && curRunTime >= 600 && !this.hasAwakened10m) {
-      if (this.evoTierUnlocked >= 2) {
-        this.hasAwakened10m = true;
-        this.awakeningTier = Math.max(this.awakeningTier || 0, 1);
-        this.applyBstNormalization();
-        if (G.Spawner && G.Spawner.say) G.Spawner.say('✦ THỨC TỈNH: SỨC MẠNH TIỀM ẨN KHAI MỞ (+25% TOÀN BỘ CHỈ SỐ)! ✦', 4.5);
-        if (G.Audio && G.Audio.sfx) G.Audio.sfx('legend');
-        if (G.Camera && G.Camera.kick) G.Camera.kick(1.0);
-        if (G.FX) {
-          G.FX.ring(this.x, this.y, 10, 160, '#ffd23f', 0.8, 5);
-          G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ffd23f', 24, 200);
-          G.FX.dmgText(this.x, this.y - this.bodyH - 24, 'THỨC TỈNH!', '#ffd23f', true);
-        }
-        if (G.UI && G.UI.toast) G.UI.toast('THỨC TỈNH: +25% toàn bộ chỉ số!', 3500);
-      }
-    }
-
-    if (!this.remote && curRunTime >= 1200 && !this.hasApex20m) {
-      if (this.evoTierUnlocked >= 3) {
-        this.hasApex20m = true;
-        this.awakeningTier = Math.max(this.awakeningTier || 0, 2);
-        this.isApex = true;
-        this.applyBstNormalization();
-        if (G.Spawner && G.Spawner.say) G.Spawner.say('★ APEX (+): BÁ VƯƠNG KHAI THẾ (+25% TOÀN BỘ CHỈ SỐ)! ★', 4.5);
-        if (G.Audio && G.Audio.sfx) G.Audio.sfx('legend');
-        if (G.Camera && G.Camera.kick) G.Camera.kick(1.2);
-        if (G.FX) {
-          G.FX.ring(this.x, this.y, 14, 200, '#f59e0b', 0.9, 6);
-          G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#fbbf24', 30, 260);
-          G.FX.dmgText(this.x, this.y - this.bodyH - 24, 'APEX (+) BÁ VƯƠNG!', '#f59e0b', true);
-        }
-        if (G.UI && G.UI.toast) G.UI.toast('APEX (+): +25% toàn bộ chỉ số!', 3500);
-      }
-    }
-
-    // Với Pokémon 1 dạng (single-stage), kích hoạt chọn nhánh tiến hóa ở phút 20 (1200s) -> BST 800
-    if (!this.remote && curRunTime >= 1200 && !this.hasChosenSingleBranch && !this.singleBranchPrompted) {
-      const isSingle = !this.evoChain || this.evoChain.type === 'single' || (this.evoChain.maxStage || 1) === 1;
-      if (isSingle && !this.isMega) {
-        this.singleBranchPrompted = true;
-        this.promptEvo([
-          {
-            dex: this.dex,
-            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Cuồng Nộ',
-            tag: 'CUỒNG NỘ (BST 800)',
-            color: '#ef4444',
-            desc: '+15% Công vật lý/phép, +15% Tỷ lệ chí mạng và nâng cấp tổng chỉ số lên BST 800.',
-            apply: () => {
-              this.hasChosenSingleBranch = true;
-              this.berserkerBranch = true;
-              this.critChance = (this.critChance || 0) + 0.15;
-              this.applyBstNormalization();
-              if (G.UI && G.UI.toast) G.UI.toast('Đã thức tỉnh nhánh Cuồng Nộ (BST 800)!', 4000);
-            }
-          },
-          {
-            dex: this.dex,
-            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Pháo Đài',
-            tag: 'PHÁO ĐÀI (BST 800)',
-            color: '#3b82f6',
-            desc: '+20% Giáp PDEF/SDEF, -15% Sát thương gánh chịu và nâng cấp tổng chỉ số lên BST 800.',
-            apply: () => {
-              this.hasChosenSingleBranch = true;
-              this.bastionBranch = true;
-              this.dmgReduce = Math.min(0.60, (this.dmgReduce || 0) + 0.15);
-              this.applyBstNormalization();
-              if (G.UI && G.UI.toast) G.UI.toast('Đã thức tỉnh nhánh Pháo Đài (BST 800)!', 4000);
-            }
-          },
-          {
-            dex: this.dex,
-            title: (this.mon ? this.mon.name : 'Pokémon') + ' · Thần Tốc',
-            tag: 'THẦN TỐC (BST 800)',
-            color: '#10b981',
-            desc: '+20% Tốc độ chạy, -15% Thời gian hồi chiêu và nâng cấp tổng chỉ số lên BST 800.',
-            apply: () => {
-              this.hasChosenSingleBranch = true;
-              this.tempestBranch = true;
-              this.cdMul = (this.cdMul || 1) * 0.85;
-              this.applyBstNormalization();
-              if (G.UI && G.UI.toast) G.UI.toast('Đã thức tỉnh nhánh Thần Tốc (BST 800)!', 4000);
-            }
-          }
-        ]);
-      }
-    }
     if (this.invuln > 0) this.invuln -= dt;
     if (this.flash > 0) this.flash -= dt;
     if (this.attackFace > 0) this.attackFace -= dt;
@@ -1464,334 +1372,6 @@ G.Player = class Player {
       this.hp = Math.min(this.maxHp, this.hp + this.maxHp * leftoversRate * dt);
     }
     if (this.abil && this.abil.tick) this.abil.tick(this, dt);
-    if (this.abil && !this.dead) {
-      if ((this.abil.psychicSurgeBlast || this.abil.psystrikeBurst) && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.psyT = (this.psyT || 0) + dt;
-        if (this.psyT >= 3.0) {
-          this.psyT = 0;
-          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 220).slice(0, 3);
-          for (const e of targets) {
-            if (!e.dead) {
-              e.hurt(35 + this.level * 6, '#ec4899', e.x - this.x, e.y - this.y, 150, 'psystrike');
-              e.applySlow(0.3, 2.0);
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#f472b6', 7, 100);
-            }
-          }
-          if (targets.length > 0) {
-            G.FX.ring(this.x, this.y, 10, 220, '#ec4899', 0.5, 3);
-            if (G.Audio) G.Audio.sfx('legend');
-          }
-        }
-      }
-      if (this.abil.drizzleThunder && G.Weather && G.Weather.current && G.Weather.current.kind === 'rain' && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.thunderT = (this.thunderT || 0) + dt;
-        if (this.thunderT >= 2.5) {
-          this.thunderT = 0;
-          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 240).slice(0, 2);
-          for (const e of targets) {
-            if (!e.dead) {
-              e.hurt(40 + this.level * 6, '#38bdf8', e.x - this.x, e.y - this.y, 120, 'thunder');
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#60a5fa', 8, 100);
-            }
-          }
-          if (targets.length > 0) G.FX.ring(this.x, this.y, 8, 80, '#38bdf8', 0.35, 2);
-        }
-      }
-      if (this.abil.droughtMagma && G.Weather && G.Weather.current && G.Weather.current.kind === 'sun' && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.magmaT = (this.magmaT || 0) + dt;
-        if (this.magmaT >= 2.0) {
-          this.magmaT = 0;
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 160)) {
-            e.applyBurn(2.0);
-            e.hurt(25 + this.level * 4, '#ea580c', e.x - this.x, e.y - this.y, 80, 'magma');
-          }
-          G.FX.ring(this.x, this.y, 8, 160, '#ea580c', 0.4, 2);
-        }
-      }
-      if ((this.abil.airLockBlast || this.abil.deltaStreamVortex) && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.airT = (this.airT || 0) + dt;
-        const interval = this.abil.deltaStreamVortex ? 2.5 : 3.5;
-        if (this.airT >= interval) {
-          this.airT = 0;
-          const col = this.abil.deltaStreamVortex ? '#10b981' : '#67e8f9';
-          const r = this.abil.deltaStreamVortex ? 220 : 180;
-          const dmg = this.abil.deltaStreamVortex ? (45 + this.level * 8) : (35 + this.level * 6);
-          const targets = G.EnemyMgr.queryCircle(this.x, this.y, r);
-          for (const e of targets) {
-            if (!e.dead) {
-              e.hurt(dmg, col, e.x - this.x, e.y - this.y, 200, 'vortex');
-              e.applySlow(0.35, 2.0);
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, col, 7, 90);
-            }
-          }
-          if (targets.length > 0) {
-            G.FX.ring(this.x, this.y, 12, r, col, 0.5, 4);
-            if (G.Audio) G.Audio.sfx('break');
-          }
-        }
-      }
-      if (this.abil.primordialSeaTide && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.tideT = (this.tideT || 0) + dt;
-        if (this.tideT >= 2.5) {
-          this.tideT = 0;
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 240)) {
-            e.applySlow(0.35, 2.0);
-            e.hurt(40 + this.level * 6, '#38bdf8', e.x - this.x, e.y - this.y, 150, 'tide');
-          }
-          G.FX.ring(this.x, this.y, 12, 240, '#0284c7', 0.5, 3);
-        }
-      }
-      if (this.abil.desolateHeat && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.heatT = (this.heatT || 0) + dt;
-        if (this.heatT >= 2.5) {
-          this.heatT = 0;
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 240)) {
-            e.applyBurn(3.0);
-            e.hurt(40 + this.level * 6, '#ea580c', e.x - this.x, e.y - this.y, 120, 'heat');
-          }
-          G.FX.ring(this.x, this.y, 12, 240, '#f97316', 0.5, 3);
-        }
-      }
-      if (this.abil.orichalcumPulse && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.oriT = (this.oriT || 0) + dt;
-        if (this.oriT >= 2.5) {
-          this.oriT = 0;
-          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 200);
-          for (const e of targets) {
-            if (!e.dead) {
-              e.hurt(35 + this.level * 6, '#f97316', e.x - this.x, e.y - this.y, 160, 'oricalco');
-              e.applyBurn(2.0);
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#ea580c', 6, 80);
-            }
-          }
-          if (targets.length > 0) G.FX.ring(this.x, this.y, 10, 200, '#f97316', 0.45, 3);
-        }
-      }
-      if (this.abil.chiYuBurn && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.chiYuT = (this.chiYuT || 0) + dt;
-        if (this.chiYuT >= 2.0) {
-          this.chiYuT = 0;
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
-            e.applyBurn(2.0);
-            e.hurt(25 + this.level * 4, '#38bdf8', e.x - this.x, e.y - this.y, 80, 'beads');
-          }
-        }
-      }
-      if (this.seedSowerT > 0) {
-        this.seedSowerT -= dt;
-        this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.015 * dt);
-      }
-      if (this.abil.pressureAura && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.pressureT = (this.pressureT || 0) + dt;
-        this.pressureSlowT = (this.pressureSlowT || 0) + dt;
-        if (this.pressureSlowT >= 0.5) {
-          this.pressureSlowT = 0;
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 220)) {
-            if (!e.dead) e.applySlow(0.25, 0.7);
-          }
-        }
-        if (this.pressureT >= 3.0) {
-          this.pressureT = 0;
-          G.FX.ring(this.x, this.y, 10, 220, '#a855f7', 0.5, 3);
-          if (G.Audio) G.Audio.sfx('legend');
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 220)) {
-            if (!e.dead) {
-              e.hurt(35 + this.level * 6, '#c084fc', e.x - this.x, e.y - this.y, 200, 'pressure');
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a855f7', 6, 80);
-            }
-          }
-        }
-      }
-      if (this.abil.badDreams && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.badDreamsT = (this.badDreamsT || 0) + dt;
-        if (this.badDreamsT >= 1.0) {
-          this.badDreamsT = 0;
-          let hitCount = 0;
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
-            if (!e.dead && (e.slowT > 0 || (e.stunT && e.stunT > 0))) {
-              e.hurt(35 + this.level * 6, '#7e22ce', 0, 0, 0, 'nightmare');
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a855f7', 4, 60);
-              hitCount++;
-            }
-          }
-          if (hitCount > 0) G.FX.ring(this.x, this.y, 6, 200, '#581c87', 0.4, 2);
-        }
-      }
-      if (this.abil.neutralizingGas && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.gasT = (this.gasT || 0) + dt;
-        if (this.gasT >= 0.5) {
-          this.gasT = 0;
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) {
-            if (!e.dead) e.applySlow(0.25, 0.7);
-          }
-        }
-      }
-      if (this.abil.fullMetalBody && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.fullMetalT = (this.fullMetalT || 0) + dt;
-        if (this.fullMetalT >= 2.0) {
-          this.fullMetalT = 0;
-          G.FX.ring(this.x, this.y, 8, 180, '#f59e0b', 0.4, 3);
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) {
-            if (!e.dead) {
-              e.applyBurn(2.0);
-              e.hurt(30 + this.level * 5, '#fbbf24', e.x - this.x, e.y - this.y, 120, 'solar_heat');
-            }
-          }
-        }
-      }
-      if (this.abil.prismArmor && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.prismT = (this.prismT || 0) + dt;
-        if (this.prismT >= 2.5) {
-          this.prismT = 0;
-          const targets = G.EnemyMgr.queryCircle(this.x, this.y, 240).slice(0, 3);
-          for (const e of targets) {
-            if (!e.dead) {
-              e.hurt(40 + this.level * 7, '#38bdf8', e.x - this.x, e.y - this.y, 150, 'prism_laser');
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#c084fc', 8, 90);
-            }
-          }
-          if (targets.length > 0) G.FX.ring(this.x, this.y, 8, 120, '#a855f7', 0.35, 3);
-        }
-      }
-      if (this.abil.teraShell && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.teraT = (this.teraT || 0) + dt;
-        if (this.teraT >= 4.0) {
-          this.teraT = 0;
-          G.FX.ring(this.x, this.y, 10, 200, '#67e8f9', 0.5, 4);
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
-            if (!e.dead) {
-              e.hurt(45 + this.level * 8, '#22d3ee', e.x - this.x, e.y - this.y, 180, 'tera_pulse');
-              e.applySlow(0.4, 2.0);
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a5f3fc', 6, 80);
-            }
-          }
-          if (G.Audio) G.Audio.sfx('break');
-        }
-      }
-      if (this.abil.windRider && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        const isMoving = Math.abs(this.vx) > 10 || Math.abs(this.vy) > 10;
-        this.windT = (this.windT || 0) + (isMoving ? dt * 1.5 : dt * 0.5);
-        if (this.windT >= 5.0) {
-          this.windT = 0;
-          G.FX.ring(this.x, this.y, 8, 190, '#34d399', 0.45, 3);
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 190)) {
-            if (!e.dead) {
-              e.hurt(35 + this.level * 6, '#10b981', e.x - this.x, e.y - this.y, 160, 'wind_vortex');
-              G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#6ee7b7', 6, 80);
-            }
-          }
-        }
-      }
-      if (this.abil.telepathyTemporal && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.telepathyT = (this.telepathyT || 0) + dt;
-        if (this.telepathyT >= 4.0) {
-          this.telepathyT = 0;
-          G.FX.ring(this.x, this.y, 8, 200, '#c084fc', 0.4, 3);
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 200)) {
-            if (!e.dead) e.applySlow(0.40, 2.0);
-          }
-        }
-      }
-      if (this.abil.innerFocus) {
-        const isStill = Math.hypot(this.vx, this.vy) < 8;
-        if (isStill) {
-          this.innerFocusT = (this.innerFocusT || 0) + dt;
-          if (this.innerFocusT >= 1.2 && !this.innerFocusCharged) {
-            this.innerFocusCharged = true;
-            G.FX.ring(this.x, this.y, 4, 100, '#facc15', 0.45, 3);
-            G.FX.dmgText(this.x, this.y - this.bodyH - 18, '✦ Định Tâm!', '#facc15', true);
-            if (G.Audio) G.Audio.sfx('charge');
-          }
-        } else {
-          this.innerFocusT = 0;
-        }
-      }
-      if (this.abil.whiteSmokeTrail && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        const isMoving = Math.hypot(this.vx, this.vy) > 15;
-        if (isMoving) {
-          this.smokeT = (this.smokeT || 0) + dt;
-          if (this.smokeT >= 0.25) {
-            this.smokeT = 0;
-            G.FX.burst(this.x, this.y - 4, '#e2e8f0', 4, 30);
-            for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 75)) {
-              if (!e.dead) {
-                e.applySlow(0.35, 2.0);
-                e.hurt(12 + this.level * 2, '#94a3b8', 0, 0, 0, 'smoke');
-              }
-            }
-          }
-        }
-      }
-      if (this.abil.runAwayEscape && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        const nowMs = performance.now();
-        if (!this._runAwayCd || nowMs - this._runAwayCd > 8000) {
-          const nearby = G.EnemyMgr.queryCircle(this.x, this.y, 85);
-          if (nearby.length >= 4) {
-            this._runAwayCd = nowMs;
-            this.addBuff('spd', 0.50, 2.5, 1);
-            this.invuln = 0.4;
-            G.FX.dmgText(this.x, this.y - this.bodyH - 18, '✦ Tẩu Thoát!', '#38bdf8', true);
-            G.FX.ring(this.x, this.y, 8, 120, '#38bdf8', 0.45, 3);
-            if (G.Audio) G.Audio.sfx('dash');
-          }
-        }
-      }
-      if (this.abil.soundproofBurst && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.soundT = (this.soundT || 0) + dt;
-        if (this.soundT >= 5.0) {
-          this.soundT = 0;
-          G.FX.ring(this.x, this.y, 10, 180, '#93c5fd', 0.5, 4);
-          if (G.Audio) G.Audio.sfx('break');
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 180)) {
-            if (!e.dead) {
-              e.hurt(30 + this.level * 5, '#60a5fa', e.x - this.x, e.y - this.y, 180, 'sonic');
-              if (e.applyStun) e.applyStun(1.0);
-              e.applySlow(0.40, 2.0);
-            }
-          }
-        }
-      }
-      if (this.abil.moltenAura && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        this.moltenT = (this.moltenT || 0) + dt;
-        if (this.moltenT >= 1.5) {
-          this.moltenT = 0;
-          G.FX.ring(this.x, this.y, 6, 140, '#f97316', 0.35, 2);
-          for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 140)) {
-            if (!e.dead) {
-              e.applyBurn(2.0);
-              e.hurt(25 + this.level * 4, '#ea580c', e.x - this.x, e.y - this.y, 60, 'molten');
-            }
-          }
-        }
-      }
-      if (this.abil.clumsyDrop && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        const isMoving = Math.hypot(this.vx, this.vy) > 10;
-        if (isMoving) {
-          this.clumsyT = (this.clumsyT || 0) + dt;
-          if (this.clumsyT >= 3.5) {
-            this.clumsyT = 0;
-            G.FX.dmgText(this.x, this.y - 14, '🍌', '#facc15', false);
-            for (const e of G.EnemyMgr.queryCircle(this.x, this.y, 110)) {
-              if (!e.dead) {
-                e.hurt(30 + this.level * 5, '#facc15', e.x - this.x, e.y - this.y, 220, 'banana_slip');
-                if (e.applyStun) e.applyStun(1.5); else e.applySlow(0.60, 2.5);
-              }
-            }
-          }
-        }
-      }
-      if (this.abil.absoluteImmunity) {
-        const ooc = (performance.now() - (this.lastHitTakenT || 0)) >= 2000;
-        if (ooc) {
-          this.immRegenT = (this.immRegenT || 0) + dt;
-          if (this.immRegenT >= 2.0) {
-            this.immRegenT = 0;
-            this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.02);
-            G.FX.ring(this.x, this.y, 6, 60, '#22c55e', 0.35, 2);
-          }
-        }
-      }
-    }
     if ((this.juggernautActive || this.hasTrialBonus('juggernaut')) && !this.dead) {
       this.juggernautTimer = (this.juggernautTimer || 0) + dt;
       if (this.juggernautTimer >= 5.0) {

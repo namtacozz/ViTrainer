@@ -732,16 +732,7 @@ G.Game = (() => {
     if (p.kind === 'coin') {
       pl.coins += p.value;
       G.FX.dmgText(who.x, who.y - who.bodyH - 6, '+' + p.value, '#ffd23f');
-      if (who.abil && who.abil.goodAsGold && G.EnemyMgr && G.EnemyMgr.queryCircle) {
-        const nowMs = performance.now();
-        if (!who._lastGoldBlast || nowMs - who._lastGoldBlast > 300) {
-          who._lastGoldBlast = nowMs;
-          G.FX.ring(who.x, who.y, 8, 150, '#facc15', 0.35, 3);
-          for (const e of G.EnemyMgr.queryCircle(who.x, who.y, 150)) {
-            if (!e.dead) e.hurt(35 + who.level * 6, '#ffd23f', e.x - who.x, e.y - who.y, 180, 'gold_blast');
-          }
-        }
-      }
+      return;
     }
     if (p.kind === 'item') {
       if (mine) offerItem(p.value);

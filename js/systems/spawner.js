@@ -25,20 +25,21 @@ G.Spawner = (() => {
   const dmgK = t => 1.5 + Math.min(0.7, (t / 300) * 0.7);
   const SHINY_RATE = 1 / 4096;
   let acc = 0, bossIdx = 0, surgeT = 32, announce = null, announceT = 0, preloadT = 0;
-  let enrageAnnounced = false;
   let forceShiny = 0;           // para pruebas: los N próximos salen shiny
 
   function reset() {
-    acc = 0; bossIdx = 0; surgeT = 32; enrageAnnounced = false;
+    acc = 0; bossIdx = 0; surgeT = 32;
     if (G.Director && G.Director.reset) G.Director.reset(); announce = null; announceT = 0; preloadT = 0;
     G.Enemies.rollRun();
     G.Sprites.preload(G.Enemies.upcomingDex(0, 80));
   }
 
-  /** Enemigos por segundo: tăng đầu game (+20%), giảm 10% sau 15p (900s). */
+  /** Enemigos por segundo según el minuto de la run. */
   function rate(t) {
-    const spawnScale = t < 900 ? 1.20 : 0.90;
-    return (1.6 + t * 0.028 + Math.pow(t / 60, 1.6) * 0.5) * DENSITY * spawnScale;
+    // Tăng mật độ quái đầu game (thêm 20-30%), giảm ~10% từ phút 15 (t >= 900)
+    const earlyMul = t < 300 ? 1.25 : (t < 600 ? 1.12 : 1.0);
+    const lateMul = t >= 900 ? 0.90 : 1.0;
+    return (1.6 + t * 0.028 + Math.pow(t / 60, 1.6) * 0.5) * DENSITY * earlyMul * lateMul;
   }
 
   /** Radio de "fuera de la vista": el de la cámara, o más si alguien la tiene alejada (Luminosfera). */
@@ -148,25 +149,6 @@ G.Spawner = (() => {
     say('¡' + e.name + (e.shiny ? ' shiny' : '') + ' salvaje apareció!', 3.2);
     G.Camera.kick(1.1);
     G.Audio.sfx('boss');
-    for (const p of players) {
-      if (p && p.abil && !p.dead) {
-        if (p.abil.intrepidSword) {
-          p.addBuff('atk', 0.35, 12, 1);
-          if (G.FX) {
-            G.FX.dmgText(p.x, p.y - p.bodyH - 18, '✦ Kiếm Bất Khuất!', '#38bdf8', true);
-            G.FX.ring(p.x, p.y, 10, 160, '#38bdf8', 0.6, 4);
-          }
-        }
-        if (p.abil.dauntlessShield) {
-          p.invuln = 2.5;
-          p.addBuff('def', 0.40, 12, 1);
-          if (G.FX) {
-            G.FX.dmgText(p.x, p.y - p.bodyH - 18, '✦ Khiên Kiên Cường!', '#fbbf24', true);
-            G.FX.ring(p.x, p.y, 10, 160, '#fbbf24', 0.6, 4);
-          }
-        }
-      }
-    }
     return e;
   }
 
@@ -181,14 +163,6 @@ G.Spawner = (() => {
     // Precarga lo que va a salir en el próximo minuto.
     preloadT -= dt;
     if (preloadT <= 0) { preloadT = 10; G.Sprites.preload(G.Enemies.upcomingDex(t, 60)); }
-
-    // Thông báo Giai đoạn Cuồng nộ ở phút thứ 10 (600s)
-    if (t >= 600 && !enrageAnnounced) {
-      enrageAnnounced = true;
-      say('GIAI ĐOẠN CUỒNG NỘ ĐÃ BẮT ĐẦU!', 4.5);
-      if (G.Audio && G.Audio.sfx) G.Audio.sfx('legend');
-      if (G.Camera && G.Camera.kick) G.Camera.kick(1.3);
-    }
 
     // --- jefes ---
     const b = G.Enemies.BOSSES[bossIdx];

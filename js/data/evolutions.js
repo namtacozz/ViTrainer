@@ -21930,3 +21930,69 @@ G.isBaseStage = function(dex) {
   const info = G.getEvoInfo(dex);
   return !info || info.stage === 1;
 };
+
+// =========================================================================
+// CHUẨN HÓA BST (BASE STAT TOTAL) TOÀN BỘ POKÉMON (Chuẩn ViTrainer Master)
+// 3 dạng: Bậc 1 = 300, Bậc 2 = 500, Bậc 3 = 800 (Mega/Đặc biệt = 800)
+// 2 dạng: Bậc 1 = 400, Bậc 2 = 800 (Mega/Đặc biệt = 800)
+// 1 dạng: Gốc = 400, Nhánh nâng cấp phút 20 = 800
+// Tỉ lệ các chỉ số riêng (hp, spd, atk, pa, sa, df, sd) scale chuẩn xác theo tỉ lệ tổng BST
+// =========================================================================
+G.normalizePokedexStats = function() {
+  if (!G.DEX || !G.DEX.length) return;
+  for (const mon of G.DEX) {
+    if (!mon || !mon.bst) continue;
+    const chain = G.getEvoChain ? G.getEvoChain(mon.dex) : null;
+    const stage = G.getStage ? G.getStage(mon.dex) : 1;
+    let targetBst = 800;
+
+    if (chain) {
+      if (chain.type === '3stage') {
+        if (stage === 1) targetBst = 300;
+        else if (stage === 2) targetBst = 500;
+        else targetBst = 800;
+      } else if (chain.type === '2stage') {
+        if (stage === 1) targetBst = 400;
+        else targetBst = 800;
+      } else if (chain.type === 'single') {
+        targetBst = 400;
+      } else if (chain.type === 'branch') {
+        if (stage === 1) targetBst = (chain.maxStage === 3) ? 300 : 400;
+        else if (stage === 2) targetBst = (chain.maxStage === 3) ? 500 : 800;
+        else targetBst = 800;
+      }
+    } else {
+      targetBst = 400;
+    }
+
+    if (mon.dex >= 10000) targetBst = 800; // Tất cả các dạng Mega / Primal / Origin
+
+    const ratio = targetBst / mon.bst;
+    mon.bst = targetBst;
+    if (mon.hp) mon.hp = Math.max(30, Math.round(mon.hp * ratio));
+    if (mon.spd) mon.spd = Math.max(40, Math.round(mon.spd * ratio));
+    if (mon.atk) mon.atk = Number((mon.atk * ratio).toFixed(2));
+    if (mon.pa) mon.pa = Number((mon.pa * ratio).toFixed(2));
+    if (mon.sa) mon.sa = Number((mon.sa * ratio).toFixed(2));
+    if (mon.df) mon.df = Math.max(20, Math.round(mon.df * ratio));
+    if (mon.sd) mon.sd = Math.max(20, Math.round(mon.sd * ratio));
+  }
+
+  if (G.MEGAS) {
+    for (const id in G.MEGAS) {
+      const m = G.MEGAS[id];
+      if (m && m.bst) {
+        const ratio = 800 / m.bst;
+        m.bst = 800;
+        if (m.hp) m.hp = Math.round(m.hp * ratio);
+        if (m.spd) m.spd = Math.round(m.spd * ratio);
+        if (m.atk) m.atk = Number((m.atk * ratio).toFixed(2));
+        if (m.pa) m.pa = Number((m.pa * ratio).toFixed(2));
+        if (m.sa) m.sa = Number((m.sa * ratio).toFixed(2));
+        if (m.df) m.df = Math.round(m.df * ratio);
+        if (m.sd) m.sd = Math.round(m.sd * ratio);
+      }
+    }
+  }
+};
+G.normalizePokedexStats();

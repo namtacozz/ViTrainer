@@ -76,12 +76,12 @@ G.MenuUI = (() => {
     const reconBtn = $('menu-reconnect');
     if (reconBtn) {
       // Nếu phòng lưu quá 40 phút thì xóa bỏ để tránh nút kẹt vô nghĩa
-      if (saved && saved.at && (Date.now() - saved.at > 40 * 60 * 1000)) {
+      if (saved && saved.at && (Date.now() - saved.at > 15 * 60 * 1000)) {
         if (G.Social.clearActiveRoom) G.Social.clearActiveRoom();
         reconBtn.classList.add('hidden');
       } else {
         if (saved && saved.id) {
-        reconBtn.innerHTML = '<span class="mi-ico">' + G.Icons.html('friends', 26) + '</span><span>' + G.T('Reconectarse') + '</span><small>' + G.T('Partida en grupo en curso') + '</small>';
+        reconBtn.innerHTML = '<span class="mi-ico" style="display:flex;align-items:center;">' + G.Icons.html('friends', 22) + '</span><div style="display:flex;flex-direction:column;text-align:left;line-height:1.2;"><span style="font-size:15px;font-weight:bold;color:var(--gold);">' + G.T('Reconectarse') + '</span><small style="font-size:11px;color:var(--muted);">' + G.T('Partida en grupo en curso') + '</small></div>';
         reconBtn.classList.remove('hidden');
       } else {
         reconBtn.classList.add('hidden');

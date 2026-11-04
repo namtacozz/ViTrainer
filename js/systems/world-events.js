@@ -107,7 +107,7 @@ G.WorldEvents = (() => {
   }
 
   function claimContractReward(contract) {
-    const pl = (typeof G !== 'undefined' && G.Game && G.Game.player) ? G.Game.player : (G.PlayerMgr ? G.PlayerMgr.local : null);
+    const pl = G.PlayerMgr ? G.PlayerMgr.local : null;
     if (!pl) return;
     if (contract.reward === 'coins_300') {
       pl.coins = (pl.coins || 0) + 300;
@@ -126,7 +126,7 @@ G.WorldEvents = (() => {
    */
   function checkAlphaSpawn(t, players) {
     // Không sinh nếu đang có Boss lớn hoặc đang trong Breathing Window
-    if (G.EnemyMgr && G.EnemyMgr.bossAlive && G.EnemyMgr.bossAlive()) return;
+    if (G.Spawner && G.Spawner.bossAlive) return;
     if (G.Director && G.Director.isBreathingWindow && G.Director.isBreathingWindow()) return;
 
     // Khoảng cách 180s, bắt đầu từ 90s

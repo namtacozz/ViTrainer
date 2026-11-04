@@ -43,14 +43,14 @@ G.Enemies = (() => {
   // Franjas de jefe: minuto en que salen, PV base y franja de BST (Nâng cấp sức mạnh chuẩn Raid Boss).
   const BOSS_SLOTS = [
     { at: 180,  hp: 2600,    dmg: 16,  xp: 450,   bst: [490, 545] },
-    { at: 360,  hp: 7200,    dmg: 25,  xp: 900,   bst: [510, 560] },
-    { at: 540,  hp: 20000,   dmg: 38,  xp: 1600,  bst: [525, 575] },
-    { at: 720,  hp: 55000,   dmg: 56,  xp: 2600,  bst: [535, 600] },
-    { at: 900,  hp: 145000,  dmg: 80,  xp: 4500,  bst: [540, 600] },
-    { at: 1080, hp: 360000,  dmg: 112, xp: 6000,  bst: [550, 600] },
-    { at: 1260, hp: 850000,  dmg: 150, xp: 8500,  bst: [560, 670] },
-    { at: 1440, hp: 1900000, dmg: 195, xp: 12000, bst: [570, 670] },
-    { at: 1620, hp: 4200000, dmg: 250, xp: 16000, bst: [580, 670] }
+    { at: 360,  hp: 7200,    dmg: 25,  xp: 900,   bst: [520, 580] },
+    { at: 540,  hp: 20000,   dmg: 38,  xp: 1600,  bst: [540, 600] },
+    { at: 720,  hp: 55000,   dmg: 56,  xp: 2600,  bst: [580, 700] },
+    { at: 900,  hp: 145000,  dmg: 80,  xp: 4500,  bst: [600, 700] },
+    { at: 1080, hp: 360000,  dmg: 112, xp: 6000,  bst: [600, 720] },
+    { at: 1260, hp: 850000,  dmg: 150, xp: 8500,  bst: [620, 750] },
+    { at: 1440, hp: 1900000, dmg: 195, xp: 12000, bst: [650, 780] },
+    { at: 1620, hp: 4200000, dmg: 250, xp: 16000, bst: [680, 800] }
   ];
 
   // Stats base aproximados a partir de los de juego (inverso de fetch_pokedex).
@@ -164,11 +164,10 @@ G.Enemies = (() => {
     }
     const used = new Set();
     bosses = BOSS_SLOTS.map(slot => {
-      const ok = p => !p.leg && G.SPRITE_META && G.SPRITE_META[p.dex] && !used.has(p.dex);
+      const ok = p => !p.leg && G.SPRITE_META[p.dex] && !used.has(p.dex);
       let pool = G.DEX.filter(p => ok(p) && p.bst >= slot.bst[0] && p.bst <= slot.bst[1]);
-      if (!pool.length) pool = G.DEX.filter(p => ok(p) && p.bst >= 540);
-      if (!pool.length) pool = G.DEX.filter(p => ok(p));
-      const p = G.U.pick(pool) || G.DEX[0];
+      if (!pool.length) pool = G.DEX.filter(p => ok(p) && p.bst >= 580);
+      const p = G.U.pick(pool);
       used.add(p.dex);
       return {
         at: slot.at, dex: p.dex, name: p.name,
@@ -182,15 +181,26 @@ G.Enemies = (() => {
     return { cast, bosses };
   }
 
-  // Tăng tiến sức mạnh quái & boss:
-  // Từ 10p trở đi, quái trụ được >= 4s trước DPS người chơi; từ 20p trở đi trụ được >= 6s. Sát thương giữ nguyên.
+  // (El "tiempo extra" del minuto 60 se quitó al llegar la Sentencia de Arceus,
+  //  que acaba todas las partidas en el minuto 30: ver systems/judgment.js.)
+  // Tăng tiến sức mạnh quái & boss theo hàm số mũ tới phút 30 (1800s) - đã giảm ~20% tốc độ tăng tiến & làm dịu đầu game
   function scale(t) {
     const p = t / 1800;
-    let hpMul = 1 + (t / 100) * Math.exp(1.35 * p);
-    if (t > 600) {
-      const extra10 = (t - 600) / 600; // 0 at 10m, 1 at 20m
-      const factor10 = 1 + extra10 * 1.8 + Math.pow(Math.max(0, extra10), 2) * 3.2;
-      hpMul *= (1.5 + factor10);
+    // Giai đoạn đầu (<10p, t < 600) giữ nguyên.
+    // Từ 10p (t >= 600) quái trụ ít nhất 4s trước sát thương liên tục của player.
+    // Từ 20p (t >= 1200) quái trụ ít nhất 6s. Sát thương quái không tăng thêm.
+    let hpMul = 1;
+    if (t < 600) {
+      hpMul = 1 + (t / 100) * Math.exp(1.35 * p);
+    } else if (t < 1200) {
+      const base10 = 1 + (600 / 100) * Math.exp(1.35 * (600 / 1800));
+      const extraP = (t - 600) / 600;
+      hpMul = base10 * (1 + extraP * 3.8);
+    } else {
+      const base10 = 1 + (600 / 100) * Math.exp(1.35 * (600 / 1800));
+      const base20 = base10 * 4.8;
+      const extraP = (t - 1200) / 600;
+      hpMul = base20 * (1 + extraP * 5.2);
     }
     return {
       hp: hpMul,
@@ -201,14 +211,13 @@ G.Enemies = (() => {
 
   /**
    * Thang điểm nâng cấp Boss tới phút 30 (1800s):
-   * Giảm 40% sinh lực boss trước 10p (x0.6), tăng 60% sau 10p (x1.6).
+   * Cân bằng lại sau phút 20: giảm tốc độ tăng trưởng máu & sát thương,
+   * tránh boss quá trâu không thể tiêu diệt và tránh one-shot.
    */
   function bossScale(t) {
     const p = t / 1800;
-    const baseHp = 1 + (t / 600) * (1 + 0.85 * p);
-    const bossHpMul = t < 600 ? 0.60 : 1.60;
     return {
-      hp: baseHp * bossHpMul,
+      hp: 1 + (t / 600) * (1 + 0.85 * p),
       dmg: 1 + (t / 550) * (1 + 0.50 * p),
       spd: 1 + Math.min(0.25, (t / 1800) * 0.25)
     };
@@ -230,28 +239,7 @@ G.Enemies = (() => {
     return G.U.pickN(pool, 4).map(p => defFor(p, TIERS[ti], ti));
   }
 
-  function isStageAllowed(dex, t) {
-    const info = (typeof G !== 'undefined' && G.getEvoInfo) ? G.getEvoInfo(dex) : null;
-    const stage = info ? (info.stage || 1) : 1;
-    const chain = (typeof G !== 'undefined' && G.getEvoChain) ? G.getEvoChain(dex) : null;
-    const maxStage = chain ? (chain.maxStage || (chain.stages ? chain.stages.length : 1)) : 1;
-    const isMega = dex >= 10000 || ((typeof G !== 'undefined' && G.MEGAS && G.MEGAS[dex]));
-    const isFinal = isMega || (stage >= maxStage);
-
-    if (t < 300) { // < 5m: Dạng 1 của dòng tiến hóa áp dụng cho tất cả
-      return stage === 1 && !isMega;
-    } else if (t < 720) { // 5m - 12m: Dạng 2
-      return (stage === 2 && !isMega) || (stage === 1 && maxStage === 1);
-    } else if (t < 1020) { // 12m - 17m: Giai đoạn chuyển tiếp
-      return (stage >= 2 && !isMega) || (stage === 1 && maxStage === 1);
-    } else if (t < 1380) { // 17m - 23m: Dạng 3 (hoặc dạng cuối của loài 2 dạng)
-      return (stage >= 3 || (stage >= 2 && maxStage <= 2)) && !isMega;
-    } else { // 23m+: Dạng cuối cùng (mega / dạng đặc biệt)
-      return isFinal;
-    }
-  }
-
-  /** Bolsa de enemigos disponibles en el segundo `t` lọc theo Stage chuẩn Master Plan. */
+  /** Bolsa de enemigos disponibles en el segundo `t`. */
   function bagAt(t) {
     // Durante una horda de un tipo sólo salen los de ese tipo (systems/events.js).
     const horde = G.Events && G.Events.bag();
@@ -260,22 +248,27 @@ G.Enemies = (() => {
     const bag = [];
     for (const tier of cast) {
       if (t < tier.from) continue;
-      const w = t - tier.from > 260 ? 3 : 10;
-      for (const e of tier.list) {
-        if (isStageAllowed(e.dex, t)) {
-          for (let i = 0; i < w; i++) bag.push(e);
-        }
-      }
+      const w = t - tier.from > 260 ? 3 : 10;       // los tramos viejos pierden peso
+      for (const e of tier.list) for (let i = 0; i < w; i++) bag.push(e);
     }
-    // Bổ sung nếu chưa có Pokémon khớp stage
-    if (!bag.length) {
-      const ti = tierAt(t);
-      const tier = TIERS[ti];
-      const validDexes = G.DEX.filter(p => p.rarity < 5 && G.SPRITE_META && G.SPRITE_META[p.dex] && isStageAllowed(p.dex, t));
-      const pool = validDexes.length ? validDexes : G.DEX.filter(p => G.SPRITE_META && G.SPRITE_META[p.dex]);
-      const picked = G.U.pickN(pool, 4);
-      for (const p of picked) bag.push(defFor(p, tier, ti));
+
+    // Tinh chỉnh xuất hiện quái:
+    // < 5p (t < 300): Chỉ dạng 1 (Bậc 1 / Base Stage)
+    // 5p - 12p (300 <= t < 720): Dạng 2 (Bậc 2)
+    // 17p+ (t >= 1020): Dạng 3 (Bậc 3)
+    // 23p+ (t >= 1380): Dạng cuối cùng (Mega / Đặc biệt / Bậc tối đa)
+    if (typeof G !== 'undefined' && G.getStage && bag.length) {
+      const filtered = bag.filter(e => {
+        const stage = G.getStage(e.dex) || 1;
+        if (t < 300) return stage <= 1;
+        if (t < 720) return stage === 2 || stage <= 1;
+        if (t < 1020) return stage >= 2;
+        if (t < 1380) return stage >= 2;
+        return stage >= 3 || stage <= 1;
+      });
+      if (filtered.length) return filtered;
     }
+
     return bag.length ? bag : cast[0].list;
   }
 

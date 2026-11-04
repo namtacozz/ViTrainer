@@ -74,11 +74,6 @@ G.Pickups = (() => {
 
   /** @param plain  sólo la experiencia (los legendarios de la Sentencia de Arceus) */
   function dropXp(x, y, value, boss = false, legend = false, plain = false) {
-    const curTime = (typeof G !== 'undefined' && G.Game && G.Game.st && G.Game.st.time) || 0;
-    // Giảm số lượng kinh nghiệm nhận được từ phút thứ 10 (600s) đi ~30%
-    if (curTime >= 600) {
-      value = Math.max(1, Math.round(value * 0.70));
-    }
     if (boss) {
       // Los jefes revientan en un montón de orbes grandes + recompensas.
       for (let i = 0; i < 14; i++) {

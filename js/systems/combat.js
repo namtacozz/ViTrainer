@@ -60,9 +60,6 @@ G.Combat = (() => {
       else if (pl.abil.aerilate) m = Object.assign({}, m, { type: 'flying' });
       else if (pl.abil.refrigerate) m = Object.assign({}, m, { type: 'ice' });
     }
-    if (pl && pl.abil && pl.abil.liquidVoice && /voice|sing|sound|echo|boom|noise|hyper-voice|snarl/.test(m.id)) {
-      m = Object.assign({}, m, { type: 'water' });
-    }
     if (pl && pl.abil && pl.abil.protean && pl.mon && m.type) {
       pl.mon.types = [m.type];
     }
@@ -1279,14 +1276,6 @@ G.Combat = (() => {
   const CRIT_MUL = 1.5;
   const isCrit = pl => {
     if (ghost) return false;
-    if (pl && pl.innerFocusCharged) {
-      pl.innerFocusCharged = false;
-      if (G.FX) {
-        G.FX.ring(pl.x, pl.y, 10, 160, '#facc15', 0.45, 4);
-        G.FX.dmgText(pl.x, pl.y - pl.bodyH - 18, '✦ ĐÒN TÂM PHÁP!', '#facc15', true);
-      }
-      return true;
-    }
     let c = pl.critChance || 0;
     if (pl && (pl.speedsterActive || (pl.hasTrialBonus && pl.hasTrialBonus('speedster')))) {
       const bonusSpd = Math.max(0, (pl.spdMul || 1) - 1);
@@ -1355,37 +1344,11 @@ G.Combat = (() => {
     }
 
     e.lastHitMove = m;
-    if (pl && pl.electroCharged) {
-      dmg *= 1.4;
-      pl.electroCharged = false;
-      if (G.FX) {
-        G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#facc15', 10, 120);
-        G.FX.ring(e.x, e.y, 6, 80, '#facc15', 0.4, 3);
-      }
-    }
-    if (pl && pl.abil && (pl.abil.unseenFist || pl.abil.mindEye) && (m.kind === 'melee' || m.kind === 'dash' || pl.abil.mindEye)) {
-      if (e.shield > 0) { e.shield = 0; e.shieldT = 0; }
-    }
-    if (pl && pl.abil && pl.abil.neuroforce && typeK(m.type, e) > 1.2) {
-      k *= 1.25;
-    }
-    if (pl && pl.abil && (pl.abil.turboblaze || pl.abil.teravolt)) {
-      const tk = typeK(m.type, e);
-      if (tk < 1.0) k = (k / tk) * 1.35;
-    }
-    const crit = isCrit(pl) || (pl && pl.abil && pl.abil.merciless && e && e.poisonT > 0), sk = statusK(pl);
+    const crit = isCrit(pl), sk = statusK(pl);
     dmg *= k * (crit ? critMul(pl) : 1);
-    if (pl && pl.abil && pl.abil.hyperCutter && e && e.hp < e.maxHp * 0.30) {
-      dmg *= 1.30;
-      if (G.FX) G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#dc2626', 8, 90);
-    }
-    const effectiveKnock = (pl && pl.abil && pl.abil.heavyKnockback) ? Math.max(180, knock * 1.60) : knock;
-    e.hurt(dmg, col, dx, dy, sk ? effectiveKnock : 0, crit ? 'crit' : G.Types.label(G.Types.mult(m.type, e.types)));
+    e.hurt(dmg, col, dx, dy, sk ? knock : 0, crit ? 'crit' : G.Types.label(G.Types.mult(m.type, e.types)));
     if (!ghost) pl.onDealt(dmg);
     pl.dmgDealt += dmg;
-    if (pl && pl.abil && pl.abil.darkAura && m && m.type === 'dark' && !ghost) {
-      pl.heal(dmg * 0.15);
-    }
     m.dealt = (m.dealt || 0) + dmg;
     if (m.burn && sk) e.applyBurn(m.burn * sk);
     if (m.poison && sk) e.applyPoison(m.poison * sk);
@@ -1395,20 +1358,12 @@ G.Combat = (() => {
       m.stunsDone = (m.stunsDone || 0) + 1;
     }
     afterHit(pl, e, m);
-    if (pl && pl.abil && pl.abil.toxicChain && Math.random() < 0.25) {
-      e.applyPoison(2.0);
-      e.applySlow(0.35, 2.5);
-      if (G.FX) G.FX.burst(e.x, e.y - e.bodyH * 0.5, '#a855f7', 4, 60);
-    }
-    if (pl && pl.abil && pl.abil.corrosion && m && m.poison) {
-      e.applySlow(0.25, 2.5);
-    }
 
     if (pl && pl.abil && pl.abil.parentalBond && !m._parentalEcho && !e.dead) {
       setTimeout(() => {
         if (e && !e.dead && pl && !pl.dead) {
           const echoM = Object.assign({}, m, { _parentalEcho: true });
-          hit(pl, e, dmg * 0.25, col, dx * 0.4, dy * 0.4, 0, echoM);
+          hit(pl, e, dmg * 0.35, col, dx * 0.4, dy * 0.4, 0, echoM);
           G.FX.burst(e.x, e.y - e.bodyH * 0.5, col, 4, 70);
         }
       }, 150);

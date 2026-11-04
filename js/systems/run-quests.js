@@ -44,7 +44,7 @@ G.RunQuests = (() => {
       487: { move: 'shadow-force', targetDex: 10007, name: 'Origin Giratina', moveName: 'Shadow Force' },
       888: { move: 'behemoth-blade', targetDex: 10188, name: 'Zacian Crowned', moveName: 'Behemoth Blade' },
       889: { move: 'behemoth-bash', targetDex: 10189, name: 'Zamazenta Crowned', moveName: 'Behemoth Bash' },
-      646: { move: 'glaciate', branches: [10022, 10023], name: 'Hợp Thể DNA (Kyurem)', moveName: 'Băng Thần' },
+      646: { move: 'glaciate', targetDex: 10022, name: 'Hợp Thể DNA (Kyurem)', moveName: 'Băng Thần' },
       800: { move: 'prismatic-laser', targetDex: 10157, name: 'Ultra Necrozma', moveName: 'Quang Phổ' },
       643: { move: 'fusion-flare', targetDex: 643, name: 'Reshiram', moveName: 'Fusion Flare' },
       644: { move: 'fusion-bolt', targetDex: 644, name: 'Zekrom', moveName: 'Fusion Bolt' },
@@ -58,19 +58,17 @@ G.RunQuests = (() => {
         id: 'legend_evo_' + baseDex,
         type: 'exclusive_plus',
         targetMoveId: lq.move,
-        targetLv: 50,
         title: 'THỬ THÁCH TIẾN HÓA: ' + lq.name,
-        desc: 'Nâng ' + lq.moveName + ' lên Rạng +++ & Đạt Lv. 50',
+        desc: 'Nâng ' + lq.moveName + ' lên Rạng +',
         rewardType: 'legend_plus_evo',
         rewardTargetDex: lq.targetDex,
-        branches: lq.branches,
         rewardName: lq.name,
         color: '#22c55e',
         icon: 'megaBadge',
         completed: false
       });
     } else if (baseDex === 718) {
-      // Zygarde: farm 5000 quái & đạt Lv. 50 để mở khóa Mega Zygarde & Nihil Light
+      // Zygarde: farm 3500 quái & đạt Lv. 50 để mở khóa Mega Zygarde & Nihil Light
       activeQuests.push({
         id: 'mega_718',
         type: 'mega',
@@ -109,9 +107,9 @@ G.RunQuests = (() => {
         id: 'mega_' + megaDex,
         type: 'mega',
         title: 'THỬ THÁCH MEGA: ' + mName,
-        desc: 'Đạt Lv. 25 & hạ 1000 kẻ địch',
+        desc: 'Đạt Lv. 50 & hạ 1000 kẻ địch',
         targetKills: 1000,
-        targetLv: 25,
+        targetLv: 50,
         kills: (pl && pl.kills) || 0,
         rewardType: 'item',
         rewardItem: 'keystone',
@@ -166,7 +164,7 @@ G.RunQuests = (() => {
         archetype: 'speedster',
         title: 'THỬ THÁCH TỐC ĐỘ',
         desc: 'Bắt Yêu Tinh HOẶC Lv. 25 trước p.12',
-        targetLv: 25,
+        targetLv: 50,
         targetTime: 720,
         caughtRunner: false,
         rewardType: 'passive_speedster',
@@ -237,9 +235,9 @@ G.RunQuests = (() => {
         id: 'mega_' + newDex,
         type: 'mega',
         title: 'THỬ THÁCH MEGA: ' + mName,
-        desc: 'Đạt Lv. 25 & hạ 1000 kẻ địch',
+        desc: 'Đạt Lv. 50 & hạ 1000 kẻ địch',
         targetKills: 1000,
-        targetLv: 25,
+        targetLv: 50,
         kills: (pl && pl.kills) || 0,
         rewardType: 'item',
         rewardItem: 'keystone',
@@ -311,8 +309,23 @@ G.RunQuests = (() => {
             }
           }
         }
-        if (curTier >= 3 && (pl.level || 1) >= (q.targetLv || 50)) isDone = true;
+        if (curTier >= 1) isDone = true;
       }
+    if (q.type === 'exclusive_plus') {
+      let curTier = 0;
+      if (pl && pl.slots) {
+        for (const g of pl.slots) {
+          const list = Array.isArray(g) ? g : [g];
+          for (const m of list) {
+            if (m && (m.id === q.targetMoveId || (m.def && m.def.id === q.targetMoveId))) {
+              curTier = Math.max(curTier, m.evoTier || (m.evolved ? 1 : 0));
+            }
+          }
+        }
+      }
+      const isReady = curTier >= 1;
+      return { current: isReady ? 1 : 0, max: 1, pct: isReady ? 1.0 : 0.0, label: isReady ? 'Rạng + (Sẵn sàng!)' : 'Chưa lên +' };
+    }
     if (q.type === 'mega' || q.type === 'legend_form') {
         if (q.id === 'mega_384') {
           if ((pl.level || 1) >= (q.targetLv || 25)) isDone = true;
@@ -372,14 +385,8 @@ G.RunQuests = (() => {
 
     // Trao phần thưởng
     if (q.rewardType === 'legend_plus_evo') {
-      if (q.branches && q.branches.length > 0) {
-        if (!pl.isMega && pl.checkInRunEvo) {
-          pl.checkInRunEvo();
-        }
-      } else if (q.rewardTargetDex && !pl.isMega) {
-        if (pl.megaEvolve) pl.megaEvolve(q.rewardTargetDex);
-      }
-      if (G.UI && G.UI.toast) G.UI.toast((q.rewardName || 'Pokémon') + ' đã hoàn thành thử thách tiến hóa!', 4500);
+      if (pl.megaEvolve && q.rewardTargetDex) pl.megaEvolve(q.rewardTargetDex);
+      if (G.UI && G.UI.toast) G.UI.toast((q.rewardName || 'Pokémon') + ' đã tiến hóa thành công!', 4500);
     } else if (q.rewardType === 'item') {
       if (G.Game && G.Game.offerItem) {
         G.Game.offerItem(q.rewardItem);
@@ -429,25 +436,6 @@ G.RunQuests = (() => {
   function getProgressInfo(q, pl, st) {
     const curTime = (st && st.time) || 0;
     if (q.completed) return { current: 100, max: 100, pct: 1.0, label: '✓ Xong!' };
-
-    if (q.type === 'exclusive_plus') {
-      let curTier = 0;
-      if (pl && pl.slots) {
-        for (const g of pl.slots) {
-          const list = Array.isArray(g) ? g : [g];
-          for (const m of list) {
-            if (m && (m.id === q.targetMoveId || (m.def && m.def.id === q.targetMoveId))) {
-              curTier = Math.max(curTier, m.evoTier || (m.evolved ? 1 : 0));
-            }
-          }
-        }
-      }
-      const curLv = (pl && pl.level) || 1;
-      const isReady = curTier >= 3 && curLv >= 50;
-      const stars = curTier === 0 ? '0' : '+'.repeat(curTier);
-      const label = isReady ? 'Rạng +++ (Sẵn sàng!)' : (curTier < 3 ? `Chiêu: ${stars}/+++` : `Cần Lv. ${curLv}/50`);
-      return { current: isReady ? 1 : 0, max: 1, pct: isReady ? 1.0 : (curTier / 3) * 0.5 + (Math.min(50, curLv) / 50) * 0.5, label };
-    }
 
     if (q.type === 'mega' || q.type === 'legend_form') {
       if (q.id === 'mega_384' && q.targetLv !== undefined) {

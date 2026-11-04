@@ -134,7 +134,7 @@ G.InRunEvents = (() => {
         xp: 0,
         behavior: 'chase'
       };
-      pursuitBoss = new G.Enemy(bDef, sp.x, sp.y, { hp: 1, spd: 1, dmg: 1 }, false);
+      pursuitBoss = new G.Enemy(bDef, sp.x, sp.y, 1, false);
       pursuitBoss.isPursuit = true;
       pursuitBoss.invulnerable = true;
       if (G.EnemyMgr && G.EnemyMgr.add) {

@@ -131,26 +131,29 @@ G.DB = (() => {
       s.partner = G.getBaseDex(s.partner);
     }
 
-    // Hoàn trả 100% tiền PokéCoins đã nâng cấp Hấp Huyết (lifesteal) và loại bỏ khỏi save
-    let lifestealRefund = 0;
-    const lifestealCost = lvl => Math.round(110 * Math.pow(1.35, lvl) / 10) * 10;
+    // Hoàn trả PokéCoins cho nâng cấp Hút Máu (lifesteal) đã bị loại bỏ
     if (s.pupg) {
-      for (const d in s.pupg) {
-        const u = s.pupg[d];
-        if (u && u.lifesteal) {
-          const lvl = Math.min(15, Math.floor(+u.lifesteal || 0));
-          for (let l = 0; l < lvl; l++) lifestealRefund += lifestealCost(l);
-          delete u.lifesteal;
+      for (const dexKey in s.pupg) {
+        const monUpgrades = s.pupg[dexKey];
+        if (monUpgrades && monUpgrades.lifesteal) {
+          const lvl = monUpgrades.lifesteal;
+          let refund = 0;
+          for (let l = 0; l < lvl; l++) {
+            refund += Math.round(110 * Math.pow(1.35, l) / 10) * 10;
+          }
+          s.coins = (s.coins || 0) + refund;
+          delete monUpgrades.lifesteal;
         }
       }
     }
     if (s.upgrades && s.upgrades.lifesteal) {
-      const lvl = Math.min(15, Math.floor(+s.upgrades.lifesteal || 0));
-      for (let l = 0; l < lvl; l++) lifestealRefund += lifestealCost(l);
+      const lvl = s.upgrades.lifesteal;
+      let refund = 0;
+      for (let l = 0; l < lvl; l++) {
+        refund += Math.round(110 * Math.pow(1.35, l) / 10) * 10;
+      }
+      s.coins = (s.coins || 0) + refund;
       delete s.upgrades.lifesteal;
-    }
-    if (lifestealRefund > 0) {
-      s.coins = (s.coins || 0) + lifestealRefund;
     }
 
     const ownedDexes = Object.keys(s.owned).map(Number).filter(d => G.DEX_BY && G.DEX_BY[d]);
@@ -1039,9 +1042,11 @@ G.DB = (() => {
     retryT = setTimeout(() => { if (pending) pushNow(); }, ms);
   }
 
-  function authError(e) {
+    function authError(e) {
     const c = (e && e.code) || '';
+    const isDiscord = typeof location !== 'undefined' && /discordsays\\.com|discord\\.com|discordapp\\.com/.test(location.hostname);
     const M = {
+      'auth/internal-error': isDiscord ? 'Lỗi kết nối proxy Discord. Vui lòng thiết lập URL Mappings trong Discord Developer Portal.' : 'Lỗi nội bộ xác thực.',
       'auth/email-already-in-use': 'Ese nombre ya existe.',
       'auth/invalid-credential': 'Usuario o contraseña incorrectos.',
       'auth/invalid-login-credentials': 'Usuario o contraseña incorrectos.',
@@ -1108,13 +1113,11 @@ G.DB = (() => {
 
   async function login(name, pass) {
     name = (name || '').trim();
-    if (name.toLowerCase() === 'tester' || name.toLowerCase() === 'admin') {
-      return loadTesterSave();
-    }
     if (mode === 'local') return loginLocal(name, pass);
     try {
+      const email = name.includes('@') ? name.toLowerCase() : nameToEmail(name);
       const legacy = await legacySave(name, pass);
-      const cred = await auth.signInWithEmailAndPassword(nameToEmail(name), pass || '');
+      const cred = await auth.signInWithEmailAndPassword(email, pass || '');
       await openCloud(cred.user, { name, legacy });
       return { ok: true, isNew: !save.partner, imported: !!legacy };
     } catch (e) { return { ok: false, error: authError(e) }; }
@@ -1141,64 +1144,6 @@ G.DB = (() => {
     save = newSave('Invitado');
     if (mode === 'local') remove(K_SES);
     return { ok: true, isNew: true };
-  }
-
-  function loadTesterSave() {
-    user = 'Tester'; key = 'tester'; guest = false; uid = 'tester';
-    save = newSave('Tester');
-    save.partner = 25;
-    save.starter = 25;
-    save.partnerShiny = false;
-    save.personality = { trait: 'audaz', scores: {} };
-    unlockAll(save);
-    write(K_SAVE + 'tester', save);
-    write(K_SES, 'tester');
-    return { ok: true, isNew: false };
-  }
-
-  function unlockAll(targetSave) {
-    const s = targetSave || save;
-    if (!s) return;
-    s.coins = 999999;
-    s.bag = s.bag || {};
-    s.bag.mint = 999;
-    s.bag.cap = 999;
-    s.bag.caph = 999;
-    s.bag.candy = 9999;
-    s.owned = s.owned || {};
-    s.shiny = s.shiny || {};
-    s.evoTiers = s.evoTiers || {};
-    s.evoBranches = s.evoBranches || {};
-    s.tms = s.tms || {};
-    s.tickets = { t1: 999, t10: 999 };
-    s.itemsFound = s.itemsFound || {};
-    s.skins = s.skins || {};
-
-    const dexList = (typeof G !== 'undefined' && (G.DEX || G.POKEDEX)) || [];
-    for (const p of dexList) {
-      s.owned[p.dex] = { at: Date.now(), from: 'tester' };
-      s.shiny[p.dex] = { at: Date.now(), from: 'tester' };
-      if (p.dex) s.evoTiers[p.dex] = 3;
-    }
-    if (typeof G !== 'undefined' && G.MEGAS) {
-      for (const mid in G.MEGAS) {
-        const m = G.MEGAS[mid];
-        if (m && m.dex) {
-          s.owned[m.dex] = { at: Date.now(), from: 'tester' };
-          s.shiny[m.dex] = { at: Date.now(), from: 'tester' };
-        }
-      }
-    }
-    if (typeof G !== 'undefined' && G.Moves && G.Moves.ALL) {
-      for (const m of G.Moves.ALL) {
-        if (m && m.id) s.tms[m.id] = 1;
-      }
-    }
-    for (let i = 1; i <= 20; i++) {
-      const sk = 'skin_' + i;
-      s.skins[sk] = Date.now();
-    }
-    if (s === save) commit();
   }
 
   /**
@@ -1426,7 +1371,7 @@ G.DB = (() => {
   }
 
   return {
-    ready, register, login, loginWithGoogle, playAsGuest, loadTesterSave, unlockAll, logout, commit, deleteAccount, flush: pushNow, saveNow,
+    ready, register, login, loginWithGoogle, playAsGuest, logout, commit, deleteAccount, flush: pushNow, saveNow,
     owns, grant, ownsShiny, grantShiny,
     getEvoTier(baseDex) { return (save && save.evoTiers && save.evoTiers[baseDex]) || 1; },
     isEvoUnlocked(dex) {

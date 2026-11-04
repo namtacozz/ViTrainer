@@ -173,8 +173,8 @@ G.SettingsUI = (() => {
     let linkMethodsHtml = '';
     if (isCloud) {
       const gHtml = hasG
-        ? `<span class="badge on" style="color:#22c55e;font-weight:bold">✓ Google vinculado</span>`
-        : `<button class="btn small google" id="set-link-google" type="button">Vincular con Google</button>`;
+        ? `<span class="badge on" style="color:#22c55e;font-weight:bold">${G.T('✓ Google vinculado')}</span>`
+        : `<button class="btn small google" id="set-link-google" type="button">${G.T('Vincular con Google')}</button>`;
       const linkedUser = G.DB.linkedUsername || nick;
       const pHtml = hasP
         ? `<div class="row wrap" style="gap:8px;align-items:center;justify-content:flex-end">
@@ -182,40 +182,40 @@ G.SettingsUI = (() => {
              <button class="btn small" id="set-btn-toggle-chpass" type="button">${G.T('Cambiar contraseña')}</button>
            </div>`
         : `<div class="link-pass-card" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;width:100%">
-             <div style="font-weight:bold;margin-bottom:4px;">Vincular usuario y contraseña</div>
-             <p class="sub" style="margin:0 0 10px 0;font-size:12px;color:var(--muted)">Podrás entrar indistintamente con tu Google o con este usuario y contraseña a la misma cuenta.</p>
+             <div style="font-weight:bold;margin-bottom:4px;">${G.T('Vincular usuario y contraseña')}</div>
+             <p class="sub" style="margin:0 0 10px 0;font-size:12px;color:var(--muted)">${G.T('Podrás entrar indistintamente con tu Google o con este usuario y contraseña a la misma cuenta.')}</p>
              <div class="row wrap" style="gap:8px">
-               <input id="set-link-user" class="field small" maxlength="16" placeholder="Nuevo usuario" spellcheck="false" autocomplete="username" autocapitalize="none" style="flex:1;min-width:120px">
-               <input id="set-link-pass" class="field small" type="password" maxlength="64" placeholder="Contraseña (mín. 6)" autocomplete="new-password" style="flex:1;min-width:120px">
-               <button id="set-btn-link-pass" class="btn small gold" type="button">Vincular</button>
+               <input id="set-link-user" class="field small" maxlength="16" placeholder="${G.T('Nuevo usuario')}" spellcheck="false" autocomplete="username" autocapitalize="none" style="flex:1;min-width:120px">
+               <input id="set-link-pass" class="field small" type="password" maxlength="64" placeholder="${G.T('Contraseña (mín. 6)')}" autocomplete="new-password" style="flex:1;min-width:120px">
+               <button id="set-btn-link-pass" class="btn small gold" type="button">${G.T('Vincular')}</button>
              </div>
              <p id="set-link-err" class="err" style="margin-top:6px;font-size:12px"></p>
            </div>`;
 
       const chPassCardHtml = hasP
         ? `<div id="set-chpass-card" class="link-pass-card hidden" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;width:100%">
-             <div style="font-weight:bold;margin-bottom:4px;">Cambiar contraseña</div>
+             <div style="font-weight:bold;margin-bottom:4px;">${G.T('Cambiar contraseña')}</div>
              <div class="row wrap" style="gap:8px">
-               <input id="set-new-pass" class="field small" type="password" maxlength="64" placeholder="Nueva contraseña (mín. 6)" autocomplete="new-password" style="flex:1;min-width:140px">
-               <button id="set-btn-submit-chpass" class="btn small gold" type="button">Actualizar contraseña</button>
-               <button id="set-btn-cancel-chpass" class="btn small ghost" type="button">Cancelar</button>
+               <input id="set-new-pass" class="field small" type="password" maxlength="64" placeholder="${G.T('Nueva contraseña (mín. 6)')}" autocomplete="new-password" style="flex:1;min-width:140px">
+               <button id="set-btn-submit-chpass" class="btn small gold" type="button">${G.T('Actualizar contraseña')}</button>
+               <button id="set-btn-cancel-chpass" class="btn small ghost" type="button">${G.T('Cancelar')}</button>
              </div>
              <p id="set-chpass-err" class="err" style="margin-top:6px;font-size:12px"></p>
            </div>`
         : '';
 
-      linkMethodsHtml = `<div class="set-row"><div class="grow"><b>Google</b><small>Acceso rápido con tu Gmail</small></div>${gHtml}</div>`
+      linkMethodsHtml = `<div class="set-row"><div class="grow"><b>Google</b><small>${G.T('Acceso rápido con tu Gmail')}</small></div>${gHtml}</div>`
         + (!hasP ? pHtml : `<div class="set-row"><div class="grow"><b>${G.T('Usuario y contraseña')}</b><small>${G.T('Acceso con credenciales')}</small></div>${pHtml}</div>${chPassCardHtml}`);
     }
 
-    box.innerHTML = section('Cuenta')
-      + `<div class="set-row"><div class="grow"><b>Apodo</b><small>Es único y no se puede cambiar.</small></div><span class="gold" translate="no">${esc(nick)}</span></div>`
-      + `<div class="set-row"><div class="grow"><b>Tipo de cuenta</b></div><span>${esc(kind)}</span></div>`
-      + `<div class="set-row"><div class="grow"><b>Partida</b></div><span>${esc(SYNC[st] || st)}</span></div>`
+    box.innerHTML = section(G.T('Cuenta'))
+      + `<div class="set-row"><div class="grow"><b>${G.T('Apodo')}</b><small>${G.T('Es único y no se puede cambiar.')}</small></div><span class="gold" translate="no">${esc(nick)}</span></div>`
+      + `<div class="set-row"><div class="grow"><b>${G.T('Tipo de cuenta')}</b></div><span>${esc(G.T(kind))}</span></div>`
+      + `<div class="set-row"><div class="grow"><b>${G.T('Partida')}</b></div><span>${esc(G.T(SYNC[st] || st))}</span></div>`
       + linkMethodsHtml
       + `<div class="row wrap" style="gap:8px;margin-top:14px">
-           <button class="btn" id="set-logout">Cerrar sesión</button>
-           <button class="btn danger" id="set-delete">Borrar cuenta</button>
+           <button class="btn" id="set-logout">${G.T('Cerrar sesión')}</button>
+           <button class="btn danger" id="set-delete">${G.T('Borrar cuenta')}</button>
          </div><p class="note" id="set-msg"></p>`;
   }
 
@@ -234,7 +234,10 @@ G.SettingsUI = (() => {
       linkG.disabled = true;
       const r = await G.DB.linkGoogle();
       linkG.disabled = false;
-      if (!r.ok) { G.UI.toast(r.error || 'Error al vincular Google', 4000); return; }
+      if (!r.ok) { G.UI.toast(r.error || G.T('Error al vincular Google'), 4000); return; }
+      G.UI.toast(G.T('¡Google vinculado!'), 3500);
+      render();
+    };
     const btnToggleChPass = $('set-btn-toggle-chpass');
     if (btnToggleChPass) btnToggleChPass.onclick = () => {
       const card = $('set-chpass-card');
@@ -263,12 +266,9 @@ G.SettingsUI = (() => {
         if (errEl) errEl.textContent = r.error;
         return;
       }
-      G.UI.toast('¡Contraseña cambiada con éxito!', 4000);
+      G.UI.toast(G.T('¡Contraseña cambiada con éxito!'), 4000);
       const card = $('set-chpass-card');
       if (card) card.classList.add('hidden');
-    };
-      G.UI.toast('¡Google vinculado!', 3500);
-      render();
     };
     const btnLinkP = $('set-btn-link-pass');
     if (btnLinkP) btnLinkP.onclick = async () => {
