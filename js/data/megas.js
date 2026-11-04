@@ -728,25 +728,6 @@ G.MEGAS = {
     "bst": 594,
     "spriteDex": 460
   },
-  "10061": {
-    "id": 10061,
-    "baseDex": 323,
-    "name": "Mega Camerupt",
-    "slug": "camerupt-mega",
-    "types": [
-      "fairy"
-    ],
-    "ability": "flower-veil",
-    "hp": 103,
-    "spd": 117,
-    "atk": 1.39,
-    "pa": 1.06,
-    "sa": 1.39,
-    "df": 67,
-    "sd": 128,
-    "bst": 551,
-    "spriteDex": 10061
-  },
   "10062": {
     "id": 10062,
     "baseDex": 380,
@@ -1205,26 +1186,6 @@ G.MEGAS = {
     "bst": 495,
     "spriteDex": 15
   },
-  "10091": {
-    "id": 10091,
-    "baseDex": 475,
-    "name": "Mega Gallade",
-    "slug": "gallade-mega",
-    "types": [
-      "dark",
-      "normal"
-    ],
-    "ability": "gluttony",
-    "hp": 84,
-    "spd": 108,
-    "atk": 1.01,
-    "pa": 1.01,
-    "sa": 0.84,
-    "df": 35,
-    "sd": 35,
-    "bst": 253,
-    "spriteDex": 10091
-  },
   "10118": {
     "id": 10118,
     "baseDex": 718,
@@ -1678,8 +1639,7 @@ G.MEGAS_BY_BASE = {
     10070
   ],
   "323": [
-    10087,
-    10061
+    10087
   ],
   "334": [
     10067
@@ -1732,8 +1692,7 @@ G.MEGAS_BY_BASE = {
     10060
   ],
   "475": [
-    10068,
-    10091
+    10068
   ],
   "483": [
     10008,
@@ -1819,3 +1778,36 @@ G.getMegasFor = dex => {
 };
 
 G.getMega = id => G.MEGAS[id];
+
+// Chuẩn hóa BST = 800 cho toàn bộ Megas
+if (typeof G !== 'undefined' && G.normalizePokedexStats) {
+  G.normalizePokedexStats();
+}
+
+// Đồng bộ toàn bộ dạng Mega vào G.DEX_BY để tra cứu an toàn tuyệt đối
+if (typeof G !== 'undefined' && G.DEX_BY) {
+  for (const id in G.MEGAS) {
+    const m = G.MEGAS[id];
+    const spr = m.spriteDex || m.id;
+    const item = {
+      dex: spr,
+      name: m.name,
+      types: m.types,
+      hp: m.hp || 100,
+      spd: m.spd || 100,
+      atk: m.atk || 1.4,
+      pa: m.pa || m.atk || 1.4,
+      sa: m.sa || m.atk || 1.4,
+      df: m.df || 100,
+      sd: m.sd || 100,
+      bst: m.bst || 800,
+      rarity: 5,
+      starter: false,
+      gen: (G.DEX_BY[m.baseDex] || {}).gen || 6,
+      isMega: true,
+      baseDex: m.baseDex
+    };
+    if (!G.DEX_BY[spr]) G.DEX_BY[spr] = item;
+    if (!G.DEX_BY[m.id]) G.DEX_BY[m.id] = item;
+  }
+}

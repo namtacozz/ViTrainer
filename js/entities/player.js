@@ -740,12 +740,17 @@ G.Player = class Player {
       if (oldMove) {
         const mi = this.moves.indexOf(oldMove);
         if (mi >= 0) this.moves[mi] = newInst;
+        for (const group of this.slots) {
+          const si = group.findIndex(m => m.id === 'core-enforcer');
+          if (si >= 0) group[si] = newInst;
+        }
       } else {
         this.moves.push(newInst);
-      }
-      for (const group of this.slots) {
-        const si = group.findIndex(m => m.id === 'core-enforcer');
-        if (si >= 0) group[si] = newInst;
+        if (this.slots.length < this.maxMoves) {
+          this.slots.push([newInst]);
+        } else if (this.slots.length > 0) {
+          this.slots[0].push(newInst);
+        }
       }
       if (G.UI && G.UI.toast) G.UI.toast('Core Enforcer ĐÃ THĂNG HOA THÀNH Nihil Light!', 3000);
       if (G.FX) {
@@ -1195,21 +1200,7 @@ G.Player = class Player {
   }
 
     upgradeToNihilLight() {
-    for (let i = 0; i < this.slots.length; i++) {
-      const group = this.slots[i];
-      if (Array.isArray(group)) {
-        for (let j = 0; j < group.length; j++) {
-          if (group[j].id === 'core-enforcer') {
-            const lvl = group[j].lvl || 1;
-            const fused = group[j].fused || [];
-            group[j] = G.Moves.instance('nihil-light', lvl);
-            group[j].fused = fused;
-            if (G.UI && G.UI.toast) G.UI.toast('Core Enforcer đã thăng hoa thành NIHIL LIGHT!');
-            break;
-          }
-        }
-      }
-    }
+    this.upgradeMoveToNihilLight();
   }
 
   triggerZygardeComplete() {
@@ -1248,6 +1239,8 @@ G.Player = class Player {
 
     const oldHpRatio = this.hp / this.maxHp;
     this.mon = Object.assign({}, this.mon, {
+      dex: (mega.spriteDex && typeof G !== 'undefined' && G.SPRITE_META && G.SPRITE_META[mega.spriteDex]) ? mega.spriteDex : this.dex,
+      baseDex: this.baseDex,
       types: mega.types,
       atk: mega.atk,
       pa: mega.pa,
@@ -1304,7 +1297,8 @@ G.Player = class Player {
         G.FX.ring(this.x, this.y, 14, 110, '#f43f5e', 0.7, 5);
         G.FX.ring(this.x, this.y, 18, 80, '#38bdf8', 0.6, 4);
         G.FX.burst(this.x, this.y - this.bodyH * 0.5, '#ffd23f', 30, 260);
-        G.FX.dmgText(this.x, this.y - this.bodyH - 28, '¡MEGA EVOLUCIÓN!', '#f43f5e', true);
+        const isVi = (typeof G !== 'undefined' && G.I18n && G.I18n.locale === 'vi');
+        G.FX.dmgText(this.x, this.y - this.bodyH - 28, isVi ? 'TIẾN HÓA MEGA!' : 'MEGA EVOLUTION!', '#f43f5e', true);
       }
       if (G.Audio) G.Audio.sfx('legend');
       if (G.Camera) G.Camera.kick(0.45);

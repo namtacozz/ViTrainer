@@ -175,7 +175,7 @@ G.Coop = (() => {
   function cleanSum(s) {
     if (!s || typeof s !== 'object') return null;
     const dex = Math.floor(num(s.dex, 0, 0, 50000));
-    if (!G.DEX_BY[dex]) return null;
+    if (!G.DEX_BY[dex] && !(G.MEGAS && G.MEGAS[dex])) return null;
     const mv = (Array.isArray(s.mv) ? s.mv : []).slice(0, 8)
       .filter(m => Array.isArray(m) && typeof m[0] === 'string' && G.Moves.BY_ID[m[0]])
       .map(m => [m[0], Math.floor(num(m[1], 1, 1, 99)), Math.round(num(m[2], 0, 0, 1e13)), Math.round(num(m[3], 0, 0, 86400)), m[4] ? 1 : 0]);
@@ -812,7 +812,7 @@ G.Coop = (() => {
   function applyMateEvo(uid, newDex, isApex) {
     const m = mates.get(uid);
     if (!m || !m.pl) return;
-    const mon = G.DEX_BY[newDex];
+    const mon = G.DEX_BY[newDex] || (G.MEGAS && G.MEGAS[newDex]);
     if (!mon) return;
     const oldAnim = m.pl.anim;
     m.pl.dex = newDex;

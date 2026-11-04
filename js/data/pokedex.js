@@ -1037,4 +1037,5 @@ for (const p of G.DEX) G.DEX_BY[p.dex] = p;
 // Dạng phụ Zygarde lưu trong DEX_BY để tra cứu chỉ số nhưng không hiển thị thành Pokémon riêng trong Pokédex
 G.DEX_BY[10118] = {"dex": 10118, "name": "Zygarde (Forma 10%)", "types": ["dragon", "ground"], "hp": 94, "spd": 126, "atk": 1.25, "pa": 1.25, "sa": 1.04, "df": 71, "sd": 85, "rarity": 5, "bst": 486, "starter": false, "gen": 6, "leg": true};
 G.DEX_BY[10120] = {"dex": 10120, "name": "Zygarde (Forma 100%)", "types": ["dragon", "ground"], "hp": 216, "spd": 85, "atk": 1.4, "pa": 1.4, "sa": 1.4, "df": 121, "sd": 95, "rarity": 5, "bst": 708, "starter": false, "gen": 6, "leg": true};
-G.getPokemon = dex => G.DEX_BY[dex] || null;
+G.DEX_BY[10121] = {"dex": 10121, "name": "Mega Zygarde", "types": ["dragon", "ground"], "hp": 180, "spd": 120, "atk": 1.55, "pa": 1.55, "sa": 1.45, "df": 140, "sd": 115, "rarity": 5, "bst": 800, "starter": false, "gen": 6, "leg": true};
+G.getPokemon = dex => (G.DEX_BY && G.DEX_BY[dex]) || (G.MEGAS && G.MEGAS[dex]) || null;

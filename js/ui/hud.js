@@ -523,10 +523,10 @@ G.HUD = (() => {
         if (cDex === 10120 || curLv >= 50) {
           const kills = (pl && pl.kills) || 0;
           const reqLv = 50;
-          const ready = kills >= 3500 && curLv >= reqLv;
+          const ready = kills >= 5000 && curLv >= reqLv;
           return {
             dex: 10121,
-            label: ready ? 'Sẵn sàng Mega!' : (curLv < reqLv ? `Lv. ${curLv}/${reqLv}` : `Mega ${kills}/3500`),
+            label: ready ? 'Sẵn sàng Mega!' : (curLv < reqLv ? `Lv. ${curLv}/${reqLv}` : `Mega ${kills}/5000`),
             ready,
             icon: 'megaBadge'
           };

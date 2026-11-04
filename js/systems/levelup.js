@@ -84,9 +84,9 @@ G.LevelUp = (() => {
         const typesStr = (mega.types || []).map(t => G.U.TYPE_NAME[t] || t).join('/');
         out.push({
           w: 1200, type: 'mega_evo', key: 'mega_evo:' + mega.id,
-          icon: 'megaBadge', dex: mega.spriteDex || mega.baseDex || pl.dex, color: '#f43f5e', tag: 'MEGA EVOLUCIÓN',
+          icon: 'megaBadge', dex: mega.spriteDex || mega.baseDex || pl.dex, color: '#f43f5e', tag: (G.I18n && G.I18n.locale === 'vi') ? 'TIẾN HÓA MEGA' : 'MEGA EVOLUTION',
           title: G.T(mega.name),
-          desc: `Despierta la Megaevolución (${typesStr}). BST ${mega.bst}, habilidad ${G.T(mega.ability, 'ability') || mega.ability} y poder desatado.`,
+          desc: (G.I18n && G.I18n.locale === 'vi') ? `Thức tỉnh Tiến Hóa Mega (${typesStr}). BST ${mega.bst}, Đặc tính ${G.T(mega.ability, 'ability') || mega.ability} và bộc phát sức mạnh tối thượng.` : `Awaken Mega Evolution (${typesStr}). BST ${mega.bst}, ability ${G.T(mega.ability, 'ability') || mega.ability} and unleashed power.`,
           apply: p => {
             p.pendingMegaBranches = null;
             p.megaEvolve(mega.id);
@@ -104,8 +104,8 @@ G.LevelUp = (() => {
         out.push({
           w: 1000, type: 'evo_mon', key: 'evo_mon:' + branchDex,
           icon: 'star', dex: branchDex, color: '#ffd23f', tag: 'EVOLUCIÓN',
-          title: 'Evolucionar a ' + G.T(mon.name),
-          desc: `Evoluciona a ${G.T(mon.name)} (${typesStr}). Recupera 40% de vida y actualiza estadísticas.`,
+          title: ((G.I18n && G.I18n.locale === 'vi') ? 'Tiến hóa thành ' : 'Evolve into ') + G.T(mon.name),
+          desc: (G.I18n && G.I18n.locale === 'vi') ? `Tiến hóa thành ${G.T(mon.name)} (${typesStr}). Hồi 40% sinh lực và gia tăng chỉ số.` : `Evolve into ${G.T(mon.name)} (${typesStr}). Heals 40% HP and updates stats.`,
           apply: p => {
             p.pendingEvoBranches = null;
             p.evolveTo(branchDex);
@@ -176,7 +176,7 @@ G.LevelUp = (() => {
       out.push({
         w: evoFor ? 14 : pl.slots.length < pl.maxMoves ? 4 : 7,
         type: 'stat', key: 'stat:' + s.id,
-        icon: s.icon, color: evoFor ? '#ffd23f' : '#8fa3c4', tag: evoFor ? 'Evoluciona ' + G.T(evoFor.name, 'move') : 'Mejora',
+        icon: s.icon, color: evoFor ? '#ffd23f' : '#8fa3c4', tag: evoFor ? (((G.I18n && G.I18n.locale === 'vi') ? 'Tiến hóa ' : 'Evolves ') + G.T(evoFor.name, 'move')) : ((G.I18n && G.I18n.locale === 'vi') ? 'Nâng cấp' : 'Upgrade'),
         title: s.title, desc: s.desc,
         apply: p => { s.apply(p); p.statsTaken[s.id] = (p.statsTaken[s.id] || 0) + 1; }
       });

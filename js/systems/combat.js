@@ -959,7 +959,7 @@ G.Combat = (() => {
         G.Audio.sfx('legend');
 
         // Gây sát thương cực lớn cho toàn bộ kẻ địch trong luồng ánh sáng
-        if (!ghost) {
+        if (!f.ghost) {
           const fullDmg = m.dmg * pl.atkFor(m);
           const mx = pl.x + ca * beamLen / 2, my = pl.y + sa * beamLen / 2;
           const onBeam = (x, y, r) => {
@@ -977,7 +977,8 @@ G.Combat = (() => {
             }
           }
 
-          for (const p of G.World.props) {
+          const propList = (typeof G !== 'undefined' && G.World && G.World.propsInCircle) ? G.World.propsInCircle(mx, my, beamLen / 2 + beamW) : [];
+          for (const p of propList) {
             if (p.r && onBeam(p.x, p.y, p.r)) G.World.damageProp(p, fullDmg, '#10b981');
           }
         }
