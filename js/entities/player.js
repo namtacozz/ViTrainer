@@ -1671,6 +1671,8 @@ G.Player = class Player {
   getSnapshot(roomId = null, time = 0) {
     return {
       roomId: roomId || (typeof G !== 'undefined' && G.Social && G.Social.getActiveRoom ? ((G.Social.getActiveRoom() || {}).id) : null) || 'local',
+      x: this.x,
+      y: this.y,
       dex: this.dex,
       chosenDex: this.chosenDex,
       baseDex: this.baseDex,
@@ -1700,6 +1702,14 @@ G.Player = class Player {
 
   restoreSnapshot(snap) {
     if (!snap) return;
+    if (typeof snap.x === 'number' && typeof snap.y === 'number') {
+      this.x = snap.x;
+      this.y = snap.y;
+      if (typeof G !== 'undefined' && G.Camera) {
+        G.Camera.x = this.x;
+        G.Camera.y = this.y;
+      }
+    }
     // 1. Khôi phục hình dạng Pokémon (Tiến hóa)
     if (snap.dex && snap.dex !== this.dex) {
       if (this.evolveTo) {

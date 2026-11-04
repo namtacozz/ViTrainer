@@ -161,7 +161,7 @@
         } else if (f.status === 'out') {
           btn('Cancelar', 'ghost', () => G.Social.remove(f.uid));
         } else {
-          if (!inRoom && (!room || room.isHost)) {
+          if (!inRoom && (!room || (room.open !== false && room.members.length < G.Social.MAX_PLAYERS))) {
             btn('Invitar', 'gold', async () => {
               const r = await G.Social.invite(f.uid);
               msg(r.ok ? r.msg : r.error, !r.ok);
@@ -233,7 +233,7 @@
       const ms = room.members;
       $('lobby-sub').textContent = room.isHost
         ? 'Eres el anfitrión. Invita a tus amigos (hasta ' + G.Social.MAX_PLAYERS + ') y empezad cuando estéis.'
-        : 'Estás en la sala de ' + ((ms.find(m => m.uid === room.host) || {}).name || '…') + '. El anfitrión empezará la partida.';
+        : (document.documentElement.lang === 'vi' || (window.PS_LOCALES && window.PS_LOCALES.lang === 'vi')) ? ('Bạn đang ở phòng của ' + ((ms.find(m => m.uid === room.host) || {}).name || '…') + '. Bạn có thể mời thêm bạn bè (' + ms.length + '/' + G.Social.MAX_PLAYERS + ').') : ('Estás en la sala de ' + ((ms.find(m => m.uid === room.host) || {}).name || '…') + '. Puedes invitar amigos (' + ms.length + '/' + G.Social.MAX_PLAYERS + ').');
 
       // Las tarjetas sólo se rehacen si cambian los miembros (los sprites no parpadean).
       const key = ms.map(m => m.uid + ':' + m.dex + ':' + (m.shiny ? 1 : 0)).join('|');
@@ -278,7 +278,7 @@
       });
 
       // Invitar (sólo el anfitrión y si queda sitio).
-      const canInvite = room.isHost && ms.length < G.Social.MAX_PLAYERS;
+      const canInvite = ms.length < G.Social.MAX_PLAYERS;
       $('lobby-inv-title').classList.toggle('hidden', !canInvite);
       const inv = $('lobby-invite');
       inv.classList.toggle('hidden', !canInvite);

@@ -174,7 +174,11 @@ G.Game = (() => {
       const activeRoom = (typeof G !== 'undefined' && G.Social && G.Social.getActiveRoom) ? G.Social.getActiveRoom() : null;
       const roomId = activeRoom ? activeRoom.id : 'local';
       if (pl.getSnapshot) {
-        localStorage.setItem('ps.run_snapshot', JSON.stringify(pl.getSnapshot(roomId, time)));
+        const snapData = pl.getSnapshot(roomId, time);
+        if (typeof G !== 'undefined' && G.Rift && G.Rift.inArena && G.Rift.arena) {
+          snapData.riftArena = { cfg: G.Rift.arena.cfg, t: G.Rift.arena.t };
+        }
+        localStorage.setItem('ps.run_snapshot', JSON.stringify(snapData));
       }
     } catch (e) {}
   }
@@ -275,9 +279,29 @@ G.Game = (() => {
           snap = coop.mateSnapshot;
         }
 
+        if (snap && snap.riftArena && G.Rift) {
+          G.Rift.onEvent(['arena', snap.riftArena.cfg]);
+        } else if (coop && coop.riftArena && G.Rift) {
+          G.Rift.onEvent(['arena', coop.riftArena.cfg]);
+        }
+
         if (snap && pl.restoreSnapshot) {
           pl.restoreSnapshot(snap);
+        } else if (coop && coop.mateSnapshot && pl.restoreSnapshot) {
+          pl.restoreSnapshot(coop.mateSnapshot);
         }
+
+        if (G.Rift && G.Rift.inArena && G.Rift.arena) {
+          const arena = G.Rift.arena;
+          const ts = (G.Tiles && G.Tiles.TS) ? G.Tiles.TS() : 32;
+          const maxR = (arena.r - 2) * ts;
+          const dx = pl.x - arena.x, dy = pl.y - arena.y, dist = Math.hypot(dx, dy);
+          if (dist > maxR || (pl.x === 0 && pl.y === 0)) {
+            pl.x = arena.x;
+            pl.y = arena.y + ts * 3;
+          }
+        }
+        G.Camera.x = pl.x; G.Camera.y = pl.y;
       }
       G.Coop.begin(coop, pl, coopApi);
       G.Social.setPlaying(true);

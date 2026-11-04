@@ -538,6 +538,8 @@ test("co-op reconnect: restores evolved stage, moves, slots, item, and apex from
   const pl = new G.Player(G.DEX_BY[4], {});
 
   const snap = {
+    x: 1250,
+    y: -800,
     dex: 6,
     level: 35,
     isApex: true,
@@ -549,6 +551,8 @@ test("co-op reconnect: restores evolved stage, moves, slots, item, and apex from
   };
 
   pl.restoreSnapshot(snap);
+  assert.equal(pl.x, 1250, "Position X restored");
+  assert.equal(pl.y, -800, "Position Y restored");
   assert.equal(pl.dex, 6, "Evolved form restored");
   assert.equal(pl.level, 35, "Level restored");
   assert.equal(pl.isApex, true, "Apex status restored");

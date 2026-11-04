@@ -365,6 +365,8 @@ G.Coop = (() => {
     const st = api.team ? api.team() : {};
     const lastSum = sums[uid];
     const mateSnapshot = lastSum ? {
+      x: (m.pl && typeof m.pl.x === 'number') ? m.pl.x : (lastSum ? lastSum.x : null),
+      y: (m.pl && typeof m.pl.y === 'number') ? m.pl.y : (lastSum ? lastSum.y : null),
       dex: lastSum.dex || (m.pl ? m.pl.dex : null),
       level: lastSum.lv || (m.pl ? m.pl.level : null),
       moves: lastSum.mv,
@@ -401,6 +403,7 @@ G.Coop = (() => {
       kills: st.kills || 0,
       bosses: st.bosses || 0,
       coins: st.coins || 0,
+      riftArena: (typeof G !== 'undefined' && G.Rift && G.Rift.inArena && G.Rift.arena) ? { cfg: G.Rift.arena.cfg, t: G.Rift.arena.t } : null,
       mateSnapshot
     });
     flushAll();

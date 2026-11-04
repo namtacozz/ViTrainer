@@ -279,8 +279,7 @@ G.Social = (() => {
     if (!f || f.status !== 'in') return { ok: false, error: 'No hay solicitud.' };
     try {
       await fb.fs.collection('friendships').doc(f.pid).update({
-        status: 'ok', at: firebase.firestore.FieldValue.serverTimestamp(), ['names.' + uid]: me.name, ['lastSeen.' + uid]: Date.now()
-      });
+        status: 'ok', at: firebase.firestore.FieldValue.serverTimestamp(), ['names.' + uid]: me.name, });
       return { ok: true, msg: 'Ahora eres amigo de ' + f.name };
     } catch (e) { return { ok: false, error: 'No se pudo aceptar (' + (e.code || 'error') + ').' }; }
   }
@@ -555,7 +554,7 @@ G.Social = (() => {
     const f = friends.get(other);
     if (!f || f.status !== 'ok') return { ok: false, error: 'Sólo puedes invitar a tus amigos.' };
     if (room && room.members.length >= MAX_PLAYERS) return { ok: false, error: 'La sala está llena (máximo ' + MAX_PLAYERS + ').' };
-    if (room && !room.isHost) return { ok: false, error: 'Sólo el anfitrión de la sala puede invitar.' };
+    if (room && room.open === false) return { ok: false, error: 'Phòng đã bắt đầu trận đấu.' };
     if (!room) await createRoom();
     // Acabas de invitarle a esta sala: ya la tiene (pulsar otra vez no escribe nada; 25-10-2026).
     const s = sentInv.get(other);
